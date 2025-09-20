@@ -74,21 +74,15 @@ namespace ET
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
 		public int Id { get; set; }
-		/// <summary>Type</summary>
+		/// <summary>总时长</summary>
 		[ProtoMember(2)]
-		public int Type { get; set; }
-		/// <summary>名字</summary>
+		public int TotalTime { get; set; }
+		/// <summary>目标选择方式</summary>
 		[ProtoMember(3)]
-		public string Name { get; set; }
-		/// <summary>位置</summary>
+		public int SelectType { get; set; }
+		/// <summary>目标选择参数</summary>
 		[ProtoMember(4)]
-		public int Position { get; set; }
-		/// <summary>身高</summary>
-		[ProtoMember(5)]
-		public int Height { get; set; }
-		/// <summary>体重</summary>
-		[ProtoMember(6)]
-		public int Weight { get; set; }
+		public string SelectParam { get; set; }
 
 	}
 }
