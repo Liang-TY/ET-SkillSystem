@@ -479,6 +479,79 @@ namespace ET
 
 	}
 
+//Cast 开始
+	[Message(OuterMessage.M2C_CastStart)]
+	[ProtoContract]
+	public partial class M2C_CastStart: ProtoObject, IActorMessage
+	{
+		[ProtoMember(80)]
+		public long SceneId { get; set; }
+
+		[ProtoMember(1)]
+		public long CastId { get; set; }
+
+		[ProtoMember(2)]
+		public long CastConfigId { get; set; }
+
+		[ProtoMember(3)]
+		public long CasterId { get; set; }
+
+		[ProtoMember(4)]
+		public List<long> TargetsId { get; set; }
+
+	}
+
+//Cast 命中
+	[Message(OuterMessage.M2C_CastHit)]
+	[ProtoContract]
+	public partial class M2C_CastHit: ProtoObject, IActorMessage
+	{
+		[ProtoMember(80)]
+		public long SceneId { get; set; }
+
+		[ProtoMember(1)]
+		public long CastId { get; set; }
+
+		[ProtoMember(2)]
+		public List<long> TargetsId { get; set; }
+
+		[ProtoMember(3)]
+		public long CasterId { get; set; }
+
+	}
+
+//Cast 结束
+	[Message(OuterMessage.M2C_CastFinish)]
+	[ProtoContract]
+	public partial class M2C_CastFinish: ProtoObject, IActorMessage
+	{
+		[ProtoMember(80)]
+		public long SceneId { get; set; }
+
+		[ProtoMember(1)]
+		public long CastId { get; set; }
+
+		[ProtoMember(2)]
+		public long CasterId { get; set; }
+
+	}
+
+//Cast 打断
+	[Message(OuterMessage.M2C_CastBreak)]
+	[ProtoContract]
+	public partial class M2C_CastBreak: ProtoObject, IActorMessage
+	{
+		[ProtoMember(80)]
+		public long SceneId { get; set; }
+
+		[ProtoMember(1)]
+		public long CastId { get; set; }
+
+		[ProtoMember(3)]
+		public long CasterId { get; set; }
+
+	}
+
 	public static class OuterMessage
 	{
 		 public const ushort HttpGetRouterResponse = 10002;
@@ -515,5 +588,9 @@ namespace ET
 		 public const ushort M2C_TransferMap = 10033;
 		 public const ushort C2G_Benchmark = 10034;
 		 public const ushort G2C_Benchmark = 10035;
+		 public const ushort M2C_CastStart = 10036;
+		 public const ushort M2C_CastHit = 10037;
+		 public const ushort M2C_CastFinish = 10038;
+		 public const ushort M2C_CastBreak = 10039;
 	}
 }
