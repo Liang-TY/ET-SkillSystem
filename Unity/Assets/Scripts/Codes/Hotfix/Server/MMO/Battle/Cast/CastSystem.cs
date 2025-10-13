@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Driver.Core.Clusters;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +15,7 @@ namespace ET.Server
         protected override void Awake(Cast self,int configId)
         {
             self.ConfigId = configId;
+            self.AddComponent<ActionsTempComponent>();
         }
     }
 
@@ -136,8 +139,8 @@ namespace ET.Server
             m2C_CastStart.TargetsId.AddRange(cast.Targets);
             MMOMessageHelper.SendClient(cast.Caster,m2C_CastStart,(NoticeClientType)cast.Config.NoticeClientType);
 
-            CastConfig castConfig = cast.Config;
-            if (castConfig.Times.Count <= 0)
+            CastConfig config = cast.Config;
+            if (config.Times.Count <= 0)
             {
                 return;
             }
@@ -145,13 +148,91 @@ namespace ET.Server
             long castInstanceId = 0;
             long casterInstanceId = 0;
 
-            foreach (int time in castConfig.Times)
+            foreach (int time in config.Times)
             {
+                castInstanceId = cast.InstanceId;
+                casterInstanceId = cast.Caster.InstanceId;
                 await TimerComponent.Instance.WaitTillAsync(cast.StartTime + time);
 
-                //TODO 创建技能行为
+                if (!cast.checkAsyncInvalid(castInstanceId,casterInstanceId))
+                {
+                    Log.Error($"Cast asyncInvalid {castInstanceId} {casterInstanceId}");
+                }
+
+
+                //TODO 创建出一系列技能行为
+                foreach (CastActionTimes castActionTimes in config.TimesDict[time])
+                {
+                    if (castActionTimes.IsSelfHit)
+                    {
+                        cast.HandleSelfHit(castActionTimes.Index);
+                    }
+                    else
+                    {
+                        cast.HandleTargetHit(castActionTimes.Index);
+                    }
+                }
+
+
+
             }
-            await ETTask.CompletedTask;
+
+
+
+            if (config.TotalTime > 0)
+            {
+                castInstanceId = cast.InstanceId;
+                casterInstanceId = cast.Caster.InstanceId;
+                await TimerComponent.Instance.WaitTillAsync(cast.StartTime + config.TotalTime);
+                if (!cast.checkAsyncInvalid(castInstanceId, casterInstanceId))
+                {
+                    Log.Error($"Cast asyncInvalid {castInstanceId} {casterInstanceId}");
+                    return;
+                }
+            }
+
+            CastFinish(cast);
+        }
+
+
+        public static void HandleSelfHit(this Cast cast, int index)
+        {
+
+        }
+
+        public static void HandleTargetHit(this Cast cast, int index)
+        {
+
+        }
+
+        public static void CastFinish(this Cast cast)
+        {
+
+            //没有持续时间，就是瞬发的技能流程，可以不用通知结束，客户端自行结束
+            if (cast.Config.TotalTime >0)
+            {
+                M2C_CastFinish m2cCastFinish = new M2C_CastFinish(){ CastId = cast.Id, CasterId = cast.Caster.Id };
+                MMOMessageHelper.SendClient(cast.Caster, m2cCastFinish, (NoticeClientType)cast.Config.NoticeClientType);
+                cast?.Dispose();
+            }
+
+
+
+        }
+
+    //检测技能异步结束后是否仍合法
+        public static bool checkAsyncInvalid(this Cast cast, long castInstanceId, long casterInstanceId)
+        {
+            if (cast.Caster == null)
+            {
+                return false;
+
+            }
+            if (cast.InstanceId != castInstanceId || cast.Caster.InstanceId != casterInstanceId)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -1,0 +1,5 @@
+{"list":[
+{"_t":"ActionsConfig","_id":1001},
+{"_t":"ActionsConfig","_id":1002},
+{"_t":"ActionsConfig","_id":1003},
+]}
