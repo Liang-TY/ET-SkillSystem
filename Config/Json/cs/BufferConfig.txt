@@ -1,0 +1,6 @@
+{"list":[
+{"_t":"BufferConfig","_id":1001},
+{"_t":"BufferConfig","_id":1002},
+{"_t":"BufferConfig","_id":1003},
+{"_t":"BufferConfig","_id":1004},
+]}

@@ -8,11 +8,26 @@ namespace ET.Server
 {
     [FriendOfAttribute(typeof(ET.Server.Actions))]
     [FriendOfAttribute(typeof(ET.Server.Cast))]
+    [FriendOfAttribute(typeof(ET.Server.Buff))]
     public static class ActionsHelper
     {
         public static Actions CreateActions(this ActionsTempComponent self, int configId)
         {
             return self.AddChild<Actions, int>(configId);
+        }
+
+
+        public static Actions CreateActions(this Buff buff, int configId,
+ActionsRunType actionsRunType, bool autoRun = true, bool autoDispose = true)
+        {
+            Actions actions = buff.GetComponent<ActionsTempComponent>().CreateActions(configId);
+            actions.Owner = buff.Owner;
+            RunActions(actions, actionsRunType, autoRun, autoDispose);
+            if (actions.IsDisposed)
+            {
+                return null;
+            }
+            return actions;
         }
 
         public static Actions CreateActions(this Cast cast, int configId, Unit owner,

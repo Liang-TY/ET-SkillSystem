@@ -197,12 +197,54 @@ namespace ET.Server
 
         public static void HandleSelfHit(this Cast cast, int index)
         {
+            CastConfig config = cast.Config;
+            cast.SelectTarget();
+            if (cast.Targets.Count <= 0)
+            {
+                return;
+            }
+            M2C_CastHit m2CCastHit = new M2C_CastHit() { CastId = cast.Id, CasterId = cast.Caster.Id, TargetsId = new List<long>() };
+            m2CCastHit.TargetsId.AddRange(cast.Targets);
+            MMOMessageHelper.SendClient(cast.Caster, m2CCastHit,(NoticeClientType)cast.Config.NoticeClientType);
+
+
+
+            if (config.SelfHitAction.Length > index)
+            {
+                int actionId = config.SelfHitAction[index];
+                cast.CreateActions(actionId, cast.Caster, ActionsRunType.CastHit);
+            }
 
         }
 
         public static void HandleTargetHit(this Cast cast, int index)
         {
 
+            CastConfig config = cast.Config;
+            cast.SelectTarget();
+            if (cast.Targets.Count <= 0)
+            {
+                return;
+            }
+            M2C_CastHit m2CCastHit = new M2C_CastHit() { CastId = cast.Id, CasterId = cast.Caster.Id, TargetsId = new List<long>() };
+            m2CCastHit.TargetsId.AddRange(cast.Targets);
+            MMOMessageHelper.SendClient(cast.Caster, m2CCastHit, (NoticeClientType)cast.Config.NoticeClientType);
+
+            UnitComponent unitComponent = cast.DomainScene().GetComponent<UnitComponent>();
+
+            foreach (long unitId in cast.Targets)
+            {
+                Unit unit = unitComponent.Get(unitId);
+                if (unit == null || unit.IsDisposed)
+                {
+                    continue;
+                }
+                if (config.HitAction.Length > index)
+                {
+                    int actionId = config.HitAction[index];
+                    cast.CreateActions(actionId,unit,ActionsRunType.CastHit);
+                }
+            }
         }
 
         public static void CastFinish(this Cast cast)

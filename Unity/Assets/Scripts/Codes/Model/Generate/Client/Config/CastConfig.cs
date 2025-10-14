@@ -86,11 +86,17 @@ namespace ET
 		/// <summary>通知客户端类型</summary>
 		[ProtoMember(5)]
 		public int NoticeClientType { get; set; }
-		/// <summary>技能命中目标时间点</summary>
+		/// <summary>命中行为</summary>
 		[ProtoMember(6)]
-		public int[] HitActionTimes { get; set; }
-		/// <summary>技能命中自身时间点</summary>
+		public int[] HitAction { get; set; }
+		/// <summary>技能命中目标时间点</summary>
 		[ProtoMember(7)]
+		public int[] HitActionTimes { get; set; }
+		/// <summary>命中自身行为</summary>
+		[ProtoMember(8)]
+		public int[] SelfHitAction { get; set; }
+		/// <summary>技能命中自身时间点</summary>
+		[ProtoMember(9)]
 		public int[] SelfHitActionTimes { get; set; }
 
 	}
