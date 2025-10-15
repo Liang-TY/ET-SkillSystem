@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ET.EventType;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +31,17 @@ namespace ET.Server
             self.ConfigId = ConfigId;
             self.AddComponent<ActionsTempComponent>();
             self.CreateTime = TimeHelper.ServerNow();
+
+            if (self.Config.TotalTime == 0)
+            {
+                self.SetExpireTime(0);
+            }
+            else
+            {
+                long expireTime = self.CreateTime + self.Config.TotalTime;
+                self.SetExpireTime(expireTime);
+            }
+            self.SetTickTime(self.Config.TickTime);
         }
 
     }
@@ -62,9 +75,90 @@ namespace ET.Server
         }
 
     }
+
+
+    [Invoke(TimerInvokeType.BuffExpireTimer)]
+    public class BuffExpireTimer_TimerHandler : ATimer<Buff>
+    {
+        protected override void Run(Buff t)
+        {
+            t.TimeOut();
+        }
+
+    }
+
+
+    [Invoke(TimerInvokeType.BuffTick)]
+    public class BuffTickTimer_TimerHandler : ATimer<Buff>
+    {
+        protected override void Run(Buff t)
+        {
+            t.TickActions();
+        }
+
+    }
+
+
+
+
+
     [FriendOfAttribute(typeof(ET.Server.Buff))]
     public static class BuffSystem
     {
+
+        public static void SetTickTime(this Buff buff, int tickTime)
+        {
+            if (tickTime > 0)
+            {
+                buff.TickBeginTime = TimeHelper.ServerNow();
+                buff.TickTime = tickTime;
+                TimerComponent.Instance.Remove(ref buff.TickTimer);
+                buff.TickTimer = TimerComponent.Instance.NewRepeatedTimer(tickTime, TimerInvokeType.BuffTick,buff);
+
+            }
+
+
+        }
+        public static void SetExpireTime(this Buff buff, long expireTime, bool noticeclient = false)
+        {
+            if(expireTime == 0)
+            {
+                buff.ExpireTime = 0;
+                if (noticeclient)
+                {
+                    buff.NoticeClientUpdateInfo();
+                }
+
+                return;
+            }
+            if(buff.ExpireTime  == expireTime)
+            {
+                return;
+            }
+
+            buff.ExpireTime = expireTime;
+            if (noticeclient)
+            {
+                buff.NoticeClientUpdateInfo();
+            }
+
+            if (buff.ExpireTimer != 0)
+            {
+                TimerComponent.Instance.Remove(ref buff.ExpireTimer);
+            }
+
+            buff.ExpireTimer = TimerComponent.Instance.NewOnceTimer(buff.ExpireTime, TimerInvokeType.BuffExpireTimer,buff);
+
+        }
+
+        public static void NoticeClientUpdateInfo(this Buff buff)
+        {
+            M2C_BuffUpdate m2CBuffupdate = new M2C_BuffUpdate() { UnitId = buff.Owner.Id, BuffData = ToBuffAddProto(buff) };
+            MMOMessageHelper.SendClient(buff.Owner, m2CBuffupdate, (NoticeClientType)buff.Config.NoticeClientType);
+        }
+
+
+
         public static void AddActions(this Buff buff)
         {
             long instanceId = buff.InstanceId;
@@ -185,13 +279,16 @@ namespace ET.Server
 
         }
 
-
-
-
-
-
-
+        public static void TimeOut(this Buff buff)
+        {
+            EventSystem.Instance.Publish(buff.DomainScene(),new BuffTimeOut() { Unit = buff.Owner,BuffId = buff.Id});
         }
+
+
+
+
+
+    }
 
 
 

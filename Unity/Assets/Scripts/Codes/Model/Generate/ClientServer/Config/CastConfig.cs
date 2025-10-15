@@ -98,6 +98,12 @@ namespace ET
 		/// <summary>技能命中自身时间点</summary>
 		[ProtoMember(9)]
 		public int[] SelfHitActionTimes { get; set; }
+		/// <summary>命中Buff</summary>
+		[ProtoMember(10)]
+		public int[] Buffs { get; set; }
+		/// <summary>命中自身Buff</summary>
+		[ProtoMember(11)]
+		public int[] SelfBuffs { get; set; }
 
 	}
 }

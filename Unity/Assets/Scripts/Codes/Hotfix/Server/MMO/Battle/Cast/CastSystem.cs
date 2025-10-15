@@ -212,7 +212,20 @@ namespace ET.Server
             if (config.SelfHitAction.Length > index)
             {
                 int actionId = config.SelfHitAction[index];
-                cast.CreateActions(actionId, cast.Caster, ActionsRunType.CastHit);
+                if (actionId != 0)
+                {
+                    cast.CreateActions(actionId, cast.Caster, ActionsRunType.CastHit);
+                }
+
+            }
+
+            if (config.SelfBuffs.Length > index)
+            {
+                int buffId = config.SelfBuffs[index];
+                if (buffId != 0)
+                {
+                    cast.Caster.GetComponent<BuffComponent>()?.CreateAndAdd(buffId);
+                }
             }
 
         }
@@ -242,7 +255,20 @@ namespace ET.Server
                 if (config.HitAction.Length > index)
                 {
                     int actionId = config.HitAction[index];
-                    cast.CreateActions(actionId,unit,ActionsRunType.CastHit);
+                    if (actionId != 0)
+                    {
+                        cast.CreateActions(actionId, unit, ActionsRunType.CastHit);
+                    }
+
+                }
+
+                if (config.SelfBuffs.Length > index)
+                {
+                    int buffId = config.SelfBuffs[index];
+                    if (buffId != 0)
+                    {
+                        cast.Caster.GetComponent<BuffComponent>()?.CreateAndAdd(buffId);
+                    }
                 }
             }
         }

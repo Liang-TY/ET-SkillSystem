@@ -37,7 +37,7 @@ namespace ET.Server
 
         public int TickTime;
 
-        public int TickBeginTime;
+        public long TickBeginTime;
 
         [BsonIgnore]
         public long TickTimer;
