@@ -77,6 +77,21 @@ namespace ET
 		/// <summary>通知客户端类型</summary>
 		[ProtoMember(2)]
 		public int NoticeClientType { get; set; }
+		/// <summary>总时长</summary>
+		[ProtoMember(3)]
+		public int TotalTime { get; set; }
+		/// <summary>效果</summary>
+		[ProtoMember(4)]
+		public int[] AddAction { get; set; }
+		/// <summary>Tick间隔时间</summary>
+		[ProtoMember(5)]
+		public int TickTime { get; set; }
+		/// <summary>效果</summary>
+		[ProtoMember(6)]
+		public int[] TickAction { get; set; }
+		/// <summary>效果</summary>
+		[ProtoMember(7)]
+		public int[] RemoveAction { get; set; }
 
 	}
 }

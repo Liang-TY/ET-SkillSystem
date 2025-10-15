@@ -93,13 +93,13 @@ namespace ET.Server
             self.ConfigIdBuffs.Add(configId, buff);
             if((NoticeClientType)buff.Config.NoticeClientType != NoticeClientType.NoNotice)
             {
-                M2C_BuffAdd m2CBuffAdd = new M2C_BuffAdd(){ UnitId = buff.Owner.Id, BuffData = null };
+                M2C_BuffAdd m2CBuffAdd = new M2C_BuffAdd(){ UnitId = buff.Owner.Id, BuffData = buff.ToBuffAddProto() };
                 MMOMessageHelper.SendClient(buff.Owner, m2CBuffAdd, (NoticeClientType)buff.Config.NoticeClientType);
             }
 
             //todo 触发创建Buff时的行为实体逻辑
 
-
+            buff.AddActions();
 
 
             return true;
@@ -123,7 +123,7 @@ namespace ET.Server
                 }
 
                 //todo 触发移除Buff时的行为实体逻辑
-
+                buff.RemoveActions();
 
                 buff.Dispose();
             }
