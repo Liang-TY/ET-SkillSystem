@@ -7,26 +7,26 @@ namespace ET
 {
     [ProtoContract]
     [Config]
-    public partial class BufferConfigCategory : ConfigSingleton<BufferConfigCategory>, IMerge
+    public partial class BuffConfigCategory : ConfigSingleton<BuffConfigCategory>, IMerge
     {
         [ProtoIgnore]
         [BsonIgnore]
-        private Dictionary<int, BufferConfig> dict = new Dictionary<int, BufferConfig>();
+        private Dictionary<int, BuffConfig> dict = new Dictionary<int, BuffConfig>();
 		
         [BsonElement]
         [ProtoMember(1)]
-        private List<BufferConfig> list = new List<BufferConfig>();
+        private List<BuffConfig> list = new List<BuffConfig>();
 		
         public void Merge(object o)
         {
-            BufferConfigCategory s = o as BufferConfigCategory;
+            BuffConfigCategory s = o as BuffConfigCategory;
             this.list.AddRange(s.list);
         }
 		
 		[ProtoAfterDeserialization]        
         public void ProtoEndInit()
         {
-            foreach (BufferConfig config in list)
+            foreach (BuffConfig config in list)
             {
                 config.AfterEndInit();
                 this.dict.Add(config.Id, config);
@@ -36,13 +36,13 @@ namespace ET
             this.AfterEndInit();
         }
 		
-        public BufferConfig Get(int id)
+        public BuffConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out BufferConfig item);
+            this.dict.TryGetValue(id, out BuffConfig item);
 
             if (item == null)
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (BufferConfig)}，配置id: {id}");
+                throw new Exception($"配置找不到，配置表名: {nameof (BuffConfig)}，配置id: {id}");
             }
 
             return item;
@@ -53,12 +53,12 @@ namespace ET
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, BufferConfig> GetAll()
+        public Dictionary<int, BuffConfig> GetAll()
         {
             return this.dict;
         }
 
-        public BufferConfig GetOne()
+        public BuffConfig GetOne()
         {
             if (this.dict == null || this.dict.Count <= 0)
             {
@@ -69,7 +69,7 @@ namespace ET
     }
 
     [ProtoContract]
-	public partial class BufferConfig: ProtoObject, IConfig
+	public partial class BuffConfig: ProtoObject, IConfig
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
