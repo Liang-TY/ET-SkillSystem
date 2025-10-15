@@ -74,6 +74,9 @@ namespace ET
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
 		public int Id { get; set; }
+		/// <summary>通知客户端类型</summary>
+		[ProtoMember(2)]
+		public int NoticeClientType { get; set; }
 
 	}
 }

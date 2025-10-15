@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace ET.Server
 {
+    [ChildOf(typeof(BuffTempComponent))]
+    public class BuffCreateInfo: Entity, IAwake<int>, IDestroy, ISerializeToEntity
+    {
+        public int ConfigId;
+        //此处可以放：施法者，状态来源，关联技能等
+    }
+
+
     [ChildOf(typeof(BuffComponent))]
     public class Buff : Entity, IAwake<int>, IDestroy, ISerializeToEntity
     {

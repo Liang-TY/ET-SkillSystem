@@ -271,6 +271,41 @@ message M2C_CastBreak // IActorMessage
 	int64 CastId = 1;
 	int64 CasterId = 3;
 }
+message BuffProto{
+	int64 Id = 1;
+	int32 ConfigId = 2;
+	int64 ExpireTime = 3;
+	int64 CreateTime = 4;
+	byte[] ExtraData = 5;
+}
+
+message M2C_BuffAdd // IActorMessage
+{
+	int64 UnitId = 1;
+	BuffProto BuffData = 2;
+
+}
+
+message M2C_BuffTick // IActorMessage
+{
+	int64 UnitId = 1;
+	int64 BuffId = 2;
+
+}
+
+message M2C_BuffUpdate // IActorMessage
+{
+	int64 UnitId = 1;
+	BuffProto BuffData = 2;
+
+}
+
+message M2C_BuffRemove // IActorMessage
+{
+	int64 UnitId = 1;
+	int64 BuffId = 2;
+
+}
 
 
 

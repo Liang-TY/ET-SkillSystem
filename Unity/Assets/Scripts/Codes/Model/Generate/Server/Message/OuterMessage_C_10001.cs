@@ -552,6 +552,74 @@ namespace ET
 
 	}
 
+	[Message(OuterMessage.BuffProto{)]
+	[ProtoContract]
+	public partial class BuffProto{: ProtoObject
+		[ProtoMember(1)]
+		public long Id { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+		[ProtoMember(3)]
+		public long ExpireTime { get; set; }
+
+		[ProtoMember(4)]
+		public long CreateTime { get; set; }
+
+		[ProtoMember(5)]
+		public byte[] ExtraData { get; set; }
+
+	}
+
+	[Message(OuterMessage.M2C_BuffAdd)]
+	[ProtoContract]
+	public partial class M2C_BuffAdd: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[ProtoMember(2)]
+		public BuffProto BuffData { get; set; }
+
+	}
+
+	[Message(OuterMessage.M2C_BuffTick)]
+	[ProtoContract]
+	public partial class M2C_BuffTick: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[ProtoMember(2)]
+		public long BuffId { get; set; }
+
+	}
+
+	[Message(OuterMessage.M2C_BuffUpdate)]
+	[ProtoContract]
+	public partial class M2C_BuffUpdate: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[ProtoMember(2)]
+		public BuffProto BuffData { get; set; }
+
+	}
+
+	[Message(OuterMessage.M2C_BuffRemove)]
+	[ProtoContract]
+	public partial class M2C_BuffRemove: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[ProtoMember(2)]
+		public long BuffId { get; set; }
+
+	}
+
 	public static class OuterMessage
 	{
 		 public const ushort HttpGetRouterResponse = 10002;
@@ -592,5 +660,10 @@ namespace ET
 		 public const ushort M2C_CastHit = 10037;
 		 public const ushort M2C_CastFinish = 10038;
 		 public const ushort M2C_CastBreak = 10039;
+		 public const ushort BuffProto{ = 10040;
+		 public const ushort M2C_BuffAdd = 10041;
+		 public const ushort M2C_BuffTick = 10042;
+		 public const ushort M2C_BuffUpdate = 10043;
+		 public const ushort M2C_BuffRemove = 10044;
 	}
 }

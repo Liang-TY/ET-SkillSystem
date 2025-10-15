@@ -1,6 +1,6 @@
 {"list":[
-{"_t":"BuffConfig","_id":1001},
-{"_t":"BuffConfig","_id":1002},
-{"_t":"BuffConfig","_id":1003},
-{"_t":"BuffConfig","_id":1004},
+{"_t":"BuffConfig","_id":1001,"NoticeClientType":0},
+{"_t":"BuffConfig","_id":1002,"NoticeClientType":0},
+{"_t":"BuffConfig","_id":1003,"NoticeClientType":0},
+{"_t":"BuffConfig","_id":1004,"NoticeClientType":0},
 ]}
