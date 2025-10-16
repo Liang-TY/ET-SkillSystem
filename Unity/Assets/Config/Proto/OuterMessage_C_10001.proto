@@ -307,5 +307,11 @@ message M2C_BuffRemove // IActorMessage
 
 }
 
+message M2C_BattleResult // IActorMessage
+{
+	int64 AttackerId = 1;
+	int64 TargetId = 2;
+	int64 Damage = 3;
 
+}
 

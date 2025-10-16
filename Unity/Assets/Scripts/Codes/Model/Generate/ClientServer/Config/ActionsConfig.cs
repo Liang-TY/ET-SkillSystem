@@ -77,6 +77,9 @@ namespace ET
 		/// <summary>技能行为类型</summary>
 		[ProtoMember(2)]
 		public int Type { get; set; }
+		/// <summary>参数</summary>
+		[ProtoMember(3)]
+		public string[] Param { get; set; }
 
 	}
 }

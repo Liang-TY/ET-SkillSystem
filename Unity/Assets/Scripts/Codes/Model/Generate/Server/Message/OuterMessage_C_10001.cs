@@ -620,6 +620,21 @@ namespace ET
 
 	}
 
+	[Message(OuterMessage.M2C_BattleResult)]
+	[ProtoContract]
+	public partial class M2C_BattleResult: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public long AttackerId { get; set; }
+
+		[ProtoMember(2)]
+		public long TargetId { get; set; }
+
+		[ProtoMember(3)]
+		public long Damage { get; set; }
+
+	}
+
 	public static class OuterMessage
 	{
 		 public const ushort HttpGetRouterResponse = 10002;
@@ -665,5 +680,6 @@ namespace ET
 		 public const ushort M2C_BuffTick = 10042;
 		 public const ushort M2C_BuffUpdate = 10043;
 		 public const ushort M2C_BuffRemove = 10044;
+		 public const ushort M2C_BattleResult = 10045;
 	}
 }
