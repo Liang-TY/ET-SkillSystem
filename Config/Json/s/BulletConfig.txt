@@ -1,0 +1,5 @@
+{"list":[
+{"_t":"BulletConfig","_id":1001,"Shape":0,"ShapeParam":[],"TotalTime":0,"AwakeAction":[],"Interval":0,"TickCastId":0,"TickAction":[],"DestroyAction":[],"Model":""},
+{"_t":"BulletConfig","_id":1002,"Shape":0,"ShapeParam":[],"TotalTime":0,"AwakeAction":[],"Interval":0,"TickCastId":0,"TickAction":[],"DestroyAction":[],"Model":""},
+{"_t":"BulletConfig","_id":1003,"Shape":0,"ShapeParam":[],"TotalTime":0,"AwakeAction":[],"Interval":0,"TickCastId":0,"TickAction":[],"DestroyAction":[],"Model":""},
+]}

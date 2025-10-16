@@ -1,0 +1,5 @@
+{"list":[
+{"_t":"Bullet2Config","_id":1001},
+{"_t":"Bullet2Config","_id":1002},
+{"_t":"Bullet2Config","_id":1004},
+]}

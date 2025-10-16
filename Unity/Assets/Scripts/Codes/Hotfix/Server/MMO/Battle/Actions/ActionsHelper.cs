@@ -16,6 +16,22 @@ namespace ET.Server
             return self.AddChild<Actions, int>(configId);
         }
 
+        public static Actions CreateActions(this BulletComponent self, int configId, Unit owner,Unit caster,
+            ActionsRunType actionsRunType,bool autoRun = true,bool autoDispose = true)
+        {
+            Actions actions = self.GetComponent<ActionsTempComponent>().CreateActions(configId);
+            actions.Caster = caster;
+            actions.Owner = owner;
+            RunActions(actions, actionsRunType, autoRun, autoDispose);
+            if (actions.IsDisposed)
+            {
+                return null;
+            }
+            
+
+            return actions;
+        }
+
 
         public static Actions CreateActions(this Buff buff, int configId,
 ActionsRunType actionsRunType, bool autoRun = true, bool autoDispose = true)
