@@ -552,9 +552,10 @@ namespace ET
 
 	}
 
-	[Message(OuterMessage.BuffProto{)]
+	[Message(OuterMessage.BuffProto)]
 	[ProtoContract]
-	public partial class BuffProto{: ProtoObject
+	public partial class BuffProto: ProtoObject
+	{
 		[ProtoMember(1)]
 		public long Id { get; set; }
 
@@ -675,7 +676,7 @@ namespace ET
 		 public const ushort M2C_CastHit = 10037;
 		 public const ushort M2C_CastFinish = 10038;
 		 public const ushort M2C_CastBreak = 10039;
-		 public const ushort BuffProto{ = 10040;
+		 public const ushort BuffProto = 10040;
 		 public const ushort M2C_BuffAdd = 10041;
 		 public const ushort M2C_BuffTick = 10042;
 		 public const ushort M2C_BuffUpdate = 10043;

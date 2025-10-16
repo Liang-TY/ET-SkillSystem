@@ -271,7 +271,8 @@ message M2C_CastBreak // IActorMessage
 	int64 CastId = 1;
 	int64 CasterId = 3;
 }
-message BuffProto{
+message BuffProto
+{
 	int64 Id = 1;
 	int32 ConfigId = 2;
 	int64 ExpireTime = 3;
