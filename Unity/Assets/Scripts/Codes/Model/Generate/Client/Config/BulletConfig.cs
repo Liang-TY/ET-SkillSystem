@@ -91,7 +91,7 @@ namespace ET
 		public int Interval { get; set; }
 		/// <summary>结算技能编号</summary>
 		[ProtoMember(7)]
-		public int TickCastId { get; set; }
+		public int[] TickCastId { get; set; }
 		/// <summary>结算行为</summary>
 		[ProtoMember(8)]
 		public int[] TickAction { get; set; }

@@ -29,5 +29,17 @@ namespace ET.Server
                     throw new Exception($"not such unit type: {unitType}");
             }
         }
+        /// <summary>
+        /// 创建子弹
+        /// </summary>
+        public static Unit CreateBullet(Scene scene, long ownerId, int unitConfigId,int bulletId,float3 pos)
+        {
+            UnitComponent unitComponent = scene.GetComponent<UnitComponent>();
+            Unit unit = unitComponent.AddChild<Unit, int>(unitConfigId);
+            unit.Position = pos;
+            BulletComponent bulletComponent = unit.AddComponent<BulletComponent,int>(bulletId);
+            unitComponent.Add(unit);
+            return unit;
+        }
     }
 }

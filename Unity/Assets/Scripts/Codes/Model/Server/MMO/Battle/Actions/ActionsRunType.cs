@@ -17,5 +17,6 @@ namespace ET.Server
         CastHit,
         BulletAwake,
         BulletDestroy,
+        BulletTick
     }
 }

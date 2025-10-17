@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
@@ -33,7 +34,7 @@ namespace ET.Server
     {
         protected override void Run(BulletComponent t)
         {
-
+            t.Tick();
         }
     }
 
@@ -49,7 +50,91 @@ namespace ET.Server
 
     public static class BulletComponentSystem
     {
-        public static Unit Getowner(this BulletComponent self)
+
+        public static void Tick(this BulletComponent self)
+        {
+            Unit selfUnit = self.GetParent<Unit>();
+            Unit owner = self.GetOwner();
+            if (owner == null)
+            {
+                self.Dispose();
+                return;
+            }
+            Log.Console($"->子弹 {self.ConfigId} Tick");
+            BulletConfig bulletConfig = self.Config;
+            using (ListComponent<Unit> list = ListComponent<Unit>.Create())
+            {
+                switch (bulletConfig.Shape)
+                {
+                    case 1://选择身边一定范围内的一个人
+                        int range = int.Parse(bulletConfig.ShapeParam[0]);
+
+
+                        foreach(AOIEntity aoiEntity in selfUnit.GetBeSeePlayers().Values)
+                        {
+                            Unit unit = aoiEntity.GetParent<Unit>();
+                            if (unit == owner)
+                            {
+                                //不选自己
+                                continue;
+                            }
+                            if (math.length(unit.Position - selfUnit.Position) < range)
+                            {
+                                list.Add(unit);
+                            }
+
+                        }
+                        break;
+                    default:
+                        throw new Exception($"not such Bulletconfig shape: {bulletConfig.Shape}");
+                }
+
+
+                if(list.Count > 0)
+                {
+                    foreach (var unit in list)
+                    {
+                        if (bulletConfig.TickCastId.Length > 0)
+                        {
+                            foreach (var tickCastId in bulletConfig.TickCastId)
+                            {
+                                owner.CreateAndCast(tickCastId);
+                            }
+                        }
+                        if(bulletConfig.TickAction.Length > 0){
+                            foreach (var actionsId in bulletConfig.TickAction)
+                            {
+                                self.CreateActions(actionsId, unit, self.GetOwner(), ActionsRunType.BulletTick);
+                            }
+                        }
+                    }
+                }
+
+
+                
+                    
+               
+
+
+
+
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static Unit GetOwner(this BulletComponent self)
         {
             return self.DomainScene().GetComponent<UnitComponent>().Get(self.OwnerId);
         }
@@ -60,7 +145,7 @@ namespace ET.Server
 
             TimerComponent.Instance.Remove(ref self.TickTimer);
 
-            Unit owner = self.Getowner();
+            Unit owner = self.GetOwner();
             if (owner == null)
             {
                 return;
@@ -84,7 +169,7 @@ namespace ET.Server
 
         public static void Start(this BulletComponent self)
         {
-            Unit owner = self.Getowner();
+            Unit owner = self.GetOwner();
             if (owner == null)
             {
                 self.Dispose();
