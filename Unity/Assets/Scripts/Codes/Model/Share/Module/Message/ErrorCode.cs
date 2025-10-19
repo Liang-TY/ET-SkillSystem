@@ -28,5 +28,10 @@ namespace ET
         /// 没有目标
         /// </summary>
         public const int ERR_Cast_TargetIsNull = 200103;
+
+        /// <summary>
+        /// unit存活
+        /// </summary>
+        public const int ERR_Relive_Alive = 200104;
     }
 }

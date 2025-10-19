@@ -1,0 +1,4 @@
+{"list":[
+{"_t":"MonsterGroupConfig","_id":1,"PosX":141,"PosY":0.5,"PosZ":237,"Range":20},
+{"_t":"MonsterGroupConfig","_id":2,"PosX":160,"PosY":0.5,"PosZ":237,"Range":10},
+]}
