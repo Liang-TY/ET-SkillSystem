@@ -33,5 +33,16 @@ namespace ET
         /// unit存活
         /// </summary>
         public const int ERR_Relive_Alive = 200104;
+
+        /// <summary>
+        /// 配置参数错误
+        /// </summary>
+        public const int ERR_ArgsError = 200105;
+
+        /// <summary>
+        /// unit已经死亡
+        /// </summary>
+        public const int ERR_Relive_Dead_Op = 200106;
+
     }
 }

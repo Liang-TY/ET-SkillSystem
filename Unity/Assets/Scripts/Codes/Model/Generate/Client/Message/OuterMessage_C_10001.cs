@@ -636,6 +636,34 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_TestCast))]
+	[Message(OuterMessage.C2M_TestCast)]
+	[ProtoContract]
+	public partial class C2M_TestCast: ProtoObject, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public int CastConfigId { get; set; }
+
+	}
+
+	[Message(OuterMessage.M2C_TestCast)]
+	[ProtoContract]
+	public partial class M2C_TestCast: ProtoObject, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
 	public static class OuterMessage
 	{
 		 public const ushort HttpGetRouterResponse = 10002;
@@ -682,5 +710,7 @@ namespace ET
 		 public const ushort M2C_BuffUpdate = 10043;
 		 public const ushort M2C_BuffRemove = 10044;
 		 public const ushort M2C_BattleResult = 10045;
+		 public const ushort C2M_TestCast = 10046;
+		 public const ushort M2C_TestCast = 10047;
 	}
 }

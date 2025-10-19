@@ -316,3 +316,19 @@ message M2C_BattleResult // IActorMessage
 
 }
 
+//ResponseType M2C_TestCast
+message C2M_TestCast // IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int32 CastConfigId = 1;
+
+}
+
+message M2C_TestCast // IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+}
+
