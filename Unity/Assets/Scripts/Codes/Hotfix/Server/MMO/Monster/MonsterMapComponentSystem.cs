@@ -88,7 +88,7 @@ namespace ET.Server
             MonsterConfig monsterConfig = MonsterConfigCategory.Instance.Get(id);
             MonsterGroupConfig groupConfig = MonsterGroupConfigCategory.Instance.Get(monsterConfig.GroupId);
             int h_range = groupConfig.Range / 2;
-            float3 pos =  new float3(groupConfig.PosX, groupConfig.PosY, groupConfig.Posz) +
+            float3 pos =  new float3(groupConfig.PosX, groupConfig.PosY, groupConfig.PosZ) +
             new float3(RandomGenerator.RandomNumber(-h_range, h_range), 0, RandomGenerator.RandomNumber(-h_range, h_range));
 
             Unit unit = UnitFactory.CreateMonster(self.DomainScene(), monsterConfig.UnitConfigId, pos);

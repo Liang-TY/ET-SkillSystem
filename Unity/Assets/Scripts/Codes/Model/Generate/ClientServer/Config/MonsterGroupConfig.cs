@@ -80,7 +80,7 @@ namespace ET
 		/// <summary>位置y</summary>
 		[ProtoMember(3)]
 		public float PosY { get; set; }
-		/// <summary>位置Z</summary>
+		/// <summary>位置z</summary>
 		[ProtoMember(4)]
 		public float PosZ { get; set; }
 		/// <summary>范围</summary>
