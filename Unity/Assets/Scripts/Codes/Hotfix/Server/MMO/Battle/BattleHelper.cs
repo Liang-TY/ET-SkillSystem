@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ET.Server
 {
+    [FriendOfAttribute(typeof(ET.Server.ReliveComponent))]
     public static class BattleHelper
     {
         /// <summary>
@@ -31,13 +32,14 @@ namespace ET.Server
 
 
             //广播飘字
-            if (res_damage != 0){
+            if (res_damage != 0)
+            {
                 MMOMessageHelper.SendClient(target, new M2C_BattleResult()
                 {
                     AttackerId = attacker.Id,
                     TargetId = target.Id,
                     Damage = res_damage
-                },NoticeClientType.Broadcast);
+                }, NoticeClientType.Broadcast);
             }
 
             if (oldHp > 0 && newHp == 0)
@@ -52,11 +54,49 @@ namespace ET.Server
 
         // 击杀
         // 负责击杀双方相关的逻辑
-        public static void Kill(Unit killer,Unit killed)
+        public static void Kill(Unit killer, Unit killed)
         {
             //此处击杀者有很多处理，例如红名，pk值，记录到被杀的仇恨列表，击杀排行榜记录等等的需求
+            OnDead(killed);
         }
 
 
+        /// <summary>
+        /// 被击杀时的处理
+        /// </summary>
+        /// <param name="killed"></param>
+        public static void OnDead(Unit killed)
+        {
+            ReliveComponent reliveComponent = killed.GetComponent<ReliveComponent>();
+            if (reliveComponent == null)
+            {
+                return;
+            }
+
+            if (!killed.IsAlive())
+            {
+                return;
+            }
+
+            killed.Stop(0);
+            reliveComponent.Alive = false;
+            switch (killed.Type)
+            {
+                case UnitType.Player:
+                    // 死亡触发buff、触发被动等等
+                    break;
+                case UnitType.Monster:
+                    // 设定怪物死了3秒后自动消失
+                    TimerComponent.Instance.NewOnceTimer(
+                        TimeHelper.ServerNow() + 3000,
+                        TimerInvokeType.MonsterDead,
+                        killed);
+                    break;
+            }
+
+
+
+
+        }
     }
 }

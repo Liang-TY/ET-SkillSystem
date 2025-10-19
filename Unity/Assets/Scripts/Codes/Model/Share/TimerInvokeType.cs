@@ -17,5 +17,10 @@
         public const int BuffExpireTimer = 204;
         public const int BuffTick = 205;
         public const int BulletTick = 206;
+
+        public const int CreateMonster = 207;
+
+        public const int MonsterDead = 208;
+
     }
 }
