@@ -104,6 +104,12 @@ namespace ET
 		/// <summary>命中自身Buff</summary>
 		[ProtoMember(11)]
 		public int[] SelfBuffs { get; set; }
+		/// <summary>技能开始时的自身特效</summary>
+		[ProtoMember(12)]
+		public int[] StartEffect { get; set; }
+		/// <summary>技能命中时的目标特效</summary>
+		[ProtoMember(13)]
+		public int[] HitEffect { get; set; }
 
 	}
 }

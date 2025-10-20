@@ -22,25 +22,29 @@ namespace ET.Client
             //buff移除，状态移除在客户端buffcomponent，回收特效，ui特效等
             Unit unit = zoneScene.CurrentScene().GetComponent<UnitComponent>().Get(message.UnitId);
 
-            if (unit != null)
+            if(unit == null){
+                return;
+            }
+
+            Buff buff = unit.GetComponent<BuffComponent>().Get(message.BuffId);
+            if (buff == null)
             {
-                EventSystem.Instance.Publish
-                (
-                    zoneScene,
-                    new BuffRemove()
-                    {
-                        Unit = unit,
-                        BuffId = message.BuffId
-                    }
-                );
+                return;
             }
 
 
 
+            EventSystem.Instance.Publish
+            (
+                zoneScene,
+                new BuffRemove()
+                {
+                    Unit = unit,
+                    BuffId = message.BuffId
+                }
+            );
 
-
-
-
+            unit.GetComponent<BuffComponent>().Remove(message.BuffId);
 
             await ETTask.CompletedTask;
         }

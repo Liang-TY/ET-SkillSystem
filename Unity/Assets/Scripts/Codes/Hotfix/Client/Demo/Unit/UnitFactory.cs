@@ -37,5 +37,17 @@ namespace ET.Client
 	        EventSystem.Instance.Publish(unit.DomainScene(), new EventType.AfterUnitCreate() {Unit = unit});
             return unit;
         }
+
+        public static Unit CreateParticleUnit(Scene currentScene)
+		{
+            UnitComponent unitComponent = currentScene.GetComponent<UnitComponent>();
+            Unit unit = unitComponent.AddChild<Unit, int>(10003);
+            unitComponent.Add(unit);
+            unit.AddComponent <ObjectWait> ();
+            return unit;
+        }
+
+
+
     }
 }

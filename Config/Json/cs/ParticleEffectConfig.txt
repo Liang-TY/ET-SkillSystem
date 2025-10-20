@@ -1,0 +1,4 @@
+{"list":[
+{"_t":"ParticleEffectConfig","_id":1,"PrefabName":"cfx31","TotalTime":1000,"IsFollowUnit":1,"PosX":0,"PosY":"0.1","PosZ":0,"ScaleX":1,"ScaleY":1,"ScaleZ":1},
+{"_t":"ParticleEffectConfig","_id":2,"PrefabName":"cfx_hit_cwhite","TotalTime":500,"IsFollowUnit":1,"PosX":0,"PosY":"0.5","PosZ":0,"ScaleX":1,"ScaleY":1,"ScaleZ":1},
+]}

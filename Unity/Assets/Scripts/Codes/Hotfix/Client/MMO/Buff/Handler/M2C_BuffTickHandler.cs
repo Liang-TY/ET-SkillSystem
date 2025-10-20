@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ET.Client
 {
+
+    //Tick是每隔一段时间执行一次，而Update是执行一次用于更新Buff的数据
+
     //在这里的sceneType.Client就相当于et6.0的zoneScene
     [MessageHandler(SceneType.Client)]
     public class M2C_BuffTickHandler : AMHandler<M2C_BuffTick>
@@ -19,27 +22,31 @@ namespace ET.Client
             Scene zoneScene = session.ClientScene();
             Log.Console($"zone{zoneScene.Zone} ->  玩家 {message.UnitId} 触发了 BUFF tick({message.BuffId}) ");
 
-            //buff移除，状态移除在客户端buffcomponent，回收特效，ui特效等
+            //buffTick，播放特效，动面等等的，例如流血动面，飘字之类的
             Unit unit = zoneScene.CurrentScene().GetComponent<UnitComponent>().Get(message.UnitId);
 
-            if (unit != null)
+
+            if (unit == null)
             {
-                EventSystem.Instance.Publish
-                (
-                    zoneScene,
-                    new BuffTick()
-                    {
-                        unit = unit,
-                        BuffId = message.BuffId
-                    }
-                );
+                return;
+            }
+
+            Buff buff = unit.GetComponent<BuffComponent>().Get(message.BuffId);
+            if (buff == null)
+            {
+                return;
             }
 
 
-
-
-
-
+            EventSystem.Instance.Publish
+            (
+                zoneScene,
+                new BuffTick()
+                {
+                    unit = unit,
+                    BuffId = message.BuffId
+                }
+            );
 
 
             await ETTask.CompletedTask;

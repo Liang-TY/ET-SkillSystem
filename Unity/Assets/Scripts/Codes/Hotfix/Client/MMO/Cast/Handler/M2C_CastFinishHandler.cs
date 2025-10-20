@@ -19,6 +19,21 @@ namespace ET.Client
 
             Scene zoneScene = session.ClientScene();
             Log.Console($"zone{zoneScene.Zone} ->  玩家 {message.CasterId} 技能{message.CastId} 结束了 ");
+
+
+            Unit caster = zoneScene.CurrentScene().GetComponent<UnitComponent>().Get(message.CasterId);
+            if (caster == null)
+            {
+                return;
+            }
+            Cast cast = caster.GetComponent<CastComponent>().Get(message.CastId);
+            if (cast == null)
+            {
+                return;
+            }
+
+
+
             //技能结束，播放技能结束后摇，回到idle状态，回收技能特效，模型，ui等资源
             EventSystem.Instance.Publish
             (
@@ -30,6 +45,7 @@ namespace ET.Client
                 }
             );
 
+            caster.GetComponent<CastComponent>().Remove(message.CastId);
 
             await ETTask.CompletedTask;
         }

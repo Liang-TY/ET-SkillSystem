@@ -8,6 +8,7 @@ namespace ET.Client
 		None,
 		Idle,
 		Run,
+		Attack,
 	}
 
 	[ComponentOf(typeof(Unit))]

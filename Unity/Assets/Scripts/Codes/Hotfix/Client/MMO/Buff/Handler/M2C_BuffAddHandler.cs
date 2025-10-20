@@ -1,4 +1,5 @@
 ﻿using ET.EventType;
+using ET.Server;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -20,20 +21,25 @@ namespace ET.Client
             Log.Console($"zone{zoneScene.Zone} ->  玩家 {message.UnitId} 添加了 {message.BuffData.ConfigId} BUFF({message.BuffData.Id}) ");
             Unit unit = zoneScene.CurrentScene().GetComponent<UnitComponent>().Get(message.UnitId);
 
-            if (unit != null)
+            if (unit == null)
             {
-                EventSystem.Instance.Publish
-                (
-                    zoneScene,
-                    new BuffAdd()
-                    {
-                        Unit = unit,
-                        BuffConfigId = message.BuffData.ConfigId,
-                        BuffId = message.BuffData.Id
-                    }
-                );
+                return;
             }
 
+            Buff buff = BuffFactory.Create(unit, message.BuffData);
+            unit.GetComponent<BuffComponent>().Add(buff);
+            //buff添加，状态记录到客户端buffcomponent，显示buff图标，信息，插放buff特效，等等的
+
+            EventSystem.Instance.Publish
+            (
+                zoneScene,
+                new BuffAdd()
+                {
+                    Unit = unit,
+                    BuffConfigId = message.BuffData.ConfigId,
+                    BuffId = message.BuffData.Id
+                }
+            );
 
 
 

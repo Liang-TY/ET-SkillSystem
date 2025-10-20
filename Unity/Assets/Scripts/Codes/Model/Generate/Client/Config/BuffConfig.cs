@@ -92,6 +92,9 @@ namespace ET
 		/// <summary>效果</summary>
 		[ProtoMember(7)]
 		public int[] RemoveAction { get; set; }
+		/// <summary>Buff自身特效</summary>
+		[ProtoMember(8)]
+		public int[] OwnerEffect { get; set; }
 
 	}
 }

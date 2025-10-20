@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ET.Client
 {
+
+    //Tick是每隔一段时间执行一次，而Update是执行一次用于更新Buff的数据
+
     //在这里的sceneType.Client就相当于et6.0的zoneScene
     [MessageHandler(SceneType.Client)]
     public class M2C_BuffUpdateHandler : AMHandler<M2C_BuffUpdate>
@@ -22,19 +25,30 @@ namespace ET.Client
             //buff上信息的更新，各自根据更新的逻辑进行处理
             Unit unit = zoneScene.CurrentScene().GetComponent<UnitComponent>().Get(message.UnitId);
 
-            if (unit != null)
+            if (unit == null)
             {
-                EventSystem.Instance.Publish
-                (
-                    zoneScene,
-                    new BuffUpdate()
-                    {
-                        unit = unit,
-                        BuffConfigId = message.BuffData.ConfigId,
-                        BuffId = message.BuffData.Id
-                    }
-                );
+                return;
             }
+
+            Buff buff = unit.GetComponent<BuffComponent>().Get(message.BuffData.Id);
+            if (buff == null)
+            {
+                return;
+            }
+
+            unit.GetComponent<BuffComponent>().Update(message.BuffData);
+            //buff上信息的更新，各自根据更新的逻辑进行处理
+
+            EventSystem.Instance.Publish
+            (
+                zoneScene,
+                new BuffUpdate()
+                {
+                    unit = unit,
+                    BuffConfigId = message.BuffData.ConfigId,
+                    BuffId = message.BuffData.Id
+                }
+            );
 
 
 
