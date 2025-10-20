@@ -30,13 +30,13 @@ namespace ET.Client
                 return;
             }
 
-            Buff buff = unit.GetComponent<BuffComponent>().Get(message.BuffData.Id);
+            ClientBuff buff = unit.GetComponent<ClientBuffComponent>().Get(message.BuffData.Id);
             if (buff == null)
             {
                 return;
             }
 
-            unit.GetComponent<BuffComponent>().Update(message.BuffData);
+            unit.GetComponent<ClientBuffComponent>().Update(message.BuffData);
             //buff上信息的更新，各自根据更新的逻辑进行处理
 
             EventSystem.Instance.Publish

@@ -26,7 +26,7 @@ namespace ET.Client
             {
                 return;
             }
-            Cast cast = caster.GetComponent<CastComponent>().Get(message.CastId);
+            ClientCast cast = caster.GetComponent<ClientCastComponent>().Get(message.CastId);
             if (cast == null)
             {
                 return;
@@ -45,7 +45,7 @@ namespace ET.Client
                 }
             );
 
-            caster.GetComponent<CastComponent>().Remove(message.CastId);
+            caster.GetComponent<ClientCastComponent>().Remove(message.CastId);
 
             await ETTask.CompletedTask;
         }

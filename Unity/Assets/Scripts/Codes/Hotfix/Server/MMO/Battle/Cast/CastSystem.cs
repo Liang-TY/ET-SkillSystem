@@ -69,13 +69,14 @@ namespace ET.Server
         {
             Unit caster = cast.Caster;
             CastConfig castConfig = cast.Config;
+            cast.Targets.Clear();
             int rang = 0;
             switch (castConfig.SelectType)
             {
                 // 选择身边范围内的一个人，不选自己
                 case 1:
                     rang = int.Parse(castConfig.SelectParam[0]);
-                    foreach (AOIEntity aoiEntity in caster.GetBeSeePlayers().Values)
+                    foreach (AOIEntity aoiEntity in caster.GetBeSeeUnits().Values)
                     {
                         Unit unit = aoiEntity.GetParent<Unit>();
                         if(unit == caster){
@@ -93,9 +94,14 @@ namespace ET.Server
                 // 选择身边范围内的所有人
                 case 2:
                     rang = int.Parse(castConfig.SelectParam[0]);
-                    foreach (AOIEntity aoiEntity in caster.GetBeSeePlayers().Values)
+                    foreach (AOIEntity aoiEntity in caster.GetBeSeeUnits().Values)
                     {
                         Unit unit = aoiEntity.GetParent<Unit>();
+                        if (unit.Type != UnitType.Player && unit.Type != UnitType.Monster)
+                        {
+                            continue;
+                        }
+
                         if (math.length(unit.Position - caster.Position) < rang)
                         {
                             cast.Targets.Add(unit.Id);

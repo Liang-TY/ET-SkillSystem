@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ET.Client
 {
-    public class BuffComponentDestroySystem : DestroySystem<BuffComponent>
+    public class BuffComponentDestroySystem : DestroySystem<ClientBuffComponent>
     {
-        protected override void Destroy(BuffComponent self)
+        protected override void Destroy(ClientBuffComponent self)
         {
             foreach (var buffsValue in self.Buffs.Values)
             {
@@ -19,11 +19,11 @@ namespace ET.Client
             self.Buffs.Clear();
         }
     }
-    [FriendOfAttribute(typeof(ET.Client.BuffComponent))]
-    [FriendOfAttribute(typeof(ET.Client.Buff))]
+    [FriendOfAttribute(typeof(ET.Client.ClientBuffComponent))]
+    [FriendOfAttribute(typeof(ET.Client.ClientBuff))]
     public static class BuffComponentSystem
     {
-        public static void Add(this BuffComponent self, Buff buff)
+        public static void Add(this ClientBuffComponent self, ClientBuff buff)
         {
             if (self.Buffs.ContainsKey(buff.Id))
             {
@@ -34,9 +34,9 @@ namespace ET.Client
             buff.Owner = self.GetParent<Unit>();
         }
 
-        public static Buff Get(this BuffComponent self, long buffId)
+        public static ClientBuff Get(this ClientBuffComponent self, long buffId)
         {
-            if (self.Buffs.TryGetValue(buffId, out Buff buff))
+            if (self.Buffs.TryGetValue(buffId, out ClientBuff buff))
             {
                 return buff;
             }
@@ -44,9 +44,9 @@ namespace ET.Client
             return buff;
         }
 
-        public static void Remove(this BuffComponent self, long buffId)
+        public static void Remove(this ClientBuffComponent self, long buffId)
         {
-            Buff buff = self.Get(buffId);
+            ClientBuff buff = self.Get(buffId);
             if (buff == null)
             {
                 return;
@@ -56,9 +56,9 @@ namespace ET.Client
             buff?.Dispose();
 
         }
-        public static void Update(this BuffComponent self, BuffProto buffData)
+        public static void Update(this ClientBuffComponent self, BuffProto buffData)
         {
-            Buff buff = self.Get(buffData.Id);
+            ClientBuff buff = self.Get(buffData.Id);
             if (buff == null)
             {
                 return;

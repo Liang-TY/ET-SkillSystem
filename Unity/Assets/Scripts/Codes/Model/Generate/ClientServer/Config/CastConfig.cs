@@ -110,6 +110,12 @@ namespace ET
 		/// <summary>技能命中时的目标特效</summary>
 		[ProtoMember(13)]
 		public int[] HitEffect { get; set; }
+		/// <summary>起手动画</summary>
+		[ProtoMember(14)]
+		public int StartAnimation { get; set; }
+		/// <summary>命中动画</summary>
+		[ProtoMember(15)]
+		public int HitAnimation { get; set; }
 
 	}
 }

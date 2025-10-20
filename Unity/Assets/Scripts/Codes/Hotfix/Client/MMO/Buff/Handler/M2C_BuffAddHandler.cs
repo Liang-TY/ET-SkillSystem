@@ -26,8 +26,8 @@ namespace ET.Client
                 return;
             }
 
-            Buff buff = BuffFactory.Create(unit, message.BuffData);
-            unit.GetComponent<BuffComponent>().Add(buff);
+            ClientBuff buff = BuffFactory.Create(unit, message.BuffData);
+            unit.GetComponent<ClientBuffComponent>().Add(buff);
             //buff添加，状态记录到客户端buffcomponent，显示buff图标，信息，插放buff特效，等等的
 
             EventSystem.Instance.Publish

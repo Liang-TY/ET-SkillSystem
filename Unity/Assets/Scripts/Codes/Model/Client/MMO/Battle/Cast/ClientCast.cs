@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace ET.Client
 {
 
-    [ChildOf(typeof(CastComponent))]
-    public class Cast : Entity, IAwake<int>, IDestroy
+    [ChildOf(typeof(ClientCastComponent))]
+    public class ClientCast : Entity, IAwake<int>, IDestroy
     {
         public int ConfigId;
         public CastConfig CastConfig => CastConfigCategory.Instance.Get(this.ConfigId);

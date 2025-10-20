@@ -18,8 +18,9 @@ namespace ET.Client
                 return;
             }
 
-            unit.GetComponent<AnimatorComponent>()?.Play(MotionType.Attack);
             CastConfig castConfig = CastConfigCategory.Instance.Get((int)a.CastConfigId);
+
+            unit.GetComponent<AnimatorComponent>()?.Play((MotionType)castConfig.StartAnimation);
             foreach (var effectID in castConfig.StartEffect)
             {
                 ParticleEffectHelper.CreateParticle(unit, effectID);

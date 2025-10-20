@@ -8,7 +8,7 @@ namespace ET.Client
     {
         public static Unit CreateParticle(Unit target, int configId)
         {
-            ParticleEffectConfig config = ParticleEffectConfigcategory.Instance.Get(configId);
+            ParticleEffectConfig config = ParticleEffectConfigCategory.Instance.Get(configId);
             string name = config.PrefabName;
             ResourcesComponent.Instance.LoadBundle($"{name}.unity3d");
             GameObject particleGame0biectPrefab = (GameObject)ResourcesComponent.Instance.GetAsset($"{name}.unity3d", name);
@@ -26,7 +26,7 @@ namespace ET.Client
             particleUnit.AddComponent<GameObjectComponent>().GameObject = particleGame0bject;
 
             particleGame0bject.transform.localPosition = new Vector3(config.PosX, config.PosY, config.PosZ);
-            particleGame0bject.transform.localScale = new Vector3(config.ScaleX, config.ScaleY, config.Scalez);
+            particleGame0bject.transform.localScale = new Vector3(config.ScaleX, config.ScaleY, config.ScaleZ);
             OutDurationTime(particleUnit, config.TotalTime).Coroutine();
             return particleUnit;
         }

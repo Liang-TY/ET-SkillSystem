@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ET.Client
 {
-    [FriendOfAttribute(typeof(ET.Client.Cast))]
+    [FriendOfAttribute(typeof(ET.Client.ClientCast))]
     public static class CastFactory
     {
-        public static Cast Create(Unit caster, long id, int configId)
+        public static ClientCast Create(Unit caster, long id, int configId)
         {
-            Cast cast = caster.GetComponent<CastComponent>().AddChildWithId<Cast, int>(id, configId);
+            ClientCast cast = caster.GetComponent<ClientCastComponent>().AddChildWithId<ClientCast, int>(id, configId);
             cast.CasterId = caster.Id;
             return cast;
         }

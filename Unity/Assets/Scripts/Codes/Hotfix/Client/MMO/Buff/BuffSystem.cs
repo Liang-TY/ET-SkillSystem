@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ET.Client
 {
-    public class BuffAwakeSystem : AwakeSystem<Buff, int>
+    public class BuffAwakeSystem : AwakeSystem<ClientBuff, int>
     {
-        protected override void Awake(Buff self, int configId)
+        protected override void Awake(ClientBuff self, int configId)
         {
             self.ConfigId = configId;
         }
@@ -16,9 +16,9 @@ namespace ET.Client
     }
 
 
-    public class BuffDestroySystem : DestroySystem<Buff>
+    public class BuffDestroySystem : DestroySystem<ClientBuff>
     {
-        protected override void Destroy(Buff self)
+        protected override void Destroy(ClientBuff self)
         {
             self.ConfigId = default;
             self.Owner = default;

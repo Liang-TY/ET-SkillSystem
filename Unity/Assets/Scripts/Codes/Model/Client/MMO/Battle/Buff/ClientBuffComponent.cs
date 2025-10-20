@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace ET.Client
 {
     [ComponentOf(typeof(Unit))]
-    public class CastComponent : Entity, IAwake, IDestroy
+    public class ClientBuffComponent : Entity, IAwake, IDestroy
     {
-        public Dictionary<long,Cast> Casts = new Dictionary<long, Cast>();
+        public Dictionary<long, ClientBuff> Buffs = new Dictionary<long, ClientBuff>();
     }
 
 }

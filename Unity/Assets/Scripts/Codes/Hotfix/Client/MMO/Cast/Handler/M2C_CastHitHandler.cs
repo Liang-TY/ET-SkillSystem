@@ -12,7 +12,7 @@ namespace ET.Client
 {
     //在这里的sceneType.Client就相当于et6.0的zoneScene
     [MessageHandler(SceneType.Client)]
-    [FriendOfAttribute(typeof(ET.Client.Cast))]
+    [FriendOfAttribute(typeof(ET.Client.ClientCast))]
     public class M2C_CastHitHandler : AMHandler<M2C_CastHit>
     {
         protected override async ETTask Run(Session session, M2C_CastHit message)
@@ -27,7 +27,7 @@ namespace ET.Client
             {
                 return;
             }
-            Cast cast = caster.GetComponent<CastComponent>().Get(message.CastId);
+            ClientCast cast = caster.GetComponent<ClientCastComponent>().Get(message.CastId);
             if (cast == null)
             {
                 return;

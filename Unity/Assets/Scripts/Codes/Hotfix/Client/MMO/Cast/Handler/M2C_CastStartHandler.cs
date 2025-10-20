@@ -4,7 +4,7 @@ namespace ET.Client
 {
     //在这里的sceneType.Client就相当于et6.0的zoneScene
     [MessageHandler(SceneType.Client)]
-    [FriendOfAttribute(typeof(ET.Client.Cast))]
+    [FriendOfAttribute(typeof(ET.Client.ClientCast))]
     public class M2C_CastStartHandler : AMHandler<M2C_CastStart>
     {
         protected override async ETTask Run(Session session, M2C_CastStart message)
@@ -15,9 +15,9 @@ namespace ET.Client
 
 
             Unit caster = zoneScene.CurrentScene().GetComponent<UnitComponent>().Get(message.CasterId);
-            Cast cast = CastFactory.Create(caster, message.CastId, (int)message.CastConfigId);
+            ClientCast cast = CastFactory.Create(caster, message.CastId, (int)message.CastConfigId);
             cast.TargetsId.AddRange(message.TargetsId);
-            caster.GetComponent<CastComponent>().Add(cast);
+            caster.GetComponent<ClientCastComponent>().Add(cast);
 
 
             //技能释放流程的开始，此处可以自行接入行为树或状态机之类的

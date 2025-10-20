@@ -31,7 +31,7 @@ namespace ET.Client
                 return;
             }
 
-            Buff buff = unit.GetComponent<BuffComponent>().Get(message.BuffId);
+            ClientBuff buff = unit.GetComponent<ClientBuffComponent>().Get(message.BuffId);
             if (buff == null)
             {
                 return;

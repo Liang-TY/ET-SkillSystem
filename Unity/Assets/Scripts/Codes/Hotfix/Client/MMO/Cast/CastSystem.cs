@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ET.Client
 {
-    public class CastAwakeSystem : AwakeSystem<Cast, int>
+    public class CastAwakeSystem : AwakeSystem<ClientCast, int>
     {
-        protected override void Awake(Cast self, int configId)
+        protected override void Awake(ClientCast self, int configId)
         {
             self.ConfigId = configId;
         }
@@ -16,9 +16,9 @@ namespace ET.Client
     }
 
 
-    public class CastDestroySystem : DestroySystem<Cast>
+    public class CastDestroySystem : DestroySystem<ClientCast>
     {
-        protected override void Destroy(Cast self)
+        protected override void Destroy(ClientCast self)
         {
             self.ConfigId = default;
             self.CasterId = default;

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ET.Client
 {
-    public class CastComponentDestroySystem : DestroySystem<CastComponent>
+    public class CastComponentDestroySystem : DestroySystem<ClientCastComponent>
     {
-        protected override void Destroy(CastComponent self)
+        protected override void Destroy(ClientCastComponent self)
         {
             foreach (var castsValue in self.Casts.Values)
             {
@@ -18,10 +18,10 @@ namespace ET.Client
             self.Casts.Clear();
         }
     }
-    [FriendOfAttribute(typeof(ET.Client.CastComponent))]
+    [FriendOfAttribute(typeof(ET.Client.ClientCastComponent))]
     public static class CastComponentSystem
     {
-        public static void Add(this CastComponent self, Cast cast)
+        public static void Add(this ClientCastComponent self, ClientCast cast)
         {
             if (self.Casts.ContainsKey(cast.Id))
             {
@@ -31,18 +31,18 @@ namespace ET.Client
             self.Casts.Add(cast.Id, cast);
         }
 
-        public static Cast Get(this CastComponent self, long id)
+        public static ClientCast Get(this ClientCastComponent self, long id)
         {
-            if (self.Casts.TryGetValue(id, out Cast cast))
+            if (self.Casts.TryGetValue(id, out ClientCast cast))
             {
                 return cast;
             }
             return null;
         }
 
-        public static void Remove(this CastComponent self, long id)
+        public static void Remove(this ClientCastComponent self, long id)
         {
-            Cast cast = self.Get(id);
+            ClientCast cast = self.Get(id);
             if (cast != null)
             {
                 self.Casts.Remove(id);
