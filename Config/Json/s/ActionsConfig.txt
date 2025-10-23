@@ -1,5 +1,4 @@
 {"list":[
-{"_t":"ActionsConfig","_id":1001,"Type":0,"Param":[]},
-{"_t":"ActionsConfig","_id":1002,"Type":0,"Param":[]},
-{"_t":"ActionsConfig","_id":1003,"Type":0,"Param":[]},
+{"_t":"ActionsConfig","_id":1001,"Type":2,"_Param":["-10"]},
+{"_t":"ActionsConfig","_id":1002,"Type":1,"_Param":["1000","12"]},
 ]}

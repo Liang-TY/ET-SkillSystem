@@ -73,7 +73,7 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 
 	}
 }

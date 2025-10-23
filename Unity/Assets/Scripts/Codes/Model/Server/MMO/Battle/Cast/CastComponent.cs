@@ -11,7 +11,7 @@ namespace ET.Server
     /// 释放技能的组件，角色调用此组件释放技能
     /// </summary>
     [ComponentOf(typeof(Unit))]
-    public class CastComponent : Entity, IAwake, IDestroy
+    public class CastComponent : Entity, IAwake, IDestroy,ITransfer
     {
         //public int ConfigId;
 

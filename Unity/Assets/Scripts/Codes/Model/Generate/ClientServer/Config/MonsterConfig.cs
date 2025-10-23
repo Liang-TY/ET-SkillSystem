@@ -73,13 +73,13 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>Unit配置Id</summary>
 		[ProtoMember(2)]
-		public int UnitConfigId { get; set; }
+		public int UnitConfigId { get; set;}
 		/// <summary>组编号</summary>
 		[ProtoMember(3)]
-		public int GroupId { get; set; }
+		public int GroupId { get; set;}
 
 	}
 }

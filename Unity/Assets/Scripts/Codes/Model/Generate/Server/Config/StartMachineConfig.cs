@@ -73,16 +73,16 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>内网地址</summary>
 		[ProtoMember(2)]
-		public string InnerIP { get; set; }
+		public string InnerIP { get; set;}
 		/// <summary>外网地址</summary>
 		[ProtoMember(3)]
-		public string OuterIP { get; set; }
+		public string OuterIP { get; set;}
 		/// <summary>守护进程端口</summary>
 		[ProtoMember(4)]
-		public string WatcherPort { get; set; }
+		public string WatcherPort { get; set;}
 
 	}
 }

@@ -73,49 +73,157 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>总时长</summary>
 		[ProtoMember(2)]
-		public int TotalTime { get; set; }
+		public int TotalTime { get; set;}
 		/// <summary>目标选择方式</summary>
 		[ProtoMember(3)]
-		public int SelectType { get; set; }
+		public int SelectType { get; set;}
 		/// <summary>目标选择参数</summary>
 		[ProtoMember(4)]
-		public string[] SelectParam { get; set; }
+		public string[] _SelectParam;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public string[] SelectParam
+		{
+		get
+		{
+				if(_SelectParam == null)
+					_SelectParam = new string[] {};
+				return _SelectParam;
+			}
+		}
 		/// <summary>通知客户端类型</summary>
 		[ProtoMember(5)]
-		public int NoticeClientType { get; set; }
+		public int NoticeClientType { get; set;}
 		/// <summary>命中行为</summary>
 		[ProtoMember(6)]
-		public int[] HitAction { get; set; }
+		public int[] _HitAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] HitAction
+		{
+		get
+		{
+				if(_HitAction == null)
+					_HitAction = new int[] {};
+				return _HitAction;
+			}
+		}
 		/// <summary>技能命中目标时间点</summary>
 		[ProtoMember(7)]
-		public int[] HitActionTimes { get; set; }
+		public int[] _HitActionTimes;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] HitActionTimes
+		{
+		get
+		{
+				if(_HitActionTimes == null)
+					_HitActionTimes = new int[] {};
+				return _HitActionTimes;
+			}
+		}
 		/// <summary>命中自身行为</summary>
 		[ProtoMember(8)]
-		public int[] SelfHitAction { get; set; }
+		public int[] _SelfHitAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] SelfHitAction
+		{
+		get
+		{
+				if(_SelfHitAction == null)
+					_SelfHitAction = new int[] {};
+				return _SelfHitAction;
+			}
+		}
 		/// <summary>技能命中自身时间点</summary>
 		[ProtoMember(9)]
-		public int[] SelfHitActionTimes { get; set; }
+		public int[] _SelfHitActionTimes;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] SelfHitActionTimes
+		{
+		get
+		{
+				if(_SelfHitActionTimes == null)
+					_SelfHitActionTimes = new int[] {};
+				return _SelfHitActionTimes;
+			}
+		}
 		/// <summary>命中Buff</summary>
 		[ProtoMember(10)]
-		public int[] Buffs { get; set; }
+		public int[] _Buffs;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] Buffs
+		{
+		get
+		{
+				if(_Buffs == null)
+					_Buffs = new int[] {};
+				return _Buffs;
+			}
+		}
 		/// <summary>命中自身Buff</summary>
 		[ProtoMember(11)]
-		public int[] SelfBuffs { get; set; }
+		public int[] _SelfBuffs;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] SelfBuffs
+		{
+		get
+		{
+				if(_SelfBuffs == null)
+					_SelfBuffs = new int[] {};
+				return _SelfBuffs;
+			}
+		}
 		/// <summary>技能开始时的自身特效</summary>
 		[ProtoMember(12)]
-		public int[] StartEffect { get; set; }
+		public int[] _StartEffect;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] StartEffect
+		{
+		get
+		{
+				if(_StartEffect == null)
+					_StartEffect = new int[] {};
+				return _StartEffect;
+			}
+		}
 		/// <summary>技能命中时的目标特效</summary>
 		[ProtoMember(13)]
-		public int[] HitEffect { get; set; }
-		/// <summary>起手动画</summary>
+		public int[] _HitEffect;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] HitEffect
+		{
+		get
+		{
+				if(_HitEffect == null)
+					_HitEffect = new int[] {};
+				return _HitEffect;
+			}
+		}
+		/// <summary>起手动画(motiontype)</summary>
 		[ProtoMember(14)]
-		public int StartAnimation { get; set; }
-		/// <summary>命中动画</summary>
+		public int StartAnimation { get; set;}
+		/// <summary>命中动画(motiontype)</summary>
 		[ProtoMember(15)]
-		public int HitAnimation { get; set; }
+		public int HitAnimation { get; set;}
 
 	}
 }

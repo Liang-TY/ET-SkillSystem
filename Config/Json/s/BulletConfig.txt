@@ -1,5 +1,5 @@
 {"list":[
-{"_t":"BulletConfig","_id":1001,"Shape":0,"ShapeParam":[],"TotalTime":0,"AwakeAction":[],"Interval":0,"TickCastId":[],"TickAction":[],"DestroyAction":[],"Model":""},
-{"_t":"BulletConfig","_id":1002,"Shape":0,"ShapeParam":[],"TotalTime":0,"AwakeAction":[],"Interval":0,"TickCastId":[],"TickAction":[],"DestroyAction":[],"Model":""},
-{"_t":"BulletConfig","_id":1003,"Shape":0,"ShapeParam":[],"TotalTime":0,"AwakeAction":[],"Interval":0,"TickCastId":[],"TickAction":[],"DestroyAction":[],"Model":""},
+{"_t":"BulletConfig","_id":1001,"Shape":0,"_ShapeParam":[],"TotalTime":0,"_AwakeAction":[],"Interval":0,"_TickCastId":[],"_TickAction":[],"_DestroyAction":[],"Model":""},
+{"_t":"BulletConfig","_id":1002,"Shape":0,"_ShapeParam":[],"TotalTime":0,"_AwakeAction":[],"Interval":0,"_TickCastId":[],"_TickAction":[],"_DestroyAction":[],"Model":""},
+{"_t":"BulletConfig","_id":1003,"Shape":0,"_ShapeParam":[],"TotalTime":0,"_AwakeAction":[],"Interval":0,"_TickCastId":[],"_TickAction":[],"_DestroyAction":[],"Model":""},
 ]}

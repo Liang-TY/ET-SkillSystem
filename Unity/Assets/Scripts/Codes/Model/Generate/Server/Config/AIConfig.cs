@@ -73,19 +73,31 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>所属ai</summary>
 		[ProtoMember(2)]
-		public int AIConfigId { get; set; }
+		public int AIConfigId { get; set;}
 		/// <summary>此ai中的顺序</summary>
 		[ProtoMember(3)]
-		public int Order { get; set; }
+		public int Order { get; set;}
 		/// <summary>节点名字</summary>
 		[ProtoMember(4)]
-		public string Name { get; set; }
+		public string Name { get; set;}
 		/// <summary>节点参数</summary>
 		[ProtoMember(5)]
-		public int[] NodeParams { get; set; }
+		public int[] _NodeParams;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] NodeParams
+		{
+		get
+		{
+				if(_NodeParams == null)
+					_NodeParams = new int[] {};
+				return _NodeParams;
+			}
+		}
 
 	}
 }

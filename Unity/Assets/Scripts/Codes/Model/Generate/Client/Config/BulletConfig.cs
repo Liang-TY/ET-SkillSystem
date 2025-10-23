@@ -73,34 +73,94 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>形状</summary>
 		[ProtoMember(2)]
-		public int Shape { get; set; }
+		public int Shape { get; set;}
 		/// <summary>形状参数</summary>
 		[ProtoMember(3)]
-		public string[] ShapeParam { get; set; }
+		public string[] _ShapeParam;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public string[] ShapeParam
+		{
+		get
+		{
+				if(_ShapeParam == null)
+					_ShapeParam = new string[] {};
+				return _ShapeParam;
+			}
+		}
 		/// <summary>持续时间</summary>
 		[ProtoMember(4)]
-		public int TotalTime { get; set; }
+		public int TotalTime { get; set;}
 		/// <summary>创建时触发</summary>
 		[ProtoMember(5)]
-		public int[] AwakeAction { get; set; }
+		public int[] _AwakeAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] AwakeAction
+		{
+		get
+		{
+				if(_AwakeAction == null)
+					_AwakeAction = new int[] {};
+				return _AwakeAction;
+			}
+		}
 		/// <summary>结算间隔</summary>
 		[ProtoMember(6)]
-		public int Interval { get; set; }
+		public int Interval { get; set;}
 		/// <summary>结算技能编号</summary>
 		[ProtoMember(7)]
-		public int[] TickCastId { get; set; }
+		public int[] _TickCastId;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] TickCastId
+		{
+		get
+		{
+				if(_TickCastId == null)
+					_TickCastId = new int[] {};
+				return _TickCastId;
+			}
+		}
 		/// <summary>结算行为</summary>
 		[ProtoMember(8)]
-		public int[] TickAction { get; set; }
+		public int[] _TickAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] TickAction
+		{
+		get
+		{
+				if(_TickAction == null)
+					_TickAction = new int[] {};
+				return _TickAction;
+			}
+		}
 		/// <summary>销毁前触发</summary>
 		[ProtoMember(9)]
-		public int[] DestroyAction { get; set; }
+		public int[] _DestroyAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] DestroyAction
+		{
+		get
+		{
+				if(_DestroyAction == null)
+					_DestroyAction = new int[] {};
+				return _DestroyAction;
+			}
+		}
 		/// <summary>模型</summary>
 		[ProtoMember(10)]
-		public string Model { get; set; }
+		public string Model { get; set;}
 
 	}
 }

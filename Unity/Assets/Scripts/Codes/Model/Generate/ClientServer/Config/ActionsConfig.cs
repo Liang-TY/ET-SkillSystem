@@ -73,13 +73,25 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>技能行为类型</summary>
 		[ProtoMember(2)]
-		public int Type { get; set; }
-		/// <summary>参数</summary>
+		public int Type { get; set;}
+		/// <summary>参数(具体含义要看技能行为的类型配置ActionsType)</summary>
 		[ProtoMember(3)]
-		public string[] Param { get; set; }
+		public string[] _Param;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public string[] Param
+		{
+		get
+		{
+				if(_Param == null)
+					_Param = new string[] {};
+				return _Param;
+			}
+		}
 
 	}
 }

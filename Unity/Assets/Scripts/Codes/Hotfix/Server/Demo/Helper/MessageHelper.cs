@@ -27,12 +27,26 @@ namespace ET.Server
             // 网络底层做了优化，同一个消息不会多次序列化
             foreach (AOIEntity u in dict.Values)
             {
+                MonsterFlag monsterFlag = u.Unit.GetComponent<MonsterFlag>();
+                if (monsterFlag != null)
+                {
+                    continue;
+                }
                 ActorMessageSenderComponent.Instance.Send(u.Unit.GetComponent<UnitGateComponent>().GateSessionActorId, message);
             }
         }
         
         public static void SendToClient(Unit unit, IActorMessage message)
         {
+            if (unit == null)
+            {
+                Log.Console("tttttttttttt");
+            }
+            if (unit.GetComponent<UnitGateComponent>() == null)
+            {
+                Log.Console($"unitType:{unit.Type},unitid: {unit.Id},unitConfigId: {unit.ConfigId}");
+                Log.Console("hhhhhhhhhhhh");
+            }
             SendActor(unit.GetComponent<UnitGateComponent>().GateSessionActorId, message);
         }
         

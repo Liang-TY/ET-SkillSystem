@@ -40,6 +40,25 @@ namespace ET.Server
 			
 			// 解锁location，可以接收发给Unit的消息
 			await LocationProxyComponent.Instance.UnLock(unit.Id, request.OldInstanceId, unit.InstanceId);
+
+			//MonsterMapComponent monsterMapComponent = scene.GetComponent<MonsterMapComponent>();
+			//monsterMapComponent.CreateMonsters();
+			Log.Console($"77777777   unit传送完成，当前scene：{scene.Name},,,,,type: {scene.SceneType}");
+            Log.Console($"77777777   给scene添加怪物组件");
+
+			UnitGateComponent unitGateComponent = unit.GetComponent<UnitGateComponent>();
+			if (unitGateComponent == null)
+			{
+                Log.Console($"77777777   unit传送完成后身上的UnitGateComponent组件没了");
+            }
+			else
+			{
+                Log.Console($"77777777   unit传送完成后身上的UnitGateComponent组件还在，sessionId: {unitGateComponent.GateSessionActorId}");
+            }
+            Log.Console($"777777传送完成，unit信息 unitType:{unit.Type},unitid: {unit.Id},unitConfigId: {unit.ConfigId}");
+            scene.AddComponent<MonsterMapComponent>();
+
+
 		}
 	}
 }

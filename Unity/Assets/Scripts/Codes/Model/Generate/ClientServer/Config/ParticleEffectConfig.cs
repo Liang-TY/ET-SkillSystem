@@ -73,34 +73,34 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>特效资源名称</summary>
 		[ProtoMember(2)]
-		public string PrefabName { get; set; }
+		public string PrefabName { get; set;}
 		/// <summary>存在总时长</summary>
 		[ProtoMember(3)]
-		public int TotalTime { get; set; }
+		public int TotalTime { get; set;}
 		/// <summary>是否跟随Unit</summary>
 		[ProtoMember(4)]
-		public int IsFollowUnit { get; set; }
+		public int IsFollowUnit { get; set;}
 		/// <summary>初始位置x</summary>
 		[ProtoMember(5)]
-		public float PosX { get; set; }
+		public float PosX { get; set;}
 		/// <summary>初始位置y</summary>
 		[ProtoMember(6)]
-		public float PosY { get; set; }
+		public float PosY { get; set;}
 		/// <summary>初始位置z</summary>
 		[ProtoMember(7)]
-		public float PosZ { get; set; }
+		public float PosZ { get; set;}
 		/// <summary>缩放x</summary>
 		[ProtoMember(8)]
-		public float ScaleX { get; set; }
+		public float ScaleX { get; set;}
 		/// <summary>缩放y</summary>
 		[ProtoMember(9)]
-		public float ScaleY { get; set; }
+		public float ScaleY { get; set;}
 		/// <summary>缩放z</summary>
 		[ProtoMember(10)]
-		public float ScaleZ { get; set; }
+		public float ScaleZ { get; set;}
 
 	}
 }

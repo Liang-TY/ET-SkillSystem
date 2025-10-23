@@ -5,10 +5,12 @@ namespace ET.Client
 {
 	public enum MotionType
 	{
-		None,
-		Idle,
-		Run,
-		Attack,
+		None = 0,
+        Attack = 1,
+		Hit = 2,
+        Idle = 3,
+		Run = 4,
+
 	}
 
 	[ComponentOf(typeof(Unit))]

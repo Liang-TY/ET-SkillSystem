@@ -54,6 +54,11 @@ namespace ET.Client
                     C2M_TransferMap c2MTransferMap = new C2M_TransferMap();
                     self.ClientScene().GetComponent<SessionComponent>().Session.Call(c2MTransferMap).Coroutine();
                 }
+
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    ClientCastHelper.CastSkill(self.ClientScene(),1).Coroutine();
+                }
             }
 
             private async ETTask Test1()

@@ -73,19 +73,19 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>Type</summary>
 		[ProtoMember(2)]
-		public int Type { get; set; }
+		public int Type { get; set;}
 		/// <summary>名字</summary>
 		[ProtoMember(3)]
-		public string Name { get; set; }
+		public string Name { get; set;}
 		/// <summary>位置</summary>
 		[ProtoMember(4)]
-		public int Position { get; set; }
+		public int Position { get; set;}
 		/// <summary>体重</summary>
 		[ProtoMember(6)]
-		public int Weight { get; set; }
+		public int Weight { get; set;}
 
 	}
 }

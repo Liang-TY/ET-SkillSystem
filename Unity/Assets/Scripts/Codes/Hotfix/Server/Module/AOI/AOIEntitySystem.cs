@@ -136,6 +136,11 @@ namespace ET.Server
                     enter.BeSeeUnits.Add(self.Id, self);
                 }
             }
+            Log.Console($"self : {self?.Id},,,,enter:{enter?.Id}");
+            if (self == null || enter == null)
+            {
+                Log.Trace($"aoi报错追踪");
+            }
             EventSystem.Instance.Publish(self.DomainScene(), new EventType.UnitEnterSightRange() { A = self, B = enter });
         }
 

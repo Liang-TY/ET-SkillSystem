@@ -1,12 +1,3 @@
 {"list":[
-{"_t":"MonsterConfig","_id":1,"UnitConfigId":1101,"GroupId":1},
-{"_t":"MonsterConfig","_id":2,"UnitConfigId":1102,"GroupId":1},
-{"_t":"MonsterConfig","_id":3,"UnitConfigId":1103,"GroupId":1},
-{"_t":"MonsterConfig","_id":4,"UnitConfigId":1104,"GroupId":1},
-{"_t":"MonsterConfig","_id":5,"UnitConfigId":1105,"GroupId":1},
-{"_t":"MonsterConfig","_id":6,"UnitConfigId":1101,"GroupId":2},
-{"_t":"MonsterConfig","_id":7,"UnitConfigId":1102,"GroupId":2},
-{"_t":"MonsterConfig","_id":8,"UnitConfigId":1103,"GroupId":2},
-{"_t":"MonsterConfig","_id":9,"UnitConfigId":1104,"GroupId":2},
-{"_t":"MonsterConfig","_id":10,"UnitConfigId":1105,"GroupId":2},
+{"_t":"MonsterConfig","_id":1,"UnitConfigId":1002,"GroupId":1},
 ]}

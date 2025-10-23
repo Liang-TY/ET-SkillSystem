@@ -14,5 +14,12 @@ namespace ET
             public long BuffId;
         }
 
+
+        public struct PlayerUnitTransferToRealMap
+        {
+            public Unit Unit;
+            public long SceneInstanceId;
+        }
+
     }
 }

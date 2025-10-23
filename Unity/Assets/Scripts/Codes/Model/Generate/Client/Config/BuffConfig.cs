@@ -73,28 +73,76 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>通知客户端类型</summary>
 		[ProtoMember(2)]
-		public int NoticeClientType { get; set; }
+		public int NoticeClientType { get; set;}
 		/// <summary>总时长</summary>
 		[ProtoMember(3)]
-		public int TotalTime { get; set; }
+		public int TotalTime { get; set;}
 		/// <summary>效果</summary>
 		[ProtoMember(4)]
-		public int[] AddAction { get; set; }
+		public int[] _AddAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] AddAction
+		{
+		get
+		{
+				if(_AddAction == null)
+					_AddAction = new int[] {};
+				return _AddAction;
+			}
+		}
 		/// <summary>Tick间隔时间</summary>
 		[ProtoMember(5)]
-		public int TickTime { get; set; }
+		public int TickTime { get; set;}
 		/// <summary>效果</summary>
 		[ProtoMember(6)]
-		public int[] TickAction { get; set; }
+		public int[] _TickAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] TickAction
+		{
+		get
+		{
+				if(_TickAction == null)
+					_TickAction = new int[] {};
+				return _TickAction;
+			}
+		}
 		/// <summary>效果</summary>
 		[ProtoMember(7)]
-		public int[] RemoveAction { get; set; }
+		public int[] _RemoveAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] RemoveAction
+		{
+		get
+		{
+				if(_RemoveAction == null)
+					_RemoveAction = new int[] {};
+				return _RemoveAction;
+			}
+		}
 		/// <summary>Buff自身特效</summary>
 		[ProtoMember(8)]
-		public int[] OwnerEffect { get; set; }
+		public int[] _OwnerEffect;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] OwnerEffect
+		{
+		get
+		{
+				if(_OwnerEffect == null)
+					_OwnerEffect = new int[] {};
+				return _OwnerEffect;
+			}
+		}
 
 	}
 }

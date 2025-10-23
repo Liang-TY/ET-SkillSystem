@@ -73,19 +73,19 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>位置x</summary>
 		[ProtoMember(2)]
-		public float PosX { get; set; }
+		public float PosX { get; set;}
 		/// <summary>位置y</summary>
 		[ProtoMember(3)]
-		public float PosY { get; set; }
+		public float PosY { get; set;}
 		/// <summary>位置z</summary>
 		[ProtoMember(4)]
-		public float PosZ { get; set; }
+		public float PosZ { get; set;}
 		/// <summary>范围</summary>
 		[ProtoMember(5)]
-		public int Range { get; set; }
+		public int Range { get; set;}
 
 	}
 }

@@ -73,13 +73,13 @@ namespace ET
 	{
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
-		public int Id { get; set; }
+		public int Id { get; set;}
 		/// <summary>所属机器</summary>
 		[ProtoMember(2)]
-		public int MachineId { get; set; }
+		public int MachineId { get; set;}
 		/// <summary>内网端口</summary>
 		[ProtoMember(3)]
-		public int InnerPort { get; set; }
+		public int InnerPort { get; set;}
 
 	}
 }

@@ -73,18 +73,18 @@ ActionsRunType actionsRunType, bool autoRun = true, bool autoDispose = true)
 
                     using (actions)
                     {
-                        RunActions(actions, actionsRunType);
+                        RunActionsInner(actions, actionsRunType);
                     }
                 }
             }
             else
             {
-                RunActions(actions,actionsRunType);
+                RunActionsInner(actions,actionsRunType);
             }
         }
 
 
-        public static void RunActions(Actions actions, ActionsRunType actionsRunType)
+        public static void RunActionsInner(Actions actions, ActionsRunType actionsRunType)
         {
             IActions actionsHandle = ActionsDispatcheerComponent.Instance.Get(actions.Config.Type);
             if (actionsHandle != null)
