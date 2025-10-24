@@ -17,7 +17,7 @@
             MonsterFlag monsterFlag = ua.GetComponent<MonsterFlag>();
             if (monsterFlag != null)
             {
-                Log.Console($"7777777777777777 玩家进入怪物视野，不向客户端发起通知");
+                Log.Console($"玩家进入怪物视野，不向客户端发起通知");
                 return;
             }
             if (ua.Type != UnitType.Player)
@@ -26,7 +26,6 @@
             }
 
             Unit ub = b.GetParent<Unit>();
-            Log.Console($"7777777777777777 视野组件 ua{ua?.Id}  ub{ub?.Id}");
             if (ua == null || ub == null)
             {
                 return;

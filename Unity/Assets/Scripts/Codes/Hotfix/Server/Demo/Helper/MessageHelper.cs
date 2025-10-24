@@ -38,14 +38,10 @@ namespace ET.Server
         
         public static void SendToClient(Unit unit, IActorMessage message)
         {
-            if (unit == null)
-            {
-                Log.Console("tttttttttttt");
-            }
             if (unit.GetComponent<UnitGateComponent>() == null)
             {
-                Log.Console($"unitType:{unit.Type},unitid: {unit.Id},unitConfigId: {unit.ConfigId}");
-                Log.Console("hhhhhhhhhhhh");
+                Log.Console($"unit找不到UnitGateComponent，unitType:{unit.Type},unitid: {unit.Id},unitConfigId: {unit.Config.Name}");
+                return;
             }
             SendActor(unit.GetComponent<UnitGateComponent>().GateSessionActorId, message);
         }

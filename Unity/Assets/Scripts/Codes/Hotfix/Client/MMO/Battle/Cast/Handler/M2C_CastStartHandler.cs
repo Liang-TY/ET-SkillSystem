@@ -16,7 +16,11 @@ namespace ET.Client
 
             Unit caster = zoneScene.CurrentScene().GetComponent<UnitComponent>().Get(message.CasterId);
             ClientCast cast = CastFactory.Create(caster, message.CastId, (int)message.CastConfigId);
-            cast.TargetsId.AddRange(message.TargetsId);
+            if (message.TargetsId != null && message.TargetsId.Count > 0)
+            {
+                cast.TargetsId.AddRange(message.TargetsId);
+            }
+
             caster.GetComponent<ClientCastComponent>().Add(cast);
 
 

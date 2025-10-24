@@ -30,7 +30,6 @@ namespace ET.Server
                     Root.Instance.Scene.AddComponent<NetInnerComponent, IPEndPoint>(processConfig.InnerIPPort);
 
                     var processScenes = StartSceneConfigCategory.Instance.GetByProcess(Options.Instance.Process);
-                        Log.Console("服务端创建出所有的StartSceneConfigCategory中的scene");
                     foreach (StartSceneConfig startConfig in processScenes)
                     {
                         await SceneFactory.CreateServerScene(ServerSceneManagerComponent.Instance, startConfig.Id, startConfig.InstanceId, startConfig.Zone, startConfig.Name,

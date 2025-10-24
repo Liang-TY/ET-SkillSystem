@@ -40,10 +40,9 @@ namespace ET.Server
     {
         protected override void Awake(MonsterMapComponent self)
         {
-            Log.Console($"7777777777777777 创建怪物的场景 {self.DomainScene().Name}   类型  {self.DomainScene().SceneType}");
             if (self.DomainScene().Name.Equals("GateMap"))
             {
-                Log.Console($"7777777777777777 GateMap不创建怪物，直接返回");
+                Log.Console($"GateMap不创建怪物，直接返回");
                 return;
             }
             foreach (var monsterId in MonsterConfigCategory.Instance.GetAll().Keys)
@@ -100,8 +99,6 @@ namespace ET.Server
             Unit unit = UnitFactory.CreateMonster(self.DomainScene(), monsterConfig.UnitConfigId, pos);
             unit.AddComponent<MonsterFlag, int, int>(id, monsterConfig.GroupId);
             unit.AddComponent<AOIEntity, int, float3>(9 * 1000, unit.Position);
-
-            Log.Console($"7777777777777777 创建了怪物id{unit.Id}");
             return unit;
 
 
