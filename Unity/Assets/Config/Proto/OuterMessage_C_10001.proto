@@ -332,3 +332,10 @@ message M2C_TestCast // IActorLocationResponse
 
 }
 
+message M2C_CoolDownChange // IActorMessage
+{
+	repeated int32 CastConfigIds = 1;
+	repeated int64 CoolDownTimes = 2;
+	repeated int64 CoolDownStartTime = 3;
+
+}

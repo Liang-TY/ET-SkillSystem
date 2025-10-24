@@ -44,5 +44,12 @@ namespace ET
         /// </summary>
         public const int ERR_Relive_Dead_Op = 200106;
 
+        public const int ERR_Cast_UnitIsNull = 200107;
+
+        public const int ERR_Cast_NumIsNull = 200108;
+
+        public const int ERR_Cast_ForbirdSkill = 200109;
+
+        public const int ERR_Cast_SkillCDDown = 200110;
     }
 }

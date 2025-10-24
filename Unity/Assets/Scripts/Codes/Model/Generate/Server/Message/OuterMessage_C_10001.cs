@@ -664,6 +664,21 @@ namespace ET
 
 	}
 
+	[Message(OuterMessage.M2C_CoolDownChange)]
+	[ProtoContract]
+	public partial class M2C_CoolDownChange: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public List<int> CastConfigIds { get; set; }
+
+		[ProtoMember(2)]
+		public List<long> CoolDownTimes { get; set; }
+
+		[ProtoMember(3)]
+		public List<long> CoolDownStartTime { get; set; }
+
+	}
+
 	public static class OuterMessage
 	{
 		 public const ushort HttpGetRouterResponse = 10002;
@@ -712,5 +727,6 @@ namespace ET
 		 public const ushort M2C_BattleResult = 10045;
 		 public const ushort C2M_TestCast = 10046;
 		 public const ushort M2C_TestCast = 10047;
+		 public const ushort M2C_CoolDownChange = 10048;
 	}
 }
