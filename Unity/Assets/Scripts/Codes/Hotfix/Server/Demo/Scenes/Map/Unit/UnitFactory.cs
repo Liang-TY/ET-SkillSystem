@@ -24,8 +24,9 @@ namespace ET.Server
                         //// 加入aoi
                         //unit.AddComponent<AOIEntity, int, float3>(9 * 1000, unit.Position);
 
-                        unit.AddComponent<CastComponent>();
+                    unit.AddComponent<CastComponent>();
                     unit.AddComponent<BuffComponent>();
+                    unit.AddComponent<SkillStatusComponent>();
                     return unit;
                 }
                 default:

@@ -134,7 +134,16 @@ namespace ET.Server
 
         public static async ETTask CastBeginAsync(this Cast cast)
         {
-            cast.StartTime = TimeHelper.ServerNow();
+
+            bool notBreak = cast.Caster.GetComponent<SkillStatusComponent>()?.RunningSkill(cast) ?? true;
+            if (!notBreak)
+            {
+                cast.Break();
+                return;
+            }
+
+
+                        cast.StartTime = TimeHelper.ServerNow();
             M2C_CastStart m2C_CastStart = new M2C_CastStart()
             {
                 CastId = cast.Id,
@@ -160,7 +169,7 @@ namespace ET.Server
                 casterInstanceId = cast.Caster.InstanceId;
                 await TimerComponent.Instance.WaitTillAsync(cast.StartTime + time);
 
-                if (!cast.checkAsyncInvalid(castInstanceId,casterInstanceId))
+                if (!cast.CheckAsyncInvalid(castInstanceId,casterInstanceId))
                 {
                     Log.Error($"Cast asyncInvalid {castInstanceId} {casterInstanceId}");
                 }
@@ -190,7 +199,7 @@ namespace ET.Server
                 castInstanceId = cast.InstanceId;
                 casterInstanceId = cast.Caster.InstanceId;
                 await TimerComponent.Instance.WaitTillAsync(cast.StartTime + config.TotalTime);
-                if (!cast.checkAsyncInvalid(castInstanceId, casterInstanceId))
+                if (!cast.CheckAsyncInvalid(castInstanceId, casterInstanceId))
                 {
                     Log.Error($"Cast asyncInvalid {castInstanceId} {casterInstanceId}");
                     return;
@@ -281,7 +290,12 @@ namespace ET.Server
 
         public static void CastFinish(this Cast cast)
         {
-
+            bool notBreak = cast.Caster.GetComponent<SkillStatusComponent>()?.RunningSkill(cast) ?? true;
+            if (!notBreak)
+            {
+                cast.Break();
+                return;
+            }
             //没有持续时间，就是瞬发的技能流程，可以不用通知结束，客户端自行结束
             if (cast.Config.TotalTime >0)
             {
@@ -294,8 +308,8 @@ namespace ET.Server
 
         }
 
-    //检测技能异步结束后是否仍合法
-        public static bool checkAsyncInvalid(this Cast cast, long castInstanceId, long casterInstanceId)
+        //检测技能异步结束后是否仍合法
+        public static bool CheckAsyncInvalid(this Cast cast, long castInstanceId, long casterInstanceId)
         {
             if (cast.Caster == null)
             {
@@ -307,6 +321,14 @@ namespace ET.Server
                 return false;
             }
             return true;
+        }
+
+
+        public static void Break(this Cast cast)
+        {
+            M2C_CastBreak m2CCastBreak = new M2C_CastBreak() { CastId = cast.Id, CasterId = cast.Caster.Id };
+            MMOMessageHelper.SendClient(cast.Caster, m2CCastBreak, (NoticeClientType)cast.Config.NoticeClientType);
+            cast.Dispose();
         }
     }
 }

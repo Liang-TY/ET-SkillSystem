@@ -10,6 +10,24 @@ namespace ET.Server
     [FriendOfAttribute(typeof(ET.Server.ReliveComponent))]
     public static class BattleHelper
     {
+
+        public static int CanCastSkill(Unit unit,int castConfigId)
+        {
+            if (!CastConfigCategory.Instance.Contain(castConfigId))
+            {
+                return ErrorCode.ERR_ArgsError;
+            }
+            if (!unit.IsAlive())
+            {
+                return ErrorCode.ERR_Relive_Dead_Op;
+            }
+            int err = unit.GetComponent<SkillStatusComponent>()?.CanCastSkill(castConfigId) ?? ErrorCode.ERR_Success;
+            return err;
+        }
+
+
+
+
         /// <summary>
         /// 结算战斗
         /// 此处必须是同步的，不可改为异步，否则需求复杂之后，很可能会出问题
@@ -29,6 +47,12 @@ namespace ET.Server
             numericComponent[NumericType.HpBase] = Math.Clamp(tarHp, 0, numericComponent[NumericType.MaxHp]);
             long newHp = numericComponent[NumericType.Hp];
             long res_damage = newHp - oldHp;
+
+            if (res_damage > 0)
+            {
+                target.GetComponent<SkillStatusComponent>()?.BreakSkill();
+            }
+
 
 
             //广播飘字

@@ -91,5 +91,46 @@ namespace ET.Server
 
         }
 
+        public static bool RunningSkill(this SkillStatusComponent self, Cast cast)
+        {
+            if (cast.Config.StatusSkill == 0)
+            {
+                return true;
+            }
+
+            if (self.CurSkillStatus != SkillStatusType.Init || self.CurSkillCastInstanceId != cast.InstanceId){
+                return false;
+            }
+            self.CurSkillStatus = SkillStatusType.Running;
+            return true;
+        }
+        public static bool FinishSkill(this SkillStatusComponent self, Cast cast)
+        {
+            if (cast.Config.StatusSkill == 0){
+                return true;
+            }
+            if (self.CurSkillStatus != SkillStatusType.Running || self.CurSkillCastInstanceId != cast.InstanceId)
+            {
+                return false;
+            }
+
+            self.CurSkillStatus = SkillStatusType.Finish;
+            return true;
+        }
+
+        public static bool BreakSkill(this SkillStatusComponent self)
+        {
+            //这里可以加一些不可打断的判断，例如某些技能就是无法被打断的，或者玩家在某个状态下霸体
+            self.ClearCurSkillInfo();
+            return true;
+        }
+
+        public static void ClearCurSkillInfo(this SkillStatusComponent self)
+        {
+            self.CurSkillCastInstanceId = default;
+            self.CurSkillCastID = default;
+            self.CurSkillStartTime = default;
+            self.CurSkillStatus = SkillStatusType.New;
+        }
     }
 }

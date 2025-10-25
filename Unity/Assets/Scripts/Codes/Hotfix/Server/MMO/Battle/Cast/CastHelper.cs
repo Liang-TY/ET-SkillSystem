@@ -11,13 +11,12 @@ namespace ET.Server
     {
         //FriendOf是为了能访问cast类
 
-        /// <summary>
-        /// 创建cast技能
-        /// </summary>
-        /// <param name="caster"></param>
-        /// <param name="castConfigId"></param>
-        /// <returns></returns>
-        public static Cast Create(this Unit caster, int castConfigId)
+        public static int CreateAndCast(this Unit caster, int castConfigId)
+        {
+            return CreateCast(caster,castConfigId).Cast();
+        }
+
+        public static Cast CreateCast(this Unit caster, int castConfigId)
         {
 
             Log.Console($"创建技能，caster信息：{caster.Config.Id} {caster.Config.Name}");
@@ -33,12 +32,6 @@ namespace ET.Server
             }
             cast.Caster = caster;
             return cast;
-        }
-
-
-        public static int CreateAndCast(this Unit caster, int castConfigId)
-        {
-            return Create(caster,castConfigId).Cast();
         }
     }
 }
