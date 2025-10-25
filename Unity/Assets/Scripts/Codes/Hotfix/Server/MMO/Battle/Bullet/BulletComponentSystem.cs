@@ -23,8 +23,16 @@ namespace ET.Server
     {
         protected override void Destroy(BulletComponent self)
         {
-            self.PreDestroy();
+            //self.PreDestroy();
+            //self.ConfigId = default;
+
             self.ConfigId = default;
+            self.TickCount = default;
+            self.OwnerId = default;
+            TimerComponent.Instance.Remove(ref self.TickTimer);
+            TimerComponent.Instance.Remove(ref self.TickTimer2);
+            TimerComponent.Instance.Remove(ref self.TickTimer3);
+            TimerComponent.Instance.Remove(ref self.TotalTimer);
         }
     }
 
@@ -40,8 +48,32 @@ namespace ET.Server
 
 
 
+    [Invoke(TimerInvokeType.BulletTick2)]
+    public class BulletTick1_TimerHandler : ATimer<BulletComponent>
+    {
+        protected override void Run(BulletComponent t)
+        {
+            t.Tick1();
+        }
+    }
 
+    [Invoke(TimerInvokeType.BulletTick3)]
+    public class BulletTick2_TimerHandler : ATimer<BulletComponent>
+    {
+        protected override void Run(BulletComponent t)
+        {
+            t.Tick2();
+        }
+    }
 
+    [Invoke(TimerInvokeType.BulletTotalTime)]
+    public class BulletTickOver_TimerHandler : ATimer<BulletComponent>
+    {
+        protected override void Run(BulletComponent t)
+        {
+            t.TimeOver();
+        }
+    }
 
 
 
@@ -109,32 +141,30 @@ namespace ET.Server
                         }
                     }
                 }
-
-
-                
-                    
-               
-
-
-
-
             }
+
+        }
+
+        public static void Tick1(this BulletComponent self)
+        {
+
+        }
+
+
+        public static void Tick2(this BulletComponent self)
+        {
+
+        }
+
+        public static void TimeOver(this BulletComponent self)
+        {
 
         }
 
 
 
 
-
-
-
-
-
-
-
-
-
-    public static Unit GetOwner(this BulletComponent self)
+        public static Unit GetOwner(this BulletComponent self)
         {
             return self.DomainScene().GetComponent<UnitComponent>().Get(self.OwnerId);
         }
@@ -197,7 +227,26 @@ namespace ET.Server
                 }
                     
                 self.TickTimer = TimerComponent.Instance.NewRepeatedTimer(Interval,TimerInvokeType.BulletTick, self);
-            } 
+            }
+
+            if (bulletConfig.Tick1.Length > 0)
+            {
+                self.TickTimer2 = TimerComponent.Instance.NewRepeatedTimer(100, TimerInvokeType.BulletTick2, self);
+            }
+
+            if (bulletConfig.Tick2.Length > 0)
+            {
+                self.TickTimer3 = TimerComponent.Instance.NewRepeatedTimer(100, TimerInvokeType.BulletTick3, self);
+            }
+
+            if (bulletConfig.TotalTime > 0)
+            {
+                self.TotalTimer = TimerComponent.Instance.NewRepeatedTimer(
+                    TimeHelper.ServerNow() + bulletConfig.TotalTime, 
+                    TimerInvokeType.BulletTick3, 
+                    self
+                    );
+            }
         }
 
     }

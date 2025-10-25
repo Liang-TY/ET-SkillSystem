@@ -22,5 +22,11 @@
 
         public const int MonsterDead = 208;
 
+        public const int BulletTick2 = 209;
+
+        public const int BulletTick3 = 210;
+
+        public const int BulletTotalTime = 211;
+
     }
 }

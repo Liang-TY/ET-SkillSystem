@@ -1,5 +1,6 @@
 ﻿
 using MongoDB.Bson.Serialization.Attributes;
+using NLog.Fluent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,14 @@ namespace ET.Server
         }
 
 
+        public int TickCount = default;
+        public List<long> Target = new List<long>();
+        public long OwnerId = default;
+        public long TickTimer = default;
+        public long TickTimer2 = default;
 
-
-        public long OwnerId;
-
-        public long TickTimer;
+        public long TickTimer3 = default;
+        public long TotalTimer = default;
 
     }
 }

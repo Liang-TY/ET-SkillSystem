@@ -158,9 +158,42 @@ namespace ET
 				return _DestroyAction;
 			}
 		}
-		/// <summary>模型</summary>
+		/// <summary>目标个数</summary>
 		[ProtoMember(10)]
-		public string Model { get; set;}
+		public int TargetNum { get; set;}
+		/// <summary>结算次数限制</summary>
+		[ProtoMember(11)]
+		public int TickLimit { get; set;}
+		/// <summary>子弹自身生命周期tick，1档(0.1s)</summary>
+		[ProtoMember(12)]
+		public int[] _Tick1;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] Tick1
+		{
+		get
+		{
+				if(_Tick1 == null)
+					_Tick1 = new int[] {};
+				return _Tick1;
+			}
+		}
+		/// <summary>子弹自身生命周期tick，2档(1s)</summary>
+		[ProtoMember(13)]
+		public int[] _Tick2;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] Tick2
+		{
+		get
+		{
+				if(_Tick2 == null)
+					_Tick2 = new int[] {};
+				return _Tick2;
+			}
+		}
 
 	}
 }
