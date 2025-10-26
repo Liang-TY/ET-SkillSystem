@@ -79,7 +79,7 @@ namespace ET.Server
 
 
     [FriendOfAttribute(typeof(ET.Server.BulletComponent))]
-
+    [FriendOfAttribute(typeof(ET.Server.Cast))]
     public static class BulletComponentSystem
     {
 
@@ -87,81 +87,139 @@ namespace ET.Server
         {
             Unit selfUnit = self.GetParent<Unit>();
             Unit owner = self.GetOwner();
-            if (owner == null)
+            if (owner == null || owner.IsDisposed)
             {
                 self.Dispose();
                 return;
             }
-            Log.Console($"->子弹 {self.ConfigId} Tick");
             BulletConfig bulletConfig = self.Config;
-            using (ListComponent<Unit> list = ListComponent<Unit>.Create())
+            self.SelectTarget();
+            if (self.Target.Count <= 0)
             {
-                switch (bulletConfig.Shape)
+                return;
+            }
+            self.TickCount++;
+            if (bulletConfig.TickCastId.Length > 0)
+            {
+                foreach (var tickCastId in bulletConfig.TickCastId)
                 {
-                    case 1://选择身边一定范围内的一个人
-                        int range = int.Parse(bulletConfig.ShapeParam[0]);
+                    Cast cast = owner.CreateCast(tickCastId);
+                    cast.Targets.AddRange(self.Target);
+                    int err = cast.Cast();
+                    if (err != ErrorCode.ERR_Success)
+                    {
+                        Log.Console($"子弹 {self.ConfigId} 释放Cast {tickCastId} 失败:{err}");
+                    }
 
-
-                        foreach(AOIEntity aoiEntity in selfUnit.GetBeSeePlayers().Values)
-                        {
-                            Unit unit = aoiEntity.GetParent<Unit>();
-                            if (unit == owner)
-                            {
-                                //不选自己
-                                continue;
-                            }
-                            if (math.length(unit.Position - selfUnit.Position) < range)
-                            {
-                                list.Add(unit);
-                            }
-
-                        }
-                        break;
-                    default:
-                        throw new Exception($"not such Bulletconfig shape: {bulletConfig.Shape}");
                 }
 
+            }
 
-                if(list.Count > 0)
+            if (bulletConfig.TickAction.Length > 0)
+            {
+                foreach (var actionsId in bulletConfig.TickAction)
                 {
-                    foreach (var unit in list)
-                    {
-                        if (bulletConfig.TickCastId.Length > 0)
-                        {
-                            foreach (var tickCastId in bulletConfig.TickCastId)
-                            {
-                                owner.CreateAndCast(tickCastId);
-                            }
-                        }
-                        if(bulletConfig.TickAction.Length > 0){
-                            foreach (var actionsId in bulletConfig.TickAction)
-                            {
-                                self.CreateActions(actionsId, unit, self.GetOwner(), ActionsRunType.BulletTick);
-                            }
-                        }
-                    }
+                    self.CreateActions(actionsId, selfUnit, selfUnit, ActionsRunType.BulletTick);
                 }
             }
+
+            if (bulletConfig.TickLimit > 0 && self.TickCount >= bulletConfig.TickLimit)
+            {
+                // 结算次数到了,提前结束
+                self.TimeOver();
+            }
+
+
 
         }
 
         public static void Tick1(this BulletComponent self)
         {
-
+            BulletConfig bulletConfig = self.Config;
+            self.SelectTarget();
+            foreach (var actionsId in bulletConfig.TickAction)
+            {
+                self.CreateActions(actionsId, self.GetParent<Unit>(), self.GetParent<Unit>(), ActionsRunType.BulletTick);
+            }
         }
 
 
         public static void Tick2(this BulletComponent self)
         {
-
+            BulletConfig bulletConfig = self.Config;
+            self.SelectTarget();
+            foreach (var actionsId in bulletConfig.TickAction)
+            {
+                self.CreateActions(actionsId, self.GetParent<Unit>(), self.GetParent<Unit>(), ActionsRunType.BulletTick);
+            }
         }
 
         public static void TimeOver(this BulletComponent self)
         {
+            TimerComponent.Instance.Remove(ref self.TickTimer);
+            Unit owner = self.GetOwner();
+            if (owner == null || owner.IsDisposed)
+            {
+                self.DoDispose();
+                return;
+            }
 
+            BulletConfig bulletConfig = self.Config;
+            if (bulletConfig.DestroyAction.Length > 0)
+            {
+                foreach (var actionsId in bulletConfig.DestroyAction)
+                {
+                    self.CreateActions(actionsId, self.GetParent<Unit>(), self.GetParent<Unit>(), ActionsRunType.BulletDestroy);
+                }
+
+            }
+
+            self.DoDispose();
         }
 
 
+        public static void SelectTarget(this BulletComponent self)
+        {
+            self.Target.Clear();
+            Unit selfUnit = self.GetParent<Unit>();
+            Unit owner = self.GetOwner();
+            BulletConfig bulletConfig = self.Config;
+            switch (bulletConfig.Shape)
+            {
+                case 1:
+                    {
+                        int range = int.Parse(bulletConfig.ShapeParam[0]);
+                        foreach (AOIEntity aoiEntity in selfUnit.GetBeSeeUnits().Values)
+                        {
+                            Unit unit = aoiEntity.GetParent<Unit>();
+                            if (unit.Type != UnitType.Player && unit.Type != UnitType.Monster)
+                            {
+                                continue;
+                            }
+
+                            if (unit == owner)
+                            {
+                                continue;
+                            }
+
+                            if (math.length(unit.Position - selfUnit.Position) < range)
+                            {
+                                self.Target.Add(unit.Id);
+                            }
+
+                        }
+
+                    }
+                    break;
+                default:
+                    throw new Exception($"not such BulletConfig Shape: {bulletConfig.Shape}");
+            }
+        }
+        public static void DoDispose(this BulletComponent self)
+        {
+            self.GetParent<Unit>().Stop(0);
+            self.DomainScene().GetComponent<UnitComponent>().Remove(self.Parent.Id);
+        }
 
 
         public static Unit GetOwner(this BulletComponent self)
@@ -218,15 +276,15 @@ namespace ET.Server
 
             }
 
-            if (bulletConfig.Interval > 0) 
+            if (bulletConfig.Interval > 0)
             {
                 int Interval = bulletConfig.Interval;
                 if (Interval <= 100)
                 {
                     Interval = 100;
                 }
-                    
-                self.TickTimer = TimerComponent.Instance.NewRepeatedTimer(Interval,TimerInvokeType.BulletTick, self);
+
+                self.TickTimer = TimerComponent.Instance.NewRepeatedTimer(Interval, TimerInvokeType.BulletTick, self);
             }
 
             if (bulletConfig.Tick1.Length > 0)
@@ -242,8 +300,8 @@ namespace ET.Server
             if (bulletConfig.TotalTime > 0)
             {
                 self.TotalTimer = TimerComponent.Instance.NewRepeatedTimer(
-                    TimeHelper.ServerNow() + bulletConfig.TotalTime, 
-                    TimerInvokeType.BulletTick3, 
+                    TimeHelper.ServerNow() + bulletConfig.TotalTime,
+                    TimerInvokeType.BulletTick3,
                     self
                     );
             }

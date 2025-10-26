@@ -27,6 +27,10 @@ namespace ET.Server
             // 网络底层做了优化，同一个消息不会多次序列化
             foreach (AOIEntity u in dict.Values)
             {
+                if (u.Unit.Type != UnitType.Player)
+                {
+                    continue;
+                }
                 MonsterFlag monsterFlag = u.Unit.GetComponent<MonsterFlag>();
                 if (monsterFlag != null)
                 {

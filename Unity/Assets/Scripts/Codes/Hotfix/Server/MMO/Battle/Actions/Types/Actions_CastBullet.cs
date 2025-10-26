@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
@@ -36,7 +37,9 @@ namespace ET.Server
                 }
                 int unitId = int.Parse(config.Param[0]);
                 int bulletId = int.Parse(config.Param[1]);
-                Unit bullet = UnitFactory.CreateBullet(cast.DomainScene(), cast.Caster.Id, unitId, bulletId, unit.Position);
+                //在unit的前方创建技能
+                float3 startPos = unit.Position + (unit.Forward * 1.2f);
+                Unit bullet = UnitFactory.CreateBullet(cast.DomainScene(), cast.Caster.Id, unitId, bulletId,startPos, unit.Rotation);
                 bullet.GetComponent<BulletComponent>().Start();
             }
 

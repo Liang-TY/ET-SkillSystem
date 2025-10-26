@@ -36,7 +36,7 @@ namespace ET.Server
         {
             get
             {
-                return this.parent.GetParent<Cast>();
+                return this.Parent.GetParent<Cast>();
             }
         }
 
@@ -45,10 +45,17 @@ namespace ET.Server
         {
             get
             {
-                return this.parent.GetParent<Buff>();
+                return this.Parent.GetParent<Buff>();
             }
         }
 
+        public BulletComponent BulletSelf
+        {
+            get
+            {
+                return this.Parent.GetParent<BulletComponent>();
+            }
+        }
 
 
 
