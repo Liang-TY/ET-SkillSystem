@@ -55,6 +55,7 @@ namespace ET.Server
             BulletComponent bulletComponent = unit.AddComponent<BulletComponent, int>(bulletId);
             bulletComponent.OwnerId = ownerId;
             unitComponent.Add(unit);
+            unit.AddComponent<AOIEntity, int, float3>(9 * 1000, unit.Position);
             return unit;
         }
 
@@ -64,6 +65,7 @@ namespace ET.Server
             UnitComponent unitComponent = scene.GetComponent<UnitComponent>();
             Unit unit = unitComponent.AddChild<Unit, int>(unitConfigId);
             unit.AddComponent<MoveComponent>();
+            unit.AddComponent<PathfindingComponent, string>(scene.Name);
             unit.Position = pos;
             NumericComponent numericComponent = unit.AddComponent<NumericComponent>();
             numericComponent.Set(NumericType.Speed, 6.0f);
@@ -71,6 +73,8 @@ namespace ET.Server
             numericComponent.Set(NumericType.MaxHp, 1000);
             numericComponent.Set(NumericType.Hp, 1000);
             unit.AddComponent<ReliveComponent>();
+            unit.AddComponent<CastComponent>();
+            unit.AddComponent<BuffComponent>();
             unitComponent.Add(unit);
             return unit;
         }

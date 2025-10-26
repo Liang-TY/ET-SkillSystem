@@ -694,6 +694,18 @@ namespace ET
 
 	}
 
+	[Message(OuterMessage.M2C_NumericChange)]
+	[ProtoContract]
+	public partial class M2C_NumericChange: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[MongoDB.Bson.Serialization.Attributes.BsonDictionaryOptions(MongoDB.Bson.Serialization.Options.DictionaryRepresentation.ArrayOfArrays)]
+		[ProtoMember(2)]
+		public Dictionary<int, long> KV { get; set; }
+	}
+
 	public static class OuterMessage
 	{
 		 public const ushort HttpGetRouterResponse = 10002;
@@ -744,5 +756,6 @@ namespace ET
 		 public const ushort M2C_TestCast = 10047;
 		 public const ushort M2C_CoolDownChange = 10048;
 		 public const ushort M2C_SetPosition = 10049;
+		 public const ushort M2C_NumericChange = 10050;
 	}
 }

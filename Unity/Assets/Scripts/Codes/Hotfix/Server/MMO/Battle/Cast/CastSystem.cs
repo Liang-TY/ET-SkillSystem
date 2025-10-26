@@ -69,12 +69,17 @@ namespace ET.Server
         {
             Unit caster = cast.Caster;
             CastConfig castConfig = cast.Config;
-            cast.Targets.Clear();
+
             int rang = 0;
             switch (castConfig.SelectType)
             {
+                case 0:
+                    cast.Targets.Clear();
+                    cast.Targets.Add(caster.Id);
+                    break;
                 // 选择身边范围内的一个人，不选自己
                 case 1:
+                    cast.Targets.Clear();
                     rang = int.Parse(castConfig.SelectParam[0]);
                     foreach (AOIEntity aoiEntity in caster.GetBeSeeUnits().Values)
                     {
@@ -93,6 +98,7 @@ namespace ET.Server
                     break;
                 // 选择身边范围内的所有人
                 case 2:
+                    cast.Targets.Clear();
                     rang = int.Parse(castConfig.SelectParam[0]);
                     foreach (AOIEntity aoiEntity in caster.GetBeSeeUnits().Values)
                     {
@@ -108,6 +114,10 @@ namespace ET.Server
                             break;
                         }
                     }
+                    break;
+                case 3://外部传入目标
+                       // 可以在这里定义一些参数
+                       //这里可检验目标是否合法的逻辑
                     break;
                 default:
                     break;

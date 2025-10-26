@@ -45,6 +45,11 @@ namespace ET.Server
         }
         public static void SendClientBroadcast(Unit unit, IActorMessage message)
         {
+            if (unit.GetComponent<AOIEntity>() == null)
+            {
+                return;
+            }
+
             Dictionary <long,AOIEntity> dict = unit.GetBeSeePlayers();
             if (dict.Count <= 0)
             {
@@ -64,6 +69,10 @@ namespace ET.Server
 
         public static void SendClientBroadcastNoSelf(Unit unit, IActorMessage message)
         {
+            if (unit.GetComponent<AOIEntity>() == null)
+            {
+                return;
+            }
             Dictionary<long, AOIEntity> dict = unit.GetBeSeePlayers();
             if (dict.Count <= 0)
             {

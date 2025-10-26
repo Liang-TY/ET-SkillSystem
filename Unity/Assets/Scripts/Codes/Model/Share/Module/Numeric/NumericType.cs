@@ -29,6 +29,8 @@
 	    public const int AOIFinalAdd = AOI * 10 + 4;
 	    public const int AOIFinalPct = AOI * 10 + 5;
 
-		public const int ForbidSkill = 1004;
+        public const int ForbidMove = 1084;
+        public const int ForbidSkill = 1085;
+        public const int ForbidRotation = 1086;
     }
 }

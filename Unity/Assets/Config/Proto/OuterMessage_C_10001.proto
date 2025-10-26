@@ -346,3 +346,9 @@ message M2C_SetPosition // IActorMessage
 	Unity.Mathematics.float3 Position = 2;
 	Unity.Mathematics.quaternion Rotation = 3;
 }
+
+message M2C_NumericChange // IActorMessage
+{
+	int64 UnitId = 1;
+	map<int32,int64>KV = 2;
+}

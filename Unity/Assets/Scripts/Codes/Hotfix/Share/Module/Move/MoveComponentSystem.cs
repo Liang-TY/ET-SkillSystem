@@ -130,7 +130,8 @@ namespace ET
                     unit.Position = self.NextTarget;
                     if (self.TurnTime > 0)
                     {
-                        unit.Rotation = self.To;
+                        unit.SetRotation(self.To);
+                        //unit.Rotation = self.To;
                     }
                 }
                 else
@@ -170,7 +171,8 @@ namespace ET
                 if (self.N >= self.Targets.Count - 1)
                 {
                     unit.Position = self.NextTarget;
-                    unit.Rotation = self.To;
+                    unit.SetRotation(self.To);
+                    //unit.Rotation = self.To;
 
                     self.MoveFinish(ret);
                     return;
@@ -241,7 +243,8 @@ namespace ET
                 if (Math.Abs(faceV.x) > 0.01 || Math.Abs(faceV.z) > 0.01)
                 {
                     self.To = quaternion.LookRotation(faceV, math.up());
-                    unit.Rotation = self.To;
+                    unit.SetRotation(self.To);
+                    //unit.Rotation = self.To;
                 }
             }
         }
