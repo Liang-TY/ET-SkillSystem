@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
@@ -81,6 +82,19 @@ namespace ET.Server
                     continue;
                 }
                 SendClientSelf(u, message);
+            }
+        }
+
+        public static void ForceSetPosition(this Unit unit,float3 newPos , bool sendMsg = false)
+        {
+            unit.Position = unit.GetComponent<PathfindingComponent>().RecastFindNearestPoint(newPos);
+            if (sendMsg)
+            {
+                M2C_SetPosition msg = new M2C_SetPosition();
+                msg.UnitId = unit.Id;
+                msg.Position = unit.Position;
+                msg.Rotation = unit.Rotation;
+                SendClient(unit, msg, NoticeClientType.Broadcast);
             }
         }
     }

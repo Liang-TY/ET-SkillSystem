@@ -679,6 +679,21 @@ namespace ET
 
 	}
 
+	[Message(OuterMessage.M2C_SetPosition)]
+	[ProtoContract]
+	public partial class M2C_SetPosition: ProtoObject, IActorMessage
+	{
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[ProtoMember(2)]
+		public Unity.Mathematics.float3 Position { get; set; }
+
+		[ProtoMember(3)]
+		public Unity.Mathematics.quaternion Rotation { get; set; }
+
+	}
+
 	public static class OuterMessage
 	{
 		 public const ushort HttpGetRouterResponse = 10002;
@@ -728,5 +743,6 @@ namespace ET
 		 public const ushort C2M_TestCast = 10046;
 		 public const ushort M2C_TestCast = 10047;
 		 public const ushort M2C_CoolDownChange = 10048;
+		 public const ushort M2C_SetPosition = 10049;
 	}
 }

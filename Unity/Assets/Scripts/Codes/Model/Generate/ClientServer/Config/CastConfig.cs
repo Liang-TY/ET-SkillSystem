@@ -194,8 +194,23 @@ namespace ET
 				return _SelfBuffs;
 			}
 		}
-		/// <summary>技能开始时的自身特效</summary>
+		/// <summary>结束行为</summary>
 		[ProtoMember(14)]
+		public int[] _FinishAction;
+		
+		[BsonIgnore]
+		[ProtoIgnore]
+		public int[] FinishAction
+		{
+		get
+		{
+				if(_FinishAction == null)
+					_FinishAction = new int[] {};
+				return _FinishAction;
+			}
+		}
+		/// <summary>技能开始时的自身特效</summary>
+		[ProtoMember(15)]
 		public int[] _StartEffect;
 		
 		[BsonIgnore]
@@ -210,7 +225,7 @@ namespace ET
 			}
 		}
 		/// <summary>技能命中时的目标特效</summary>
-		[ProtoMember(15)]
+		[ProtoMember(16)]
 		public int[] _HitEffect;
 		
 		[BsonIgnore]
@@ -225,10 +240,10 @@ namespace ET
 			}
 		}
 		/// <summary>起手动画(motiontype)</summary>
-		[ProtoMember(16)]
+		[ProtoMember(17)]
 		public int StartAnimation { get; set;}
 		/// <summary>命中动画(motiontype)</summary>
-		[ProtoMember(17)]
+		[ProtoMember(18)]
 		public int HitAnimation { get; set;}
 
 	}

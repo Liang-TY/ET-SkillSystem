@@ -15,6 +15,7 @@ namespace ET.Server
         BuffTick,
         BuffRemove,
         CastHit,
+        CastFinish,
         BulletAwake,
         BulletDestroy,
         BulletTick

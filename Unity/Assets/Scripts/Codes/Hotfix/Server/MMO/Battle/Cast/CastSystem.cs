@@ -301,11 +301,22 @@ namespace ET.Server
             {
                 M2C_CastFinish m2cCastFinish = new M2C_CastFinish(){ CastId = cast.Id, CasterId = cast.Caster.Id };
                 MMOMessageHelper.SendClient(cast.Caster, m2cCastFinish, (NoticeClientType)cast.Config.NoticeClientType);
-                cast?.Dispose();
+
+            }
+
+
+            if (cast.Config.FinishAction.Length > 0)
+            {
+                foreach (var actionsId in cast.Config.FinishAction)
+                {
+                    cast.CreateActions(actionsId, cast.Caster, ActionsRunType.CastFinish);
+                }
+
             }
 
 
 
+            cast?.Dispose();
         }
 
         //检测技能异步结束后是否仍合法

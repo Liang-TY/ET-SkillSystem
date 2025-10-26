@@ -339,3 +339,10 @@ message M2C_CoolDownChange // IActorMessage
 	repeated int64 CoolDownStartTime = 3;
 
 }
+
+message M2C_SetPosition // IActorMessage
+{
+	int64 UnitId = 1;
+	Unity.Mathematics.float3 Position = 2;
+	Unity.Mathematics.quaternion Rotation = 3;
+}

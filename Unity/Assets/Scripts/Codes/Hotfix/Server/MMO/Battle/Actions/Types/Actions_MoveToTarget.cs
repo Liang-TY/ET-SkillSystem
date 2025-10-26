@@ -8,7 +8,7 @@ using Unity.Mathematics;
 namespace ET.Server
 {
 
-    [Actions(ActionsType.Damage)]
+    [Actions(ActionsType.MoveToTarget)]
     [FriendOfAttribute(typeof(ET.Server.Cast))]
     [FriendOfAttribute(typeof(ET.Server.Actions))]
     [FriendOfAttribute(typeof(ET.Server.BulletComponent))]
