@@ -74,7 +74,7 @@ namespace ET
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
 		public int Id { get; set;}
-		/// <summary>技能行为类型</summary>
+		/// <summary>技能行为类型(ActionsType)</summary>
 		[ProtoMember(2)]
 		public int Type { get; set;}
 		/// <summary>参数(具体含义要看技能行为的类型配置ActionsType)</summary>

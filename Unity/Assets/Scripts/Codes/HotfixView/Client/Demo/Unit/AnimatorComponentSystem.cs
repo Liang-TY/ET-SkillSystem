@@ -37,7 +37,7 @@ namespace ET.Client
 		
 		public static void Awake(this AnimatorComponent self)
 		{
-			Animator animator = self.GetParent<Unit>().GetComponent<GameObjectComponent>().GameObject.GetComponent<Animator>();
+			Animator animator = self.GetParent<Unit>().GetComponent<GameObjectComponent>().GameObject.GetComponentInChildren<Animator>();
 
 			if (animator == null)
 			{

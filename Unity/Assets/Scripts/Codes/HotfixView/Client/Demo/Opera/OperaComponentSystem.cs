@@ -59,6 +59,10 @@ namespace ET.Client
                 {
                     ClientCastHelper.CastSkill(self.ClientScene(),1).Coroutine();
                 }
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    ClientCastHelper.CastSkill(self.ClientScene(), 2).Coroutine();
+                }
             }
 
             private async ETTask Test1()

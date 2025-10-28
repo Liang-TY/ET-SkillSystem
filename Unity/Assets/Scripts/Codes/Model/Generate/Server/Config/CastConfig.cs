@@ -74,20 +74,23 @@ namespace ET
 		/// <summary>Id</summary>
 		[ProtoMember(1)]
 		public int Id { get; set;}
-		/// <summary>总时长</summary>
+		/// <summary>技能名字</summary>
 		[ProtoMember(2)]
+		public string Name { get; set;}
+		/// <summary>总时长</summary>
+		[ProtoMember(3)]
 		public int TotalTime { get; set;}
 		/// <summary>冷却时间</summary>
-		[ProtoMember(3)]
+		[ProtoMember(4)]
 		public int CoolDown { get; set;}
 		/// <summary>状态技能标志(只允许有一个状态技能在释放)</summary>
-		[ProtoMember(4)]
+		[ProtoMember(5)]
 		public int StatusSkill { get; set;}
 		/// <summary>目标选择方式</summary>
-		[ProtoMember(5)]
+		[ProtoMember(6)]
 		public int SelectType { get; set;}
 		/// <summary>目标选择参数</summary>
-		[ProtoMember(6)]
+		[ProtoMember(7)]
 		public string[] _SelectParam;
 		
 		[BsonIgnore]
@@ -102,10 +105,10 @@ namespace ET
 			}
 		}
 		/// <summary>通知客户端类型</summary>
-		[ProtoMember(7)]
+		[ProtoMember(8)]
 		public int NoticeClientType { get; set;}
 		/// <summary>命中行为</summary>
-		[ProtoMember(8)]
+		[ProtoMember(9)]
 		public int[] _HitAction;
 		
 		[BsonIgnore]
@@ -120,7 +123,7 @@ namespace ET
 			}
 		}
 		/// <summary>技能命中目标时间点</summary>
-		[ProtoMember(9)]
+		[ProtoMember(10)]
 		public int[] _HitActionTimes;
 		
 		[BsonIgnore]
@@ -135,7 +138,7 @@ namespace ET
 			}
 		}
 		/// <summary>命中自身行为</summary>
-		[ProtoMember(10)]
+		[ProtoMember(11)]
 		public int[] _SelfHitAction;
 		
 		[BsonIgnore]
@@ -150,7 +153,7 @@ namespace ET
 			}
 		}
 		/// <summary>技能命中自身时间点</summary>
-		[ProtoMember(11)]
+		[ProtoMember(12)]
 		public int[] _SelfHitActionTimes;
 		
 		[BsonIgnore]
@@ -165,7 +168,7 @@ namespace ET
 			}
 		}
 		/// <summary>命中Buff</summary>
-		[ProtoMember(12)]
+		[ProtoMember(13)]
 		public int[] _Buffs;
 		
 		[BsonIgnore]
@@ -180,7 +183,7 @@ namespace ET
 			}
 		}
 		/// <summary>命中自身Buff</summary>
-		[ProtoMember(13)]
+		[ProtoMember(14)]
 		public int[] _SelfBuffs;
 		
 		[BsonIgnore]
@@ -195,7 +198,7 @@ namespace ET
 			}
 		}
 		/// <summary>结束行为</summary>
-		[ProtoMember(14)]
+		[ProtoMember(15)]
 		public int[] _FinishAction;
 		
 		[BsonIgnore]
@@ -210,7 +213,7 @@ namespace ET
 			}
 		}
 		/// <summary>技能开始时的自身特效</summary>
-		[ProtoMember(15)]
+		[ProtoMember(16)]
 		public int[] _StartEffect;
 		
 		[BsonIgnore]
@@ -225,7 +228,7 @@ namespace ET
 			}
 		}
 		/// <summary>技能命中时的目标特效</summary>
-		[ProtoMember(16)]
+		[ProtoMember(17)]
 		public int[] _HitEffect;
 		
 		[BsonIgnore]
@@ -240,10 +243,10 @@ namespace ET
 			}
 		}
 		/// <summary>起手动画(motiontype)</summary>
-		[ProtoMember(17)]
+		[ProtoMember(18)]
 		public int StartAnimation { get; set;}
 		/// <summary>命中动画(motiontype)</summary>
-		[ProtoMember(18)]
+		[ProtoMember(19)]
 		public int HitAnimation { get; set;}
 
 	}

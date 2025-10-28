@@ -35,9 +35,10 @@ namespace ET.Server
                 {
                     continue;
                 }
+                //unitId是子弹的unitid
+                //bulletId是子弹在bulletconfig配置表中的id
                 int unitId = int.Parse(config.Param[0]);
                 int bulletId = int.Parse(config.Param[1]);
-                //在unit的前方创建技能
                 float3 startPos = unit.Position + (unit.Forward * 1.2f);
                 Unit bullet = UnitFactory.CreateBullet(cast.DomainScene(), cast.Caster.Id, unitId, bulletId,startPos, unit.Rotation);
                 bullet.GetComponent<BulletComponent>().Start();

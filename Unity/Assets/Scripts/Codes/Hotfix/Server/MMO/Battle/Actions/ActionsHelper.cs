@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,7 @@ ActionsRunType actionsRunType, bool autoRun = true, bool autoDispose = true)
             Actions actions = cast.GetComponent<ActionsTempComponent>().CreateActions(configId);
             actions.Caster = cast.Caster;
             actions.Owner = owner;
+            Log.Console($"777 创建action,,,,, id: {configId}  actionsRunType: {actionsRunType}");
             RunActions(actions, actionsRunType, autoRun, autoDispose);
             if (actions.IsDisposed)
             {
@@ -87,7 +89,8 @@ ActionsRunType actionsRunType, bool autoRun = true, bool autoDispose = true)
         public static void RunActionsInner(Actions actions, ActionsRunType actionsRunType)
         {
             IActions actionsHandle = ActionsDispatcheerComponent.Instance.Get(actions.Config.Type);
-            if (actionsHandle != null)
+            Log.Console($"777 actionsHandleType: {actions.Config.Type}   ActionsRunType:{actionsRunType} ");
+            if (actionsHandle == null)
             {
                 Log.Error($"Error! Actions type not found, UnitID: {actions.Owner?.Id }, ActionsconfigID: {actions.ConfigId}");
                 actions.Dispose();

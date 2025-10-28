@@ -15,6 +15,7 @@ namespace ET.Server
         protected override void Awake(BulletComponent self, int ConfigId)
         {
             self.ConfigId = ConfigId;
+            self.AddComponent<ActionsTempComponent>();
         }
     }
 
@@ -104,6 +105,7 @@ namespace ET.Server
                 foreach (var tickCastId in bulletConfig.TickCastId)
                 {
                     Cast cast = owner.CreateCast(tickCastId);
+                    Log.Console($"子弹：{self.ConfigId}结算间隔触发，CreateCast，castid: {tickCastId}");
                     cast.Targets.AddRange(self.Target);
                     int err = cast.Cast();
                     if (err != ErrorCode.ERR_Success)
@@ -126,6 +128,7 @@ namespace ET.Server
             if (bulletConfig.TickLimit > 0 && self.TickCount >= bulletConfig.TickLimit)
             {
                 // 结算次数到了,提前结束
+                Log.Console($"子弹：{self.ConfigId}结算间隔结束");
                 self.TimeOver();
             }
 
@@ -137,7 +140,7 @@ namespace ET.Server
         {
             BulletConfig bulletConfig = self.Config;
             self.SelectTarget();
-            foreach (var actionsId in bulletConfig.TickAction)
+            foreach (var actionsId in bulletConfig.Tick1)
             {
                 self.CreateActions(actionsId, self.GetParent<Unit>(), self.GetParent<Unit>(), ActionsRunType.BulletTick);
             }
@@ -148,8 +151,9 @@ namespace ET.Server
         {
             BulletConfig bulletConfig = self.Config;
             self.SelectTarget();
-            foreach (var actionsId in bulletConfig.TickAction)
+            foreach (var actionsId in bulletConfig.Tick2)
             {
+                Log.Console($"子弹：{self.ConfigId}每秒结算触发，创建action，actionid:{actionsId}");
                 self.CreateActions(actionsId, self.GetParent<Unit>(), self.GetParent<Unit>(), ActionsRunType.BulletTick);
             }
         }
@@ -294,14 +298,14 @@ namespace ET.Server
 
             if (bulletConfig.Tick2.Length > 0)
             {
-                self.TickTimer3 = TimerComponent.Instance.NewRepeatedTimer(100, TimerInvokeType.BulletTick3, self);
+                self.TickTimer3 = TimerComponent.Instance.NewRepeatedTimer(1000, TimerInvokeType.BulletTick3, self);
             }
 
             if (bulletConfig.TotalTime > 0)
             {
                 self.TotalTimer = TimerComponent.Instance.NewRepeatedTimer(
                     TimeHelper.ServerNow() + bulletConfig.TotalTime,
-                    TimerInvokeType.BulletTick3,
+                    TimerInvokeType.BulletTotalTime,
                     self
                     );
             }

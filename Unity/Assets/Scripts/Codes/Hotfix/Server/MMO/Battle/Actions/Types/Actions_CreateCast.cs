@@ -31,6 +31,7 @@ namespace ET.Server
 
             ActionsConfig config = actions.Config;
             int castConfigId = int.Parse(config.Param[0]);
+            Log.Console($"777 run action:ActionsType.CreateCast,,cast id: {castConfigId}");
             Unit unit = cast.Caster;
             await TimerComponent.Instance.WaitFrameAsync();
             if (unit.IsDisposed)

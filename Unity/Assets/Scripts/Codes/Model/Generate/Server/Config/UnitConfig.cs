@@ -86,6 +86,9 @@ namespace ET
 		/// <summary>体重</summary>
 		[ProtoMember(6)]
 		public int Weight { get; set;}
+		/// <summary>名字</summary>
+		[ProtoMember(7)]
+		public string PrefabName { get; set;}
 
 	}
 }

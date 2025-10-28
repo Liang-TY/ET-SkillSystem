@@ -122,7 +122,7 @@ namespace ET.Server
                 default:
                     break;
             }
-
+            Log.Console("选择目标完成");
         }
         public static int CastCheckBeforeBegin(this Cast cast)
         {
@@ -152,8 +152,9 @@ namespace ET.Server
                 return;
             }
 
+            Log.Console("开始技能，通知client");
 
-                        cast.StartTime = TimeHelper.ServerNow();
+            cast.StartTime = TimeHelper.ServerNow();
             M2C_CastStart m2C_CastStart = new M2C_CastStart()
             {
                 CastId = cast.Id,
@@ -184,7 +185,7 @@ namespace ET.Server
                     Log.Error($"Cast asyncInvalid {castInstanceId} {casterInstanceId}");
                 }
 
-
+                Log.Console("到达节点，创建技能行为");
                 //TODO 创建出一系列技能行为
                 foreach (CastActionTimes castActionTimes in config.TimesDict[time])
                 {

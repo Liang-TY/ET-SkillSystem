@@ -19,7 +19,7 @@ namespace ET.Server
         public static Cast CreateCast(this Unit caster, int castConfigId)
         {
 
-            Log.Console($"创建技能，caster信息：{caster.Config.Id} {caster.Config.Name}");
+            Log.Console($"777 创建技能，caster信息：{caster.Config.Id} {caster.Config.Name}");
             CastComponent castComponent = caster.GetComponent<CastComponent>();
             if (castComponent == null)
             {
@@ -30,6 +30,7 @@ namespace ET.Server
             {
                 return null;
             }
+            Log.Console($"777 创建技能，cast技能id：{cast.Config.Id}");
             cast.Caster = caster;
             return cast;
         }
