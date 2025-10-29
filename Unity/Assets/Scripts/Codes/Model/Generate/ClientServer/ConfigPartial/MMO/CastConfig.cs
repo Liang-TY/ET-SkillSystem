@@ -16,6 +16,13 @@ namespace ET
         public List<int> Times = new List<int>();
         public MultiMap<int , CastActionTimes> TimesDict = new MultiMap<int , CastActionTimes>();
 
+        //暂时不区分，都用Times,TimesDict
+        ///// <summary>
+        ///// 记录有几个HitActionTimes
+        ///// </summary>
+        //public List<int> HitActionTimesTotal = new List<int>();
+        //public MultiMap<int, CastActionTimes> HitActionTimesDict = new MultiMap<int, CastActionTimes>();
+
         public override void AfterEndInit()
         {
             for (int i = 0; i < this.SelfHitActionTimes.Length; i++)
@@ -26,6 +33,17 @@ namespace ET
                     this.Times.Add(time);
                 }
                 this.TimesDict.Add(time,new CastActionTimes() { Index = i,IsSelfHit = true});
+            }
+            this.Times.Sort();
+
+            for (int i = 0; i < this.HitActionTimes.Length; i++)
+            {
+                int time = this.HitActionTimes[i];
+                if (!this.Times.Contains(time))
+                {
+                    this.Times.Add(time);
+                }
+                this.TimesDict.Add(time, new CastActionTimes() { Index = i, IsSelfHit = false });
             }
             this.Times.Sort();
         }

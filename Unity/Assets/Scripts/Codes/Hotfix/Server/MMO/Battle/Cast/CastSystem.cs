@@ -198,11 +198,7 @@ namespace ET.Server
                         cast.HandleTargetHit(castActionTimes.Index);
                     }
                 }
-
-
-
             }
-
 
 
             if (config.TotalTime > 0)

@@ -1,3 +1,6 @@
 {"list":[
 {"_t":"BuffConfig","_id":2001,"NoticeClientType":2,"TotalTime":1000,"_AddAction":[1002],"TickTime":0,"_TickAction":[],"_RemoveAction":[1002],"_OwnerEffect":[1]},
+{"_t":"BuffConfig","_id":30016,"NoticeClientType":2,"TotalTime":1000,"_AddAction":[],"TickTime":100,"_TickAction":[1010],"_RemoveAction":[],"_OwnerEffect":[]},
+{"_t":"BuffConfig","_id":30017,"NoticeClientType":2,"TotalTime":1500,"_AddAction":[10058,10059,10060],"TickTime":0,"_TickAction":[],"_RemoveAction":[10058,10059,10060],"_OwnerEffect":[]},
+{"_t":"BuffConfig","_id":30018,"NoticeClientType":2,"TotalTime":1000,"_AddAction":[10055],"TickTime":0,"_TickAction":[],"_RemoveAction":[10055],"_OwnerEffect":[1]},
 ]}
