@@ -160,7 +160,11 @@ namespace ET.Server
 
         public static void TimeOver(this BulletComponent self)
         {
+            Log.Console($"777 bullet time over,,,bulletid:{self.Config.Id}");
             TimerComponent.Instance.Remove(ref self.TickTimer);
+            TimerComponent.Instance.Remove(ref self.TickTimer2);
+            TimerComponent.Instance.Remove(ref self.TickTimer3);
+            TimerComponent.Instance.Remove(ref self.TotalTimer);
             Unit owner = self.GetOwner();
             if (owner == null || owner.IsDisposed)
             {
@@ -303,7 +307,7 @@ namespace ET.Server
 
             if (bulletConfig.TotalTime > 0)
             {
-                self.TotalTimer = TimerComponent.Instance.NewRepeatedTimer(
+                self.TotalTimer = TimerComponent.Instance.NewOnceTimer(
                     TimeHelper.ServerNow() + bulletConfig.TotalTime,
                     TimerInvokeType.BulletTotalTime,
                     self
