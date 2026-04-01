@@ -1,0 +1,28 @@
+{
+    "name": "ET.ModelView",
+    "rootNamespace": "",
+    "references": [
+        "ET.Core",
+        "ET.Loader",
+        "ET.LSEntity",
+        "ET.Model",
+        "ET.ReferenceCollector",
+        "ET.SourceGeneratorAttribute",
+        "ET.UI",
+        "ET.YooAssets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "INITED"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [],
+    "additionalReferences": [],
+    "compilerOptions": ""
+}
