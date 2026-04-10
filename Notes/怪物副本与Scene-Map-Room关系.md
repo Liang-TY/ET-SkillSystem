@@ -407,7 +407,109 @@ private static void LSUpdate(this LSDungeonComponent self)
                     4. LSDungeonComponent 检查通关条件
 ```
 
-## 五、核心结论
+## 五、DNF 副本房间与 ET Room 的关系
+
+DNF 的"房间"和 ET 的 `Room` 是**两个不同的概念**，只是中文撞名了：
+
+| DNF 概念 | 含义 | 对应 ET 中的什么 |
+|----------|------|-----------------|
+| **副本**（Dungeon） | 整个地下城，从头打到尾 | **Room** — 一个帧同步游戏会话 |
+| **房间**（Map1/Map2/...） | 副本内的一个个关卡区域 | LSWorld 内的逻辑分区，不是独立的实体 |
+
+### 一个副本的完整流程
+
+```
+玩家进入副本
+  → 创建一个 Room（帧同步会话）
+  → Room 内一个 LSWorld
+  → LSWorld 内一个 LSDungeonComponent 管理关卡进度
+
+Room 1（第一关）:
+  LSWorld 内: 玩家 LSUnit + 怪物A + 怪物B
+  → 打完所有怪物 → LSDungeonComponent 检测通关
+  → 移除旧怪物 → 加载新地图配置 → 生成新怪物
+
+Room 2（第二关）:
+  LSWorld 内: 同一批玩家 LSUnit + 怪物C + 怪物D
+  → 玩家 HP/Buff/技能冷却 全部保留（同一个 LSWorld）
+  → 打完 → 继续...
+
+Boss Room:
+  LSWorld 内: 同一批玩家 + Boss
+  → 击杀 Boss → 副本结束 → 销毁 Room
+```
+
+**整个过程只有一个 Room、一个 LSWorld**。DNF 的"换房间"只是 LSWorld 内部的状态切换——清理旧怪物、生成新怪物、切换地图。
+
+### 为什么不需要多个 LSWorld
+
+```
+┌─ Room（整个副本）──────────────────────────────────────┐
+│  LSWorld                                                │
+│  ├── LSUnitComponent                                    │
+│  │   └── LSUnit(玩家) ← HP/Buff/CD 始终保留             │
+│  ├── LSProjectileComponent ← 弹道跨关卡时清空           │
+│  ├── LSAreaComponent ← 区域跨关卡时清空                 │
+│  ├── LSBuffComponent(per unit)                          │
+│  └── LSDungeonComponent  ← 管理"当前在哪个关卡"         │
+│       ├── CurrentRoomIndex: int   // 第几关              │
+│       ├── RoomConfigs[]           // 每关配置            │
+│       └── LSUpdate: 检查通关条件 → 切换关卡              │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 切换关卡时的逻辑
+
+```csharp
+// LSDungeonComponentSystem.LSUpdate
+private static void OnRoomClear(LSDungeonComponent self)
+{
+    // 1. 清理当前关卡的实体
+    self.LSWorld().GetComponent<LSProjectileComponent>().DisposeAll();
+    self.LSWorld().GetComponent<LSAreaComponent>().DisposeAll();
+    // 移除所有怪物（不移除玩家）
+
+    // 2. 推进关卡
+    self.CurrentRoomIndex++;
+
+    if (self.CurrentRoomIndex >= self.RoomConfigs.Count)
+    {
+        // 副本通关
+        self.DungeonClear = true;
+        return;
+    }
+
+    // 3. 生成新关卡的怪物
+    var roomConfig = self.RoomConfigs[self.CurrentRoomIndex];
+    foreach (var monsterInfo in roomConfig.Monsters)
+    {
+        LSMonsterFactory.Init(self.LSWorld(), monsterInfo);
+    }
+}
+```
+
+帧缓冲、预测回滚机制不受影响——快照会自然记录 LSWorld 从"有旧怪物"到"有新怪物"的状态变化。
+
+### Room 代码注释说的"多个 LSWorld"是什么场景
+
+Room.cs 源码注释：`// LSWorld做成child，可以有多个lsWorld，比如守望先锋有两个`
+
+守望先锋这类游戏：一张大地图上同时存在多个独立的逻辑区域（比如攻防两端各自有独立模拟），每个区域是独立的 LSWorld，各自有自己的帧同步循环。
+
+DNF 不需要这种设计。DNF 的关卡是**串行的**（打完一间进下一间），不是**并行的**。
+
+### 总结
+
+```
+DNF 副本 = ET Room（一个帧同步会话）
+DNF 房间/地图 = LSWorld 内的一个关卡状态（LSDungeonComponent 管理）
+切换地图 = 清除旧怪物 + 生成新怪物（同一个 LSWorld）
+玩家状态 = 自然保留（同一个 LSWorld 里的同一个 LSUnit）
+```
+
+---
+
+## 六、核心结论
 
 - **副本就是 Room**，不需要额外的 Scene 或 Fiber
 - **怪物���是 LSWorld 里的 LSUnit**，和玩家在同一个逻辑世界里
