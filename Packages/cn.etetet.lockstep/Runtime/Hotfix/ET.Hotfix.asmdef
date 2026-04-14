@@ -2,11 +2,14 @@
     "name": "ET.Hotfix",
     "rootNamespace": "",
     "references": [
+        "ET.Aabb",
+        "ET.Collision",
         "ET.Core",
         "ET.Loader",
         "ET.LSEntity",
         "ET.MemoryPack",
         "ET.Model",
+        "ET.Npkparser",
         "ET.SourceGeneratorAttribute",
         "ET.TrueSync",
         "Unity.Mathematics"

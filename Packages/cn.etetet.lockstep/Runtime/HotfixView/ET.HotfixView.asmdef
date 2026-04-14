@@ -2,6 +2,8 @@
     "name": "ET.HotfixView",
     "rootNamespace": "",
     "references": [
+        "ET.Aabb",
+        "ET.Collision",
         "ET.Core",
         "ET.Hotfix",
         "ET.Loader",
@@ -9,6 +11,7 @@
         "ET.MemoryPack",
         "ET.Model",
         "ET.ModelView",
+        "ET.Npkparser",
         "ET.ReferenceCollector",
         "ET.SourceGeneratorAttribute",
         "ET.TrueSync",

@@ -1,0 +1,11 @@
+﻿{
+    "Id": 200,
+    "Name": "collision",
+    "ScriptsReferences": 
+    {
+        "Hotfix": ["ET.Collision"],
+        "HotfixView": ["ET.Collision"],
+        "Model": ["ET.Collision"],
+        "ModelView": ["ET.Collision"]
+    }
+}

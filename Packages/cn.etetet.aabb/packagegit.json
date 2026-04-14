@@ -1,0 +1,11 @@
+﻿{
+    "Id": 200,
+    "Name": "aabb",
+    "ScriptsReferences": 
+    {
+        "Hotfix": ["ET.Aabb"],
+        "HotfixView": ["ET.Aabb"],
+        "Model": ["ET.Aabb"],
+        "ModelView": ["ET.Aabb"]
+    }
+}

@@ -1,0 +1,11 @@
+﻿{
+    "Id": 200,
+    "Name": "npkparser",
+    "ScriptsReferences": 
+    {
+        "Hotfix": ["ET.Npkparser"],
+        "HotfixView": ["ET.Npkparser"],
+        "Model": ["ET.Npkparser"],
+        "ModelView": ["ET.Npkparser"]
+    }
+}

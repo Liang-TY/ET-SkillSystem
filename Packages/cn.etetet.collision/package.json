@@ -1,0 +1,21 @@
+﻿{
+  "name": "cn.etetet.collision",
+  "displayName": "ET.Collision",
+  "version": "0.0.0",
+  "unity": "2022.3",
+  "description": "碰撞检测策略",
+  "author": {
+    "name": "ltytest"
+  },
+  "repository": {},
+  "relatedPackages": {},
+  "dependencies": {
+    "cn.etetet.aabb": "1.0.0",
+    "cn.etetet.core": "3.0.3",
+    "cn.etetet.sourcegenerator": "3.0.1",
+    "cn.etetet.truesync": "3.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@ET-Packages"
+  }
+}

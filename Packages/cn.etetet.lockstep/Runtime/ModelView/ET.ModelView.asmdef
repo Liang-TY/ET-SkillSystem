@@ -2,10 +2,13 @@
     "name": "ET.ModelView",
     "rootNamespace": "",
     "references": [
+        "ET.Aabb",
+        "ET.Collision",
         "ET.Core",
         "ET.Loader",
         "ET.LSEntity",
         "ET.Model",
+        "ET.Npkparser",
         "ET.ReferenceCollector",
         "ET.SourceGeneratorAttribute",
         "ET.UI",

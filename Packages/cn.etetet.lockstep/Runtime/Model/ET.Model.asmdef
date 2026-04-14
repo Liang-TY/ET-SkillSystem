@@ -2,10 +2,13 @@
     "name": "ET.Model",
     "rootNamespace": "",
     "references": [
+        "ET.Aabb",
+        "ET.Collision",
         "ET.Core",
         "ET.Loader",
         "ET.LSEntity",
         "ET.MemoryPack",
+        "ET.Npkparser",
         "ET.SourceGeneratorAttribute",
         "ET.TrueSync",
         "ET.YooAssets",
