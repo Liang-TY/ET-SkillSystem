@@ -20,6 +20,11 @@ namespace ET.Client
         public static async ETTask InitAsync(this LSUnitViewComponent self)
         {
             Room room = self.Room();
+
+            // Initialize 2D animation resources
+            LSAnimResComponent animRes = room.AddComponent<LSAnimResComponent>();
+            await animRes.InitAsync();
+
             LSUnitComponent lsUnitComponent = room.LSWorld.GetComponent<LSUnitComponent>();
             Scene root = self.Root();
             foreach (long playerId in room.PlayerIds)
