@@ -31,42 +31,42 @@ namespace ET.Client
             // string assetsName = $"Packages/cn.etetet.demores/Bundles/Unit/Unit.prefab";
             // GameObject bundleGameObject = await 
             //         room.GetComponent<ResourcesLoaderComponent>().LoadAssetAsync<GameObject>(assetsName);
-            // // 1. Load and parse IMG sprite atlas
-            // string imgPath = "Packages/cn.etetet.lockstep/Bundles/AnimRes/bantuamazones.img";
-            // TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>(imgPath);
-            // Log.Info($"[LSAnimRes] IMG loaded, size: {imgAsset.bytes.Length} bytes");
-            //
-            // NpkSprite[] npkSprites = NpkImgParser.Parse(imgAsset.bytes);
-            // Log.Info($"[LSAnimRes] Parsed {npkSprites.Length} sprites from IMG");
-            //
-            // // 2. Convert each NpkSprite to Unity Texture2D + Sprite
-            // foreach (NpkSprite npkSprite in npkSprites)
-            // {
-            //     if (npkSprite.ArgbData == null) continue;
-            //
-            //     Texture2D tex = new Texture2D(npkSprite.Width, npkSprite.Height, TextureFormat.ARGB32, false);
-            //     Color[] colors = new Color[npkSprite.ArgbData.Length];
-            //     for (int i = 0; i < npkSprite.ArgbData.Length; i++)
-            //     {
-            //         int argb = npkSprite.ArgbData[i];
-            //         colors[i] = new Color32(
-            //             (byte)((argb >> 16) & 0xFF),
-            //             (byte)((argb >> 8) & 0xFF),
-            //             (byte)(argb & 0xFF),
-            //             (byte)((argb >> 24) & 0xFF)
-            //         );
-            //     }
-            //     tex.SetPixels(colors);
-            //     tex.Apply();
-            //
-            //     Sprite sprite = Sprite.Create(tex,
-            //         new Rect(0, 0, npkSprite.Width, npkSprite.Height),
-            //         new Vector2(0.5f, 0.5f), 100f);
-            //
-            //     self.Sprites[npkSprite.Index] = sprite;
-            //     self.Textures.Add(tex);
-            // }
-            // Log.Info($"[LSAnimRes] Created {self.Sprites.Count} Unity Sprites");
+            // 1. Load and parse IMG sprite atlas
+            string imgPath = "Packages/cn.etetet.lockstep/Bundles/AnimRes/bantuamazones.img.bytes";
+            TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>(imgPath);
+            Log.Info($"[LSAnimRes] IMG loaded, size: {imgAsset.bytes.Length} bytes");
+            
+            NpkSprite[] npkSprites = NpkImgParser.Parse(imgAsset.bytes);
+            Log.Info($"[LSAnimRes] Parsed {npkSprites.Length} sprites from IMG");
+            
+            // 2. Convert each NpkSprite to Unity Texture2D + Sprite
+            foreach (NpkSprite npkSprite in npkSprites)
+            {
+                if (npkSprite.ArgbData == null) continue;
+            
+                Texture2D tex = new Texture2D(npkSprite.Width, npkSprite.Height, TextureFormat.ARGB32, false);
+                Color[] colors = new Color[npkSprite.ArgbData.Length];
+                for (int i = 0; i < npkSprite.ArgbData.Length; i++)
+                {
+                    int argb = npkSprite.ArgbData[i];
+                    colors[i] = new Color32(
+                        (byte)((argb >> 16) & 0xFF),
+                        (byte)((argb >> 8) & 0xFF),
+                        (byte)(argb & 0xFF),
+                        (byte)((argb >> 24) & 0xFF)
+                    );
+                }
+                tex.SetPixels(colors);
+                tex.Apply();
+            
+                Sprite sprite = Sprite.Create(tex,
+                    new Rect(0, 0, npkSprite.Width, npkSprite.Height),
+                    new Vector2(0.5f, 0.5f), 100f);
+            
+                self.Sprites[npkSprite.Index] = sprite;
+                self.Textures.Add(tex);
+            }
+            Log.Info($"[LSAnimRes] Created {self.Sprites.Count} Unity Sprites");
 
             // 3. Load and register animation configs
             string stayPath = "Packages/cn.etetet.lockstep/Bundles/AnimRes/stay.json";//Packages/cn.etetet.demores/Bundles/Unit/Unit.prefab
