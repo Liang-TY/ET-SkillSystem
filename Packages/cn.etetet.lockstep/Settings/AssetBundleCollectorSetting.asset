@@ -90,8 +90,8 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
     - GroupName: Unit
-      GroupDesc: 
-      AssetTags: 
+      GroupDesc:
+      AssetTags:
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Packages/cn.etetet.demores/Bundles/Unit
@@ -100,5 +100,18 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackSeparately
         FilterRuleName: CollectPrefab
-        AssetTags: 
-        UserData: 
+        AssetTags:
+        UserData:
+    - GroupName: AnimRes
+      GroupDesc:
+      AssetTags:
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Packages/cn.etetet.lockstep/Bundles/AnimRes
+        CollectorGUID: fe780460bc85e0c409c4739367a1b644
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
