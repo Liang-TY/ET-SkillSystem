@@ -32,32 +32,51 @@ namespace ET.Client
         {
             LSUnit unit = self.GetUnit();
 
-            Vector3 unitPos = unit.Position.ToVector();
+            // 3D 逻辑坐标转 2D 屏幕坐标
+            Vector3 logicPos = unit.Position.ToVector();
+            const float depthRatio = 0.6f; // 纵深转屏幕纵向的比例，越大越有纵深感
+            Vector3 screenPos = new Vector3(
+                logicPos.x,
+                logicPos.z * depthRatio + logicPos.y,
+                0
+            );
+
             const float speed = 6f;
-            float speed2 = speed;// * self.Room().SpeedMultiply;
-
-            if (unitPos != self.Position)
+            if (screenPos != self.Position)
             {
-                float distance = (unitPos - self.Position).magnitude;
-                self.totalTime = distance / speed2;
+                float distance = (screenPos - self.Position).magnitude;
+                self.totalTime = distance / speed;
                 self.t = 0;
-                self.Position = unit.Position.ToVector();
-                self.Rotation = unit.Rotation.ToQuaternion();
+                self.Position = screenPos;
             }
 
+            // 朝向：根据逻辑层的 Forward.x 翻转精灵
+            TSVector forward = unit.Forward;
+            bool shouldFaceRight = forward.x >= FP.Zero;
+            if (shouldFaceRight != self.FaceRight)
+            {
+                self.FaceRight = shouldFaceRight;
+                Vector3 scale = self.Transform.localScale;
+                scale.x = shouldFaceRight ? 1 : -1;
+                self.Transform.localScale = scale;
+            }
 
+            // 动画
             LSInput input = unit.GetComponent<LSInputComponent>().LSInput;
-            if (input.V != TSVector2.zero)
-            {
-                self.GetComponent<LSAnimatorComponent>().SetFloatValue("Speed", speed2);
-            }
-            else
-            {
-                self.GetComponent<LSAnimatorComponent>().SetFloatValue("Speed", 0);
-            }
+            bool isMoving = input.V != TSVector2.zero || input.VY != FP.Zero;
+            // TODO: 改成你的 2D 帧动画逻辑
+            self.GetComponent<LSAnimatorComponent>().SetFloatValue("Speed", isMoving ? speed : 0);
+
+            // Lerp 插值平滑移动
             self.t += Time.deltaTime;
-            self.Transform.rotation = Quaternion.Lerp(self.Transform.rotation, self.Rotation, self.t / 1f);
-            self.Transform.position = Vector3.Lerp(self.Transform.position, self.Position, self.t / self.totalTime);
+            float lerpT = self.totalTime > 0 ? Mathf.Min(self.t / self.totalTime, 1f) : 1f;
+            self.Transform.position = Vector3.Lerp(self.Transform.position, self.Position, lerpT);
+
+            // 排序：Z 越大越远，sortingOrder 越小越先画（在后面）
+            if (self.SpriteRenderer != null)
+            {
+                self.SpriteRenderer.sortingOrder = -(int)(logicPos.z * 100);
+            }
         }
 
         private static LSUnit GetUnit(this LSUnitView self)

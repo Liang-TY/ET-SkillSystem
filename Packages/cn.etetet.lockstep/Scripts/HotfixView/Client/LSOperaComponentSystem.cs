@@ -17,28 +17,17 @@ namespace ET.Client
         private static void Update(this LSOperaComponent self)
         {
             TSVector2 v = new();
-            if (Input.GetKey(KeyCode.W))
-            {
-                v.y += 1;
-            }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                v.x -= 1;
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                v.y -= 1;
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                v.x += 1;
-            }
+            FP vy = FP.Zero;
+            if (Input.GetKey(KeyCode.D)) { v.x += 1; }
+            if (Input.GetKey(KeyCode.A)) { v.x -= 1; }
+            if (Input.GetKey(KeyCode.W)) { v.y += 1; }  // z+
+            if (Input.GetKey(KeyCode.S)) { v.y -= 1; }  // z-
+            if (Input.GetKey(KeyCode.C)) { vy += 1; }    // y+
+            if (Input.GetKey(KeyCode.V)) { vy -= 1; }    // y-
 
             LSClientUpdater lsClientUpdater = self.GetParent<Room>().GetComponent<LSClientUpdater>();
             lsClientUpdater.Input.V = v.normalized;
+            lsClientUpdater.Input.VY = vy;
         }
 
     }

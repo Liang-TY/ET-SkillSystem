@@ -32,7 +32,7 @@ namespace ET.Client
                 LSUnit lsUnit = lsUnitComponent.GetChild<LSUnit>(playerId);
                 string assetsName = $"Packages/cn.etetet.demores/Bundles/Unit/Unit.prefab";
                 GameObject bundleGameObject = await room.GetComponent<ResourcesLoaderComponent>().LoadAssetAsync<GameObject>(assetsName);
-                GameObject prefab = bundleGameObject.Get<GameObject>("Skeleton");
+                GameObject prefab = bundleGameObject.Get<GameObject>("Knight");
 
                 GlobalComponent globalComponent = root.GetComponent<GlobalComponent>();
                 GameObject unitGo = UnityEngine.Object.Instantiate(prefab, globalComponent.Unit, true);

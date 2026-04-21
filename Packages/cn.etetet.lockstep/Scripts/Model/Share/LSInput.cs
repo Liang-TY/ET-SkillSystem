@@ -11,10 +11,12 @@ namespace ET
 
         [MemoryPackOrder(1)]
         public int Button;
-        
+
+        [MemoryPackOrder(2)]
+        public TrueSync.FP VY;
         public bool Equals(LSInput other)
         {
-            return this.V == other.V && this.Button == other.Button;
+            return this.V == other.V && this.Button == other.Button && this.VY == other.VY;
         }
 
         public override bool Equals(object obj)
