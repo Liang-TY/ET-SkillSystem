@@ -55,5 +55,5 @@ Unity.sln
 Unity.sln.DotSettings.user
 
 /ET.sln
-Assets/Plugins/Sirenix*
+Assets/Plugins/Sirenix/Assemblies/AOT/*.dll*
 Assets/HybridCLR*
