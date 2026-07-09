@@ -12,7 +12,9 @@
         "ET.ReferenceCollector",
         "ET.SourceGeneratorAttribute",
         "ET.UI",
-        "ET.YooAssets"
+        "ET.YIUIFramework",
+        "ET.YooAssets",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
