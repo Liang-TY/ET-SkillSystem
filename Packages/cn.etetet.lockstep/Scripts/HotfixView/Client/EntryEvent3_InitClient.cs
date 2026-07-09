@@ -17,7 +17,11 @@ namespace ET.Client
             root.AddComponent<ResourcesLoaderComponent>();
             root.AddComponent<PlayerComponent>();
             root.AddComponent<CurrentScenesComponent>();
-            
+
+            // YIUI 初始化
+            root.AddComponent<YIUIMgrComponent>();
+            await root.GetComponent<YIUIMgrComponent>().Initialize();
+
             await EventSystem.Instance.PublishAsync(root, new AppStartInitFinish());
         }
     }

@@ -5,7 +5,8 @@
 	{
 		protected override async ETTask Run(Scene root, AppStartInitFinish args)
 		{
-			await UIHelper.Create(root, UIType.UILSLogin, UILayer.Mid);
+			// 使用 YIUI 面板替换旧的 ET UI 登录界面
+			await root.YIUIRoot().OpenPanelAsync<LoginPanelComponent>();
 		}
 	}
 }
