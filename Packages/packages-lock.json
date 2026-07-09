@@ -185,6 +185,31 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "cn.etetet.yiuiframework": {
+      "version": "file:cn.etetet.yiuiframework",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.core": "1.0.0",
+        "cn.etetet.yiuiinvoke": "4.0.3"
+      }
+    },
+    "cn.etetet.yiuiinvoke": {
+      "version": "file:cn.etetet.yiuiinvoke",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.core": "1.0.0"
+      }
+    },
+    "cn.etetet.yiuiyooassets": {
+      "version": "file:cn.etetet.yiuiyooassets",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.core": "1.0.0"
+      }
+    },
     "cn.etetet.yooassets": {
       "version": "file:cn.etetet.yooassets",
       "depth": 0,
@@ -240,6 +265,13 @@
         "com.unity.nuget.mono-cecil": "1.11.4",
         "com.unity.test-framework.performance": "3.0.3"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.editorcoroutines": {
+      "version": "1.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
