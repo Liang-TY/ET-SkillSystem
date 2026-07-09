@@ -17,12 +17,13 @@ MonoBehaviour:
   UniqueBundleName: 1
   Packages:
   - PackageName: DefaultPackage
-    PackageDesc: 
-    EnableAddressable: 0
+    PackageDesc:
+    EnableAddressable: 1
+    SupportExtensionless: 1
     LocationToLower: 0
     IncludeAssetGUID: 0
-    IgnoreDefaultType: 1
     AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
     Groups:
     - GroupName: AotDlls
       GroupDesc: 
@@ -113,5 +114,34 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+    - GroupName: YIUI
+      GroupDesc:
+      AssetTags:
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Packages/cn.etetet.yiuiframework/Assets/GameRes/YIUI/YIUI
+        CollectorGUID: e48db20705e647068528b4be16ee4707
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+      - CollectPath: Assets/GameRes/YIUI/YIUISettings
+        CollectorGUID: 8a82f3019ed7422db6beeb5a16757641
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
+      - CollectPath: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI
+        CollectorGUID: d993e5e46c754c5383c668f6877285c9
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectPrefab
         AssetTags:
         UserData:
