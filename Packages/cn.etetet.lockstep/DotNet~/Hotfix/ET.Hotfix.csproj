@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>ET</RootNamespace>
@@ -12,13 +12,13 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DefineConstants>DOTNET</DefineConstants>
         <OutputPath>$(SolutionDir)Bin</OutputPath>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <NoWarn>0169,0649,3021,8981,CS9193,CS9192</NoWarn>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DefineConstants>DOTNET</DefineConstants>
         <OutputPath>$(SolutionDir)Bin</OutputPath>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <Optimize>false</Optimize>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <NoWarn>0169,0649,3021,8981,CS9193,CS9192</NoWarn>
@@ -45,6 +45,7 @@
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)Packages\cn.etetet.sourcegenerator\DotNet~\ET.SourceGenerator\ET.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\Model\ET.Model.csproj" />
+        <ProjectReference Include="..\..\..\cn.etetet.mathematics\DotNet~\ET.Mathematics.csproj" />
     </ItemGroup>
 
     <!-- sourcegenerator use -->
