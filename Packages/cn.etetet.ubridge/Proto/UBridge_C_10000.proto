@@ -59,3 +59,42 @@ message ScreenshotCaptureResponse // IResponse
     string Target = 5;                      // 实际目标
     BridgeScreenshotInfo Screenshot = 6;     // 截图文件信息
 }
+
+// ==================== Ping ====================
+
+// ResponseType PingResponse
+message Ping // IRequest
+{
+    int32 RpcId = 1;
+}
+
+message PingResponse // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    int64 Time = 4;                         // 服务端 Unix 时间戳 (ms)
+    bool IsCompiling = 5;                   // 正在编译脚本？
+    bool IsPlaying = 6;                     // PlayMode 中？
+    bool IsPlayingOrWillChangePlaymode = 7; // PlayMode 或正在切换？
+    string CodeMode = 8;                    // ET GlobalConfig.CodeMode
+    string UnityVersion = 9;               // Unity 版本号
+}
+
+// ==================== MenuItemExecute ====================
+
+// ResponseType MenuItemExecuteResponse
+message MenuItemExecuteRequest // IRequest
+{
+    int32 RpcId = 1;
+    string MenuPath = 2;    // 菜单路径，如 "File/Save Project"
+}
+
+message MenuItemExecuteResponse // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    string MenuPath = 4;    // 回显
+    bool Executed = 5;      // 是否执行成功
+}

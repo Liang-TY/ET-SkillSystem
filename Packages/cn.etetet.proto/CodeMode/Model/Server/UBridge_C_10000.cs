@@ -323,6 +323,189 @@ namespace ET
         }
     }
 
+    // ==================== Ping ====================
+    [MemoryPackable]
+    [Message(UBridge.Ping)]
+    [ResponseType(nameof(PingResponse))]
+    public partial class Ping : MessageObject, IRequest
+    {
+        public static Ping Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<Ping>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PingResponse)]
+    public partial class PingResponse : MessageObject, IResponse
+    {
+        public static PingResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PingResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        /// <summary>
+        /// 服务端 Unix 时间戳 (ms)
+        /// </summary>
+        [MemoryPackOrder(3)]
+        public long Time { get; set; }
+
+        /// <summary>
+        /// 正在编译脚本？
+        /// </summary>
+        [MemoryPackOrder(4)]
+        public bool IsCompiling { get; set; }
+
+        /// <summary>
+        /// PlayMode 中？
+        /// </summary>
+        [MemoryPackOrder(5)]
+        public bool IsPlaying { get; set; }
+
+        /// <summary>
+        /// PlayMode 或正在切换？
+        /// </summary>
+        [MemoryPackOrder(6)]
+        public bool IsPlayingOrWillChangePlaymode { get; set; }
+
+        /// <summary>
+        /// ET GlobalConfig.CodeMode
+        /// </summary>
+        [MemoryPackOrder(7)]
+        public string CodeMode { get; set; }
+
+        /// <summary>
+        /// Unity 版本号
+        /// </summary>
+        [MemoryPackOrder(8)]
+        public string UnityVersion { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Time = default;
+            this.IsCompiling = default;
+            this.IsPlaying = default;
+            this.IsPlayingOrWillChangePlaymode = default;
+            this.CodeMode = default;
+            this.UnityVersion = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    // ==================== MenuItemExecute ====================
+    [MemoryPackable]
+    [Message(UBridge.MenuItemExecuteRequest)]
+    [ResponseType(nameof(MenuItemExecuteResponse))]
+    public partial class MenuItemExecuteRequest : MessageObject, IRequest
+    {
+        public static MenuItemExecuteRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<MenuItemExecuteRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        /// <summary>
+        /// 菜单路径，如 "File/Save Project"
+        /// </summary>
+        [MemoryPackOrder(1)]
+        public string MenuPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.MenuPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.MenuItemExecuteResponse)]
+    public partial class MenuItemExecuteResponse : MessageObject, IResponse
+    {
+        public static MenuItemExecuteResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<MenuItemExecuteResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        /// <summary>
+        /// 回显
+        /// </summary>
+        [MemoryPackOrder(3)]
+        public string MenuPath { get; set; }
+
+        /// <summary>
+        /// 是否执行成功
+        /// </summary>
+        [MemoryPackOrder(4)]
+        public bool Executed { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.MenuPath = default;
+            this.Executed = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -331,5 +514,9 @@ namespace ET
         public const ushort BridgeScreenshotInfo = 10004;
         public const ushort ScreenshotCaptureRequest = 10005;
         public const ushort ScreenshotCaptureResponse = 10006;
+        public const ushort Ping = 10007;
+        public const ushort PingResponse = 10008;
+        public const ushort MenuItemExecuteRequest = 10009;
+        public const ushort MenuItemExecuteResponse = 10010;
     }
 }

@@ -30,6 +30,7 @@ namespace ET
             string format = "png";
             int quality = 85;
             bool allowEditMode = false;
+            string menuPath = "";
 
             for (int i = 1; i < args.Length; i++)
             {
@@ -40,6 +41,7 @@ namespace ET
                     case "--format" when i + 1 < args.Length: format = args[++i]; break;
                     case "--quality" when i + 1 < args.Length: quality = int.Parse(args[++i]); break;
                     case "--allowEditMode" when i + 1 < args.Length: allowEditMode = bool.Parse(args[++i]); break;
+                    case "--menuPath" when i + 1 < args.Length: menuPath = args[++i]; break;
                     case "--timeout" when i + 1 < args.Length: timeoutMs = int.Parse(args[++i]); break;
                     case "--waitMs" when i + 1 < args.Length: waitMs = int.Parse(args[++i]); break;
                 }
@@ -47,13 +49,20 @@ namespace ET
 
             // M-fM-^^M-^DM-iM-^@M- M-hM-/M-7M-fM-1M-^B
             string payloadJson;
-            if (command == "ScreenshotCapture")
+            switch (command)
             {
-                payloadJson = $"{{\"_t\":\"ET.ScreenshotCaptureRequest\",\"RpcId\":1,\"Target\":\"game\",\"Format\":\"{format}\",\"Quality\":{quality},\"AllowEditMode\":{allowEditMode.ToString().ToLower()}}}";
-            }
-            else
-            {
-                payloadJson = $"{{\"_t\":\"ET.ConsoleGetLogsRequest\",\"RpcId\":1,\"Count\":{count},\"LogType\":\"{logType}\"}}";
+                case "ScreenshotCapture":
+                    payloadJson = $"{{\"_t\":\"ET.ScreenshotCaptureRequest\",\"RpcId\":1,\"Target\":\"game\",\"Format\":\"{format}\",\"Quality\":{quality},\"AllowEditMode\":{allowEditMode.ToString().ToLower()}}}";
+                    break;
+                case "Ping":
+                    payloadJson = "{\"_t\":\"ET.Ping\",\"RpcId\":1}";
+                    break;
+                case "MenuItemExecute":
+                    payloadJson = $"{{\"_t\":\"ET.MenuItemExecuteRequest\",\"RpcId\":1,\"MenuPath\":\"{menuPath}\"}}";
+                    break;
+                default:
+                    payloadJson = $"{{\"_t\":\"ET.ConsoleGetLogsRequest\",\"RpcId\":1,\"Count\":{count},\"LogType\":\"{logType}\"}}";
+                    break;
             }
 
             UBridgeRequestEnvelope envelope = new UBridgeRequestEnvelope
