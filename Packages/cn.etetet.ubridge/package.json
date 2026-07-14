@@ -1,0 +1,13 @@
+{
+  "name": "cn.etetet.ubridge",
+  "displayName": "ET.UBridge",
+  "version": "1.0.0",
+  "unity": "2022.3",
+  "description": "Unity Editor file-based IPC bridge for reading console logs and controlling the Editor from CLI.",
+  "author": {
+    "name": "ET"
+  },
+  "dependencies": {
+    "cn.etetet.core": "1.0.0"
+  }
+}

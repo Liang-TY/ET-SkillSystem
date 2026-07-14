@@ -1,0 +1,30 @@
+syntax = "proto3";
+package ET;
+
+// 单条控制台日志
+message BridgeConsoleLog
+{
+    string LogType = 1;    // Error/Warning/Log/Exception
+    string Message = 2;    // 日志正文
+    string StackTrace = 3; // 堆栈跟踪
+    string Time = 4;       // 时间戳
+}
+
+// ResponseType ConsoleGetLogsResponse
+message ConsoleGetLogsRequest // IRequest
+{
+    int32 RpcId = 1;
+    int32 Count = 2;       // 要获取的条数，0=全部
+    string LogType = 3;    // 类型过滤: Error/Warning/Log/All
+}
+
+message ConsoleGetLogsResponse // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    repeated BridgeConsoleLog Logs = 4;
+    int32 Count = 5;        // 实际返回条数
+    int32 TotalCount = 6;   // 控制台日志总数
+    string LogType = 7;     // 实际过滤类型
+}

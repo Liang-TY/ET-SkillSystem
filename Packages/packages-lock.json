@@ -181,6 +181,14 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "cn.etetet.ubridge": {
+      "version": "file:cn.etetet.ubridge",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.core": "1.0.0"
+      }
+    },
     "cn.etetet.ui": {
       "version": "file:cn.etetet.ui",
       "depth": 0,
