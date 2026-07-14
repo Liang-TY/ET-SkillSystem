@@ -28,3 +28,34 @@ message ConsoleGetLogsResponse // IResponse
     int32 TotalCount = 6;   // 控制台日志总数
     string LogType = 7;     // 实际过滤类型
 }
+
+// 截图文件信息
+message BridgeScreenshotInfo
+{
+    string Path = 1;        // 完整文件路径
+    string FileName = 2;    // 文件名
+    int32 Width = 3;        // 图像宽度
+    int32 Height = 4;       // 图像高度
+    int64 FileSize = 5;     // 文件大小（字节）
+    string MediaType = 6;   // MIME 类型 "image/png" 或 "image/jpeg"
+}
+
+// ResponseType ScreenshotCaptureResponse
+message ScreenshotCaptureRequest // IRequest
+{
+    int32 RpcId = 1;
+    string Target = 2;       // 截图目标，"game" 或 "gameview"
+    string Format = 3;       // 输出格式，"png"、"jpg"、"jpeg"
+    int32 Quality = 4;       // JPEG 质量 1-100，默认 85
+    bool AllowEditMode = 5;  // 是否允许 EditMode 截图
+}
+
+message ScreenshotCaptureResponse // IResponse
+{
+    int32 RpcId = 1;
+    int32 Error = 2;
+    string Message = 3;
+    bool Captured = 4;                      // 是否成功
+    string Target = 5;                      // 实际目标
+    BridgeScreenshotInfo Screenshot = 6;     // 截图文件信息
+}

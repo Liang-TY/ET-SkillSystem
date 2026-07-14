@@ -19,10 +19,17 @@ namespace ET
 
             // M-hM-'M-#M-fM-^^M-^PM-eM-^OM-^BM-fM-^UM-0
             string command = args.Length > 0 ? args[0] : "ConsoleGetLogs";
-            int count = 50;
-            string logType = "all";
+
+            // 通用参数
             int timeoutMs = 15000;
             int waitMs = 100;
+
+            // 各命令专用参数
+            int count = 50;
+            string logType = "all";
+            string format = "png";
+            int quality = 85;
+            bool allowEditMode = false;
 
             for (int i = 1; i < args.Length; i++)
             {
@@ -30,14 +37,24 @@ namespace ET
                 {
                     case "--count" when i + 1 < args.Length: count = int.Parse(args[++i]); break;
                     case "--logType" when i + 1 < args.Length: logType = args[++i]; break;
+                    case "--format" when i + 1 < args.Length: format = args[++i]; break;
+                    case "--quality" when i + 1 < args.Length: quality = int.Parse(args[++i]); break;
+                    case "--allowEditMode" when i + 1 < args.Length: allowEditMode = bool.Parse(args[++i]); break;
                     case "--timeout" when i + 1 < args.Length: timeoutMs = int.Parse(args[++i]); break;
                     case "--waitMs" when i + 1 < args.Length: waitMs = int.Parse(args[++i]); break;
                 }
             }
 
             // M-fM-^^M-^DM-iM-^@M- M-hM-/M-7M-fM-1M-^B
-            // 构造请求（不依赖 proto 类型，直接用 JSON）
-            string payloadJson = $"{{\"_t\":\"ET.ConsoleGetLogsRequest\",\"RpcId\":1,\"Count\":{count},\"LogType\":\"{logType}\"}}";
+            string payloadJson;
+            if (command == "ScreenshotCapture")
+            {
+                payloadJson = $"{{\"_t\":\"ET.ScreenshotCaptureRequest\",\"RpcId\":1,\"Target\":\"game\",\"Format\":\"{format}\",\"Quality\":{quality},\"AllowEditMode\":{allowEditMode.ToString().ToLower()}}}";
+            }
+            else
+            {
+                payloadJson = $"{{\"_t\":\"ET.ConsoleGetLogsRequest\",\"RpcId\":1,\"Count\":{count},\"LogType\":\"{logType}\"}}";
+            }
 
             UBridgeRequestEnvelope envelope = new UBridgeRequestEnvelope
             {

@@ -38,6 +38,7 @@ namespace ET
 
             // 注册命令处理器
             RegisterHandler("ConsoleGetLogs", UBridgeConsoleGetLogsHandler.Handle);
+            RegisterHandler("ScreenshotCapture", UBridgeScreenshotCaptureHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");
