@@ -31,6 +31,12 @@ namespace ET
             int quality = 85;
             bool allowEditMode = false;
             string menuPath = "";
+            string name = "";
+            string path = "";
+            string filter = "";
+            string type = "";
+            int instanceId = 0;
+            bool active = true;
 
             for (int i = 1; i < args.Length; i++)
             {
@@ -42,6 +48,12 @@ namespace ET
                     case "--quality" when i + 1 < args.Length: quality = int.Parse(args[++i]); break;
                     case "--allowEditMode" when i + 1 < args.Length: allowEditMode = bool.Parse(args[++i]); break;
                     case "--menuPath" when i + 1 < args.Length: menuPath = args[++i]; break;
+                    case "--name" when i + 1 < args.Length: name = args[++i]; break;
+                    case "--path" when i + 1 < args.Length: path = args[++i]; break;
+                    case "--filter" when i + 1 < args.Length: filter = args[++i]; break;
+                    case "--type" when i + 1 < args.Length: type = args[++i]; break;
+                    case "--instanceId" when i + 1 < args.Length: instanceId = int.Parse(args[++i]); break;
+                    case "--active" when i + 1 < args.Length: active = bool.Parse(args[++i]); break;
                     case "--timeout" when i + 1 < args.Length: timeoutMs = int.Parse(args[++i]); break;
                     case "--waitMs" when i + 1 < args.Length: waitMs = int.Parse(args[++i]); break;
                 }
@@ -61,6 +73,15 @@ namespace ET
                     payloadJson = $"{{\"_t\":\"ET.MenuItemExecuteRequest\",\"RpcId\":1,\"MenuPath\":\"{menuPath}\"}}";
                     break;
                 default:
+                    // 通用请求构造：带上所有已设置的参数
+                    payloadJson = "{";
+                    payloadJson += $"\"_t\":\"ET.{command}Request\",\"RpcId\":1";
+                    if (!string.IsNullOrEmpty(name)) payloadJson += $",\"Name\":\"{name}\"";
+                    if (!string.IsNullOrEmpty(path)) payloadJson += $",\"Path\":\"{path}\"";
+                    if (!string.IsNullOrEmpty(filter)) payloadJson += $",\"Filter\":\"{filter}\"";
+                    if (instanceId != 0) payloadJson += $",\"InstanceId\":{instanceId}";
+                    payloadJson += "}";
+                    break;
                     payloadJson = $"{{\"_t\":\"ET.ConsoleGetLogsRequest\",\"RpcId\":1,\"Count\":{count},\"LogType\":\"{logType}\"}}";
                     break;
             }

@@ -41,6 +41,41 @@ namespace ET
             RegisterHandler("ScreenshotCapture", UBridgeScreenshotCaptureHandler.Handle);
             RegisterHandler("Ping", UBridgePingHandler.Handle);
             RegisterHandler("MenuItemExecute", UBridgeMenuItemExecuteHandler.Handle);
+            // Scene
+            RegisterHandler("SceneGetHierarchy", UBridgeSceneGetHierarchyHandler.Handle);
+            RegisterHandler("SceneGetActive", UBridgeSceneGetActiveHandler.Handle);
+            RegisterHandler("SceneLoad", UBridgeSceneLoadHandler.Handle);
+            RegisterHandler("SceneSave", UBridgeSceneSaveHandler.Handle);
+            RegisterHandler("SceneNew", UBridgeSceneNewHandler.Handle);
+            // Selection
+            RegisterHandler("SelectionGet", UBridgeSelectionGetHandler.Handle);
+            RegisterHandler("SelectionSet", UBridgeSelectionSetHandler.Handle);
+            RegisterHandler("SelectionAdd", UBridgeSelectionAddHandler.Handle);
+            RegisterHandler("SelectionRemove", UBridgeSelectionRemoveHandler.Handle);
+            RegisterHandler("SelectionClear", UBridgeSelectionClearHandler.Handle);
+            // Asset
+            RegisterHandler("AssetSearch", UBridgeAssetSearchHandler.Handle);
+            RegisterHandler("AssetFind", UBridgeAssetFindHandler.Handle);
+            RegisterHandler("AssetGetPath", UBridgeAssetGetPathHandler.Handle);
+            RegisterHandler("AssetLoad", UBridgeAssetLoadHandler.Handle);
+            RegisterHandler("AssetReadText", UBridgeAssetReadTextHandler.Handle);
+            // GameObject
+            RegisterHandler("GameObjectCreate", UBridgeGameObjectCreateHandler.Handle);
+            RegisterHandler("GameObjectDestroy", UBridgeGameObjectDestroyHandler.Handle);
+            RegisterHandler("GameObjectFind", UBridgeGameObjectFindHandler.Handle);
+            RegisterHandler("GameObjectGetInfo", UBridgeGameObjectGetInfoHandler.Handle);
+            RegisterHandler("GameObjectRename", UBridgeGameObjectRenameHandler.Handle);
+            RegisterHandler("GameObjectDuplicate", UBridgeGameObjectDuplicateHandler.Handle);
+            RegisterHandler("GameObjectSetActive", UBridgeGameObjectSetActiveHandler.Handle);
+            // Transform
+            RegisterHandler("TransformGet", UBridgeTransformGetHandler.Handle);
+            RegisterHandler("TransformSetPosition", UBridgeTransformSetPositionHandler.Handle);
+            RegisterHandler("TransformSetRotation", UBridgeTransformSetRotationHandler.Handle);
+            RegisterHandler("TransformSetScale", UBridgeTransformSetScaleHandler.Handle);
+            RegisterHandler("TransformSetParent", UBridgeTransformSetParentHandler.Handle);
+            RegisterHandler("TransformSetSiblingIndex", UBridgeTransformSetSiblingIndexHandler.Handle);
+            RegisterHandler("TransformLookAt", UBridgeTransformLookAtHandler.Handle);
+            RegisterHandler("TransformReset", UBridgeTransformResetHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");
