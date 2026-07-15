@@ -958,3 +958,147 @@ message InspectorRemoveComponentResponse // IResponse
     string ObjectPath = 95;
     BridgeComponentInfo RemovedComponent = 96;
 }
+
+// ==================== Editor 控制 ====================
+
+// ResponseType ReloadResponse
+message Reload // IRequest
+{
+    int32 RpcId = 90;
+}
+message ReloadResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool Reloaded = 93;
+}
+
+// ResponseType EditorUndoResponse
+message EditorUndoRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 Count = 91;
+}
+message EditorUndoResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 Count = 93;
+}
+
+// ResponseType EditorRedoResponse
+message EditorRedoRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 Count = 91;
+}
+message EditorRedoResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 Count = 93;
+}
+
+// ResponseType EditorPauseResponse
+message EditorPauseRequest // IRequest
+{
+    int32 RpcId = 90;
+    bool Toggle = 91;
+    bool Pause = 92;
+}
+message EditorPauseResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool IsPaused = 93;
+}
+
+// ResponseType EditorGetStateResponse
+message EditorGetStateRequest // IRequest
+{
+    int32 RpcId = 90;
+}
+message EditorGetStateResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool IsPlaying = 93;
+    bool IsPaused = 94;
+    bool IsCompiling = 95;
+    bool IsUpdating = 96;
+    string ApplicationPath = 97;
+    string ApplicationContentsPath = 98;
+    bool EnterPlayModeOptionsEnabled = 99;
+    string EnterPlayModeOptions = 100;
+}
+
+// ==================== 延迟命令（生命周期） ====================
+
+// ResponseType CompileResponse
+message Compile // IRequest
+{
+    int32 RpcId = 90;
+}
+message CompileResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int64 DurationMs = 93;
+}
+
+// ResponseType RefreshResponse
+message Refresh // IRequest
+{
+    int32 RpcId = 90;
+    bool ForceUpdate = 91;
+}
+message RefreshResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType RegenProjectResponse
+message RegenProject // IRequest
+{
+    int32 RpcId = 90;
+}
+message RegenProjectResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType EnterPlayResponse
+message EnterPlay // IRequest
+{
+    int32 RpcId = 90;
+}
+message EnterPlayResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool IsPlaying = 93;
+}
+
+// ResponseType ExitPlayResponse
+message ExitPlay // IRequest
+{
+    int32 RpcId = 90;
+}
+message ExitPlayResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool IsPlaying = 93;
+}

@@ -92,6 +92,18 @@ namespace ET
             RegisterHandler("InspectorSetProperties", UBridgeInspectorSetPropertiesHandler.Handle);
             RegisterHandler("InspectorAddComponent", UBridgeInspectorAddComponentHandler.Handle);
             RegisterHandler("InspectorRemoveComponent", UBridgeInspectorRemoveComponentHandler.Handle);
+            // Editor 控制
+            RegisterHandler("Reload", UBridgeReloadHandler.Handle);
+            RegisterHandler("EditorUndo", UBridgeEditorUndoHandler.Handle);
+            RegisterHandler("EditorRedo", UBridgeEditorRedoHandler.Handle);
+            RegisterHandler("EditorPause", UBridgeEditorPauseHandler.Handle);
+            RegisterHandler("EditorGetState", UBridgeEditorGetStateHandler.Handle);
+            // 延迟命令
+            RegisterHandler("Compile", UBridgeCompileHandler.Handle);
+            RegisterHandler("Refresh", UBridgeRefreshHandler.Handle);
+            RegisterHandler("RegenProject", UBridgeRegenProjectHandler.Handle);
+            RegisterHandler("EnterPlay", UBridgeEnterPlayHandler.Handle);
+            RegisterHandler("ExitPlay", UBridgeExitPlayHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");
@@ -105,6 +117,26 @@ namespace ET
         private static void OnUpdate()
         {
             EnsureInitialized();
+
+            // 优先泵送延迟命令：有 pending 则每帧重入一次 Handler
+            if (UBridgeDeferredRuntime.HasPending)
+            {
+                if (UBridgeDeferredRuntime.IsTimeout()) return;
+                string cmd = UBridgeDeferredRuntime.GetPendingCommand();
+                string payload = UBridgeDeferredRuntime.GetPendingPayload();
+                if (s_Handlers.TryGetValue(cmd, out var h))
+                {
+                    try
+                    {
+                        string result = h(payload);
+                        UBridgeFileStore.WriteResponse(UBridgeDeferredRuntime.GetPendingRpcId(), result);
+                        UBridgeDeferredRuntime.Clear();
+                    }
+                    catch (DeferredNotReady) { } // 下帧再试
+                    catch { UBridgeDeferredRuntime.Clear(); }
+                }
+                return; // pending 优先，不处理新请求
+            }
 
             // 限频：200ms
             double now = EditorApplication.timeSinceStartup;
@@ -145,7 +177,10 @@ namespace ET
                 }
 
                 // 执行 Handler
+                UBridgeDeferredRuntime.SetRequestRpcId(rpcId);
+                Debug.Log($"[UBridge] 执行命令: {envelope.Command} rpcId={rpcId}");
                 string payloadJson = handler(envelope.PayloadJson ?? "");
+                Debug.Log($"[UBridge] 命令完成: {envelope.Command}");
 
                 responseJson = UBridgeJsonHelper.ToJson(new UBridgeResponseEnvelope
                 {
@@ -155,8 +190,22 @@ namespace ET
                     PayloadJson = payloadJson
                 });
             }
+            catch (DeferredStarted)
+            {
+                Debug.Log($"[UBridge] 延迟命令已启动: rpcId={rpcId}");
+                // 延迟命令已启动，立即返回"已接收"响应
+                responseJson = UBridgeJsonHelper.ToJson(new UBridgeResponseEnvelope
+                {
+                    RpcId = rpcId,
+                    Error = UBridgeErrorCode.Success,
+                    Message = "deferred: command accepted, pending execution",
+                    PayloadJson = "{\"_deferred\":true}"
+                });
+            }
             catch (Exception ex)
             {
+                Debug.LogError($"[UBridge] 处理请求异常: {ex.Message}");
+
                 responseJson = UBridgeJsonHelper.ToJson(new UBridgeResponseEnvelope
                 {
                     RpcId = rpcId,

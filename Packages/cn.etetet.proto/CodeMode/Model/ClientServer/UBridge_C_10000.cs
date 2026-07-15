@@ -4408,6 +4408,678 @@ namespace ET
         }
     }
 
+    // ==================== Editor 控制 ====================
+    [MemoryPackable]
+    [Message(UBridge.Reload)]
+    [ResponseType(nameof(ReloadResponse))]
+    public partial class Reload : MessageObject, IRequest
+    {
+        public static Reload Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<Reload>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.ReloadResponse)]
+    public partial class ReloadResponse : MessageObject, IResponse
+    {
+        public static ReloadResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<ReloadResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool Reloaded { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Reloaded = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorUndoRequest)]
+    [ResponseType(nameof(EditorUndoResponse))]
+    public partial class EditorUndoRequest : MessageObject, IRequest
+    {
+        public static EditorUndoRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorUndoRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Count { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Count = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorUndoResponse)]
+    public partial class EditorUndoResponse : MessageObject, IResponse
+    {
+        public static EditorUndoResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorUndoResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public int Count { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Count = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorRedoRequest)]
+    [ResponseType(nameof(EditorRedoResponse))]
+    public partial class EditorRedoRequest : MessageObject, IRequest
+    {
+        public static EditorRedoRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorRedoRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Count { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Count = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorRedoResponse)]
+    public partial class EditorRedoResponse : MessageObject, IResponse
+    {
+        public static EditorRedoResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorRedoResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public int Count { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Count = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorPauseRequest)]
+    [ResponseType(nameof(EditorPauseResponse))]
+    public partial class EditorPauseRequest : MessageObject, IRequest
+    {
+        public static EditorPauseRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorPauseRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public bool Toggle { get; set; }
+
+        [MemoryPackOrder(91)]
+        public bool Pause { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Toggle = default;
+            this.Pause = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorPauseResponse)]
+    public partial class EditorPauseResponse : MessageObject, IResponse
+    {
+        public static EditorPauseResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorPauseResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool IsPaused { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.IsPaused = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorGetStateRequest)]
+    [ResponseType(nameof(EditorGetStateResponse))]
+    public partial class EditorGetStateRequest : MessageObject, IRequest
+    {
+        public static EditorGetStateRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorGetStateRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorGetStateResponse)]
+    public partial class EditorGetStateResponse : MessageObject, IResponse
+    {
+        public static EditorGetStateResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorGetStateResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool IsPlaying { get; set; }
+
+        [MemoryPackOrder(93)]
+        public bool IsPaused { get; set; }
+
+        [MemoryPackOrder(94)]
+        public bool IsCompiling { get; set; }
+
+        [MemoryPackOrder(95)]
+        public bool IsUpdating { get; set; }
+
+        [MemoryPackOrder(96)]
+        public string ApplicationPath { get; set; }
+
+        [MemoryPackOrder(97)]
+        public string ApplicationContentsPath { get; set; }
+
+        [MemoryPackOrder(98)]
+        public bool EnterPlayModeOptionsEnabled { get; set; }
+
+        [MemoryPackOrder(99)]
+        public string EnterPlayModeOptions { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.IsPlaying = default;
+            this.IsPaused = default;
+            this.IsCompiling = default;
+            this.IsUpdating = default;
+            this.ApplicationPath = default;
+            this.ApplicationContentsPath = default;
+            this.EnterPlayModeOptionsEnabled = default;
+            this.EnterPlayModeOptions = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    // ==================== 延迟命令（生命周期） ====================
+    [MemoryPackable]
+    [Message(UBridge.Compile)]
+    [ResponseType(nameof(CompileResponse))]
+    public partial class Compile : MessageObject, IRequest
+    {
+        public static Compile Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<Compile>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.CompileResponse)]
+    public partial class CompileResponse : MessageObject, IResponse
+    {
+        public static CompileResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<CompileResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public long DurationMs { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.DurationMs = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.Refresh)]
+    [ResponseType(nameof(RefreshResponse))]
+    public partial class Refresh : MessageObject, IRequest
+    {
+        public static Refresh Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<Refresh>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public bool ForceUpdate { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.ForceUpdate = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RefreshResponse)]
+    public partial class RefreshResponse : MessageObject, IResponse
+    {
+        public static RefreshResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RefreshResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RegenProject)]
+    [ResponseType(nameof(RegenProjectResponse))]
+    public partial class RegenProject : MessageObject, IRequest
+    {
+        public static RegenProject Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RegenProject>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RegenProjectResponse)]
+    public partial class RegenProjectResponse : MessageObject, IResponse
+    {
+        public static RegenProjectResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RegenProjectResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EnterPlay)]
+    [ResponseType(nameof(EnterPlayResponse))]
+    public partial class EnterPlay : MessageObject, IRequest
+    {
+        public static EnterPlay Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EnterPlay>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EnterPlayResponse)]
+    public partial class EnterPlayResponse : MessageObject, IResponse
+    {
+        public static EnterPlayResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EnterPlayResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool IsPlaying { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.IsPlaying = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.ExitPlay)]
+    [ResponseType(nameof(ExitPlayResponse))]
+    public partial class ExitPlay : MessageObject, IRequest
+    {
+        public static ExitPlay Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<ExitPlay>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.ExitPlayResponse)]
+    public partial class ExitPlayResponse : MessageObject, IResponse
+    {
+        public static ExitPlayResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<ExitPlayResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool IsPlaying { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.IsPlaying = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -4517,5 +5189,25 @@ namespace ET
         public const ushort InspectorAddComponentResponse = 10105;
         public const ushort InspectorRemoveComponentRequest = 10106;
         public const ushort InspectorRemoveComponentResponse = 10107;
+        public const ushort Reload = 10108;
+        public const ushort ReloadResponse = 10109;
+        public const ushort EditorUndoRequest = 10110;
+        public const ushort EditorUndoResponse = 10111;
+        public const ushort EditorRedoRequest = 10112;
+        public const ushort EditorRedoResponse = 10113;
+        public const ushort EditorPauseRequest = 10114;
+        public const ushort EditorPauseResponse = 10115;
+        public const ushort EditorGetStateRequest = 10116;
+        public const ushort EditorGetStateResponse = 10117;
+        public const ushort Compile = 10118;
+        public const ushort CompileResponse = 10119;
+        public const ushort Refresh = 10120;
+        public const ushort RefreshResponse = 10121;
+        public const ushort RegenProject = 10122;
+        public const ushort RegenProjectResponse = 10123;
+        public const ushort EnterPlay = 10124;
+        public const ushort EnterPlayResponse = 10125;
+        public const ushort ExitPlay = 10126;
+        public const ushort ExitPlayResponse = 10127;
     }
 }
