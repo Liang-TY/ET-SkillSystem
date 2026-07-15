@@ -72,6 +72,25 @@ namespace ET
                 case "MenuItemExecute":
                     payloadJson = $"{{\"_t\":\"ET.MenuItemExecuteRequest\",\"RpcId\":1,\"MenuPath\":\"{menuPath}\"}}";
                     break;
+                // Inspector
+                case "InspectorGetComponents":
+                    payloadJson = $"{{\"_t\":\"ET.InspectorGetComponentsRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "InspectorGetProperties":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"ComponentName\":\"{type}\",\"IncludeChildren\":true}}";
+                    break;
+                case "InspectorGetProperty":
+                case "InspectorSetProperty":
+                case "InspectorSetProperties":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"PropertyName\":\"{name}\",\"ComponentName\":\"{type}\"}}";
+                    break;
+                case "InspectorFindProperty":
+                    payloadJson = $"{{\"_t\":\"ET.InspectorFindPropertyRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"Keyword\":\"{filter}\"}}";
+                    break;
+                case "InspectorAddComponent":
+                case "InspectorRemoveComponent":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"TypeName\":\"{type}\",\"ComponentName\":\"{type}\"}}";
+                    break;
                 // Prefab
                 case "PrefabSave":
                     payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"GameObjectPath\":\"{name}\",\"SavePath\":\"{path}\"}}";

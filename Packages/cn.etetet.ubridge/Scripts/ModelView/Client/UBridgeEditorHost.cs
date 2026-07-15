@@ -83,6 +83,15 @@ namespace ET
             RegisterHandler("PrefabUnpack", UBridgePrefabUnpackHandler.Handle);
             RegisterHandler("PrefabGetInfo", UBridgePrefabGetInfoHandler.Handle);
             RegisterHandler("PrefabGetHierarchy", UBridgePrefabGetHierarchyHandler.Handle);
+            // Inspector
+            RegisterHandler("InspectorGetComponents", UBridgeInspectorGetComponentsHandler.Handle);
+            RegisterHandler("InspectorGetProperties", UBridgeInspectorGetPropertiesHandler.Handle);
+            RegisterHandler("InspectorGetProperty", UBridgeInspectorGetPropertyHandler.Handle);
+            RegisterHandler("InspectorFindProperty", UBridgeInspectorFindPropertyHandler.Handle);
+            RegisterHandler("InspectorSetProperty", UBridgeInspectorSetPropertyHandler.Handle);
+            RegisterHandler("InspectorSetProperties", UBridgeInspectorSetPropertiesHandler.Handle);
+            RegisterHandler("InspectorAddComponent", UBridgeInspectorAddComponentHandler.Handle);
+            RegisterHandler("InspectorRemoveComponent", UBridgeInspectorRemoveComponentHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");
