@@ -575,6 +575,9 @@ namespace ET
         [MemoryPackOrder(6)]
         public BridgeTransformInfo Transform { get; set; }
 
+        [MemoryPackOrder(7)]
+        public string Path { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -589,6 +592,7 @@ namespace ET
             this.ActiveSelf = default;
             this.ActiveInHierarchy = default;
             this.Transform = default;
+            this.Path = default;
 
             ObjectPool.Recycle(this);
         }
@@ -2911,6 +2915,509 @@ namespace ET
         }
     }
 
+    // ==================== Prefab ====================
+    [MemoryPackable]
+    [Message(UBridge.PrefabInstantiateRequest)]
+    [ResponseType(nameof(PrefabInstantiateResponse))]
+    public partial class PrefabInstantiateRequest : MessageObject, IRequest
+    {
+        public static PrefabInstantiateRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabInstantiateRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public BridgeVector3 Position { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.Position = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabInstantiateResponse)]
+    public partial class PrefabInstantiateResponse : MessageObject, IResponse
+    {
+        public static PrefabInstantiateResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabInstantiateResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(93)]
+        public BridgeObjectInfo Instance { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.PrefabPath = default;
+            this.Instance = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabSaveRequest)]
+    [ResponseType(nameof(PrefabSaveResponse))]
+    public partial class PrefabSaveRequest : MessageObject, IRequest
+    {
+        public static PrefabSaveRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabSaveRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string GameObjectPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string SavePath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.GameObjectPath = default;
+            this.SavePath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabSaveResponse)]
+    public partial class PrefabSaveResponse : MessageObject, IResponse
+    {
+        public static PrefabSaveResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabSaveResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string GameObjectName { get; set; }
+
+        [MemoryPackOrder(93)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(94)]
+        public bool Saved { get; set; }
+
+        [MemoryPackOrder(95)]
+        public BridgeAssetInfo Asset { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.GameObjectName = default;
+            this.PrefabPath = default;
+            this.Saved = default;
+            this.Asset = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabApplyRequest)]
+    [ResponseType(nameof(PrefabApplyResponse))]
+    public partial class PrefabApplyRequest : MessageObject, IRequest
+    {
+        public static PrefabApplyRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabApplyRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string GameObjectPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.GameObjectPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabApplyResponse)]
+    public partial class PrefabApplyResponse : MessageObject, IResponse
+    {
+        public static PrefabApplyResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabApplyResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string GameObjectName { get; set; }
+
+        [MemoryPackOrder(93)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(94)]
+        public bool Applied { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.GameObjectName = default;
+            this.PrefabPath = default;
+            this.Applied = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabUnpackRequest)]
+    [ResponseType(nameof(PrefabUnpackResponse))]
+    public partial class PrefabUnpackRequest : MessageObject, IRequest
+    {
+        public static PrefabUnpackRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabUnpackRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string GameObjectPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public bool Completely { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.GameObjectPath = default;
+            this.Completely = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabUnpackResponse)]
+    public partial class PrefabUnpackResponse : MessageObject, IResponse
+    {
+        public static PrefabUnpackResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabUnpackResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string GameObjectName { get; set; }
+
+        [MemoryPackOrder(93)]
+        public bool Unpacked { get; set; }
+
+        [MemoryPackOrder(94)]
+        public bool Completely { get; set; }
+
+        [MemoryPackOrder(95)]
+        public BridgeObjectInfo Object { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.GameObjectName = default;
+            this.Unpacked = default;
+            this.Completely = default;
+            this.Object = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabGetInfoRequest)]
+    [ResponseType(nameof(PrefabGetInfoResponse))]
+    public partial class PrefabGetInfoRequest : MessageObject, IRequest
+    {
+        public static PrefabGetInfoRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabGetInfoRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string GameObjectPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.GameObjectPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabGetInfoResponse)]
+    public partial class PrefabGetInfoResponse : MessageObject, IResponse
+    {
+        public static PrefabGetInfoResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabGetInfoResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string Name { get; set; }
+
+        [MemoryPackOrder(93)]
+        public bool IsPrefabAsset { get; set; }
+
+        [MemoryPackOrder(94)]
+        public bool IsPrefabInstance { get; set; }
+
+        [MemoryPackOrder(95)]
+        public string PrefabAssetPath { get; set; }
+
+        [MemoryPackOrder(96)]
+        public string PrefabType { get; set; }
+
+        [MemoryPackOrder(97)]
+        public string PrefabStatus { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Name = default;
+            this.IsPrefabAsset = default;
+            this.IsPrefabInstance = default;
+            this.PrefabAssetPath = default;
+            this.PrefabType = default;
+            this.PrefabStatus = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabGetHierarchyRequest)]
+    [ResponseType(nameof(PrefabGetHierarchyResponse))]
+    public partial class PrefabGetHierarchyRequest : MessageObject, IRequest
+    {
+        public static PrefabGetHierarchyRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabGetHierarchyRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public int Depth { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool IncludeInactive { get; set; }
+
+        [MemoryPackOrder(93)]
+        public bool IncludeComponents { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.Depth = default;
+            this.IncludeInactive = default;
+            this.IncludeComponents = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabGetHierarchyResponse)]
+    public partial class PrefabGetHierarchyResponse : MessageObject, IResponse
+    {
+        public static PrefabGetHierarchyResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabGetHierarchyResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(93)]
+        public string PrefabName { get; set; }
+
+        [MemoryPackOrder(94)]
+        public int RootCount { get; set; }
+
+        [MemoryPackOrder(95)]
+        public bool Truncated { get; set; }
+
+        [MemoryPackOrder(96)]
+        public List<BridgeSceneNode> Roots { get; set; } = new();
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.PrefabPath = default;
+            this.PrefabName = default;
+            this.RootCount = default;
+            this.Truncated = default;
+            this.Roots.Clear();
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -2991,5 +3498,17 @@ namespace ET
         public const ushort TransformLookAtResponse = 10076;
         public const ushort TransformResetRequest = 10077;
         public const ushort TransformResetResponse = 10078;
+        public const ushort PrefabInstantiateRequest = 10079;
+        public const ushort PrefabInstantiateResponse = 10080;
+        public const ushort PrefabSaveRequest = 10081;
+        public const ushort PrefabSaveResponse = 10082;
+        public const ushort PrefabApplyRequest = 10083;
+        public const ushort PrefabApplyResponse = 10084;
+        public const ushort PrefabUnpackRequest = 10085;
+        public const ushort PrefabUnpackResponse = 10086;
+        public const ushort PrefabGetInfoRequest = 10087;
+        public const ushort PrefabGetInfoResponse = 10088;
+        public const ushort PrefabGetHierarchyRequest = 10089;
+        public const ushort PrefabGetHierarchyResponse = 10090;
     }
 }

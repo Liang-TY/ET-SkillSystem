@@ -72,15 +72,23 @@ namespace ET
                 case "MenuItemExecute":
                     payloadJson = $"{{\"_t\":\"ET.MenuItemExecuteRequest\",\"RpcId\":1,\"MenuPath\":\"{menuPath}\"}}";
                     break;
+                // Prefab
+                case "PrefabSave":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"GameObjectPath\":\"{name}\",\"SavePath\":\"{path}\"}}";
+                    break;
+                case "PrefabInstantiate":
+                case "PrefabGetHierarchy":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"PrefabPath\":\"{path}\"}}";
+                    break;
+                case "PrefabGetInfo":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"GameObjectPath\":\"{name}\"}}";
+                    break;
+                case "PrefabApply":
+                case "PrefabUnpack":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"GameObjectPath\":\"{name}\"}}";
+                    break;
                 default:
-                    // 通用请求构造：带上所有已设置的参数
-                    payloadJson = "{";
-                    payloadJson += $"\"_t\":\"ET.{command}Request\",\"RpcId\":1";
-                    if (!string.IsNullOrEmpty(name)) payloadJson += $",\"Name\":\"{name}\"";
-                    if (!string.IsNullOrEmpty(path)) payloadJson += $",\"Path\":\"{path}\"";
-                    if (!string.IsNullOrEmpty(filter)) payloadJson += $",\"Filter\":\"{filter}\"";
-                    if (instanceId != 0) payloadJson += $",\"InstanceId\":{instanceId}";
-                    payloadJson += "}";
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1}}";
                     break;
                     payloadJson = $"{{\"_t\":\"ET.ConsoleGetLogsRequest\",\"RpcId\":1,\"Count\":{count},\"LogType\":\"{logType}\"}}";
                     break;

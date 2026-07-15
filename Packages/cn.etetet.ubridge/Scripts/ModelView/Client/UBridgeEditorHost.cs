@@ -76,6 +76,13 @@ namespace ET
             RegisterHandler("TransformSetSiblingIndex", UBridgeTransformSetSiblingIndexHandler.Handle);
             RegisterHandler("TransformLookAt", UBridgeTransformLookAtHandler.Handle);
             RegisterHandler("TransformReset", UBridgeTransformResetHandler.Handle);
+            // Prefab
+            RegisterHandler("PrefabInstantiate", UBridgePrefabInstantiateHandler.Handle);
+            RegisterHandler("PrefabSave", UBridgePrefabSaveHandler.Handle);
+            RegisterHandler("PrefabApply", UBridgePrefabApplyHandler.Handle);
+            RegisterHandler("PrefabUnpack", UBridgePrefabUnpackHandler.Handle);
+            RegisterHandler("PrefabGetInfo", UBridgePrefabGetInfoHandler.Handle);
+            RegisterHandler("PrefabGetHierarchy", UBridgePrefabGetHierarchyHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");

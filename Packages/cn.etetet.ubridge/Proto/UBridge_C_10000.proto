@@ -128,6 +128,7 @@ message BridgeObjectInfo
     bool ActiveSelf = 5;
     bool ActiveInHierarchy = 6;
     BridgeTransformInfo Transform = 7;
+    string Path = 8;
 }
 message BridgeComponentInfo 
 {
@@ -620,3 +621,114 @@ message TransformResetResponse // IResponse
     BridgeTransformInfo Transform = 93;
 }
 
+
+// ==================== Prefab ====================
+
+// ResponseType PrefabInstantiateResponse
+message PrefabInstantiateRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    BridgeVector3 Position = 92;
+}
+message PrefabInstantiateResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string PrefabPath = 93;
+    BridgeObjectInfo Instance = 94;
+}
+
+// ResponseType PrefabSaveResponse
+message PrefabSaveRequest // IRequest
+{
+    int32 RpcId = 90;
+    string GameObjectPath = 91;
+    string SavePath = 92;
+}
+message PrefabSaveResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string GameObjectName = 93;
+    string PrefabPath = 94;
+    bool Saved = 95;
+    BridgeAssetInfo Asset = 96;
+}
+
+// ResponseType PrefabApplyResponse
+message PrefabApplyRequest // IRequest
+{
+    int32 RpcId = 90;
+    string GameObjectPath = 91;
+}
+message PrefabApplyResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string GameObjectName = 93;
+    string PrefabPath = 94;
+    bool Applied = 95;
+}
+
+// ResponseType PrefabUnpackResponse
+message PrefabUnpackRequest // IRequest
+{
+    int32 RpcId = 90;
+    string GameObjectPath = 91;
+    bool Completely = 92;
+}
+message PrefabUnpackResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string GameObjectName = 93;
+    bool Unpacked = 94;
+    bool Completely = 95;
+    BridgeObjectInfo Object = 96;
+}
+
+// ResponseType PrefabGetInfoResponse
+message PrefabGetInfoRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string GameObjectPath = 92;
+}
+message PrefabGetInfoResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string Name = 93;
+    bool IsPrefabAsset = 94;
+    bool IsPrefabInstance = 95;
+    string PrefabAssetPath = 96;
+    string PrefabType = 97;
+    string PrefabStatus = 98;
+}
+
+// ResponseType PrefabGetHierarchyResponse
+message PrefabGetHierarchyRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    int32 Depth = 92;
+    bool IncludeInactive = 93;
+    bool IncludeComponents = 94;
+}
+message PrefabGetHierarchyResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string PrefabPath = 93;
+    string PrefabName = 94;
+    int32 RootCount = 95;
+    bool Truncated = 96;
+    repeated BridgeSceneNode Roots = 97;
+}
