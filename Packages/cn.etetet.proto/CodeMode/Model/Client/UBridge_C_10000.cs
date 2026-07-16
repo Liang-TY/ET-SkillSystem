@@ -5419,6 +5419,472 @@ namespace ET
         }
     }
 
+    // ==================== 剩余命令 ====================
+    [MemoryPackable]
+    [Message(UBridge.BridgeGameViewResolution)]
+    public partial class BridgeGameViewResolution : MessageObject
+    {
+        public static BridgeGameViewResolution Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<BridgeGameViewResolution>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int Width { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Height { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Label { get; set; }
+
+        [MemoryPackOrder(3)]
+        public bool IsCurrent { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.Width = default;
+            this.Height = default;
+            this.Label = default;
+            this.IsCurrent = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.BridgeTestResult)]
+    public partial class BridgeTestResult : MessageObject
+    {
+        public static BridgeTestResult Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<BridgeTestResult>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public string Name { get; set; }
+
+        [MemoryPackOrder(1)]
+        public string FullName { get; set; }
+
+        [MemoryPackOrder(2)]
+        public bool Passed { get; set; }
+
+        [MemoryPackOrder(3)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(4)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(5)]
+        public long DurationMs { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.Name = default;
+            this.FullName = default;
+            this.Passed = default;
+            this.Error = default;
+            this.Message = default;
+            this.DurationMs = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.TestEcho)]
+    [ResponseType(nameof(TestEchoResponse))]
+    public partial class TestEcho : MessageObject, IRequest
+    {
+        public static TestEcho Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<TestEcho>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string Text { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Text = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.TestEchoResponse)]
+    public partial class TestEchoResponse : MessageObject, IResponse
+    {
+        public static TestEchoResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<TestEchoResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string Text { get; set; }
+
+        [MemoryPackOrder(93)]
+        public long HandledAt { get; set; }
+
+        [MemoryPackOrder(94)]
+        public string Handler { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Text = default;
+            this.HandledAt = default;
+            this.Handler = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorLogRequest)]
+    [ResponseType(nameof(EditorLogResponse))]
+    public partial class EditorLogRequest : MessageObject, IRequest
+    {
+        public static EditorLogRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorLogRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string LogType { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Message = default;
+            this.LogType = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.EditorLogResponse)]
+    public partial class EditorLogResponse : MessageObject, IResponse
+    {
+        public static EditorLogResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<EditorLogResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool Logged { get; set; }
+
+        [MemoryPackOrder(93)]
+        public string LogType { get; set; }
+
+        [MemoryPackOrder(94)]
+        public string LoggedMessage { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Logged = default;
+            this.LogType = default;
+            this.LoggedMessage = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.GameViewGetResolutionRequest)]
+    [ResponseType(nameof(GameViewGetResolutionResponse))]
+    public partial class GameViewGetResolutionRequest : MessageObject, IRequest
+    {
+        public static GameViewGetResolutionRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<GameViewGetResolutionRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.GameViewGetResolutionResponse)]
+    public partial class GameViewGetResolutionResponse : MessageObject, IResponse
+    {
+        public static GameViewGetResolutionResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<GameViewGetResolutionResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public BridgeGameViewResolution Resolution { get; set; }
+
+        [MemoryPackOrder(93)]
+        public int SelectedIndex { get; set; }
+
+        [MemoryPackOrder(94)]
+        public string SizeType { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Resolution = default;
+            this.SelectedIndex = default;
+            this.SizeType = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.GameViewListResolutionsRequest)]
+    [ResponseType(nameof(GameViewListResolutionsResponse))]
+    public partial class GameViewListResolutionsRequest : MessageObject, IRequest
+    {
+        public static GameViewListResolutionsRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<GameViewListResolutionsRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.GameViewListResolutionsResponse)]
+    public partial class GameViewListResolutionsResponse : MessageObject, IResponse
+    {
+        public static GameViewListResolutionsResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<GameViewListResolutionsResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public List<BridgeGameViewResolution> Resolutions { get; set; } = new();
+
+        [MemoryPackOrder(93)]
+        public int Count { get; set; }
+
+        [MemoryPackOrder(94)]
+        public int CurrentIndex { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Resolutions.Clear();
+            this.Count = default;
+            this.CurrentIndex = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.GameViewSetResolutionRequest)]
+    [ResponseType(nameof(GameViewSetResolutionResponse))]
+    public partial class GameViewSetResolutionRequest : MessageObject, IRequest
+    {
+        public static GameViewSetResolutionRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<GameViewSetResolutionRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Width { get; set; }
+
+        [MemoryPackOrder(91)]
+        public int Height { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string Label { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Width = default;
+            this.Height = default;
+            this.Label = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.GameViewSetResolutionResponse)]
+    public partial class GameViewSetResolutionResponse : MessageObject, IResponse
+    {
+        public static GameViewSetResolutionResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<GameViewSetResolutionResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public BridgeGameViewResolution Resolution { get; set; }
+
+        [MemoryPackOrder(93)]
+        public int SelectedIndex { get; set; }
+
+        [MemoryPackOrder(94)]
+        public bool WasAdded { get; set; }
+
+        [MemoryPackOrder(95)]
+        public string SizeType { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Resolution = default;
+            this.SelectedIndex = default;
+            this.WasAdded = default;
+            this.SizeType = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -5557,5 +6023,17 @@ namespace ET
         public const ushort AssetImportResponse = 10134;
         public const ushort AssetRefreshRequest = 10135;
         public const ushort AssetRefreshResponse = 10136;
+        public const ushort BridgeGameViewResolution = 10137;
+        public const ushort BridgeTestResult = 10138;
+        public const ushort TestEcho = 10139;
+        public const ushort TestEchoResponse = 10140;
+        public const ushort EditorLogRequest = 10141;
+        public const ushort EditorLogResponse = 10142;
+        public const ushort GameViewGetResolutionRequest = 10143;
+        public const ushort GameViewGetResolutionResponse = 10144;
+        public const ushort GameViewListResolutionsRequest = 10145;
+        public const ushort GameViewListResolutionsResponse = 10146;
+        public const ushort GameViewSetResolutionRequest = 10147;
+        public const ushort GameViewSetResolutionResponse = 10148;
     }
 }

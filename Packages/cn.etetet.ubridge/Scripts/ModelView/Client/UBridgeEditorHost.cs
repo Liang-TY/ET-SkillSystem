@@ -108,6 +108,11 @@ namespace ET
             RegisterHandler("BatchExecute", UBridgeBatchExecuteHandler.Handle);
             RegisterHandler("AssetImport", UBridgeAssetImportHandler.Handle);
             RegisterHandler("AssetRefresh", UBridgeAssetRefreshHandler.Handle);
+            RegisterHandler("TestEcho", UBridgeTestEchoHandler.Handle);
+            RegisterHandler("EditorLog", UBridgeEditorLogHandler.Handle);
+            RegisterHandler("GameViewGetResolution", UBridgeGameViewGetResolutionHandler.Handle);
+            RegisterHandler("GameViewListResolutions", UBridgeGameViewListResolutionsHandler.Handle);
+            RegisterHandler("GameViewSetResolution", UBridgeGameViewSetResolutionHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");

@@ -91,6 +91,20 @@ namespace ET
                 case "InspectorRemoveComponent":
                     payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"TypeName\":\"{type}\",\"ComponentName\":\"{type}\"}}";
                     break;
+                // Misc
+                case "TestEcho":
+                    payloadJson = $"{{\"_t\":\"ET.TestEcho\",\"RpcId\":1,\"Text\":\"{name}\"}}";
+                    break;
+                case "EditorLog":
+                    payloadJson = $"{{\"_t\":\"ET.EditorLogRequest\",\"RpcId\":1,\"Message\":\"{name}\",\"LogType\":\"{type}\"}}";
+                    break;
+                case "GameViewGetResolution":
+                case "GameViewListResolutions":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1}}";
+                    break;
+                case "GameViewSetResolution":
+                    payloadJson = $"{{\"_t\":\"ET.GameViewSetResolutionRequest\",\"RpcId\":1,\"Width\":{count},\"Height\":{count}}}";
+                    break;
                 // Asset deferred
                 case "AssetImport":
                     payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"AssetPath\":\"{path}\"}}";

@@ -1178,3 +1178,105 @@ message AssetRefreshResponse // IResponse
     string Message = 92;
     bool Refreshed = 93;
 }
+
+// ==================== 剩余命令 ====================
+
+message BridgeGameViewResolution
+{
+    int32 Width = 1;
+    int32 Height = 2;
+    string Label = 3;
+    bool IsCurrent = 4;
+}
+
+message BridgeTestResult
+{
+    string Name = 1;
+    string FullName = 2;
+    bool Passed = 3;
+    int32 Error = 4;
+    string Message = 5;
+    int64 DurationMs = 6;
+}
+
+// ResponseType TestEchoResponse
+message TestEcho // IRequest
+{
+    int32 RpcId = 90;
+    string Text = 91;
+}
+message TestEchoResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string Text = 93;
+    int64 HandledAt = 94;
+    string Handler = 95;
+}
+
+// ResponseType EditorLogResponse
+message EditorLogRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Message = 91;
+    string LogType = 92;
+}
+message EditorLogResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool Logged = 93;
+    string LogType = 94;
+    string LoggedMessage = 95;
+}
+
+// ResponseType GameViewGetResolutionResponse
+message GameViewGetResolutionRequest // IRequest
+{
+    int32 RpcId = 90;
+}
+message GameViewGetResolutionResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    BridgeGameViewResolution Resolution = 93;
+    int32 SelectedIndex = 94;
+    string SizeType = 95;
+}
+
+// ResponseType GameViewListResolutionsResponse
+message GameViewListResolutionsRequest // IRequest
+{
+    int32 RpcId = 90;
+}
+message GameViewListResolutionsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    repeated BridgeGameViewResolution Resolutions = 93;
+    int32 Count = 94;
+    int32 CurrentIndex = 95;
+}
+
+// ResponseType GameViewSetResolutionResponse
+message GameViewSetResolutionRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 Width = 91;
+    int32 Height = 92;
+    string Label = 93;
+}
+message GameViewSetResolutionResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    BridgeGameViewResolution Resolution = 93;
+    int32 SelectedIndex = 94;
+    bool WasAdded = 95;
+    string SizeType = 96;
+}
