@@ -1102,3 +1102,49 @@ message ExitPlayResponse // IResponse
     string Message = 92;
     bool IsPlaying = 93;
 }
+
+// ==================== 系统 ====================
+
+// ResponseType HostStateResponse
+message HostState // IRequest
+{
+    int32 RpcId = 90;
+}
+message HostStateResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool IsCompiling = 93;
+    bool IsPlaying = 94;
+    bool IsPlayingOrWillChangePlaymode = 95;
+    string CodeMode = 96;
+    string UnityVersion = 97;
+    string AvailableCommands = 98;
+}
+
+message BridgeBatchStepResult
+{
+    string Name = 1;
+    string Command = 2;
+    int32 Error = 3;
+    string Message = 4;
+}
+
+// ResponseType BatchExecuteResponse
+message BatchExecuteRequest // IRequest
+{
+    int32 RpcId = 90;
+    repeated string Commands = 91;
+    bool StopOnError = 92;
+}
+message BatchExecuteResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    repeated BridgeBatchStepResult Results = 93;
+    int32 Count = 94;
+    int32 Failed = 95;
+    bool Completed = 96;
+}

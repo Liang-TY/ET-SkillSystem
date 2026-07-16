@@ -5080,6 +5080,210 @@ namespace ET
         }
     }
 
+    // ==================== 系统 ====================
+    [MemoryPackable]
+    [Message(UBridge.HostState)]
+    [ResponseType(nameof(HostStateResponse))]
+    public partial class HostState : MessageObject, IRequest
+    {
+        public static HostState Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<HostState>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.HostStateResponse)]
+    public partial class HostStateResponse : MessageObject, IResponse
+    {
+        public static HostStateResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<HostStateResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool IsCompiling { get; set; }
+
+        [MemoryPackOrder(93)]
+        public bool IsPlaying { get; set; }
+
+        [MemoryPackOrder(94)]
+        public bool IsPlayingOrWillChangePlaymode { get; set; }
+
+        [MemoryPackOrder(95)]
+        public string CodeMode { get; set; }
+
+        [MemoryPackOrder(96)]
+        public string UnityVersion { get; set; }
+
+        [MemoryPackOrder(97)]
+        public string AvailableCommands { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.IsCompiling = default;
+            this.IsPlaying = default;
+            this.IsPlayingOrWillChangePlaymode = default;
+            this.CodeMode = default;
+            this.UnityVersion = default;
+            this.AvailableCommands = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.BridgeBatchStepResult)]
+    public partial class BridgeBatchStepResult : MessageObject
+    {
+        public static BridgeBatchStepResult Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<BridgeBatchStepResult>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public string Name { get; set; }
+
+        [MemoryPackOrder(1)]
+        public string Command { get; set; }
+
+        [MemoryPackOrder(2)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(3)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.Name = default;
+            this.Command = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.BatchExecuteRequest)]
+    [ResponseType(nameof(BatchExecuteResponse))]
+    public partial class BatchExecuteRequest : MessageObject, IRequest
+    {
+        public static BatchExecuteRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<BatchExecuteRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public List<string> Commands { get; set; } = new();
+
+        [MemoryPackOrder(91)]
+        public bool StopOnError { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Commands.Clear();
+            this.StopOnError = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.BatchExecuteResponse)]
+    public partial class BatchExecuteResponse : MessageObject, IResponse
+    {
+        public static BatchExecuteResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<BatchExecuteResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public List<BridgeBatchStepResult> Results { get; set; } = new();
+
+        [MemoryPackOrder(93)]
+        public int Count { get; set; }
+
+        [MemoryPackOrder(94)]
+        public int Failed { get; set; }
+
+        [MemoryPackOrder(95)]
+        public bool Completed { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Results.Clear();
+            this.Count = default;
+            this.Failed = default;
+            this.Completed = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -5209,5 +5413,10 @@ namespace ET
         public const ushort EnterPlayResponse = 10125;
         public const ushort ExitPlay = 10126;
         public const ushort ExitPlayResponse = 10127;
+        public const ushort HostState = 10128;
+        public const ushort HostStateResponse = 10129;
+        public const ushort BridgeBatchStepResult = 10130;
+        public const ushort BatchExecuteRequest = 10131;
+        public const ushort BatchExecuteResponse = 10132;
     }
 }

@@ -104,10 +104,15 @@ namespace ET
             RegisterHandler("RegenProject", UBridgeRegenProjectHandler.Handle);
             RegisterHandler("EnterPlay", UBridgeEnterPlayHandler.Handle);
             RegisterHandler("ExitPlay", UBridgeExitPlayHandler.Handle);
+            RegisterHandler("HostState", UBridgeQueryHostStateHandler.Handle);
+            RegisterHandler("BatchExecute", UBridgeBatchExecuteHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");
         }
+
+        public static System.Collections.Generic.IReadOnlyDictionary<string, Func<string, string>> GetHandlers() => s_Handlers;
+        public static System.Collections.Generic.IEnumerable<string> GetRegisteredCommands() => s_Handlers.Keys;
 
         public static void RegisterHandler(string command, Func<string, string> handler)
         {
