@@ -27,7 +27,7 @@ Unity 本地文件桥接包，提供：
 - 执行 `Compile` / `Refresh` / `RegenProject` 等延迟命令。
 - 排查 UnityBridge 返回的 `Error` / `Message`。
 
-**补读**：`Packages/cn.etetet.ubridge/skills/et-unitybridge/SKILL.md`
+**补读**：`Packages/cn.etetet.harness/skills/et-unitybridge/SKILL.md`
 
 ## 核心目录
 
