@@ -5284,6 +5284,141 @@ namespace ET
         }
     }
 
+    // ==================== Asset 延迟命令 ====================
+    [MemoryPackable]
+    [Message(UBridge.AssetImportRequest)]
+    [ResponseType(nameof(AssetImportResponse))]
+    public partial class AssetImportRequest : MessageObject, IRequest
+    {
+        public static AssetImportRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<AssetImportRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string AssetPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.AssetPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.AssetImportResponse)]
+    public partial class AssetImportResponse : MessageObject, IResponse
+    {
+        public static AssetImportResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<AssetImportResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string AssetPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.AssetPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.AssetRefreshRequest)]
+    [ResponseType(nameof(AssetRefreshResponse))]
+    public partial class AssetRefreshRequest : MessageObject, IRequest
+    {
+        public static AssetRefreshRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<AssetRefreshRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public bool ForceUpdate { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.ForceUpdate = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.AssetRefreshResponse)]
+    public partial class AssetRefreshResponse : MessageObject, IResponse
+    {
+        public static AssetRefreshResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<AssetRefreshResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public bool Refreshed { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Refreshed = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -5418,5 +5553,9 @@ namespace ET
         public const ushort BridgeBatchStepResult = 10130;
         public const ushort BatchExecuteRequest = 10131;
         public const ushort BatchExecuteResponse = 10132;
+        public const ushort AssetImportRequest = 10133;
+        public const ushort AssetImportResponse = 10134;
+        public const ushort AssetRefreshRequest = 10135;
+        public const ushort AssetRefreshResponse = 10136;
     }
 }

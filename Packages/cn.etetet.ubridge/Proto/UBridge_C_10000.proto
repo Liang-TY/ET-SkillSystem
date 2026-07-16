@@ -1148,3 +1148,33 @@ message BatchExecuteResponse // IResponse
     int32 Failed = 95;
     bool Completed = 96;
 }
+
+// ==================== Asset 延迟命令 ====================
+
+// ResponseType AssetImportResponse
+message AssetImportRequest // IRequest
+{
+    int32 RpcId = 90;
+    string AssetPath = 91;
+}
+message AssetImportResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string AssetPath = 93;
+}
+
+// ResponseType AssetRefreshResponse
+message AssetRefreshRequest // IRequest
+{
+    int32 RpcId = 90;
+    bool ForceUpdate = 91;
+}
+message AssetRefreshResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    bool Refreshed = 93;
+}

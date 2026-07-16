@@ -106,6 +106,8 @@ namespace ET
             RegisterHandler("ExitPlay", UBridgeExitPlayHandler.Handle);
             RegisterHandler("HostState", UBridgeQueryHostStateHandler.Handle);
             RegisterHandler("BatchExecute", UBridgeBatchExecuteHandler.Handle);
+            RegisterHandler("AssetImport", UBridgeAssetImportHandler.Handle);
+            RegisterHandler("AssetRefresh", UBridgeAssetRefreshHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");

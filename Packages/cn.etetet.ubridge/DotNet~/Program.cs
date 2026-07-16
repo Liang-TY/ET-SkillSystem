@@ -91,6 +91,13 @@ namespace ET
                 case "InspectorRemoveComponent":
                     payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"TypeName\":\"{type}\",\"ComponentName\":\"{type}\"}}";
                     break;
+                // Asset deferred
+                case "AssetImport":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"AssetPath\":\"{path}\"}}";
+                    break;
+                case "AssetRefresh":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"ForceUpdate\":true}}";
+                    break;
                 // Prefab
                 case "PrefabSave":
                     payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"GameObjectPath\":\"{name}\",\"SavePath\":\"{path}\"}}";

@@ -102,6 +102,50 @@ namespace ET
         }
     }
 
+    public static class UBridgeAssetImportHandler
+    {
+        public static string Handle(string p)
+        {
+            if (UBridgeDeferredRuntime.HasPending)
+            {
+                if (EditorApplication.isCompiling) throw new DeferredNotReady();
+                var resp = AssetImportResponse.Create();
+                resp.AssetPath = UBridgeDeferredRuntime.GetPendingPayload();
+                if (EditorUtility.scriptCompilationFailed) { resp.Error = 8; resp.Message = "Import/compile failed"; }
+                UBridgeDeferredRuntime.Clear();
+                UBridgeFileStore.WriteResponse(UBridgeDeferredRuntime.GetPendingRpcId(), UBridgeJsonHelper.ToJson(resp));
+                return "";
+            }
+            var r = UBridgeJsonHelper.FromJson<AssetImportRequest>(p);
+            if (string.IsNullOrWhiteSpace(r?.AssetPath)) { var er = AssetImportResponse.Create(); er.Error = 3; er.Message = "AssetPath required"; return UBridgeJsonHelper.ToJson(er); }
+            AssetDatabase.ImportAsset(r.AssetPath, ImportAssetOptions.ForceUpdate);
+            UBridgeDeferredRuntime.SavePending(p, "AssetImport", 120000);
+            throw new DeferredStarted();
+        }
+    }
+
+    public static class UBridgeAssetRefreshHandler
+    {
+        public static string Handle(string p)
+        {
+            if (UBridgeDeferredRuntime.HasPending)
+            {
+                if (EditorApplication.isCompiling) throw new DeferredNotReady();
+                var resp = AssetRefreshResponse.Create();
+                resp.Refreshed = true;
+                if (EditorUtility.scriptCompilationFailed) { resp.Error = 8; resp.Message = "Refresh/compile failed"; }
+                UBridgeDeferredRuntime.Clear();
+                UBridgeFileStore.WriteResponse(UBridgeDeferredRuntime.GetPendingRpcId(), UBridgeJsonHelper.ToJson(resp));
+                return "";
+            }
+            if (EditorApplication.isCompiling) { var er = AssetRefreshResponse.Create(); er.Error = 8; er.Message = "Already compiling"; return UBridgeJsonHelper.ToJson(er); }
+            var r = UBridgeJsonHelper.FromJson<AssetRefreshRequest>(p);
+            AssetDatabase.Refresh(r?.ForceUpdate ?? false ? ImportAssetOptions.ForceUpdate : ImportAssetOptions.Default);
+            UBridgeDeferredRuntime.SavePending(p, "AssetRefresh", 60000);
+            throw new DeferredStarted();
+        }
+    }
+
     static class DeferredHelper
     {
         public static string ExtractRpcId(string p)
