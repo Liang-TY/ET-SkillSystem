@@ -5885,6 +5885,772 @@ namespace ET
         }
     }
 
+    // ==================== RectTransform ====================
+    [MemoryPackable]
+    [Message(UBridge.RectGetRequest)]
+    public partial class RectGetRequest : MessageObject, IRequest
+    {
+        public static RectGetRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectGetRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectGetResponse)]
+    public partial class RectGetResponse : MessageObject, IResponse
+    {
+        public static RectGetResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectGetResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public float AnchorMinX { get; set; }
+
+        [MemoryPackOrder(93)]
+        public float AnchorMinY { get; set; }
+
+        [MemoryPackOrder(94)]
+        public float AnchorMaxX { get; set; }
+
+        [MemoryPackOrder(95)]
+        public float AnchorMaxY { get; set; }
+
+        [MemoryPackOrder(96)]
+        public float SizeDeltaX { get; set; }
+
+        [MemoryPackOrder(97)]
+        public float SizeDeltaY { get; set; }
+
+        [MemoryPackOrder(98)]
+        public float AnchoredPosX { get; set; }
+
+        [MemoryPackOrder(99)]
+        public float AnchoredPosY { get; set; }
+
+        [MemoryPackOrder(100)]
+        public float PivotX { get; set; }
+
+        [MemoryPackOrder(101)]
+        public float PivotY { get; set; }
+
+        [MemoryPackOrder(102)]
+        public float LocalRotX { get; set; }
+
+        [MemoryPackOrder(103)]
+        public float LocalRotY { get; set; }
+
+        [MemoryPackOrder(104)]
+        public float LocalRotZ { get; set; }
+
+        [MemoryPackOrder(105)]
+        public float LocalScaleX { get; set; }
+
+        [MemoryPackOrder(106)]
+        public float LocalScaleY { get; set; }
+
+        [MemoryPackOrder(107)]
+        public float LocalScaleZ { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.AnchorMinX = default;
+            this.AnchorMinY = default;
+            this.AnchorMaxX = default;
+            this.AnchorMaxY = default;
+            this.SizeDeltaX = default;
+            this.SizeDeltaY = default;
+            this.AnchoredPosX = default;
+            this.AnchoredPosY = default;
+            this.PivotX = default;
+            this.PivotY = default;
+            this.LocalRotX = default;
+            this.LocalRotY = default;
+            this.LocalRotZ = default;
+            this.LocalScaleX = default;
+            this.LocalScaleY = default;
+            this.LocalScaleZ = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetAnchorRequest)]
+    public partial class RectSetAnchorRequest : MessageObject, IRequest
+    {
+        public static RectSetAnchorRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetAnchorRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public float MinX { get; set; }
+
+        [MemoryPackOrder(92)]
+        public float MinY { get; set; }
+
+        [MemoryPackOrder(93)]
+        public float MaxX { get; set; }
+
+        [MemoryPackOrder(94)]
+        public float MaxY { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+            this.MinX = default;
+            this.MinY = default;
+            this.MaxX = default;
+            this.MaxY = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetAnchorResponse)]
+    public partial class RectSetAnchorResponse : MessageObject, IResponse
+    {
+        public static RectSetAnchorResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetAnchorResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetSizeRequest)]
+    public partial class RectSetSizeRequest : MessageObject, IRequest
+    {
+        public static RectSetSizeRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetSizeRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public float RectWidth { get; set; }
+
+        [MemoryPackOrder(92)]
+        public float RectHeight { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+            this.RectWidth = default;
+            this.RectHeight = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetSizeResponse)]
+    public partial class RectSetSizeResponse : MessageObject, IResponse
+    {
+        public static RectSetSizeResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetSizeResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetPosRequest)]
+    public partial class RectSetPosRequest : MessageObject, IRequest
+    {
+        public static RectSetPosRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetPosRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public float X { get; set; }
+
+        [MemoryPackOrder(92)]
+        public float Y { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+            this.X = default;
+            this.Y = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetPosResponse)]
+    public partial class RectSetPosResponse : MessageObject, IResponse
+    {
+        public static RectSetPosResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetPosResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetPivotRequest)]
+    public partial class RectSetPivotRequest : MessageObject, IRequest
+    {
+        public static RectSetPivotRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetPivotRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public float X { get; set; }
+
+        [MemoryPackOrder(92)]
+        public float Y { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+            this.X = default;
+            this.Y = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetPivotResponse)]
+    public partial class RectSetPivotResponse : MessageObject, IResponse
+    {
+        public static RectSetPivotResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetPivotResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetRotationRequest)]
+    public partial class RectSetRotationRequest : MessageObject, IRequest
+    {
+        public static RectSetRotationRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetRotationRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public float X { get; set; }
+
+        [MemoryPackOrder(92)]
+        public float Y { get; set; }
+
+        [MemoryPackOrder(93)]
+        public float Z { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+            this.X = default;
+            this.Y = default;
+            this.Z = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetRotationResponse)]
+    public partial class RectSetRotationResponse : MessageObject, IResponse
+    {
+        public static RectSetRotationResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetRotationResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetScaleRequest)]
+    public partial class RectSetScaleRequest : MessageObject, IRequest
+    {
+        public static RectSetScaleRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetScaleRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public float X { get; set; }
+
+        [MemoryPackOrder(92)]
+        public float Y { get; set; }
+
+        [MemoryPackOrder(93)]
+        public float Z { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+            this.X = default;
+            this.Y = default;
+            this.Z = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.RectSetScaleResponse)]
+    public partial class RectSetScaleResponse : MessageObject, IResponse
+    {
+        public static RectSetScaleResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<RectSetScaleResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    // ==================== YIUI Create Panel ====================
+    [MemoryPackable]
+    [Message(UBridge.YIUICreatePanelRequest)]
+    public partial class YIUICreatePanelRequest : MessageObject, IRequest
+    {
+        public static YIUICreatePanelRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUICreatePanelRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string Path { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Name { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Path = default;
+            this.Name = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUICreatePanelResponse)]
+    public partial class YIUICreatePanelResponse : MessageObject, IResponse
+    {
+        public static YIUICreatePanelResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUICreatePanelResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string PrefabPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.PrefabPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabLoadForEditRequest)]
+    public partial class PrefabLoadForEditRequest : MessageObject, IRequest
+    {
+        public static PrefabLoadForEditRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabLoadForEditRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabLoadForEditResponse)]
+    public partial class PrefabLoadForEditResponse : MessageObject, IResponse
+    {
+        public static PrefabLoadForEditResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabLoadForEditResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public int RootInstanceId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.RootInstanceId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabSaveModifiedRequest)]
+    public partial class PrefabSaveModifiedRequest : MessageObject, IRequest
+    {
+        public static PrefabSaveModifiedRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabSaveModifiedRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int InstanceId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string PrefabPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.InstanceId = default;
+            this.PrefabPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.PrefabSaveModifiedResponse)]
+    public partial class PrefabSaveModifiedResponse : MessageObject, IResponse
+    {
+        public static PrefabSaveModifiedResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<PrefabSaveModifiedResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -6035,5 +6801,25 @@ namespace ET
         public const ushort GameViewListResolutionsResponse = 10146;
         public const ushort GameViewSetResolutionRequest = 10147;
         public const ushort GameViewSetResolutionResponse = 10148;
+        public const ushort RectGetRequest = 10149;
+        public const ushort RectGetResponse = 10150;
+        public const ushort RectSetAnchorRequest = 10151;
+        public const ushort RectSetAnchorResponse = 10152;
+        public const ushort RectSetSizeRequest = 10153;
+        public const ushort RectSetSizeResponse = 10154;
+        public const ushort RectSetPosRequest = 10155;
+        public const ushort RectSetPosResponse = 10156;
+        public const ushort RectSetPivotRequest = 10157;
+        public const ushort RectSetPivotResponse = 10158;
+        public const ushort RectSetRotationRequest = 10159;
+        public const ushort RectSetRotationResponse = 10160;
+        public const ushort RectSetScaleRequest = 10161;
+        public const ushort RectSetScaleResponse = 10162;
+        public const ushort YIUICreatePanelRequest = 10163;
+        public const ushort YIUICreatePanelResponse = 10164;
+        public const ushort PrefabLoadForEditRequest = 10165;
+        public const ushort PrefabLoadForEditResponse = 10166;
+        public const ushort PrefabSaveModifiedRequest = 10167;
+        public const ushort PrefabSaveModifiedResponse = 10168;
     }
 }

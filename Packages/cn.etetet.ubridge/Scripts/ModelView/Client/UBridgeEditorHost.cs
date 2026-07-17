@@ -113,6 +113,18 @@ namespace ET
             RegisterHandler("GameViewGetResolution", UBridgeGameViewGetResolutionHandler.Handle);
             RegisterHandler("GameViewListResolutions", UBridgeGameViewListResolutionsHandler.Handle);
             RegisterHandler("GameViewSetResolution", UBridgeGameViewSetResolutionHandler.Handle);
+            // RectTransform
+            RegisterHandler("RectGet", UBridgeRectGetHandler.Handle);
+            RegisterHandler("RectSetAnchor", UBridgeRectSetAnchorHandler.Handle);
+            RegisterHandler("RectSetSize", UBridgeRectSetSizeHandler.Handle);
+            RegisterHandler("RectSetPos", UBridgeRectSetPosHandler.Handle);
+            RegisterHandler("RectSetPivot", UBridgeRectSetPivotHandler.Handle);
+            RegisterHandler("RectSetRotation", UBridgeRectSetRotationHandler.Handle);
+            RegisterHandler("RectSetScale", UBridgeRectSetScaleHandler.Handle);
+            // YIUI Panel
+            RegisterHandler("YIUICreatePanel", UBridgeYIUICreatePanelHandler.Handle);
+            RegisterHandler("PrefabLoadForEdit", UBridgePrefabLoadForEditHandler.Handle);
+            RegisterHandler("PrefabSaveModified", UBridgePrefabSaveModifiedHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");

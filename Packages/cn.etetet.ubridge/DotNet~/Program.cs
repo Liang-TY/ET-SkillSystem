@@ -37,6 +37,12 @@ namespace ET
             string type = "";
             int instanceId = 0;
             bool active = true;
+            float minX = 0, minY = 0, maxX = 1, maxY = 1;
+            float posX = 0, posY = 0;
+            float pivotX = 0.5f, pivotY = 0.5f;
+            float rotX = 0, rotY = 0, rotZ = 0;
+            float scaleX = 1, scaleY = 1, scaleZ = 1;
+            float rectWidth = 100, rectHeight = 100;
 
             for (int i = 1; i < args.Length; i++)
             {
@@ -54,6 +60,22 @@ namespace ET
                     case "--type" when i + 1 < args.Length: type = args[++i]; break;
                     case "--instanceId" when i + 1 < args.Length: instanceId = int.Parse(args[++i]); break;
                     case "--active" when i + 1 < args.Length: active = bool.Parse(args[++i]); break;
+                    case "--minX" when i + 1 < args.Length: minX = float.Parse(args[++i]); break;
+                    case "--minY" when i + 1 < args.Length: minY = float.Parse(args[++i]); break;
+                    case "--maxX" when i + 1 < args.Length: maxX = float.Parse(args[++i]); break;
+                    case "--maxY" when i + 1 < args.Length: maxY = float.Parse(args[++i]); break;
+                    case "--posX" when i + 1 < args.Length: posX = float.Parse(args[++i]); break;
+                    case "--posY" when i + 1 < args.Length: posY = float.Parse(args[++i]); break;
+                    case "--pivotX" when i + 1 < args.Length: pivotX = float.Parse(args[++i]); break;
+                    case "--pivotY" when i + 1 < args.Length: pivotY = float.Parse(args[++i]); break;
+                    case "--rotX" when i + 1 < args.Length: rotX = float.Parse(args[++i]); break;
+                    case "--rotY" when i + 1 < args.Length: rotY = float.Parse(args[++i]); break;
+                    case "--rotZ" when i + 1 < args.Length: rotZ = float.Parse(args[++i]); break;
+                    case "--scaleX" when i + 1 < args.Length: scaleX = float.Parse(args[++i]); break;
+                    case "--scaleY" when i + 1 < args.Length: scaleY = float.Parse(args[++i]); break;
+                    case "--scaleZ" when i + 1 < args.Length: scaleZ = float.Parse(args[++i]); break;
+                    case "--rectWidth" when i + 1 < args.Length: rectWidth = float.Parse(args[++i]); break;
+                    case "--rectHeight" when i + 1 < args.Length: rectHeight = float.Parse(args[++i]); break;
                     case "--timeout" when i + 1 < args.Length: timeoutMs = int.Parse(args[++i]); break;
                     case "--waitMs" when i + 1 < args.Length: waitMs = int.Parse(args[++i]); break;
                 }
@@ -90,6 +112,36 @@ namespace ET
                 case "InspectorAddComponent":
                 case "InspectorRemoveComponent":
                     payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"TypeName\":\"{type}\",\"ComponentName\":\"{type}\"}}";
+                    break;
+                // YIUI
+                case "YIUICreatePanel":
+                    payloadJson = $"{{\"_t\":\"ET.YIUICreatePanelRequest\",\"RpcId\":1,\"Path\":\"{path}\",\"Name\":\"{name}\"}}";
+                    break;
+                case "PrefabLoadForEdit":
+                case "PrefabSaveModified":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"PrefabPath\":\"{path}\"}}";
+                    break;
+                // RectTransform
+                case "RectGet":
+                    payloadJson = $"{{\"_t\":\"ET.RectGetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "RectSetAnchor":
+                    payloadJson = $"{{\"_t\":\"ET.RectSetAnchorRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"MinX\":{minX},\"MinY\":{minY},\"MaxX\":{maxX},\"MaxY\":{maxY}}}";
+                    break;
+                case "RectSetSize":
+                    payloadJson = $"{{\"_t\":\"ET.RectSetSizeRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"RectWidth\":{rectWidth},\"RectHeight\":{rectHeight}}}";
+                    break;
+                case "RectSetPos":
+                    payloadJson = $"{{\"_t\":\"ET.RectSetPosRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"X\":{posX},\"Y\":{posY}}}";
+                    break;
+                case "RectSetPivot":
+                    payloadJson = $"{{\"_t\":\"ET.RectSetPivotRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"X\":{pivotX},\"Y\":{pivotY}}}";
+                    break;
+                case "RectSetRotation":
+                    payloadJson = $"{{\"_t\":\"ET.RectSetRotationRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"X\":{rotX},\"Y\":{rotY},\"Z\":{rotZ}}}";
+                    break;
+                case "RectSetScale":
+                    payloadJson = $"{{\"_t\":\"ET.RectSetScaleRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"X\":{scaleX},\"Y\":{scaleY},\"Z\":{scaleZ}}}";
                     break;
                 // Misc
                 case "TestEcho":

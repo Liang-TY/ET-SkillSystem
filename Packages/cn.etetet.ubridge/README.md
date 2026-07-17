@@ -285,7 +285,7 @@ CLI (Program.cs)                          Unity Editor
 | BSON 序列化 | `UBridgeStorage.cs:UBridgeJsonHelper` | 封装的 `MongoHelper.ToJson/FromJson`，带 `_t` 类型判别器 |
 | 命令分发 | `UBridgeEditorHost.cs` | `Dictionary<string, Func<string, string>>` 存 Handler，按 Command 字段路由 |
 
-## 已知坑（14 条，按文件/场景查询）
+## 已知坑（15 条，按文件/场景查询）
 
 | 场景 | 报错特征 | 解决 |
 |------|----------|------|
@@ -309,6 +309,7 @@ CLI (Program.cs)                          Unity Editor
 | `new BridgeXxx { ... }` → ET0031 | 初始化器未匹配正则 | 逐属性赋值：`Create()` + `info.A = ...` |
 | Unity 6 API 差异 | `EditorSceneManager`/`GetScenePathByBuildIndex` 不存在 | 加 `UnityEditor.SceneManagement`；用 `EditorBuildSettings.scenes[i].path` |
 | CLI default case 参数丢失 | `--name` 解析但未进入 JSON | default case 动态拼接已设置参数 |
+| Handler 修改组件属性后 Inspector 不刷新 | 值已写入但 Inspector 面板显示未变化，需取消选中再重新选中 | 在 Handler 中加 `EditorUtility.SetDirty(component)` 通知 Editor 刷新 |
 
 
 

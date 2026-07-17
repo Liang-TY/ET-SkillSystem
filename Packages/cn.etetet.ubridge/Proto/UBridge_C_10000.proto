@@ -1280,3 +1280,164 @@ message GameViewSetResolutionResponse // IResponse
     bool WasAdded = 95;
     string SizeType = 96;
 }
+
+// ==================== RectTransform ====================
+
+message RectGetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+}
+message RectGetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    float AnchorMinX = 93;
+    float AnchorMinY = 94;
+    float AnchorMaxX = 95;
+    float AnchorMaxY = 96;
+    float SizeDeltaX = 97;
+    float SizeDeltaY = 98;
+    float AnchoredPosX = 99;
+    float AnchoredPosY = 100;
+    float PivotX = 101;
+    float PivotY = 102;
+    float LocalRotX = 103;
+    float LocalRotY = 104;
+    float LocalRotZ = 105;
+    float LocalScaleX = 106;
+    float LocalScaleY = 107;
+    float LocalScaleZ = 108;
+}
+
+message RectSetAnchorRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float MinX = 92;
+    float MinY = 93;
+    float MaxX = 94;
+    float MaxY = 95;
+}
+message RectSetAnchorResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+message RectSetSizeRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float RectWidth = 92;
+    float RectHeight = 93;
+}
+message RectSetSizeResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+message RectSetPosRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+}
+message RectSetPosResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+message RectSetPivotRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+}
+message RectSetPivotResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+message RectSetRotationRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+    float Z = 94;
+}
+message RectSetRotationResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+message RectSetScaleRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+    float Z = 94;
+}
+message RectSetScaleResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Create Panel ====================
+
+message YIUICreatePanelRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    string Name = 92;
+}
+message YIUICreatePanelResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string PrefabPath = 93;
+}
+
+message PrefabLoadForEditRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+}
+message PrefabLoadForEditResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 RootInstanceId = 93;
+}
+
+message PrefabSaveModifiedRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    string PrefabPath = 92;
+}
+message PrefabSaveModifiedResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
