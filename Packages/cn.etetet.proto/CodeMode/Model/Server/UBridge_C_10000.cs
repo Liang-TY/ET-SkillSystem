@@ -6651,6 +6651,158 @@ namespace ET
         }
     }
 
+    // ==================== YIUI Add Control ====================
+    [MemoryPackable]
+    [Message(UBridge.YIUIAddControlRequest)]
+    [ResponseType(nameof(YIUIAddControlResponse))]
+    public partial class YIUIAddControlRequest : MessageObject, IRequest
+    {
+        public static YIUIAddControlRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIAddControlRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int ParentId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Name { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string Type { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.ParentId = default;
+            this.Name = default;
+            this.Type = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIAddControlResponse)]
+    public partial class YIUIAddControlResponse : MessageObject, IResponse
+    {
+        public static YIUIAddControlResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIAddControlResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public int InstanceId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.InstanceId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    // ==================== AddControl (Standard Unity UI) ====================
+    [MemoryPackable]
+    [Message(UBridge.AddControlRequest)]
+    [ResponseType(nameof(AddControlResponse))]
+    public partial class AddControlRequest : MessageObject, IRequest
+    {
+        public static AddControlRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<AddControlRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int ParentId { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Name { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string Type { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.ParentId = default;
+            this.Name = default;
+            this.Type = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.AddControlResponse)]
+    public partial class AddControlResponse : MessageObject, IResponse
+    {
+        public static AddControlResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<AddControlResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public int InstanceId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.InstanceId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -6821,5 +6973,9 @@ namespace ET
         public const ushort PrefabLoadForEditResponse = 10166;
         public const ushort PrefabSaveModifiedRequest = 10167;
         public const ushort PrefabSaveModifiedResponse = 10168;
+        public const ushort YIUIAddControlRequest = 10169;
+        public const ushort YIUIAddControlResponse = 10170;
+        public const ushort AddControlRequest = 10171;
+        public const ushort AddControlResponse = 10172;
     }
 }

@@ -1441,3 +1441,39 @@ message PrefabSaveModifiedResponse // IResponse
     string Message = 92;
 }
 
+// ==================== YIUI Add Control ====================
+
+// ResponseType YIUIAddControlResponse
+message YIUIAddControlRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 ParentId = 91;
+    string Name = 92;
+    string Type = 93;
+}
+message YIUIAddControlResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 InstanceId = 93;
+}
+
+// ==================== AddControl (Standard Unity UI) ====================
+
+// ResponseType AddControlResponse
+message AddControlRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 ParentId = 91;
+    string Name = 92;
+    string Type = 93;
+}
+message AddControlResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 InstanceId = 93;
+}
+

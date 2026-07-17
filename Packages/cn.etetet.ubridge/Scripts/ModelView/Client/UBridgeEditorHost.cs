@@ -125,6 +125,9 @@ namespace ET
             RegisterHandler("YIUICreatePanel", UBridgeYIUICreatePanelHandler.Handle);
             RegisterHandler("PrefabLoadForEdit", UBridgePrefabLoadForEditHandler.Handle);
             RegisterHandler("PrefabSaveModified", UBridgePrefabSaveModifiedHandler.Handle);
+            // Control
+            RegisterHandler("AddControl", UBridgeAddControlHandler.Handle);
+            RegisterHandler("YIUIAddControl", UBridgeYIUIAddControlHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");

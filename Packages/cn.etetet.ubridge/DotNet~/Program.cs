@@ -36,6 +36,7 @@ namespace ET
             string filter = "";
             string type = "";
             int instanceId = 0;
+            int parentId = 0;
             bool active = true;
             float minX = 0, minY = 0, maxX = 1, maxY = 1;
             float posX = 0, posY = 0;
@@ -59,6 +60,7 @@ namespace ET
                     case "--filter" when i + 1 < args.Length: filter = args[++i]; break;
                     case "--type" when i + 1 < args.Length: type = args[++i]; break;
                     case "--instanceId" when i + 1 < args.Length: instanceId = int.Parse(args[++i]); break;
+                    case "--parentId" when i + 1 < args.Length: parentId = int.Parse(args[++i]); break;
                     case "--active" when i + 1 < args.Length: active = bool.Parse(args[++i]); break;
                     case "--minX" when i + 1 < args.Length: minX = float.Parse(args[++i]); break;
                     case "--minY" when i + 1 < args.Length: minY = float.Parse(args[++i]); break;
@@ -113,13 +115,19 @@ namespace ET
                 case "InspectorRemoveComponent":
                     payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"TypeName\":\"{type}\",\"ComponentName\":\"{type}\"}}";
                     break;
+                // Control
+                case "AddControl":
+                    payloadJson = $"{{\"_t\":\"ET.AddControlRequest\",\"RpcId\":1,\"ParentId\":{parentId},\"Name\":\"{name}\",\"Type\":\"{type}\"}}";
+                    break;
                 // YIUI
                 case "YIUICreatePanel":
                     payloadJson = $"{{\"_t\":\"ET.YIUICreatePanelRequest\",\"RpcId\":1,\"Path\":\"{path}\",\"Name\":\"{name}\"}}";
                     break;
                 case "PrefabLoadForEdit":
+                    payloadJson = $"{{\"_t\":\"ET.PrefabLoadForEditRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\"}}";
+                    break;
                 case "PrefabSaveModified":
-                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"PrefabPath\":\"{path}\"}}";
+                    payloadJson = $"{{\"_t\":\"ET.PrefabSaveModifiedRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"PrefabPath\":\"{path}\"}}";
                     break;
                 // RectTransform
                 case "RectGet":
