@@ -1477,3 +1477,111 @@ message AddControlResponse // IResponse
     int32 InstanceId = 93;
 }
 
+// ==================== YIUI CDE Table ====================
+
+message YIUIBindingInfo
+{
+    string Name = 1;
+    string ComponentType = 2;
+    string ComponentName = 3;
+}
+
+// ResponseType YIUIGetBindingsResponse
+message YIUIGetBindingsRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+}
+message YIUIGetBindingsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    repeated YIUIBindingInfo Bindings = 93;
+    int32 Count = 94;
+}
+
+message YIUIEventItem
+{
+    string EventName = 1;
+    string EventType = 2;
+    string ParamTypes = 3;
+}
+
+// ResponseType YIUIGetEventsResponse
+message YIUIGetEventsRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+}
+message YIUIGetEventsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    repeated YIUIEventItem Events = 93;
+    int32 Count = 94;
+}
+
+// ResponseType YIUIBindComponentResponse
+message YIUIBindComponentRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string ControlName = 92;
+    string BindName = 93;
+}
+message YIUIBindComponentResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType YIUIBindEventResponse
+message YIUIBindEventRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string EventName = 92;
+    string EventType = 93;
+    string ParamTypes = 94;
+}
+message YIUIBindEventResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType YIUIAttachEventResponse
+message YIUIAttachEventRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string TargetName = 92;
+    string EventName = 93;
+}
+message YIUIAttachEventResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Generate Code ====================
+
+// ResponseType YIUIGenerateCodeResponse
+message YIUIGenerateCodeRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string PackageName = 92;
+}
+message YIUIGenerateCodeResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+

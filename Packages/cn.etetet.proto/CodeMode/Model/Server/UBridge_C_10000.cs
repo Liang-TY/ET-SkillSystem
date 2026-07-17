@@ -6803,6 +6803,500 @@ namespace ET
         }
     }
 
+    // ==================== YIUI CDE Table ====================
+    [MemoryPackable]
+    [Message(UBridge.YIUIBindingInfo)]
+    public partial class YIUIBindingInfo : MessageObject
+    {
+        public static YIUIBindingInfo Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIBindingInfo>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public string Name { get; set; }
+
+        [MemoryPackOrder(1)]
+        public string ComponentType { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string ComponentName { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.Name = default;
+            this.ComponentType = default;
+            this.ComponentName = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIGetBindingsRequest)]
+    [ResponseType(nameof(YIUIGetBindingsResponse))]
+    public partial class YIUIGetBindingsRequest : MessageObject, IRequest
+    {
+        public static YIUIGetBindingsRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIGetBindingsRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIGetBindingsResponse)]
+    public partial class YIUIGetBindingsResponse : MessageObject, IResponse
+    {
+        public static YIUIGetBindingsResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIGetBindingsResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public List<YIUIBindingInfo> Bindings { get; set; } = new();
+
+        [MemoryPackOrder(93)]
+        public int Count { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Bindings.Clear();
+            this.Count = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIEventItem)]
+    public partial class YIUIEventItem : MessageObject
+    {
+        public static YIUIEventItem Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIEventItem>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public string EventName { get; set; }
+
+        [MemoryPackOrder(1)]
+        public string EventType { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string ParamTypes { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.EventName = default;
+            this.EventType = default;
+            this.ParamTypes = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIGetEventsRequest)]
+    [ResponseType(nameof(YIUIGetEventsResponse))]
+    public partial class YIUIGetEventsRequest : MessageObject, IRequest
+    {
+        public static YIUIGetEventsRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIGetEventsRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIGetEventsResponse)]
+    public partial class YIUIGetEventsResponse : MessageObject, IResponse
+    {
+        public static YIUIGetEventsResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIGetEventsResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(92)]
+        public List<YIUIEventItem> Events { get; set; } = new();
+
+        [MemoryPackOrder(93)]
+        public int Count { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Events.Clear();
+            this.Count = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIBindComponentRequest)]
+    [ResponseType(nameof(YIUIBindComponentResponse))]
+    public partial class YIUIBindComponentRequest : MessageObject, IRequest
+    {
+        public static YIUIBindComponentRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIBindComponentRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string ControlName { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string BindName { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.ControlName = default;
+            this.BindName = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIBindComponentResponse)]
+    public partial class YIUIBindComponentResponse : MessageObject, IResponse
+    {
+        public static YIUIBindComponentResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIBindComponentResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIBindEventRequest)]
+    [ResponseType(nameof(YIUIBindEventResponse))]
+    public partial class YIUIBindEventRequest : MessageObject, IRequest
+    {
+        public static YIUIBindEventRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIBindEventRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string EventName { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string EventType { get; set; }
+
+        [MemoryPackOrder(93)]
+        public string ParamTypes { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.EventName = default;
+            this.EventType = default;
+            this.ParamTypes = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIBindEventResponse)]
+    public partial class YIUIBindEventResponse : MessageObject, IResponse
+    {
+        public static YIUIBindEventResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIBindEventResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIAttachEventRequest)]
+    [ResponseType(nameof(YIUIAttachEventResponse))]
+    public partial class YIUIAttachEventRequest : MessageObject, IRequest
+    {
+        public static YIUIAttachEventRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIAttachEventRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string TargetName { get; set; }
+
+        [MemoryPackOrder(92)]
+        public string EventName { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.TargetName = default;
+            this.EventName = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIAttachEventResponse)]
+    public partial class YIUIAttachEventResponse : MessageObject, IResponse
+    {
+        public static YIUIAttachEventResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIAttachEventResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    // ==================== YIUI Generate Code ====================
+    [MemoryPackable]
+    [Message(UBridge.YIUIGenerateCodeRequest)]
+    [ResponseType(nameof(YIUIGenerateCodeResponse))]
+    public partial class YIUIGenerateCodeRequest : MessageObject, IRequest
+    {
+        public static YIUIGenerateCodeRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIGenerateCodeRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string PackageName { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.PackageName = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIGenerateCodeResponse)]
+    public partial class YIUIGenerateCodeResponse : MessageObject, IResponse
+    {
+        public static YIUIGenerateCodeResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIGenerateCodeResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -6977,5 +7471,19 @@ namespace ET
         public const ushort YIUIAddControlResponse = 10170;
         public const ushort AddControlRequest = 10171;
         public const ushort AddControlResponse = 10172;
+        public const ushort YIUIBindingInfo = 10173;
+        public const ushort YIUIGetBindingsRequest = 10174;
+        public const ushort YIUIGetBindingsResponse = 10175;
+        public const ushort YIUIEventItem = 10176;
+        public const ushort YIUIGetEventsRequest = 10177;
+        public const ushort YIUIGetEventsResponse = 10178;
+        public const ushort YIUIBindComponentRequest = 10179;
+        public const ushort YIUIBindComponentResponse = 10180;
+        public const ushort YIUIBindEventRequest = 10181;
+        public const ushort YIUIBindEventResponse = 10182;
+        public const ushort YIUIAttachEventRequest = 10183;
+        public const ushort YIUIAttachEventResponse = 10184;
+        public const ushort YIUIGenerateCodeRequest = 10185;
+        public const ushort YIUIGenerateCodeResponse = 10186;
     }
 }

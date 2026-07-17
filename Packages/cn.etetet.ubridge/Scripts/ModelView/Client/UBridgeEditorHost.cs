@@ -128,6 +128,13 @@ namespace ET
             // Control
             RegisterHandler("AddControl", UBridgeAddControlHandler.Handle);
             RegisterHandler("YIUIAddControl", UBridgeYIUIAddControlHandler.Handle);
+            // CDE Table
+            RegisterHandler("YIUIGetBindings", UBridgeYIUIGetBindingsHandler.Handle);
+            RegisterHandler("YIUIGetEvents", UBridgeYIUIGetEventsHandler.Handle);
+            RegisterHandler("YIUIBindComponent", UBridgeYIUIBindComponentHandler.Handle);
+            RegisterHandler("YIUIBindEvent", UBridgeYIUIBindEventHandler.Handle);
+            RegisterHandler("YIUIAttachEvent", UBridgeYIUIAttachEventHandler.Handle);
+            RegisterHandler("YIUIGenerateCode", UBridgeYIUIGenerateCodeHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");

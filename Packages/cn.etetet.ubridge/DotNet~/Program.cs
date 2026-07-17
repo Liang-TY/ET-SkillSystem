@@ -44,6 +44,9 @@ namespace ET
             float rotX = 0, rotY = 0, rotZ = 0;
             float scaleX = 1, scaleY = 1, scaleZ = 1;
             float rectWidth = 100, rectHeight = 100;
+            string controlName = "";
+            string paramTypeList = "";
+            string targetName = "";
 
             for (int i = 1; i < args.Length; i++)
             {
@@ -78,6 +81,9 @@ namespace ET
                     case "--scaleZ" when i + 1 < args.Length: scaleZ = float.Parse(args[++i]); break;
                     case "--rectWidth" when i + 1 < args.Length: rectWidth = float.Parse(args[++i]); break;
                     case "--rectHeight" when i + 1 < args.Length: rectHeight = float.Parse(args[++i]); break;
+                    case "--controlName" when i + 1 < args.Length: controlName = args[++i]; break;
+                    case "--paramTypes" when i + 1 < args.Length: paramTypeList = args[++i]; break;
+                    case "--targetName" when i + 1 < args.Length: targetName = args[++i]; break;
                     case "--timeout" when i + 1 < args.Length: timeoutMs = int.Parse(args[++i]); break;
                     case "--waitMs" when i + 1 < args.Length: waitMs = int.Parse(args[++i]); break;
                 }
@@ -122,6 +128,23 @@ namespace ET
                 // YIUI
                 case "YIUICreatePanel":
                     payloadJson = $"{{\"_t\":\"ET.YIUICreatePanelRequest\",\"RpcId\":1,\"Path\":\"{path}\",\"Name\":\"{name}\"}}";
+                    break;
+                // CDE Table
+                case "YIUIGetBindings":
+                case "YIUIGetEvents":
+                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"PrefabPath\":\"{path}\"}}";
+                    break;
+                case "YIUIBindComponent":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIBindComponentRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"ControlName\":\"{controlName}\",\"BindName\":\"{name}\"}}";
+                    break;
+                case "YIUIBindEvent":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIBindEventRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"EventName\":\"{name}\",\"EventType\":\"{type}\",\"ParamTypes\":\"{paramTypeList}\"}}";
+                    break;
+                case "YIUIAttachEvent":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIAttachEventRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"TargetName\":\"{targetName}\",\"EventName\":\"{name}\"}}";
+                    break;
+                case "YIUIGenerateCode":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIGenerateCodeRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"PackageName\":\"{name}\"}}";
                     break;
                 case "PrefabLoadForEdit":
                     payloadJson = $"{{\"_t\":\"ET.PrefabLoadForEditRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\"}}";
