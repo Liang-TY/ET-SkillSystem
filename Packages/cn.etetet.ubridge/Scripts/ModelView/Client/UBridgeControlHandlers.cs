@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -7,11 +8,29 @@ namespace ET
     /// <summary>
     /// AddControl: 创建标准 Unity UI 控件（Button/Text/Image/Toggle/InputField 等）
     /// 实现方式：UnityEngine.UI.DefaultControls.CreateXxx()
+    /// 创建后自动按类型加前缀重命名（如 Button → Btn_xxx）
     /// </summary>
     public static class UBridgeAddControlHandler
     {
         [StaticField]
         private static readonly DefaultControls.Resources s_Resources = new DefaultControls.Resources();
+
+        /// <summary>控件类型 → 命名前缀</summary>
+        [StaticField]
+        private static readonly Dictionary<string, string> s_TypePrefixes = new()
+        {
+            {"Button", "Btn"},
+            {"Text", "Txt"},
+            {"Image", "Img"},
+            {"RawImage", "RawImg"},
+            {"InputField", "Input"},
+            {"Toggle", "Tog"},
+            {"Slider", "Sld"},
+            {"ScrollView", "Scroll"},
+            {"Dropdown", "Drop"},
+            {"Scrollbar", "Bar"},
+            {"Panel", "Panel"},
+        };
 
         public static string Handle(string p)
         {
@@ -45,8 +64,24 @@ namespace ET
             }
 
             instance.transform.SetParent(parent.transform, false);
-            if (!string.IsNullOrWhiteSpace(r.Name))
-                instance.name = r.Name;
+
+            // 自动加前缀重命名：如 --type Button --name Login → Btn_Login
+            string userGivenName = r?.Name ?? "";
+            if (!string.IsNullOrWhiteSpace(userGivenName))
+            {
+                if (s_TypePrefixes.TryGetValue(controlType, out var prefix))
+                {
+                    var parts = userGivenName.Split('_');
+                    // 首段已是正确前缀 → 保留原名；否则加前缀
+                    instance.name = (parts.Length > 0 && parts[0] == prefix)
+                        ? userGivenName
+                        : $"{prefix}_{userGivenName}";
+                }
+                else
+                {
+                    instance.name = userGivenName;
+                }
+            }
             EditorUtility.SetDirty(parent);
 
             resp.InstanceId = instance.GetInstanceID();

@@ -7297,6 +7297,142 @@ namespace ET
         }
     }
 
+    // ==================== YIUI Clear Bindings ====================
+    [MemoryPackable]
+    [Message(UBridge.YIUIClearBindingsRequest)]
+    [ResponseType(nameof(YIUIClearBindingsResponse))]
+    public partial class YIUIClearBindingsRequest : MessageObject, IRequest
+    {
+        public static YIUIClearBindingsRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIClearBindingsRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Target { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.Target = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIClearBindingsResponse)]
+    public partial class YIUIClearBindingsResponse : MessageObject, IResponse
+    {
+        public static YIUIClearBindingsResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIClearBindingsResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    // ==================== YIUI Remove Control ====================
+    [MemoryPackable]
+    [Message(UBridge.YIUIRemoveControlRequest)]
+    [ResponseType(nameof(YIUIRemoveControlResponse))]
+    public partial class YIUIRemoveControlRequest : MessageObject, IRequest
+    {
+        public static YIUIRemoveControlRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIRemoveControlRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public string PrefabPath { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string ControlName { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PrefabPath = default;
+            this.ControlName = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(UBridge.YIUIRemoveControlResponse)]
+    public partial class YIUIRemoveControlResponse : MessageObject, IResponse
+    {
+        public static YIUIRemoveControlResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<YIUIRemoveControlResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(89)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(90)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(91)]
+        public string Message { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class UBridge
     {
         public const ushort BridgeConsoleLog = 10001;
@@ -7485,5 +7621,9 @@ namespace ET
         public const ushort YIUIAttachEventResponse = 10184;
         public const ushort YIUIGenerateCodeRequest = 10185;
         public const ushort YIUIGenerateCodeResponse = 10186;
+        public const ushort YIUIClearBindingsRequest = 10187;
+        public const ushort YIUIClearBindingsResponse = 10188;
+        public const ushort YIUIRemoveControlRequest = 10189;
+        public const ushort YIUIRemoveControlResponse = 10190;
     }
 }

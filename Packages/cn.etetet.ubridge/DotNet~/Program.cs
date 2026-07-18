@@ -146,6 +146,12 @@ namespace ET
                 case "YIUIGenerateCode":
                     payloadJson = $"{{\"_t\":\"ET.YIUIGenerateCodeRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"PackageName\":\"{name}\"}}";
                     break;
+                case "YIUIClearBindings":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIClearBindingsRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"Target\":\"{type}\"}}";
+                    break;
+                case "YIUIRemoveControl":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIRemoveControlRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"ControlName\":\"{name}\"}}";
+                    break;
                 case "PrefabLoadForEdit":
                     payloadJson = $"{{\"_t\":\"ET.PrefabLoadForEditRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\"}}";
                     break;

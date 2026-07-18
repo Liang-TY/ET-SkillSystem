@@ -135,6 +135,8 @@ namespace ET
             RegisterHandler("YIUIBindEvent", UBridgeYIUIBindEventHandler.Handle);
             RegisterHandler("YIUIAttachEvent", UBridgeYIUIAttachEventHandler.Handle);
             RegisterHandler("YIUIGenerateCode", UBridgeYIUIGenerateCodeHandler.Handle);
+            RegisterHandler("YIUIClearBindings", UBridgeYIUIClearBindingsHandler.Handle);
+            RegisterHandler("YIUIRemoveControl", UBridgeYIUIRemoveControlHandler.Handle);
 
             s_Initialized = true;
             Debug.Log($"[UBridge] 已启动，监听: {UBridgeFileStore.Root}");

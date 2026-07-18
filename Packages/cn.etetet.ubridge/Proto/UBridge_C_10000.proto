@@ -1585,3 +1585,35 @@ message YIUIGenerateCodeResponse // IResponse
     string Message = 92;
 }
 
+// ==================== YIUI Clear Bindings ====================
+
+// ResponseType YIUIClearBindingsResponse
+message YIUIClearBindingsRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string Target = 92;
+}
+message YIUIClearBindingsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Remove Control ====================
+
+// ResponseType YIUIRemoveControlResponse
+message YIUIRemoveControlRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string ControlName = 92;
+}
+message YIUIRemoveControlResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+

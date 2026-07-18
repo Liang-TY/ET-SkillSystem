@@ -13,8 +13,9 @@
 | 调整布局 | `RectGet`, `RectSetAnchor/Size/Pos/Pivot/Rotation/Scale` | 7 | 读写 RectTransform |
 | CDE 绑定 | `YIUIGetBindings`, `YIUIGetEvents`, `YIUIBindComponent`, `YIUIBindEvent` | 4 | 读/写 CDE Table |
 | 挂载事件 | `YIUIAttachEvent` | 1 | 将事件挂载到控件 |
+| 清空 CDE | `YIUIClearBindings` | 1 | 清空 C/E 表（反射） |
 | 生成代码 | `YIUIGenerateCode` | 1 | 反射调用 UICreateModule 生成 .cs |
-| **合计** | | **17** | |
+| **合计** | | **18** | |
 
 ---
 
@@ -75,37 +76,36 @@ dotnet Bin/ET.UBridge.dll PrefabSaveModified --instanceId 46100 --path "Assets/G
 ### AddControl
 
 通过 `UnityEngine.UI.DefaultControls` 创建标准 Unity UI 控件，添加到指定父节点。
+**创建后自动按类型加前缀重命名**，供 `YIUIBindComponent` 后续精确绑定。
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `--parentId` | int | ✅ | 父节点 InstanceId |
-| `--name` | string | ❌ | 控件显示名 |
+| `--name` | string | ❌ | 控件名称（自动加前缀，见下表） |
 | `--type` | string | ✅ | 控件类型（见下表） |
 
-**支持的 `--type` 值：**
+**自动命名规则：** 按下划线拆分 `--name` → 首段等于该类型前缀则保留原名，否则加 `前缀_`。
 
-| type | 创建控件 | 包含子对象 |
-|------|----------|-----------|
-| `Button` | Button | + Image + 子 Text |
-| `Text` | Text (Legacy) | — |
-| `Image` | Image | — |
-| `RawImage` | RawImage | — |
-| `InputField` | InputField | + Placeholder + Text |
-| `Toggle` | Toggle | + Background + Checkmark + Label |
-| `Slider` | Slider | + Background + Fill + Handle |
-| `ScrollView` | ScrollView | + Viewport + Content |
-| `Dropdown` | Dropdown | + Template + Scrollbar |
-| `Scrollbar` | Scrollbar | + Sliding Area + Handle |
-| `Panel` | Image（全屏拉伸） | — |
+| type | 前缀 | `--name Login` → | `--name Btn_Login` → | 包含子对象 |
+|------|------|-------------------|----------------------|-----------|
+| `Button` | `Btn` | `Btn_Login` | `Btn_Login` | + Image + 子 Text |
+| `Text` | `Txt` | `Txt_Login` | `Txt_Login` | — |
+| `Image` | `Img` | `Img_Login` | `Img_Login` | — |
+| `RawImage` | `RawImg` | `RawImg_Login` | `RawImg_Login` | — |
+| `InputField` | `Input` | `Input_Login` | `Input_Login` | + Placeholder + Text |
+| `Toggle` | `Tog` | `Tog_Login` | `Tog_Login` | + Background + Checkmark + Label |
+| `Slider` | `Sld` | `Sld_Login` | `Sld_Login` | + Background + Fill + Handle |
+| `ScrollView` | `Scroll` | `Scroll_Login` | `Scroll_Login` | + Viewport + Content |
+| `Dropdown` | `Drop` | `Drop_Login` | `Drop_Login` | + Template + Scrollbar |
+| `Scrollbar` | `Bar` | `Bar_Login` | `Bar_Login` | + Sliding Area + Handle |
+| `Panel` | `Panel` | `Panel_Login` | `Panel_Login` | Image（全屏拉伸） |
 
 ```bash
-# 先加载预制体获取 RootInstanceId
-dotnet Bin/ET.UBridge.dll PrefabLoadForEdit --path "Assets/.../AuthPanel.prefab"
-# → RootInstanceId = 46100
-
-# 添加控件
-dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name BtnLogin --type Button
-dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name InputAccount --type InputField
+# 添加控件（自动加前缀）
+dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name Login --type Button
+# → 实际命名: Btn_Login
+dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name Account --type InputField
+# → 实际命名: Input_Account
 ```
 
 **返回：** 新控件的 `InstanceId`
@@ -199,10 +199,28 @@ dotnet Bin/ET.UBridge.dll YIUIGetEvents --path "Assets/.../AuthPanel.prefab"
 | `--name` | string | ✅ | 绑定名，如 `u_ComBtnLogin` |
 
 ```bash
-dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName BtnLogin --name u_ComBtnLogin
+dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName Btn_Login --name u_ComBtnLogin
 ```
 
-**组件匹配优先级：** 优先匹配 Unity UI 组件（`typeof(Button)`, `typeof(Text)`, `typeof(Image)` 等集合），找不到则 fallback 第一个非 Transform 组件。
+**组件解析规则（两级）：**
+
+1. **前缀精确匹配：** 按 `_` 拆分 `controlName` 取首段 → 查前缀映射表 → `GetComponent<目标类型>()`
+
+| 前缀 | 目标组件 |
+|------|---------|
+| `Btn` | `Button` |
+| `Txt` | `Text` |
+| `Img` | `Image` |
+| `RawImg` | `RawImage` |
+| `Input` | `InputField` |
+| `Tog` | `Toggle` |
+| `Sld` | `Slider` |
+| `Scroll` | `ScrollRect` |
+| `Drop` | `Dropdown` |
+| `Bar` | `Scrollbar` |
+| `Panel` | `Image` |
+
+2. **默认 fallback：** 前缀未命中 → 遍历所有 Component，跳过 `Transform`/`CanvasRenderer`，取第一个剩余组件。
 
 ---
 
@@ -253,6 +271,29 @@ dotnet Bin/ET.UBridge.dll YIUIAttachEvent --path "Assets/.../AuthPanel.prefab" -
 
 ---
 
+## 五、清空 CDE 表（1 条）
+
+### YIUIClearBindings
+
+清空 CDE Table 的 C 表（组件绑定）或 E 表（事件定义），按 `--type` 区分。
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `--path` | string | ✅ | 预制体路径 |
+| `--type` | string | ✅ | `C`（组件表）/ `E`（事件表）/ `All`（全部） |
+
+```bash
+dotnet Bin/ET.UBridge.dll YIUIClearBindings --path "Assets/.../TestPanel.prefab" --type C
+# → "ComponentTable cleared (2 entries)"
+
+dotnet Bin/ET.UBridge.dll YIUIClearBindings --path "Assets/.../TestPanel.prefab" --type All
+# → "Cleared: ComponentTable (2) + EventTable (1)"
+```
+
+**实现：** 反射清 `UIBindComponentTable.m_AllBindPair` + 调 `AutoCheck()`；反射清 `UIBindEventTable.m_EventDic`。
+
+---
+
 ## 六、生成代码（1 条）
 
 ### YIUIGenerateCode
@@ -286,13 +327,13 @@ dotnet Bin/ET.UBridge.dll YIUICreatePanel --path "Assets/GameRes/YIUI/YIUI/Prefa
 dotnet Bin/ET.UBridge.dll PrefabLoadForEdit --path "Assets/.../AuthPanel.prefab"
 # → RootInstanceId = 46100
 
-# 3. 添加控件
-dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name BtnLogin --type Button
-# → InstanceId = -17032
-dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name InputAccount --type InputField
-# → InstanceId = -17056
-dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name InputPassword --type InputField
-# → InstanceId = -17092
+# 3. 添加控件（自动加前缀）
+dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name Login --type Button
+# → 实际命名: Btn_Login, InstanceId = -17032
+dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name Account --type InputField
+# → 实际命名: Input_Account, InstanceId = -17056
+dotnet Bin/ET.UBridge.dll AddControl --parentId 46100 --name Password --type InputField
+# → 实际命名: Input_Password, InstanceId = -17092
 
 # 4. 调整布局
 dotnet Bin/ET.UBridge.dll RectSetSize --instanceId -17056 --rectWidth 300 --rectHeight 30
@@ -305,12 +346,12 @@ dotnet Bin/ET.UBridge.dll RectSetPos --instanceId -17032 --posX 0 --posY -110
 # 5. 保存
 dotnet Bin/ET.UBridge.dll PrefabSaveModified --instanceId 46100 --path "Assets/.../AuthPanel.prefab"
 
-# 6. CDE 绑定
-dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName BtnLogin --name u_ComBtnLogin
-dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName InputAccount --name u_ComInputAccount
-dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName InputPassword --name u_ComInputPassword
+# 6. CDE 绑定（controlName 用前缀名）
+dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName Btn_Login --name u_ComBtnLogin
+dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName Input_Account --name u_ComInputAccount
+dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../AuthPanel.prefab" --controlName Input_Password --name u_ComInputPassword
 dotnet Bin/ET.UBridge.dll YIUIBindEvent --path "Assets/.../AuthPanel.prefab" --name u_EventClickLogin --type Sync --paramTypes ""
-dotnet Bin/ET.UBridge.dll YIUIAttachEvent --path "Assets/.../AuthPanel.prefab" --targetName BtnLogin --name u_EventClickLogin
+dotnet Bin/ET.UBridge.dll YIUIAttachEvent --path "Assets/.../AuthPanel.prefab" --targetName Btn_Login --name u_EventClickLogin
 
 # 7. 生成代码
 dotnet Bin/ET.UBridge.dll YIUIGenerateCode --path "Assets/.../AuthPanel.prefab" --name lockstep
