@@ -39,12 +39,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "cn.etetet.harness": {
-      "version": "file:cn.etetet.harness",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "cn.etetet.demores": {
       "version": "file:cn.etetet.demores",
       "depth": 0,
@@ -53,6 +47,12 @@
     },
     "cn.etetet.excel": {
       "version": "file:cn.etetet.excel",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "cn.etetet.harness": {
+      "version": "file:cn.etetet.harness",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -84,7 +84,6 @@
         "cn.etetet.actorlocation": "3.0.0",
         "cn.etetet.core": "3.0.3",
         "cn.etetet.loader": "3.0.1",
-        "cn.etetet.harness": "1.0.0",
         "cn.etetet.demores": "3.0.0",
         "cn.etetet.router": "3.0.0",
         "cn.etetet.console": "3.0.0",
@@ -219,6 +218,14 @@
     },
     "cn.etetet.yiuiinvoke": {
       "version": "file:cn.etetet.yiuiinvoke",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.core": "1.0.0"
+      }
+    },
+    "cn.etetet.yiuiloopscrollrectasync": {
+      "version": "file:cn.etetet.yiuiloopscrollrectasync",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
