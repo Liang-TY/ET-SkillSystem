@@ -59,7 +59,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3069861309087383393}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce71017a2903f7c4c9a699e438d0b897, type: 3}
+  m_Script: {fileID: 11500000, guid: 63f67ade0220eb1488efa8800270022f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   totalCount: 0
@@ -86,6 +86,10 @@ MonoBehaviour:
   u_MaxClickCount: 1
   u_AutoCancelLast: 1
   u_RepetitionCancel: 0
+  u_CreateInterval: 0
+  u_ForeverInterval: 0
+  u_RefreshCanOption: 0
+  u_PreLoadCount: 0
 --- !u!114 &2595369304746376112
 MonoBehaviour:
   m_ObjectHideFlags: 0
