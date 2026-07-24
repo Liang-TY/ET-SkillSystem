@@ -1,29 +1,24 @@
 {
-    "name": "ET.Model",
+    "name": "ET.Editor",
     "rootNamespace": "",
     "references": [
-        "ET.Aabb",
-        "ET.Collision",
         "ET.Core",
         "ET.Loader",
-        "ET.LSEntity",
-        "ET.MemoryPack",
-        "ET.Npkparser",
+        "ET.Model",
+        "ET.YIUIFramework",
         "ET.SourceGeneratorAttribute",
-        "ET.TrueSync",
-        "ET.YooAssets",
-        "Unity.Mathematics"
+        "UnityEngine.UI",
+        "ET.ModelView"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [
-        "INITED",
-        "IS_COMPILING || UNITY_EDITOR"
-    ],
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
 }
