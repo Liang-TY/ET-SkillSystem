@@ -40,15 +40,19 @@ dotnet Bin/ET.UBridge.dll YIUIAddControl --parentId <rootId> --type LoopScrollVe
 
 ## 创建列表 Item
 
-### 第 1 步：创建 Item Prefab
+> Item 是 **Common 组件**（`EUICodeType.Common`），不是 Panel。
+> 与 Panel 的区别：无 `TimeCache`、无全屏 RectTransform、无 `UIBlockBG` 子对象。
 
-用 UBridge 或手动创建：
+### 第 1 步：创建 Item Prefab（Common）
+
+**UBridge 方式（待实现）：**
 
 ```bash
-dotnet Bin/ET.UBridge.dll YIUICreatePanel --path "Assets/GameRes/YIUI/YourModule/Prefabs" --name YourItem
+# TODO: YIUICreateCommon 指令尚未实现，目前需手动创建
+dotnet Bin/ET.UBridge.dll YIUICreateCommon --path "Assets/GameRes/YIUI/YourModule/Prefabs" --name YourItem
 ```
 
-Item prefab 是一个独立的 YIUI Panel 预制体，包含你需要展示的 UI 元素（Text、Image 等）。
+**手动方式：** 在 Project 面板，右键目标文件夹 → **YIUI → Create UICommon**。
 
 ### 第 2 步：给 Item 添加控件
 
@@ -166,6 +170,15 @@ SetDataRefresh(IList data, 0)
     → YIUILoopRenderer(item, data, index, select)
     → Item 的 UI 更新
 ```
+
+---
+
+## UBridge 待实现
+
+| 指令 | 说明 |
+|------|------|
+| `YIUICreateCommon` | 创建 Common 类型预制体（当前需手动：右键 → YIUI → Create UICommon） |
+| `YIUIAddControl` | 添加 YIUI 模板控件（LoopScrollVertical 等），当前需手动 |
 
 ---
 
