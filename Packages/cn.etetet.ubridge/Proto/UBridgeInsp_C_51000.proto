@@ -1,0 +1,230 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== Inspector ====================
+
+message BridgePropertyInfo
+{
+    string Name = 1;
+    string DisplayName = 2;
+    string Type = 3;
+    string StringValue = 4;
+    int32 IntValue = 5;
+    float FloatValue = 6;
+    bool BoolValue = 7;
+    BridgeVector2 Vector2Value = 8;
+    BridgeVector3 Vector3Value = 9;
+    string ObjectReferencePath = 10;
+    string ObjectReferenceType = 11;
+    bool IsArray = 12;
+    bool IsEditable = 13;
+    string PropertyPath = 14;
+    bool IsExpanded = 15;
+    bool HasChildren = 16;
+    int32 Depth = 17;
+}
+
+// ResponseType InspectorGetComponentsResponse
+message InspectorGetComponentsRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+}
+message InspectorGetComponentsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string GameObjectName = 93;
+    string AssetPath = 94;
+    string ObjectPath = 95;
+    repeated BridgeComponentInfo Components = 96;
+    int32 Count = 97;
+}
+
+// ResponseType InspectorGetPropertiesResponse
+message InspectorGetPropertiesRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+    string ComponentName = 95;
+    int32 ComponentIndex = 96;
+    int32 ComponentInstanceId = 97;
+    bool IncludeChildren = 98;
+}
+message InspectorGetPropertiesResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string TargetName = 93;
+    string TargetType = 94;
+    string GameObjectName = 95;
+    string ComponentName = 96;
+    string AssetPath = 97;
+    string ObjectPath = 98;
+    repeated BridgePropertyInfo Properties = 99;
+}
+
+// ResponseType InspectorGetPropertyResponse
+message InspectorGetPropertyRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+    string ComponentName = 95;
+    int32 ComponentIndex = 96;
+    int32 ComponentInstanceId = 97;
+    string PropertyName = 98;
+}
+message InspectorGetPropertyResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string TargetName = 93;
+    string TargetType = 94;
+    string ComponentName = 95;
+    string AssetPath = 96;
+    string ObjectPath = 97;
+    BridgePropertyInfo Property = 98;
+}
+
+// ResponseType InspectorFindPropertyResponse
+message InspectorFindPropertyRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+    string ComponentName = 95;
+    int32 ComponentIndex = 96;
+    int32 ComponentInstanceId = 97;
+    string Keyword = 98;
+}
+message InspectorFindPropertyResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string TargetName = 93;
+    string TargetType = 94;
+    string ComponentName = 95;
+    string Keyword = 96;
+    int32 Count = 97;
+    string AssetPath = 98;
+    string ObjectPath = 99;
+    repeated BridgePropertyInfo Properties = 100;
+}
+
+// ResponseType InspectorSetPropertyResponse
+message InspectorSetPropertyRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+    string ComponentName = 95;
+    int32 ComponentIndex = 96;
+    int32 ComponentInstanceId = 97;
+    string PropertyName = 98;
+    BridgePropertyInfo Value = 99;
+}
+message InspectorSetPropertyResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string TargetName = 93;
+    string TargetType = 94;
+    string GameObjectName = 95;
+    string ComponentName = 96;
+    string AssetPath = 97;
+    string ObjectPath = 98;
+    bool Changed = 99;
+    repeated BridgePropertyInfo Properties = 100;
+}
+
+// ResponseType InspectorSetPropertiesResponse
+message InspectorSetPropertiesRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+    string ComponentName = 95;
+    int32 ComponentIndex = 96;
+    int32 ComponentInstanceId = 97;
+    repeated BridgePropertyInfo Values = 98;
+}
+message InspectorSetPropertiesResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string TargetName = 93;
+    string TargetType = 94;
+    string GameObjectName = 95;
+    string ComponentName = 96;
+    string AssetPath = 97;
+    string ObjectPath = 98;
+    bool Changed = 99;
+    repeated BridgePropertyInfo Properties = 100;
+}
+
+// ResponseType InspectorAddComponentResponse
+message InspectorAddComponentRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+    string TypeName = 95;
+}
+message InspectorAddComponentResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string GameObjectName = 93;
+    string AssetPath = 94;
+    string ObjectPath = 95;
+    BridgeComponentInfo AddedComponent = 96;
+}
+
+// ResponseType InspectorRemoveComponentResponse
+message InspectorRemoveComponentRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    int32 InstanceId = 92;
+    string AssetPath = 93;
+    string ObjectPath = 94;
+    string ComponentName = 95;
+    int32 ComponentIndex = 96;
+    int32 ComponentInstanceId = 97;
+}
+message InspectorRemoveComponentResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string GameObjectName = 93;
+    string AssetPath = 94;
+    string ObjectPath = 95;
+    BridgeComponentInfo RemovedComponent = 96;
+}
+

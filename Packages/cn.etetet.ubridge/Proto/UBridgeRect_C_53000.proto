@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== RectTransform ====================
+
+// ResponseType RectGetResponse
+message RectGetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+}
+message RectGetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    float AnchorMinX = 93;
+    float AnchorMinY = 94;
+    float AnchorMaxX = 95;
+    float AnchorMaxY = 96;
+    float SizeDeltaX = 97;
+    float SizeDeltaY = 98;
+    float AnchoredPosX = 99;
+    float AnchoredPosY = 100;
+    float PivotX = 101;
+    float PivotY = 102;
+    float LocalRotX = 103;
+    float LocalRotY = 104;
+    float LocalRotZ = 105;
+    float LocalScaleX = 106;
+    float LocalScaleY = 107;
+    float LocalScaleZ = 108;
+}
+
+// ResponseType RectSetAnchorResponse
+message RectSetAnchorRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float MinX = 92;
+    float MinY = 93;
+    float MaxX = 94;
+    float MaxY = 95;
+}
+message RectSetAnchorResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType RectSetSizeResponse
+message RectSetSizeRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float RectWidth = 92;
+    float RectHeight = 93;
+}
+message RectSetSizeResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType RectSetPosResponse
+message RectSetPosRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+}
+message RectSetPosResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType RectSetPivotResponse
+message RectSetPivotRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+}
+message RectSetPivotResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType RectSetRotationResponse
+message RectSetRotationRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+    float Z = 94;
+}
+message RectSetRotationResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType RectSetScaleResponse
+message RectSetScaleRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    float X = 92;
+    float Y = 93;
+    float Z = 94;
+}
+message RectSetScaleResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+

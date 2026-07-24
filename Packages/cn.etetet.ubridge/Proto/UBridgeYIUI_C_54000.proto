@@ -1,0 +1,288 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== YIUI Create Panel ====================
+
+// ResponseType YIUICreatePanelResponse
+message YIUICreatePanelRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    string Name = 92;
+}
+message YIUICreatePanelResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string PrefabPath = 93;
+}
+
+// ResponseType PrefabLoadForEditResponse
+message PrefabLoadForEditRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+}
+message PrefabLoadForEditResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 RootInstanceId = 93;
+}
+
+// ResponseType PrefabSaveModifiedResponse
+message PrefabSaveModifiedRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    string PrefabPath = 92;
+}
+message PrefabSaveModifiedResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Add Control ====================
+
+// ResponseType YIUIAddControlResponse
+message YIUIAddControlRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 ParentId = 91;
+    string Name = 92;
+    string Type = 93;
+}
+message YIUIAddControlResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 InstanceId = 93;
+}
+
+// ==================== AddControl (Standard Unity UI) ====================
+
+// ResponseType AddControlResponse
+message AddControlRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 ParentId = 91;
+    string Name = 92;
+    string Type = 93;
+}
+message AddControlResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 InstanceId = 93;
+}
+
+// ==================== YIUI CDE Table ====================
+
+message YIUIBindingInfo
+{
+    string Name = 1;
+    string ComponentType = 2;
+    string ComponentName = 3;
+}
+
+// ResponseType YIUIGetBindingsResponse
+message YIUIGetBindingsRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+}
+message YIUIGetBindingsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    repeated YIUIBindingInfo Bindings = 93;
+    int32 Count = 94;
+}
+
+message YIUIEventItem
+{
+    string EventName = 1;
+    string EventType = 2;
+    string ParamTypes = 3;
+}
+
+// ResponseType YIUIGetEventsResponse
+message YIUIGetEventsRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+}
+message YIUIGetEventsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    repeated YIUIEventItem Events = 93;
+    int32 Count = 94;
+}
+
+// ResponseType YIUIBindComponentResponse
+message YIUIBindComponentRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string ControlName = 92;
+    string BindName = 93;
+}
+message YIUIBindComponentResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType YIUIBindEventResponse
+message YIUIBindEventRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string EventName = 92;
+    string EventType = 93;
+    string ParamTypes = 94;
+}
+message YIUIBindEventResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType YIUIAttachEventResponse
+message YIUIAttachEventRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string TargetName = 92;
+    string EventName = 93;
+}
+message YIUIAttachEventResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Generate Code ====================
+
+// ResponseType YIUIGenerateCodeResponse
+message YIUIGenerateCodeRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string PackageName = 92;
+}
+message YIUIGenerateCodeResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Clear Bindings ====================
+
+// ResponseType YIUIClearBindingsResponse
+message YIUIClearBindingsRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string Target = 92;
+}
+message YIUIClearBindingsResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Remove Control ====================
+
+// ResponseType YIUIRemoveControlResponse
+message YIUIRemoveControlRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string ControlName = 92;
+}
+message YIUIRemoveControlResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ResponseType YIUICreateCommonResponse
+message YIUICreateCommonRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    string Name = 92;
+}
+message YIUICreateCommonResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string PrefabPath = 93;
+}
+
+// ==================== YIUI Create View ====================
+
+// ResponseType YIUICreateViewResponse
+message YIUICreateViewRequest // IRequest
+{
+    int32 RpcId = 90;
+    string Path = 91;
+    string Name = 92;
+}
+message YIUICreateViewResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string PrefabPath = 93;
+}
+
+// ==================== YIUI Create AllView ====================
+
+// ResponseType YIUICreateAllViewResponse
+message YIUICreateAllViewRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+}
+message YIUICreateAllViewResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+
+// ==================== YIUI Create UIView in Panel ====================
+
+// ResponseType YIUICreateUIViewResponse
+message YIUICreateUIViewRequest // IRequest
+{
+    int32 RpcId = 90;
+    string PrefabPath = 91;
+    string ViewPrefabPath = 92;
+}
+message YIUICreateUIViewResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}
+

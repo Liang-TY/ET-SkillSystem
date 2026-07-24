@@ -159,6 +159,61 @@ cn.etetet.ubridge/
 
 > 所有命令前缀：`dotnet Bin/ET.UBridge.dll <命令名> [--参数]`
 
+### RectTransform（7）
+
+| 命令 | 用途 | 示例 |
+|------|------|------|
+| `RectGet` | 读取全部 RectTransform 属性 | `RectGet --instanceId 12345` |
+| `RectSetAnchor` | 设置锚点 | `RectSetAnchor --instanceId 12345 --minX 0 --minY 0 --maxX 1 --maxY 1` |
+| `RectSetSize` | 设置大小 | `RectSetSize --instanceId 12345 --rectWidth 200 --rectHeight 100` |
+| `RectSetPos` | 设置位置 | `RectSetPos --instanceId 12345 --posX 0 --posY 0` |
+| `RectSetPivot` | 设置轴心 | `RectSetPivot --instanceId 12345 --pivotX 0.5 --pivotY 0.5` |
+| `RectSetRotation` | 设置旋转 | `RectSetRotation --instanceId 12345 --rotX 0 --rotY 0 --rotZ 45` |
+| `RectSetScale` | 设置缩放 | `RectSetScale --instanceId 12345 --scaleX 1 --scaleY 1 --scaleZ 1` |
+
+### YIUI（18）
+
+| 命令 | 用途 | 示例 |
+|------|------|------|
+| `YIUICreatePanel` | 创建 Panel prefab | `YIUICreatePanel --path "Assets/..." --name MyPanel` |
+| `YIUICreateCommon` | 创建 Common prefab | `YIUICreateCommon --path "Assets/..." --name MyItem` |
+| `YIUICreateView` | 创建 View prefab | `YIUICreateView --path "Assets/..." --name MyView` |
+| `YIUICreateAllView` | Panel 上建 AllViewParent | `YIUICreateAllView --path "Assets/.../Panel.prefab"` |
+| `YIUICreateUIView` | AllViewParent 下建 ViewParent | `YIUICreateUIView --path "Assets/.../Panel.prefab"` |
+| `AddControl` | 添加 Unity 标准 UI 控件（11 种） | `AddControl --parentId 12345 --name Login --type Button` |
+| `YIUIAddControl` | 添加 YIUI 模板控件（LoopScroll 等） | `YIUIAddControl --parentId 12345 --type LoopScrollVertical` |
+| `YIUIGetBindings` | 读取 CDE C 表 | `YIUIGetBindings --path "Assets/.../prefab"` |
+| `YIUIGetEvents` | 读取 CDE E 表 | `YIUIGetEvents --path "Assets/.../prefab"` |
+| `YIUIBindComponent` | CDE 绑定组件 | `YIUIBindComponent --path "..." --controlName Btn_Login --name u_ComBtnLogin` |
+| `YIUIBindEvent` | CDE 创建事件 | `YIUIBindEvent --path "..." --name u_EventClick --type Sync --paramTypes ""` |
+| `YIUIAttachEvent` | 挂载事件到控件 | `YIUIAttachEvent --path "..." --targetName Btn_Login --name u_EventClick` |
+| `YIUIGenerateCode` | 生成 UI 代码 | `YIUIGenerateCode --path "Assets/.../prefab" --name lockstep` |
+| `YIUIClearBindings` | 清空 CDE C/E 表 | `YIUIClearBindings --path "..." --type C` |
+| `YIUIRemoveControl` | 删除预制体子控件 | `YIUIRemoveControl --path "..." --name Btn_Login` |
+| `PrefabLoadForEdit` | 加载预制体到预览场景 | `PrefabLoadForEdit --path "..."` |
+| `PrefabSaveModified` | 保存已加载的预制体 | `PrefabSaveModified --instanceId 12345 --path "..."` |
+| 合计 | | **25**（含 7 RectTransform） |
+
+> ⚠️ `EnterPlay` / `ExitPlay` 已禁用。参见已知坑 #5。
+
+### Proto 拆分说明
+
+原单文件 `UBridge_C_10000.proto` 拆为 5 个，按命令类别分：
+
+| 文件 | 内容 | opcode 范围 |
+|------|------|-------------|
+| `UBridge_C_50000.proto` | 系统 / 场景 / 选中 / 资源 / GameObject / Transform / Prefab | 50001~ |
+| `UBridgeInsp_C_51000.proto` | Inspector | 51001~ |
+| `UBridgeEdit_C_52000.proto` | Editor 控制 / 延迟 / 剩余 | 52001~ |
+| `UBridgeRect_C_53000.proto` | RectTransform | 53001~ |
+| `UBridgeYIUI_C_54000.proto` | 全部 YIUI | 54001~ |
+
+细节参见 `Notes/Proto2CS-生成原理与命名规则.md`。
+
+### Handler 程序集迁移
+
+所有 Handler 从 `Scripts/ModelView/Client/`（ET.ModelView）迁移到 `Scripts/Editor/`（通过 asmref → `ET.Editor`）。Editor-only 程序集不参与 F6 编译，解决 `UnityEditor` API 在 Player 编译中缺失的问题。
+
 ## 添加新命令（步骤模板）
 
 ### 1. 加 Proto 消息
@@ -285,7 +340,7 @@ CLI (Program.cs)                          Unity Editor
 | BSON 序列化 | `UBridgeStorage.cs:UBridgeJsonHelper` | 封装的 `MongoHelper.ToJson/FromJson`，带 `_t` 类型判别器 |
 | 命令分发 | `UBridgeEditorHost.cs` | `Dictionary<string, Func<string, string>>` 存 Handler，按 Command 字段路由 |
 
-## 已知坑（15 条，按文件/场景查询）
+## 已知坑（17 条，按文件/场景查询）
 
 | 场景 | 报错特征 | 解决 |
 |------|----------|------|
@@ -310,6 +365,8 @@ CLI (Program.cs)                          Unity Editor
 | Unity 6 API 差异 | `EditorSceneManager`/`GetScenePathByBuildIndex` 不存在 | 加 `UnityEditor.SceneManagement`；用 `EditorBuildSettings.scenes[i].path` |
 | CLI default case 参数丢失 | `--name` 解析但未进入 JSON | default case 动态拼接已设置参数 |
 | Handler 修改组件属性后 Inspector 不刷新 | 值已写入但 Inspector 面板显示未变化，需取消选中再重新选中 | 在 Handler 中加 `EditorUtility.SetDirty(component)` 通知 Editor 刷新 |
+| Play 模式 `FileNotFoundException: ET.Model` | 进 Play 时 `AssemblyEditor` 删除 `Library/ScriptAssemblies/` 下 ET.Model.dll（游戏从 .bytes 加载），`[InitializeOnLoad]` 若此时访问 ET.Model 类型即抛异常 | 静态构造不碰 ET.Model 类型；用 `playModeStateChanged` 在进 Play 前停掉 `OnUpdate`；**`EnterPlay`/`ExitPlay` 指令禁用**（Play 期间桥接不可用，退出 Play 后自动恢复） |
+| `YIUICreateUIView` 创建的 View prefab 无法实例到 Panel 中 | Panel 的 `AllChildCdeTable` 缺少 View 条目 → `GetBindVoByResName` 返回 null → `OpenViewAsync` 加载不到 View。YIUI 的 View-Panel 关联通过 SourceGenerator 编译时生成 `YIUIBindProvider.Get()` 实现，手动操作 Panel/View 后需按正确顺序运行 Packages生成（先 View 后 Panel） | **当前跳过**：改用 LoopScroll 直接挂 Panel 根节点，不走 View 体系。详见 `Notes/YIUI-LoopScroll-实现方案.md` 踩坑记录 #8 |
 
 
 
