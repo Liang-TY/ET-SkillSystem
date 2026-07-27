@@ -305,7 +305,8 @@ namespace ET
 
                 // 根据事件参数类型确定 UIEventBind 组件类型
                 var paramTypes = uiEvent.AllEventParamType;
-                var bindType = GetBindComponentType(paramTypes, uiEvent.IsTaskEvent);
+                var triggerType = r?.EventTriggerType ?? "Click";
+                var bindType = GetBindComponentType(paramTypes, uiEvent.IsTaskEvent, triggerType);
                 if (bindType == null)
                 {
                     resp.Error = 3; resp.Message = $"Cannot determine bind component for event: {eventName}";
@@ -337,26 +338,37 @@ namespace ET
             return UBridgeJsonHelper.ToJson(resp);
         }
 
-        private static Type GetBindComponentType(List<EUIEventParamType> paramTypes, bool isTaskEvent)
+        private static Type GetBindComponentType(List<EUIEventParamType> paramTypes, bool isTaskEvent, string triggerType)
         {
-            // YIUI 的 UIEventBind 类型映射（简化版，按第一个参数类型匹配）
-            if (paramTypes == null || paramTypes.Count == 0)
-            {
-                return typeof(UIEventBindClick);
-            }
+            bool hasParams = paramTypes != null && paramTypes.Count > 0;
+            EUIEventParamType firstParam = hasParams ? paramTypes[0] : EUIEventParamType.Bool; // Bool as sentinel for "no params"
 
-            switch (paramTypes[0])
+            // ClickDown / ClickUp only have no-param sync variants
+            if (triggerType == "ClickDown")
+                return typeof(UIEventBindClickDown);
+            if (triggerType == "ClickUp")
+                return typeof(UIEventBindClickUp);
+
+            // Click (default) — sync vs async
+            if (isTaskEvent)
             {
-                case EUIEventParamType.Int:
-                    return typeof(UIEventBindClickInt);
-                case EUIEventParamType.String:
-                    return typeof(UIEventBindClickString);
-                case EUIEventParamType.Object:
-                case EUIEventParamType.ParamVo:
-                    return typeof(UIEventBindClickPointerEventData);
-                default:
-                    // Bool, Float 及其他无精确匹配 → 用基础 Click 类型
-                    return typeof(UIEventBindClick);
+                return firstParam switch
+                {
+                    EUIEventParamType.Int => typeof(UITaskEventBindClickInt),
+                    EUIEventParamType.String => typeof(UITaskEventBindClickString),
+                    EUIEventParamType.Object or EUIEventParamType.ParamVo => typeof(UITaskEventBindClickPointerEventData),
+                    _ => typeof(UITaskEventBindClick),
+                };
+            }
+            else
+            {
+                return firstParam switch
+                {
+                    EUIEventParamType.Int => typeof(UIEventBindClickInt),
+                    EUIEventParamType.String => typeof(UIEventBindClickString),
+                    EUIEventParamType.Object or EUIEventParamType.ParamVo => typeof(UIEventBindClickPointerEventData),
+                    _ => typeof(UIEventBindClick),
+                };
             }
         }
     }

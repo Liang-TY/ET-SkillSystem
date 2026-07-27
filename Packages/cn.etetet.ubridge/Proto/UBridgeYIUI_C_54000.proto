@@ -167,6 +167,7 @@ message YIUIAttachEventRequest // IRequest
     string PrefabPath = 91;
     string TargetName = 92;
     string EventName = 93;
+    string EventTriggerType = 94;
 }
 message YIUIAttachEventResponse // IResponse
 {

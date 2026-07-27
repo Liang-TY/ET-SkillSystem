@@ -74,6 +74,7 @@ namespace ET
             string controlName = "";
             string paramTypeList = "";
             string targetName = "";
+            string triggerType = "Click";
 
             for (int i = 1; i < args.Length; i++)
             {
@@ -154,6 +155,7 @@ namespace ET
                     case "--controlName" when i + 1 < args.Length: controlName = args[++i]; break;
                     case "--paramTypes" when i + 1 < args.Length: paramTypeList = args[++i]; break;
                     case "--targetName" when i + 1 < args.Length: targetName = args[++i]; break;
+                    case "--triggerType" when i + 1 < args.Length: triggerType = args[++i]; break;
                     case "--timeout" when i + 1 < args.Length: timeoutMs = int.Parse(args[++i]); break;
                     case "--waitMs" when i + 1 < args.Length: waitMs = int.Parse(args[++i]); break;
                 }
@@ -223,7 +225,7 @@ namespace ET
                     payloadJson = $"{{\"_t\":\"ET.YIUIBindEventRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"EventName\":\"{name}\",\"EventType\":\"{type}\",\"ParamTypes\":\"{paramTypeList}\"}}";
                     break;
                 case "YIUIAttachEvent":
-                    payloadJson = $"{{\"_t\":\"ET.YIUIAttachEventRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"TargetName\":\"{targetName}\",\"EventName\":\"{name}\"}}";
+                    payloadJson = $"{{\"_t\":\"ET.YIUIAttachEventRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"TargetName\":\"{targetName}\",\"EventName\":\"{name}\",\"EventTriggerType\":\"{triggerType}\"}}";
                     break;
                 case "YIUIGenerateCode":
                     payloadJson = $"{{\"_t\":\"ET.YIUIGenerateCodeRequest\",\"RpcId\":1,\"PrefabPath\":\"{path}\",\"PackageName\":\"{name}\"}}";

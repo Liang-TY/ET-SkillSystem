@@ -195,13 +195,15 @@ cn.etetet.ubridge/
 | `YIUIGetEvents` | 读取 CDE E 表 | `YIUIGetEvents --path "Assets/.../prefab"` |
 | `YIUIBindComponent` | CDE 绑定组件 | `YIUIBindComponent --path "..." --controlName Btn_Login --name u_ComBtnLogin` |
 | `YIUIBindEvent` | CDE 创建事件 | `YIUIBindEvent --path "..." --name u_EventClick --type Sync --paramTypes ""` |
-| `YIUIAttachEvent` | 挂载事件到控件 | `YIUIAttachEvent --path "..." --targetName Btn_Login --name u_EventClick` |
+| `YIUIAttachEvent` | 挂载事件到控件 | `YIUIAttachEvent --path "..." --targetName Btn_Login --name u_EventClick [--triggerType ClickDown]` |
 | `YIUIGenerateCode` | 生成 UI 代码 | `YIUIGenerateCode --path "Assets/.../prefab" --name lockstep` |
 | `YIUIClearBindings` | 清空 CDE C/E 表 | `YIUIClearBindings --path "..." --type C` |
 | `YIUIRemoveControl` | 删除预制体子控件 | `YIUIRemoveControl --path "..." --name Btn_Login` |
 | `PrefabLoadForEdit` | 加载预制体到预览场景 | `PrefabLoadForEdit --path "..."` |
 | `PrefabSaveModified` | 保存已加载的预制体 | `PrefabSaveModified --instanceId 12345 --path "..."` |
 | 合计 | | **25**（含 7 RectTransform） |
+
+> `--triggerType`：可选 `Click`（默认）、`ClickDown`、`ClickUp`。Sync 事件匹配 UIEventBind 系列，Async 事件匹配 UITaskEventBind 系列。
 
 > ⚠️ `EnterPlay` / `ExitPlay` 已禁用。参见已知坑 #5。
 
