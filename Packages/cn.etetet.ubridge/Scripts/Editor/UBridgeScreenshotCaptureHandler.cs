@@ -36,10 +36,12 @@ namespace ET
 
             int quality = Math.Clamp(request?.Quality ?? 85, 1, 100);
 
+            string target = request?.Target ?? "game";
+
             Texture2D texture = null;
             try
             {
-                texture = CaptureGameView();
+                texture = target == "scene" ? CaptureSceneView() : CaptureGameView();
                 if (texture == null)
                 {
                     ScreenshotCaptureResponse errorResponse = ScreenshotCaptureResponse.Create();
@@ -90,7 +92,7 @@ namespace ET
 
                 ScreenshotCaptureResponse response = ScreenshotCaptureResponse.Create();
                 response.Captured = true;
-                response.Target = "game";
+                response.Target = target;
                 response.Screenshot = info;
 
                 return UBridgeJsonHelper.ToJson(response);
@@ -100,6 +102,27 @@ namespace ET
                 if (texture != null)
                     UnityEngine.Object.DestroyImmediate(texture);
             }
+        }
+
+        private static Texture2D CaptureSceneView()
+        {
+            var sv = SceneView.lastActiveSceneView;
+            if (sv == null) return null;
+            var cam = sv.camera;
+            int w = cam.pixelWidth;
+            int h = cam.pixelHeight;
+            var tempRT = RenderTexture.GetTemporary(w, h, 24);
+            cam.targetTexture = tempRT;
+            cam.Render();
+            cam.targetTexture = null;
+            RenderTexture backup = RenderTexture.active;
+            RenderTexture.active = tempRT;
+            Texture2D tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+            tex.ReadPixels(new Rect(0, 0, w, h), 0, 0);
+            tex.Apply();
+            RenderTexture.active = backup;
+            RenderTexture.ReleaseTemporary(tempRT);
+            return tex;
         }
 
         private static Texture2D CaptureGameView()

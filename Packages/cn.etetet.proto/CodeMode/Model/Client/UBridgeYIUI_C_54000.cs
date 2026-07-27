@@ -738,6 +738,9 @@ namespace ET
         [MemoryPackOrder(92)]
         public string EventName { get; set; }
 
+        [MemoryPackOrder(93)]
+        public string EventTriggerType { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -749,6 +752,7 @@ namespace ET
             this.PrefabPath = default;
             this.TargetName = default;
             this.EventName = default;
+            this.EventTriggerType = default;
 
             ObjectPool.Recycle(this);
         }

@@ -166,7 +166,7 @@ namespace ET
             switch (command)
             {
                 case "ScreenshotCapture":
-                    payloadJson = $"{{\"_t\":\"ET.ScreenshotCaptureRequest\",\"RpcId\":1,\"Target\":\"game\",\"Format\":\"{format}\",\"Quality\":{quality},\"AllowEditMode\":{allowEditMode.ToString().ToLower()}}}";
+                    payloadJson = $"{{\"_t\":\"ET.ScreenshotCaptureRequest\",\"RpcId\":1,\"Target\":\"{type}\",\"Format\":\"{format}\",\"Quality\":{quality},\"AllowEditMode\":{allowEditMode.ToString().ToLower()}}}";
                     break;
                 case "Ping":
                     payloadJson = "{\"_t\":\"ET.Ping\",\"RpcId\":1}";
@@ -208,6 +208,9 @@ namespace ET
                 // Control
                 case "AddControl":
                     payloadJson = $"{{\"_t\":\"ET.AddControlRequest\",\"RpcId\":1,\"ParentId\":{parentId},\"Name\":\"{name}\",\"Type\":\"{type}\"}}";
+                    break;
+                case "YIUIAddControl":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIAddControlRequest\",\"RpcId\":1,\"ParentId\":{parentId},\"Name\":\"{name}\",\"Type\":\"{type}\"}}";
                     break;
                 // YIUI
                 case "YIUICreatePanel":
