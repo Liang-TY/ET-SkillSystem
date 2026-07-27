@@ -144,6 +144,20 @@ namespace ET
             RegisterHandler("RectSetPivot", UBridgeRectSetPivotHandler.Handle);
             RegisterHandler("RectSetRotation", UBridgeRectSetRotationHandler.Handle);
             RegisterHandler("RectSetScale", UBridgeRectSetScaleHandler.Handle);
+            // LayoutGroup
+            RegisterHandler("LayoutGet", UBridgeLayoutGetHandler.Handle);
+            RegisterHandler("LayoutSet", UBridgeLayoutSetHandler.Handle);
+            // ContentSizeFitter
+            RegisterHandler("FitterGet", UBridgeFitterGetHandler.Handle);
+            RegisterHandler("FitterSet", UBridgeFitterSetHandler.Handle);
+            // LayoutElement
+            RegisterHandler("ElementGet", UBridgeElementGetHandler.Handle);
+            RegisterHandler("ElementSet", UBridgeElementSetHandler.Handle);
+            // Image / Text
+            RegisterHandler("ImageGet", UBridgeImageGetHandler.Handle);
+            RegisterHandler("ImageSet", UBridgeImageSetHandler.Handle);
+            RegisterHandler("TextGet", UBridgeTextGetHandler.Handle);
+            RegisterHandler("TextSet", UBridgeTextSetHandler.Handle);
             // YIUI Panel
             RegisterHandler("YIUICreatePanel", UBridgeYIUICreatePanelHandler.Handle);
             RegisterHandler("YIUICreateCommon", UBridgeYIUICreateCommonHandler.Handle);

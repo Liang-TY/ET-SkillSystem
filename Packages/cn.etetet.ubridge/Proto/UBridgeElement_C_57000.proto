@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== LayoutElement ====================
+
+// ResponseType ElementGetResponse
+message ElementGetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+}
+message ElementGetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    double MinWidth = 93;
+    double MinHeight = 94;
+    double PreferredWidth = 95;
+    double PreferredHeight = 96;
+    double FlexibleWidth = 97;
+    double FlexibleHeight = 98;
+    bool IgnoreLayout = 99;
+    int32 LayoutPriority = 100;
+}
+
+// ResponseType ElementSetResponse
+message ElementSetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    double MinWidth = 92;
+    double MinHeight = 93;
+    double PreferredWidth = 94;
+    double PreferredHeight = 95;
+    double FlexibleWidth = 96;
+    double FlexibleHeight = 97;
+    bool IgnoreLayout = 98;
+    int32 LayoutPriority = 99;
+}
+message ElementSetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}

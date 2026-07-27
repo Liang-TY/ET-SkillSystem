@@ -44,6 +44,33 @@ namespace ET
             float rotX = 0, rotY = 0, rotZ = 0;
             float scaleX = 1, scaleY = 1, scaleZ = 1;
             float rectWidth = 100, rectHeight = 100;
+            int paddingL = 0, paddingR = 0, paddingT = 0, paddingB = 0;
+            float spacing = 0;
+            float spacingX = 0, spacingY = 0;
+            int alignment = 0;
+            bool reverse = false;
+            bool controlWidth = false, controlHeight = false;
+            bool expandWidth = false, expandHeight = false;
+            float cellSizeX = 0, cellSizeY = 0;
+            int constraint = 0;
+            int constraintCount = 0;
+            int startCorner = 0;
+            int startAxis = 0;
+            int hFit = 0, vFit = 0;
+            float minW = 0, minH = 0, prefW = 0, prefH = 0, flexW = 0, flexH = 0;
+            bool ignoreLayout = false;
+            int layoutPriority = 0;
+            string sprite = "";
+            int imageType = 0;
+            float fillAmount = 0;
+            int fillMethod = 0;
+            bool preserveAspect = false;
+            bool raycastTarget = true;
+            string text = "";
+            int fontSize = 14;
+            int fontStyle = 0;
+            bool bestFit = false;
+            float colorR = 1, colorG = 1, colorB = 1, colorA = 1;
             string controlName = "";
             string paramTypeList = "";
             string targetName = "";
@@ -81,6 +108,49 @@ namespace ET
                     case "--scaleZ" when i + 1 < args.Length: scaleZ = float.Parse(args[++i]); break;
                     case "--rectWidth" when i + 1 < args.Length: rectWidth = float.Parse(args[++i]); break;
                     case "--rectHeight" when i + 1 < args.Length: rectHeight = float.Parse(args[++i]); break;
+                    case "--paddingL" when i + 1 < args.Length: paddingL = int.Parse(args[++i]); break;
+                    case "--paddingR" when i + 1 < args.Length: paddingR = int.Parse(args[++i]); break;
+                    case "--paddingT" when i + 1 < args.Length: paddingT = int.Parse(args[++i]); break;
+                    case "--paddingB" when i + 1 < args.Length: paddingB = int.Parse(args[++i]); break;
+                    case "--spacing" when i + 1 < args.Length: spacing = float.Parse(args[++i]); break;
+                    case "--spacingX" when i + 1 < args.Length: spacingX = float.Parse(args[++i]); break;
+                    case "--spacingY" when i + 1 < args.Length: spacingY = float.Parse(args[++i]); break;
+                    case "--alignment" when i + 1 < args.Length: alignment = int.Parse(args[++i]); break;
+                    case "--reverse" when i + 1 < args.Length: reverse = bool.Parse(args[++i]); break;
+                    case "--controlWidth" when i + 1 < args.Length: controlWidth = bool.Parse(args[++i]); break;
+                    case "--controlHeight" when i + 1 < args.Length: controlHeight = bool.Parse(args[++i]); break;
+                    case "--expandWidth" when i + 1 < args.Length: expandWidth = bool.Parse(args[++i]); break;
+                    case "--expandHeight" when i + 1 < args.Length: expandHeight = bool.Parse(args[++i]); break;
+                    case "--cellSizeX" when i + 1 < args.Length: cellSizeX = float.Parse(args[++i]); break;
+                    case "--cellSizeY" when i + 1 < args.Length: cellSizeY = float.Parse(args[++i]); break;
+                    case "--constraint" when i + 1 < args.Length: constraint = int.Parse(args[++i]); break;
+                    case "--constraintCount" when i + 1 < args.Length: constraintCount = int.Parse(args[++i]); break;
+                    case "--startCorner" when i + 1 < args.Length: startCorner = int.Parse(args[++i]); break;
+                    case "--startAxis" when i + 1 < args.Length: startAxis = int.Parse(args[++i]); break;
+                    case "--hFit" when i + 1 < args.Length: hFit = int.Parse(args[++i]); break;
+                    case "--vFit" when i + 1 < args.Length: vFit = int.Parse(args[++i]); break;
+                    case "--minW" when i + 1 < args.Length: minW = float.Parse(args[++i]); break;
+                    case "--minH" when i + 1 < args.Length: minH = float.Parse(args[++i]); break;
+                    case "--prefW" when i + 1 < args.Length: prefW = float.Parse(args[++i]); break;
+                    case "--prefH" when i + 1 < args.Length: prefH = float.Parse(args[++i]); break;
+                    case "--flexW" when i + 1 < args.Length: flexW = float.Parse(args[++i]); break;
+                    case "--flexH" when i + 1 < args.Length: flexH = float.Parse(args[++i]); break;
+                    case "--ignoreLayout" when i + 1 < args.Length: ignoreLayout = bool.Parse(args[++i]); break;
+                    case "--layoutPriority" when i + 1 < args.Length: layoutPriority = int.Parse(args[++i]); break;
+                    case "--sprite" when i + 1 < args.Length: sprite = args[++i]; break;
+                    case "--imageType" when i + 1 < args.Length: imageType = int.Parse(args[++i]); break;
+                    case "--fillAmount" when i + 1 < args.Length: fillAmount = float.Parse(args[++i]); break;
+                    case "--fillMethod" when i + 1 < args.Length: fillMethod = int.Parse(args[++i]); break;
+                    case "--preserveAspect" when i + 1 < args.Length: preserveAspect = bool.Parse(args[++i]); break;
+                    case "--raycastTarget" when i + 1 < args.Length: raycastTarget = bool.Parse(args[++i]); break;
+                    case "--text" when i + 1 < args.Length: text = args[++i]; break;
+                    case "--fontSize" when i + 1 < args.Length: fontSize = int.Parse(args[++i]); break;
+                    case "--fontStyle" when i + 1 < args.Length: fontStyle = int.Parse(args[++i]); break;
+                    case "--bestFit" when i + 1 < args.Length: bestFit = bool.Parse(args[++i]); break;
+                    case "--colorR" when i + 1 < args.Length: colorR = float.Parse(args[++i]); break;
+                    case "--colorG" when i + 1 < args.Length: colorG = float.Parse(args[++i]); break;
+                    case "--colorB" when i + 1 < args.Length: colorB = float.Parse(args[++i]); break;
+                    case "--colorA" when i + 1 < args.Length: colorA = float.Parse(args[++i]); break;
                     case "--controlName" when i + 1 < args.Length: controlName = args[++i]; break;
                     case "--paramTypes" when i + 1 < args.Length: paramTypeList = args[++i]; break;
                     case "--targetName" when i + 1 < args.Length: targetName = args[++i]; break;
@@ -118,8 +188,20 @@ namespace ET
                     payloadJson = $"{{\"_t\":\"ET.InspectorFindPropertyRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"Keyword\":\"{filter}\"}}";
                     break;
                 case "InspectorAddComponent":
+                    payloadJson = $"{{\"_t\":\"ET.InspectorAddComponentRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"TypeName\":\"{type}\"}}";
+                    break;
                 case "InspectorRemoveComponent":
-                    payloadJson = $"{{\"_t\":\"ET.{command}Request\",\"RpcId\":1,\"InstanceId\":{instanceId},\"TypeName\":\"{type}\",\"ComponentName\":\"{type}\"}}";
+                    payloadJson = $"{{\"_t\":\"ET.InspectorRemoveComponentRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"ComponentName\":\"{type}\"}}";
+                    break;
+                // GameObject
+                case "GameObjectCreate":
+                    payloadJson = $"{{\"_t\":\"ET.GameObjectCreateRequest\",\"RpcId\":1,\"Name\":\"{name}\"}}";
+                    break;
+                case "GameObjectDestroy":
+                    payloadJson = $"{{\"_t\":\"ET.GameObjectDestroyRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "GameObjectFind":
+                    payloadJson = $"{{\"_t\":\"ET.GameObjectFindRequest\",\"RpcId\":1,\"Name\":\"{name}\",\"MaxResults\":20}}";
                     break;
                 // Control
                 case "AddControl":
@@ -179,6 +261,41 @@ namespace ET
                     break;
                 case "RectSetScale":
                     payloadJson = $"{{\"_t\":\"ET.RectSetScaleRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"X\":{scaleX},\"Y\":{scaleY},\"Z\":{scaleZ}}}";
+                    break;
+                // LayoutGroup
+                case "LayoutGet":
+                    payloadJson = $"{{\"_t\":\"ET.LayoutGetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "LayoutSet":
+                    payloadJson = $"{{\"_t\":\"ET.LayoutSetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"PaddingLeft\":{paddingL},\"PaddingRight\":{paddingR},\"PaddingTop\":{paddingT},\"PaddingBottom\":{paddingB},\"Spacing\":{spacing},\"SpacingX\":{spacingX},\"SpacingY\":{spacingY},\"ChildAlignment\":{alignment},\"ReverseArrangement\":{reverse.ToString().ToLower()},\"ControlChildWidth\":{controlWidth.ToString().ToLower()},\"ControlChildHeight\":{controlHeight.ToString().ToLower()},\"ChildForceExpandWidth\":{expandWidth.ToString().ToLower()},\"ChildForceExpandHeight\":{expandHeight.ToString().ToLower()},\"CellSizeX\":{cellSizeX},\"CellSizeY\":{cellSizeY},\"Constraint\":{constraint},\"ConstraintCount\":{constraintCount},\"StartCorner\":{startCorner},\"StartAxis\":{startAxis}}}";
+                    break;
+                // ContentSizeFitter
+                case "FitterGet":
+                    payloadJson = $"{{\"_t\":\"ET.FitterGetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "FitterSet":
+                    payloadJson = $"{{\"_t\":\"ET.FitterSetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"HorizontalFit\":{hFit},\"VerticalFit\":{vFit}}}";
+                    break;
+                // LayoutElement
+                case "ElementGet":
+                    payloadJson = $"{{\"_t\":\"ET.ElementGetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "ElementSet":
+                    payloadJson = $"{{\"_t\":\"ET.ElementSetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"MinWidth\":{minW},\"MinHeight\":{minH},\"PreferredWidth\":{prefW},\"PreferredHeight\":{prefH},\"FlexibleWidth\":{flexW},\"FlexibleHeight\":{flexH},\"IgnoreLayout\":{ignoreLayout.ToString().ToLower()},\"LayoutPriority\":{layoutPriority}}}";
+                    break;
+                // Image
+                case "ImageGet":
+                    payloadJson = $"{{\"_t\":\"ET.ImageGetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "ImageSet":
+                    payloadJson = $"{{\"_t\":\"ET.ImageSetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"Sprite\":\"{sprite}\",\"ColorR\":{colorR},\"ColorG\":{colorG},\"ColorB\":{colorB},\"ColorA\":{colorA},\"ImageType\":{imageType},\"FillAmount\":{fillAmount},\"FillMethod\":{fillMethod},\"RaycastTarget\":{raycastTarget.ToString().ToLower()},\"PreserveAspect\":{preserveAspect.ToString().ToLower()}}}";
+                    break;
+                // Text
+                case "TextGet":
+                    payloadJson = $"{{\"_t\":\"ET.TextGetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId}}}";
+                    break;
+                case "TextSet":
+                    payloadJson = $"{{\"_t\":\"ET.TextSetRequest\",\"RpcId\":1,\"InstanceId\":{instanceId},\"Text\":\"{text}\",\"FontSize\":{fontSize},\"FontStyle\":{fontStyle},\"Alignment\":{alignment},\"ColorR\":{colorR},\"ColorG\":{colorG},\"ColorB\":{colorB},\"ColorA\":{colorA},\"BestFit\":{bestFit.ToString().ToLower()},\"RaycastTarget\":{raycastTarget.ToString().ToLower()}}}";
                     break;
                 // Misc
                 case "TestEcho":

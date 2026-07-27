@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== ContentSizeFitter ====================
+
+// ResponseType FitterGetResponse
+message FitterGetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+}
+message FitterGetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    int32 HorizontalFit = 93;
+    int32 VerticalFit = 94;
+}
+
+// ResponseType FitterSetResponse
+message FitterSetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    int32 HorizontalFit = 92;
+    int32 VerticalFit = 93;
+}
+message FitterSetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}

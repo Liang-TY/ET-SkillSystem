@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== Text ====================
+
+// ResponseType TextGetResponse
+message TextGetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+}
+message TextGetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string Text = 93;
+    int32 FontSize = 94;
+    int32 FontStyle = 95;
+    int32 Alignment = 96;
+    double ColorR = 97;
+    double ColorG = 98;
+    double ColorB = 99;
+    double ColorA = 100;
+    bool BestFit = 101;
+    bool RaycastTarget = 102;
+}
+
+// ResponseType TextSetResponse
+message TextSetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    string Text = 92;
+    int32 FontSize = 93;
+    int32 FontStyle = 94;
+    int32 Alignment = 95;
+    double ColorR = 96;
+    double ColorG = 97;
+    double ColorB = 98;
+    double ColorA = 99;
+    bool BestFit = 100;
+    bool RaycastTarget = 101;
+}
+message TextSetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}

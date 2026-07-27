@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== Image ====================
+
+// ResponseType ImageGetResponse
+message ImageGetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+}
+message ImageGetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string Sprite = 93;
+    double ColorR = 94;
+    double ColorG = 95;
+    double ColorB = 96;
+    double ColorA = 97;
+    int32 ImageType = 98;
+    double FillAmount = 99;
+    int32 FillMethod = 100;
+    bool RaycastTarget = 101;
+    bool PreserveAspect = 102;
+}
+
+// ResponseType ImageSetResponse
+message ImageSetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    string Sprite = 92;
+    double ColorR = 93;
+    double ColorG = 94;
+    double ColorB = 95;
+    double ColorA = 96;
+    int32 ImageType = 97;
+    double FillAmount = 98;
+    int32 FillMethod = 99;
+    bool RaycastTarget = 100;
+    bool PreserveAspect = 101;
+}
+message ImageSetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}

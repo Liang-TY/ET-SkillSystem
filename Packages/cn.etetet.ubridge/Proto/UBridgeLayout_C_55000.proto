@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package ET;
+
+// ==================== LayoutGroup ====================
+
+// ResponseType LayoutGetResponse
+message LayoutGetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+}
+message LayoutGetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+    string Type = 93;
+    int32 PaddingLeft = 94;
+    int32 PaddingRight = 95;
+    int32 PaddingTop = 96;
+    int32 PaddingBottom = 97;
+    double Spacing = 98;
+    double SpacingX = 99;
+    double SpacingY = 100;
+    int32 ChildAlignment = 101;
+    bool ReverseArrangement = 102;
+    bool ControlChildWidth = 103;
+    bool ControlChildHeight = 104;
+    bool ChildForceExpandWidth = 105;
+    bool ChildForceExpandHeight = 106;
+    double CellSizeX = 107;
+    double CellSizeY = 108;
+    int32 Constraint = 109;
+    int32 ConstraintCount = 110;
+    int32 StartCorner = 111;
+    int32 StartAxis = 112;
+}
+
+// ResponseType LayoutSetResponse
+message LayoutSetRequest // IRequest
+{
+    int32 RpcId = 90;
+    int32 InstanceId = 91;
+    int32 PaddingLeft = 92;
+    int32 PaddingRight = 93;
+    int32 PaddingTop = 94;
+    int32 PaddingBottom = 95;
+    double Spacing = 96;
+    double SpacingX = 97;
+    double SpacingY = 98;
+    int32 ChildAlignment = 99;
+    bool ReverseArrangement = 100;
+    bool ControlChildWidth = 101;
+    bool ControlChildHeight = 102;
+    bool ChildForceExpandWidth = 103;
+    bool ChildForceExpandHeight = 104;
+    double CellSizeX = 105;
+    double CellSizeY = 106;
+    int32 Constraint = 107;
+    int32 ConstraintCount = 108;
+    int32 StartCorner = 109;
+    int32 StartAxis = 110;
+}
+message LayoutSetResponse // IResponse
+{
+    int32 RpcId = 90;
+    int32 Error = 91;
+    string Message = 92;
+}

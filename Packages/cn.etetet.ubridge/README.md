@@ -9,14 +9,23 @@
 CLI 写 JSON 文件到 `Temp/UnityBridge/requests/`，Editor 每 200ms 轮询处理，响应写回 `Temp/UnityBridge/responses/`。
 无网络、无 HTTP、无管道。`File.Move` 做原子锁，MongoDB BSON 做序列化。
 
-**当前状态：50 个命令可用（+3 延迟引擎就绪 +2 EnterPlay/ExitPlay 域重载 bug 待修），13 个 Handler 文件，~3000 行代码。**
+**当前状态：60 个命令可用（+3 延迟引擎就绪 +2 EnterPlay/ExitPlay 域重载 bug 待修），19 个 Handler 文件，~4000 行代码。**
 
 ## 目录结构
 
 ```
 cn.etetet.ubridge/
 ├── Proto/
-│   └── UBridge_C_10000.proto          # 所有命令的 proto 消息定义
+│   ├── UBridge_C_50000.proto           # 系统/场景/选中/资源/GameObject/Transform/Prefab
+│   ├── UBridgeInsp_C_51000.proto       # Inspector
+│   ├── UBridgeEdit_C_52000.proto       # Editor 控制/延迟
+│   ├── UBridgeRect_C_53000.proto       # RectTransform
+│   ├── UBridgeYIUI_C_54000.proto       # YIUI
+│   ├── UBridgeLayout_C_55000.proto     # LayoutGroup
+│   ├── UBridgeFitter_C_56000.proto     # ContentSizeFitter
+│   ├── UBridgeElement_C_57000.proto    # LayoutElement
+│   ├── UBridgeImage_C_58000.proto      # Image 渲染属性
+│   └── UBridgeText_C_59000.proto       # Text 渲染属性
 ├── Scripts/
 │   ├── Model/Share/                    # → ET.Model 程序集
 │   │   ├── UBridgeStorage.cs           # 文件 IO + 原子锁 + BSON 序列化
@@ -196,9 +205,55 @@ cn.etetet.ubridge/
 
 > ⚠️ `EnterPlay` / `ExitPlay` 已禁用。参见已知坑 #5。
 
+### LayoutGroup（2）✅ 2026-07-27
+
+| 命令 | 用途 | 示例 |
+|------|------|------|
+| `LayoutGet` | 读取 LayoutGroup 类型+全属性 | `LayoutGet --instanceId 12345` |
+| `LayoutSet` | 设置 LayoutGroup 属性 | `LayoutSet --instanceId 12345 --spacing 10 --paddingL 5` |
+
+> 覆盖 HorizontalLayoutGroup / VerticalLayoutGroup / GridLayoutGroup。
+> **增删**用 `InspectorAddComponent` / `InspectorRemoveComponent`，type 需 assembly-qualified：`"UnityEngine.UI.Xxx, UnityEngine.UI"`。
+
+### ContentSizeFitter（2）✅ 2026-07-27
+
+| 命令 | 用途 | 示例 |
+|------|------|------|
+| `FitterGet` | 读取 HorizontalFit / VerticalFit | `FitterGet --instanceId 12345` |
+| `FitterSet` | 设置适配模式 | `FitterSet --instanceId 12345 --hFit 0 --vFit 2` |
+
+> FitMode: 0=Unconstrained, 1=MinSize, 2=PreferredSize。LoopScroll 的 Content 必配 `--vFit 2`。
+
+### LayoutElement（2）✅ 2026-07-27
+
+| 命令 | 用途 | 示例 |
+|------|------|------|
+| `ElementGet` | 读取全部 LayoutElement 属性 | `ElementGet --instanceId 12345` |
+| `ElementSet` | 设置布局元素 | `ElementSet --instanceId 12345 --minW 100 --minH 50 --prefW 200 --prefH 100 --flexW 1` |
+
+> 默认值：min/pref/flex=-1（不参与计算），priority=1。
+
+### Image 渲染属性（2）✅ 2026-07-27
+
+| 命令 | 用途 | 示例 |
+|------|------|------|
+| `ImageGet` | 读取 Image 全部属性 | `ImageGet --instanceId 12345` |
+| `ImageSet` | 设置 Image 渲染属性 | `ImageSet --instanceId 12345 --colorR 1 --colorG 0 --colorB 0 --colorA 0.5 --fillAmount 0.8` |
+
+> Color 使用 RGBA float（0-1），ImageType: 0=Simple, 1=Sliced, 2=Tiled, 3=Filled。
+
+### Text 渲染属性（2）✅ 2026-07-27
+
+| 命令 | 用途 | 示例 |
+|------|------|------|
+| `TextGet` | 读取 Text 全部属性 | `TextGet --instanceId 12345` |
+| `TextSet` | 设置 Text 文本/字号/颜色等 | `TextSet --instanceId 12345 --text "Hello" --fontSize 24 --fontStyle 1 --colorR 0 --colorG 0.5 --colorB 1 --colorA 1` |
+
+> FontStyle: 0=Normal, 1=Bold, 2=Italic, 3=BoldAndItalic。
+
 ### Proto 拆分说明
 
-原单文件 `UBridge_C_10000.proto` 拆为 5 个，按命令类别分：
+原单文件 `UBridge_C_10000.proto` 拆为 10 个，按命令类别分：
 
 | 文件 | 内容 | opcode 范围 |
 |------|------|-------------|
@@ -207,6 +262,11 @@ cn.etetet.ubridge/
 | `UBridgeEdit_C_52000.proto` | Editor 控制 / 延迟 / 剩余 | 52001~ |
 | `UBridgeRect_C_53000.proto` | RectTransform | 53001~ |
 | `UBridgeYIUI_C_54000.proto` | 全部 YIUI | 54001~ |
+| `UBridgeLayout_C_55000.proto` | LayoutGroup | 55001~ |
+| `UBridgeFitter_C_56000.proto` | ContentSizeFitter | 56001~ |
+| `UBridgeElement_C_57000.proto` | LayoutElement | 57001~ |
+| `UBridgeImage_C_58000.proto` | Image 渲染属性 | 58001~ |
+| `UBridgeText_C_59000.proto` | Text 渲染属性 | 59001~ |
 
 细节参见 `Notes/Proto2CS-生成原理与命名规则.md`。
 
@@ -366,6 +426,10 @@ CLI (Program.cs)                          Unity Editor
 | CLI default case 参数丢失 | `--name` 解析但未进入 JSON | default case 动态拼接已设置参数 |
 | Handler 修改组件属性后 Inspector 不刷新 | 值已写入但 Inspector 面板显示未变化，需取消选中再重新选中 | 在 Handler 中加 `EditorUtility.SetDirty(component)` 通知 Editor 刷新 |
 | Play 模式 `FileNotFoundException: ET.Model` | 进 Play 时 `AssemblyEditor` 删除 `Library/ScriptAssemblies/` 下 ET.Model.dll（游戏从 .bytes 加载），`[InitializeOnLoad]` 若此时访问 ET.Model 类型即抛异常 | 静态构造不碰 ET.Model 类型；用 `playModeStateChanged` 在进 Play 前停掉 `OnUpdate`；**`EnterPlay`/`ExitPlay` 指令禁用**（Play 期间桥接不可用，退出 Play 后自动恢复） |
+| CLI `TruncationException: Truncation resulted in data loss` | BSON 序列化时 JSON double → C# float 精度截断（如 `0.8` 无法精确表示为 float） | **Proto float → double**：所有涉及浮点值的字段在 proto 中用 `double`，Handler 中 `(float)r.Xxx` 显式截断。涉及：LayoutGroup(spacing/cellSize)、LayoutElement(min/pref/flex)、Image/Text(Color/FillAmount) |
+| `InspectorAddComponent` 报 `ComponentName` 不匹配 | Proto `InspectorAddComponentRequest` 用 `TypeName`，`InspectorRemoveComponentRequest` 用 `ComponentName`，字段名不同 | CLI 已拆分两个 switch case，分别构造正确字段名的 payload |
+| `GameObjectCreate`/`Destroy`/`Find` 无法传参 | CLI switch 缺这三个命令的 case，走 default 只传 RpcId | 已在 Program.cs 添加对应 switch case，正确传递 `--name`、`--instanceId` 等参数 |
+| UI 组件 InspectorAddComponent 报 `Component type not found` | 类型解析只尝试 `name` → `name, UnityEngine` → `UnityEngine.name, UnityEngine`，不覆盖 `UnityEngine.UI` 命名空间 | 传入 assembly-qualified name：`"UnityEngine.UI.HorizontalLayoutGroup, UnityEngine.UI"` 等 |
 | `YIUICreateUIView` 创建的 View prefab 无法实例到 Panel 中 | Panel 的 `AllChildCdeTable` 缺少 View 条目 → `GetBindVoByResName` 返回 null → `OpenViewAsync` 加载不到 View。YIUI 的 View-Panel 关联通过 SourceGenerator 编译时生成 `YIUIBindProvider.Get()` 实现，手动操作 Panel/View 后需按正确顺序运行 Packages生成（先 View 后 Panel） | **当前跳过**：改用 LoopScroll 直接挂 Panel 根节点，不走 View 体系。详见 `Notes/YIUI-LoopScroll-实现方案.md` 踩坑记录 #8 |
 
 
