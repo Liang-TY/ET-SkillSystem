@@ -1,0 +1,1 @@
+{ "_comment": "存在时 Editor Play 从 .bytes 加载 ET.Model（默认热更行为），删除后从 Library 加载（UBridge Play 可用）" }

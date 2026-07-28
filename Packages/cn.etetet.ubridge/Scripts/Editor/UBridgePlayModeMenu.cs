@@ -9,7 +9,7 @@ namespace ET
     /// </summary>
     public static class UBridgePlayModeMenu
     {
-        private const string ConfigPath = "Assets/ETModelLoadFromBytes.json";
+        private const string ConfigPath = "Assets/Resources/ETModelLoadFromBytes.json";
 
         [MenuItem("ET/LockStep/设置EditorPlay从Bytes加载ET.Model", false, 10)]
         public static void SetPlayLoadFromBytes()

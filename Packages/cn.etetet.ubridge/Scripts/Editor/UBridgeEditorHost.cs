@@ -23,14 +23,28 @@ namespace ET
         [StaticField]
         private static bool s_Initialized;
 
-        /// <summary>
-        /// 静态构造不碰任何 ET.Model 类型，仅启动轮询。
-        /// Editor Play 下 DLL 不再被删除（AssemblyEditor 改为 Application.isEditor 判断），
-        /// UBridge 在 Edit / Play 模式下持续运行，退出 Play 后自动恢复。
-        /// </summary>
         static UBridgeEditorHost()
         {
-            EditorApplication.update += OnUpdate;
+            EditorApplication.playModeStateChanged += OnPlayModeChanged;
+            if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                EditorApplication.update += OnUpdate;
+        }
+
+        private static void OnPlayModeChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode)
+            {
+                if (System.IO.File.Exists($"{Application.dataPath}/Resources/ETModelLoadFromBytes.json"))
+                {
+                    EditorApplication.update -= OnUpdate;
+                    Debug.Log("[UBridge] bytes 加载模式，Play 期间已暂停");
+                }
+            }
+            else if (state == PlayModeStateChange.EnteredEditMode)
+            {
+                EditorApplication.update += OnUpdate;
+                Debug.Log("[UBridge] 已恢复");
+            }
         }
 
         private static void EnsureInitialized()
