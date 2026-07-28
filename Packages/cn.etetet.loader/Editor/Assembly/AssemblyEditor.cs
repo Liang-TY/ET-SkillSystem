@@ -33,7 +33,7 @@ namespace ET
             // 打包后正常运行：删 DLL 从 .bytes 加载
             if (!Application.isEditor) goto Delete;
             // Editor 下：配置文件不存在 → 保留 DLL（UBridge Play 可用）
-            if (!File.Exists($"{Application.dataPath}/ETModelLoadFromBytes.json")) return;
+            if (!File.Exists($"{Application.dataPath}/Resources/ETModelLoadFromBytes.json")) return;
 
         Delete:
             foreach (string dll in DllNames)

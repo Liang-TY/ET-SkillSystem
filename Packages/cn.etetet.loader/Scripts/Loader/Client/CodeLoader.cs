@@ -62,7 +62,7 @@ namespace ET
             else
             {
                 // 配置文件不存在 → Editor Play 复用已加载的 Assembly（UBridge 可用）
-                if (!File.Exists($"{Application.dataPath}/ETModelLoadFromBytes.json"))
+                if (!File.Exists($"{Application.dataPath}/Resources/ETModelLoadFromBytes.json"))
                 {
                     this.modelAssembly = AppDomain.CurrentDomain.GetAssemblies()
                         .First(a => a.GetName().Name == "ET.Model");
