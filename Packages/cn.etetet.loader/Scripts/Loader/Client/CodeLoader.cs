@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using HybridCLR;
 using UnityEngine;
@@ -60,12 +61,23 @@ namespace ET
             }
             else
             {
-                byte[] modelAssBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Model.dll.bytes"));
-                byte[] modelPdbBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Model.pdb.bytes"));
-                byte[] modelViewAssBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.ModelView.dll.bytes"));
-                byte[] modelViewPdbBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.ModelView.pdb.bytes"));
-                this.modelAssembly = Assembly.Load(modelAssBytes, modelPdbBytes);
-                this.modelViewAssembly = Assembly.Load(modelViewAssBytes, modelViewPdbBytes);
+                // 配置文件不存在 → Editor Play 复用已加载的 Assembly（UBridge 可用）
+                if (!File.Exists($"{Application.dataPath}/ETModelLoadFromBytes.json"))
+                {
+                    this.modelAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                        .First(a => a.GetName().Name == "ET.Model");
+                    this.modelViewAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                        .First(a => a.GetName().Name == "ET.ModelView");
+                }
+                else
+                {
+                    byte[] modelAssBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Model.dll.bytes"));
+                    byte[] modelPdbBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Model.pdb.bytes"));
+                    byte[] modelViewAssBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.ModelView.dll.bytes"));
+                    byte[] modelViewPdbBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.ModelView.pdb.bytes"));
+                    this.modelAssembly = Assembly.Load(modelAssBytes, modelPdbBytes);
+                    this.modelViewAssembly = Assembly.Load(modelViewAssBytes, modelViewPdbBytes);
+                }
             }
             
             (Assembly hotfixAssembly, Assembly hotfixViewAssembly) = this.LoadHotfix();
