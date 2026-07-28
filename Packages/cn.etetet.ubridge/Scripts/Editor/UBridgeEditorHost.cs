@@ -24,29 +24,13 @@ namespace ET
         private static bool s_Initialized;
 
         /// <summary>
-        /// 静态构造只挂状态回调，不碰任何 ET.Model 类型。
-        /// 原因：ET9 进 Play 时 AssemblyEditor 会删除 ET.Model.dll（游戏改从 .bytes 加载），
-        /// 若此时访问 ET.Model 类型会抛 FileNotFoundException。所以 Play 期间暂停 UBridge，退出 Play 后自动恢复。
+        /// 静态构造不碰任何 ET.Model 类型，仅启动轮询。
+        /// Editor Play 下 DLL 不再被删除（AssemblyEditor 改为 Application.isEditor 判断），
+        /// UBridge 在 Edit / Play 模式下持续运行，退出 Play 后自动恢复。
         /// </summary>
         static UBridgeEditorHost()
         {
-            EditorApplication.playModeStateChanged += OnPlayModeChanged;
-            if (!EditorApplication.isPlayingOrWillChangePlaymode)
-                EditorApplication.update += OnUpdate;
-        }
-
-        private static void OnPlayModeChanged(PlayModeStateChange state)
-        {
-            if (state == PlayModeStateChange.ExitingEditMode)
-            {
-                EditorApplication.update -= OnUpdate;
-                Debug.Log("[UBridge] 进入 Play 模式，UBridge 已暂停");
-            }
-            else if (state == PlayModeStateChange.EnteredEditMode)
-            {
-                EditorApplication.update += OnUpdate;
-                Debug.Log("[UBridge] 退出 Play 模式，UBridge 已恢复");
-            }
+            EditorApplication.update += OnUpdate;
         }
 
         private static void EnsureInitialized()

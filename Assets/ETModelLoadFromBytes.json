@@ -1,0 +1,3 @@
+{
+    "_comment": "此文件存在时，Editor Play 模式下 AssemblyEditor 删除 Library/ScriptAssemblies 中的 ET.Model.dll，CodeLoader 从 .bytes 加载（ET9 默认热更行为）。删除此文件后，Editor Play 保留 DLL 并复用已加载 Assembly（UBridge CLI 在 Play 期间可用）。打包后 Application.isEditor=false，不受此文件影响。"
+}
