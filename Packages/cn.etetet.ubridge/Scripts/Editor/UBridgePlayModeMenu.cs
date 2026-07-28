@@ -32,7 +32,17 @@ namespace ET
             if (File.Exists(ConfigPath))
             {
                 AssetDatabase.DeleteAsset(ConfigPath);
-                Debug.Log("[UBridge] Editor Play 将从 Library 加载 ET.Model（CLI 可用）");
+                // 检查 Library 中 DLL 是否存在，不存在则触发重新编译
+                string dllPath = $"{Application.dataPath}/../Library/ScriptAssemblies/ET.Model.dll";
+                if (!File.Exists(dllPath))
+                {
+                    UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+                    Debug.Log("[UBridge] ET.Model.dll 不存在，已触发重新编译，请等待编译完成后再 Play");
+                }
+                else
+                {
+                    Debug.Log("[UBridge] Editor Play 将从 Library 加载 ET.Model（CLI 可用）");
+                }
             }
             else
             {
