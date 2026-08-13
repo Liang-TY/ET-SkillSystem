@@ -526,48 +526,55 @@ dotnet Bin/ET.UBridge.dll PrefabSaveModified --id -12345 -path ".../TestPanel.pr
 
 ---
 
-### 优先级 5：CDE Table 绑定（5 个：2 读 + 3 写）— 串联依赖
+### 优先级 5：CDE Table 绑定（5 个：2 读 + 3 写）— ✅ 已完成
 
-**依赖：** 优先级 1-4 全部就绪。需要：prefab 加载 + 子控件已存在 + CDE Table 可用。
+**依赖：** 需要一个已有 CDE Table 的 prefab（YIUICreatePanel 创建）+ 子控件（AddControl 添加）。
 
-**实现：** 5 个 Handler。
+**实现文件：**
 
-- `YIUIGetBindings`：读 `ComponentTable.AllBindDic` → 返回所有绑定名 + 组件类型
-- `YIUIGetEvents`：读 `EventTable.EventDic` → 返回所有事件名 + 类型 + 参数列表
-- `YIUIBindComponent`：调 `EditorAddComponent`
-- `YIUIBindEvent`：调 `EditorAddEvent`
-- `YIUIAttachEvent`：调 `AddComponent<UIEventBindClick>`
+| 层 | 文件 | 说明 |
+|----|------|------|
+| Proto | `UBridge_C_10000.proto` | 5 组 Req/Resp + YIUIBindingInfo + YIUIEventItem |
+| 生成 C# | `cn.etetet.proto/CodeMode/Model/Client/UBridge_C_10000.cs` | Proto2CS 生成 |
+| Handler | `Scripts/ModelView/Client/UBridgeCDEHandlers.cs` | CDEHelper + 5 个 Handler |
+| 注册 | `UBridgeEditorHost.cs` L131-136 | 5 个 RegisterHandler |
+| CLI | `DotNet~/Program.cs` | --controlName/--paramTypes/--targetName + 5 个 case |
 
-**测试步骤：**
+**实现细节：**
+- 所有命令独立操作 prefab 文件：`LoadPrefabContents` → 操作 CDE Table → `SaveAsPrefabAsset` → `UnloadPrefabContents`
+- `YIUIGetBindings`：遍历 `ComponentTable.AllBindDic`，返回绑定名+组件类型+组件名
+- `YIUIGetEvents`：遍历 `EventTable.EventDic`，返回事件名+Sync/Async+参数类型
+- `YIUIBindComponent`：通过 `--controlName` 查找子对象，优先匹配 Unity UI 组件（typeof 集合），调 `EditorAddComponent`
+- `YIUIBindEvent`：调 `EventTable.EditorAddEvent(eventType, eventName, paramTypes)`
+- `YIUIAttachEvent`：根据事件参数类型匹配 UIEventBind* 组件，`AddComponent` + 反射设 `m_EventName`；重复挂载会先移除旧的
+
+**已测试：** All 5 commands pass.
 
 ```bash
-# 1. 加载 prefab + 添加控件（优先级 3+4）
-
-# 2. 绑定前先读（应为空）
-dotnet Bin/ET.UBridge.dll YIUIGetBindings --prefabPath "Assets/.../TestPanel.prefab"
-dotnet Bin/ET.UBridge.dll YIUIGetEvents --prefabPath "Assets/.../TestPanel.prefab"
-
-# 3. 绑定控件 + 创建事件
-dotnet Bin/ET.UBridge.dll YIUIBindComponent --prefabPath "Assets/.../TestPanel.prefab" --controlId -12346 --bindName u_ComMyButton
-dotnet Bin/ET.UBridge.dll YIUIBindEvent --prefabPath "Assets/.../TestPanel.prefab" --eventName u_EventClick1 --eventType Task --paramTypes ""
-
-# 4. 绑定后再读（应有新增条目）
-dotnet Bin/ET.UBridge.dll YIUIGetBindings --prefabPath "Assets/.../TestPanel.prefab"
-dotnet Bin/ET.UBridge.dll YIUIGetEvents --prefabPath "Assets/.../TestPanel.prefab"
-
-# 5. 挂载 EventBind + 保存
-dotnet Bin/ET.UBridge.dll YIUIAttachEvent --prefabPath "Assets/.../TestPanel.prefab" --targetId -12346 --eventName u_EventClick1 --eventType Task
+dotnet Bin/ET.UBridge.dll YIUIBindComponent --path "Assets/.../TestPanel.prefab" --controlName MyButton --name u_ComMyButton
+dotnet Bin/ET.UBridge.dll YIUIBindEvent --path "Assets/.../TestPanel.prefab" --name u_EventClick --type Sync --paramTypes ""
+dotnet Bin/ET.UBridge.dll YIUIAttachEvent --path "Assets/.../TestPanel.prefab" --targetName MyButton --name u_EventClick
 ```
-
-**验证标准：** 读命令返回值与写操作一致，写后立即读验证。
 
 ---
 
-### 优先级 6：YIUIGenerateCode — 末端依赖
+### 优先级 6：YIUIGenerateCode — ✅ 已完成
 
 **依赖：** prefab 须已配置好 CDE Table（优先级 5 完成）。
 
-**实现：** 1 个 Handler，反射调用 `UICreateModule.CreatePackages`。
+**实现文件：**
+
+| 层 | 文件 | 说明 |
+|----|------|------|
+| Proto | `UBridge_C_10000.proto` | YIUIGenerateCodeRequest/Response |
+| 生成 C# | `cn.etetet.proto/CodeMode/Model/Client/UBridge_C_10000.cs` | Proto2CS 生成 |
+| Handler | `Scripts/ModelView/Client/UBridgeCDEHandlers.cs` | 反射调用 `UICreateModule.CreatePackages` |
+| 注册 | `UBridgeEditorHost.cs` L137 | RegisterHandler |
+| CLI | `DotNet~/Program.cs` | case YIUIGenerateCode（--path=prefab, --name=package） |
+
+**实现细节：**
+- 必须用 `AssetDatabase.LoadAssetAtPath` 加载（不能使用 LoadPrefabContents），因为 `UICreateModule` 内部检查 `IsPartOfPrefabAsset`
+- 反射加载 `ET.YIUIFramework.Editor` 程序集调用 `YIUIFramework.Editor.UICreateModule.CreatePackages`
 
 **测试步骤：**
 
