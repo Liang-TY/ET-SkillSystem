@@ -19,6 +19,8 @@ namespace ET
         public AnimFrameImage image;
         public AnimFramePos imagePos;
         public int delay;
+        public AnimBox damageBox;       // 受击/身体盒（每帧都有，对应 JSON 已有的 damageBox）
+        // attackBox（攻击盒）等 attack.json 接入时再加；现在 JSON 没有，JsonUtility 也不便处理 nullable
     }
 
     [Serializable]
@@ -33,5 +35,20 @@ namespace ET
     {
         public int x;
         public int y;
+    }
+
+    [Serializable]
+    public struct AnimVec3
+    {
+        public int x;
+        public int y;
+        public int z;
+    }
+
+    [Serializable]
+    public struct AnimBox
+    {
+        public AnimVec3 min;
+        public AnimVec3 max;
     }
 }

@@ -19,6 +19,9 @@ namespace ET.Client
             
             // 加载场景资源
             await resourcesLoaderComponent.LoadSceneAsync($"Packages/cn.etetet.demores/Scenes/{"Game"}.unity", LoadSceneMode.Single);
+
+            // 注册动画 clip（必须在 room.Init 建 unit 之前；此事件 await PublishAsync 完成后才 Init）
+            await LSAnimClipRegistrar.RegisterAll(clientScene);
         }
     }
 }

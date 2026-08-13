@@ -51,21 +51,22 @@ namespace ET.Client
             }
 
             // 朝向：根据逻辑层的 Forward.x 翻转精灵
+            // 翻转作用在 SpriteRenderer.transform（子），不是根——否则 imagePos 偏移会被镜像导致位置跳变
             TSVector forward = unit.Forward;
             bool shouldFaceRight = forward.x >= FP.Zero;
             if (shouldFaceRight != self.FaceRight)
             {
                 self.FaceRight = shouldFaceRight;
-                Vector3 scale = self.Transform.localScale;
-                scale.x = shouldFaceRight ? 1 : -1;
-                self.Transform.localScale = scale;
+                if (self.SpriteRenderer != null)
+                {
+                    Vector3 scale = self.SpriteRenderer.transform.localScale;
+                    scale.x = shouldFaceRight ? 1 : -1;
+                    self.SpriteRenderer.transform.localScale = scale;
+                }
             }
 
-            // 动画
-            LSInput input = unit.GetComponent<LSInputComponent>().LSInput;
-            bool isMoving = input.V != TSVector2.zero || input.VY != FP.Zero;
-            // TODO: 改成你的 2D 帧动画逻辑
-            self.GetComponent<LSAnimatorComponent>().SetFloatValue("Speed", isMoving ? speed : 0);
+            // 动画：由 LSSpriteAnimViewComponent 读逻辑层 LSAnimComponent 驱动（Half B）
+            // 玩家 Walk-on-move 暂未接（Half B 范围外），玩家一直 Idle
 
             // Lerp 插值平滑移动
             self.t += Time.deltaTime;

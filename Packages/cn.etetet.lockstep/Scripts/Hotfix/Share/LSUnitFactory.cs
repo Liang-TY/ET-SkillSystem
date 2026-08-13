@@ -11,6 +11,7 @@
 	        lsUnit.Rotation = unitInfo.Rotation;
 
 			lsUnit.AddComponent<LSInputComponent>();
+            lsUnit.AddComponent<LSAnimComponent>();   // Half B: 动画状态（Awake 自动 Play(Idle)）
             return lsUnit;
         }
     }

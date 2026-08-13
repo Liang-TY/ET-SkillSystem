@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TrueSync;
 
 namespace ET
 {
@@ -29,6 +30,13 @@ namespace ET
                 LSUnitFactory.Init(lsWorld, unitInfo);
                 self.PlayerIds.Add(unitInfo.PlayerId);
             }
+
+            // Half B 测试桩：建一个怪物原地循环走 move.json（无 AI；正式刷怪配置以后再做）
+            // 不进 PlayerIds、不加 LSInputComponent（不是玩家：不吃输入、相机不跟）
+            LSUnitComponent lsUnitComponent = lsWorld.GetComponent<LSUnitComponent>();
+            LSUnit monster = lsUnitComponent.AddChild<LSUnit>();
+            monster.Position = new TSVector(3, 0, 0);
+            monster.AddComponent<LSAnimComponent>().Play(AnimId.Walk);
         }
 
         public static void Update(this Room self, OneFrameInputs oneFrameInputs)
