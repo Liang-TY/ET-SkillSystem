@@ -42,6 +42,9 @@ namespace ET
             var monsterNum = monster.AddComponent<LSNumericComponent>();
             monsterNum.Set(NumericType.HpBase, 500);
             monsterNum.Set(NumericType.MaxHpBase, 500);
+
+            // 怪物挂命中盒组件（仅受击盒采样，不开攻击盒）
+            monster.AddComponent<LSHitboxComponent>();
         }
 
         public static void Update(this Room self, OneFrameInputs oneFrameInputs)
