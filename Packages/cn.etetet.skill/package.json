@@ -1,0 +1,16 @@
+{
+    "name": "cn.etetet.skill",
+    "version": "1.0.0",
+    "displayName": "ET Skill System",
+    "description": "DNF-style 2D frame animation skill system for lockstep",
+    "dependencies": {
+        "cn.etetet.core": "1.0.0",
+        "cn.etetet.sourcegenerator": "1.0.0",
+        "cn.etetet.truesync": "1.0.0",
+        "cn.etetet.lsentity": "1.0.0",
+        "cn.etetet.aabb": "1.0.0",
+        "cn.etetet.collision": "1.0.0",
+        "cn.etetet.lockstep": "1.0.0",
+        "cn.etetet.npkparser": "1.0.0"
+    }
+}
