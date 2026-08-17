@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MemoryPack;
 
 namespace ET
@@ -16,11 +17,15 @@ namespace ET
         [MemoryPackOrder(0)]
         public AABB CurrentHurtBox;
 
-        // 攻击盒（世界坐标，技能/攻击动作设置；阶段2先由 LSUpdate 临时驱动，阶段4+ 换成 Cast/帧事件驱动）
+        // 攻击盒（世界坐标，技能/攻击动作设置；阶段3由攻击键驱动，阶段4+ 换成 Cast/帧事件驱动）
         [MemoryPackOrder(1)]
         public AABB CurrentAttackBox;
 
         [MemoryPackOrder(2)]
         public bool AttackEnabled;
+
+        // 本次攻击已命中目标（防多重命中：按住攻击期间同一目标只结算一次；松开/重新按下清空）
+        [MemoryPackOrder(3)]
+        public HashSet<long> HitTargets = new();
     }
 }

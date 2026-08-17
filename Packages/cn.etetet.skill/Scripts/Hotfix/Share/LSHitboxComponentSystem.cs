@@ -11,18 +11,32 @@ namespace ET
         [EntitySystem]
         private static void Awake(this LSHitboxComponent self)
         {
+            self.HitTargets ??= new();
         }
 
-        // 攻击盒开关（工厂/技能系统调用；字段访问收敛在 Friend 内）
-        public static void SetAttackEnabled(this LSHitboxComponent self, bool enabled)
+        // 攻击输入驱动（阶段3临时：按住=攻击盒持续激活，松开=关闭；
+        // 每次按下算一次新攻击，清空已命中列表。阶段4+ 换成攻击动作帧事件/技能 Cast 驱动）
+        public static void SetAttackInput(this LSHitboxComponent self, bool pressed)
         {
-            self.AttackEnabled = enabled;
+            if (pressed)
+            {
+                if (self.AttackEnabled) return;      // 持续按住：不是新攻击，保留已命中列表
+                self.AttackEnabled = true;
+                self.HitTargets.Clear();
+            }
+            else
+            {
+                if (!self.AttackEnabled) return;
+                self.AttackEnabled = false;
+                self.HitTargets.Clear();
+            }
         }
 
         [LSEntitySystem]
         private static void LSUpdate(this LSHitboxComponent self)
         {
             LSUnit unit = self.GetParent<LSUnit>();
+            int frameNo = unit.LSWorld().Frame;
 
             // 1) 受击盒：当前动画帧 damageBox（DNF 像素）→ 世界 AABB
             LSAnimComponent anim = unit.GetComponent<LSAnimComponent>();
@@ -32,28 +46,24 @@ namespace ET
                 self.CurrentHurtBox = SampleHurtBox(unit, frame.damageBox);
             }
 
-            // 2) 攻击盒：阶段2临时——面前固定盒，随位置/朝向每帧更新（阶段3+ 换成攻击动作/技能驱动）
+            // 2) 攻击盒：随位置/朝向更新 + 命中检测扣血（每帧；激活/关闭由 LSInputComponentSystem 按攻击键驱动）
             if (self.AttackEnabled)
             {
                 FP facing = unit.Forward.x >= FP.Zero ? FP.One : -FP.One;
                 TSVector center = unit.Position + new TSVector(facing * 2, 0, 0);
                 AABBUtil.UpdateCenter(ref self.CurrentAttackBox, center, new TSVector(1, 1, 1));
+                CheckAttack(self, unit, frameNo, frameNo % LSConstValue.FrameCountPerSecond == 0);
             }
 
-            // 3) 阶段2验证 Log：每秒 1 次（20 帧逻辑帧）。阶段3 换成真正的命中处理时删除。
-            int frameNo = unit.LSWorld().Frame;
+            // 3) 验证 Log：每秒 1 次
             if (frameNo % LSConstValue.FrameCountPerSecond != 0) return;
-
             AABB hurt = self.CurrentHurtBox;
             Log.Info($"[Hitbox] 帧{frameNo} unit{unit.Id} anim{anim?.AnimId}-{anim?.FrameIndex} " +
                      $"受击盒 Min=({hurt.Min.x},{hurt.Min.y},{hurt.Min.z}) Max=({hurt.Max.x},{hurt.Max.y},{hurt.Max.z})");
-
-            if (!self.AttackEnabled) return;
-            CheckAttackLog(self, unit, frameNo);
         }
 
-        // 攻击盒 vs 世界内所有其他单位的受击盒（阶段3 的命中检测骨架，当前只 Log）
-        private static void CheckAttackLog(LSHitboxComponent self, LSUnit unit, int frameNo)
+        // 攻击盒 vs 世界内所有其他单位的受击盒；相交且本次攻击未命中过 → 扣血（防多重命中）
+        private static void CheckAttack(LSHitboxComponent self, LSUnit unit, int frameNo, bool logStatus)
         {
             LSUnitComponent unitComponent = unit.LSWorld().GetComponent<LSUnitComponent>();
             foreach (var kv in unitComponent.Children)
@@ -64,10 +74,30 @@ namespace ET
                 if (otherHitbox == null) continue;
 
                 bool hit = AABBUtil.Intersects(self.CurrentAttackBox, otherHitbox.CurrentHurtBox);
-                AABB atk = self.CurrentAttackBox;
-                Log.Info($"[Hitbox] 帧{frameNo} unit{unit.Id}攻击盒[{atk.Min.x}~{atk.Max.x}] vs " +
-                         $"unit{other.Id}受击盒：{(hit ? "命中" : "未命中")}");
+                if (hit && !self.HitTargets.Contains(other.Id))
+                {
+                    self.HitTargets.Add(other.Id);
+                    ApplyDamage(unit, other, frameNo);
+                }
+
+                if (logStatus)
+                {
+                    AABB atk = self.CurrentAttackBox;
+                    Log.Info($"[Hitbox] 帧{frameNo} unit{unit.Id}攻击盒[{atk.Min.x}~{atk.Max.x}] vs " +
+                             $"unit{other.Id}受击盒：{(hit ? "命中" : "未命中")}");
+                }
             }
+        }
+
+        // 阶段3临时：固定伤害 50（注意 FP.FromRaw(50) 是设内部原始值≈0，文档笔误，别用）
+        // 阶段4+ 换成攻击方 Attack 数值 / 技能数据
+        private static void ApplyDamage(LSUnit attacker, LSUnit target, int frameNo)
+        {
+            var targetNum = target.GetComponent<LSNumericComponent>();
+            if (targetNum == null) return;
+            FP damage = 50;
+            targetNum.Add(NumericType.Hp, -damage);
+            Log.Info($"[Combat] 帧{frameNo} unit{attacker.Id} 命中 unit{target.Id}，伤害{damage}，HP={targetNum.Get(NumericType.Hp)}");
         }
 
         // DNF 坐标(像素)：x=横向(面右正) y=纵深 z=高度(0=地面脚底)。
@@ -85,7 +115,7 @@ namespace ET
             TSVector pos = unit.Position;
             return new AABB
             {
-                // 像素 → 单位：先转 FP 再除（直接 int/int 会截断丢 6% 精度）
+                // 像素 → 单位：先转 FP 再除（直接 int/int 会截断丢精度）
                 Min = new TSVector(pos.x + (FP)wx0 / 100, pos.y + (FP)minZ / 100, pos.z + (FP)minY / 100),
                 Max = new TSVector(pos.x + (FP)wx1 / 100, pos.y + (FP)maxZ / 100, pos.z + (FP)maxY / 100),
             };

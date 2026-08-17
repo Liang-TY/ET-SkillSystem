@@ -22,21 +22,23 @@ namespace ET
         public static void Set(this LSNumericComponent self, int key, FP value)
         {
             self.NumericDic[key] = value;
-            // key % 10 != 0 表示是子属性（base/add/pct/finalAdd/finalPct），需要重算 final
-            if (key % 10 != 0) self.UpdateFinal(key / 10 * 10);
+            // 子属性（5位数，final*10+1~5，见 NumericType）→ 重算对应 final（4位数）。
+            // final key 直接写入不重算：当前 HP 扣减、ForbidMove 标记都走这条路。
+            if (key >= 10000) self.UpdateFinal(key / 10);
         }
 
         public static void Add(this LSNumericComponent self, int key, FP value)
             => self.Set(key, self.Get(key) + value);
 
         // 五层公式：final = (((base + add) * (1 + pct) + finalAdd) * (1 + finalPct)
+        // 子属性 key = finalKey * 10 + 1~5（如 HpBase=10011 → finalKey=1001=Hp）
         private static void UpdateFinal(this LSNumericComponent self, int finalKey)
         {
-            FP baseVal  = self.Get(finalKey + 1);
-            FP add      = self.Get(finalKey + 2);
-            FP pct      = self.Get(finalKey + 3);
-            FP finalAdd = self.Get(finalKey + 4);
-            FP finalPct = self.Get(finalKey + 5);
+            FP baseVal  = self.Get(finalKey * 10 + 1);
+            FP add      = self.Get(finalKey * 10 + 2);
+            FP pct      = self.Get(finalKey * 10 + 3);
+            FP finalAdd = self.Get(finalKey * 10 + 4);
+            FP finalPct = self.Get(finalKey * 10 + 5);
             self.NumericDic[finalKey] = ((baseVal + add) * (FP.One + pct) + finalAdd) * (FP.One + finalPct);
         }
     }
