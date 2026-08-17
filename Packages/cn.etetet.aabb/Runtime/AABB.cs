@@ -5,15 +5,16 @@ namespace ET
     [EnableClass]
     public struct AABB
     {
-        private static long nextId = 1;
-
+        // 身份标识：需要时由调用方显式赋值（实体 Id / 碰撞框类型等）。
+        // 不做自动分配——静态计数器是进程级状态，帧同步回滚重放后各端不一致，
+        // AABB 存进 LSEntity 快照后 hash 会假报 desync。
         public long Id;
         public TSVector Min;
         public TSVector Max;
 
         public AABB(TSVector min, TSVector max)
         {
-            Id = nextId++;
+            Id = 0;
             Min = min;
             Max = max;
         }

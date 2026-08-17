@@ -35,9 +35,9 @@ cn.etetet.aabb/
 ```csharp
 public struct AABB
 {
-    public int Id;               // 身份标识，碰撞结果直接返回此值
-    public TSVector Min;           // 最小角点
-    public TSVector Max;           // 最大角点
+    public long Id;              // 身份标识，调用方显式赋值（默认 0，不自动分配）
+    public TSVector Min;         // 最小角点
+    public TSVector Max;         // 最大角点
 
     public TSVector Center;       // 计算属性: (Min + Max) / 2
     public TSVector Size;         // 计算属性: Max - Min
@@ -47,7 +47,9 @@ public struct AABB
 }
 ```
 
-**Id 的用途**：碰撞检测结果（`List<(int, int)>`）中的每个元素 `(idA, idB)` 对应碰撞双方的 `AABB.Id`。调用方将 `Id` 设为实体 ID、碰撞框类型等任意值，碰撞后直接用 Id 定位原始对象，无需维护"数组索引 → 对象"的映射。
+**Id 的用途**：碰撞检测结果（`List<(long, long)>`）中的每个元素 `(idA, idB)` 对应碰撞双方的 `AABB.Id`。调用方将 `Id` 设为实体 ID、碰撞框类型等任意值，碰撞后直接用 Id 定位原始对象，无需维护"数组索引 → 对象"的映射。
+
+**Id 不自动分配（帧同步铁律）**：构造函数曾用静态计数器自增分配 Id，但静态计数器是进程级状态——回滚重放会重复执行帧逻辑，各端计数器不一致，而 AABB 会存进 LSEntity 快照参与 hash 校验 → 假报 desync。因此 Id 恒默认 0，需要身份时显式 `box.Id = xxx`。
 
 ```
 攻击框 Id=101  ────相交────  受击框 Id=201

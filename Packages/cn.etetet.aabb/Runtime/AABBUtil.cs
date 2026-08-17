@@ -5,7 +5,7 @@ namespace ET
     [EnableClass]
     public static class AABBUtil
     {
-        // === 构造（自动赋 Id） ===
+        // === 构造（Id 默认 0；需要身份时调用方显式赋 box.Id） ===
 
         public static AABB FromMinMax(TSVector min, TSVector max)
         {
