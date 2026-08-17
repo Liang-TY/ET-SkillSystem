@@ -17,6 +17,11 @@ namespace ET
         private static void LSUpdate(this LSInputComponent self)
         {
             LSUnit unit = self.GetParent<LSUnit>();
+
+            // 眩晕/冰冻等 ForbidMove > 0 时禁止移动（skill 包的 LSNumericComponent）
+            var numeric = unit.GetComponent<LSNumericComponent>();
+            if (numeric != null && numeric.Get(NumericType.ForbidMove) > FP.Zero) return;
+
             LSInput input = self.LSInput;
             TSVector2 v2 = input.V * 6 * 50 / 1000;
             FP vy = input.VY * 6 * 50 / 1000;

@@ -37,6 +37,11 @@ namespace ET
             LSUnit monster = lsUnitComponent.AddChild<LSUnit>();
             monster.Position = new TSVector(3, 0, 0);
             monster.AddComponent<LSAnimComponent>().Play(AnimId.Walk);
+
+            // 怪物也挂数值组件（HP）
+            var monsterNum = monster.AddComponent<LSNumericComponent>();
+            monsterNum.Set(NumericType.HpBase, 500);
+            monsterNum.Set(NumericType.MaxHpBase, 500);
         }
 
         public static void Update(this Room self, OneFrameInputs oneFrameInputs)

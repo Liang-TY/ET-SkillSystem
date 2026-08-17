@@ -12,6 +12,12 @@
 
 			lsUnit.AddComponent<LSInputComponent>();
             lsUnit.AddComponent<LSAnimComponent>();   // Half B: 动画状态（Awake 自动 Play(Idle)）
+
+            // 数值组件（skill 包）：HP/速度/攻击力 等
+            var num = lsUnit.AddComponent<LSNumericComponent>();
+            num.Set(NumericType.HpBase, 1000);
+            num.Set(NumericType.MaxHpBase, 1000);
+
             return lsUnit;
         }
     }
