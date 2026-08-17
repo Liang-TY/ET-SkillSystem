@@ -18,14 +18,10 @@ namespace ET.Client
         [EntitySystem]
         private static void Update(this LSSpriteAnimViewComponent self)
         {
-            if (Time.frameCount % 60 == 0)
-                //Log.Warning($"[LSAnimView] Update 跑了 SR={(self.SpriteRenderer==null?"NULL":"OK")}");
             if (self.SpriteRenderer == null) return;
             LSUnitView view = self.GetParent<LSUnitView>();
             LSUnit unit = view.Unit;
             LSAnimComponent anim = unit?.GetComponent<LSAnimComponent>();
-            if (Time.frameCount % 60 == 0)
-                //Log.Warning($"[LSAnimView] view.Unit={(unit==null?"NULL":"OK")} anim={(anim==null?"NULL":"OK")}");
             if (anim == null) return;
 
 #if UNITY_EDITOR
@@ -43,16 +39,6 @@ namespace ET.Client
                 dbg.SpriteName = self.SpriteRenderer.sprite ? self.SpriteRenderer.sprite.name : "null";
             }
 #endif
-            // 无条件诊断（确认 anim 值；hasDbg 只在编辑器查）
-            if (Time.frameCount % 60 == 0)
-            {
-#if UNITY_EDITOR
-                bool hasDbg = view.GameObject.GetComponentInChildren<LSUnitViewDebug>() != null;
-#else
-                bool hasDbg = false;
-#endif
-                //Log.Warning($"[LSAnimView] go={view.GameObject.name} id={view.GameObject.GetInstanceID()} hasDbg={hasDbg} AnimId={anim.AnimId} FrameIndex={anim.FrameIndex} IsLoop={anim.IsLoop}");
-            }
 
             // 只有帧真的变了才碰渲染器
             if (anim.AnimId == self.LastAnimId && anim.FrameIndex == self.LastFrameIndex) return;
@@ -63,9 +49,11 @@ namespace ET.Client
             if (sprite == null) return;
 
             self.SpriteRenderer.sprite = sprite;
-            // imagePos 是像素（100ppu）→ 除以 100 转 Unity 单位
+            // imagePos 是像素（100ppu）→ 除以 100 转 Unity 单位。
+            // imagePos 锚定 DNF 帧画布，Sprite 是紧致内容框 → 补每帧"内容中心相对画布中心"偏移
+            Vector2 off = res?.GetFrameOffset(frame.image.index) ?? Vector2.zero;
             self.SpriteRenderer.transform.localPosition =
-                new Vector3(frame.imagePos.x / 100f, frame.imagePos.y / 100f, 0f);
+                new Vector3((frame.imagePos.x + off.x) / 100f, (frame.imagePos.y + off.y) / 100f, 0f);
 
             self.LastAnimId = anim.AnimId;
             self.LastFrameIndex = anim.FrameIndex;

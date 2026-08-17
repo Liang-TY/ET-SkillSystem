@@ -78,11 +78,20 @@ namespace ET.Client
             Log.Info($"[LSAnimRes] Atlas built: {atlasW}x{atlasH}, {rectArr.Length} sprites");
 
             // 6. 每帧 Sprite.Create 为子区域，存进字典（key = image.index）
+            //    FrameOffsets = 摆位修正（像素，相对校准帧 = 图集首个实体帧，即 idle 首帧）：
+            //    DNF 的 imagePos 锚定帧画布，内容中心真实位置 = imagePos + X + 宽/2（y 取反），
+            //    旧代码只摆 imagePos 丢了 X/宽/2 项 → 换动作漂移（膝踢左漂 81px）。
+            //    以校准帧为基准做相对修正：idle 零变化，其余帧回到真实相对锚定。
+            //    详见 Notes/dnf源码研究/02-坐标系与包围盒-总结.md §2.1
+            NpkSprite refSprite = npk[rectArr[0].Id];   // 校准帧（首个实体帧）
             foreach (PackingRectangle r in rectArr)
             {
                 NpkSprite s = npk[r.Id];
                 Rect rect = new Rect(r.X, atlasH - r.Y - s.Height, s.Width, s.Height);  // Y 翻转
                 self.Sprites[r.Id] = Sprite.Create(atlas, rect, new Vector2(0.5f, 0.5f), 100f);
+                self.FrameOffsets[r.Id] = new Vector2(
+                    s.X + s.Width / 2f - refSprite.X - refSprite.Width / 2f,       // 内容中心 x 相对校准帧
+                    -(s.Y + s.Height / 2f) + refSprite.Y + refSprite.Height / 2f); // y 上正
             }
 
             // clip 注册已挪到逻辑层 LSAnimClipRegistrar（在 room.Init 之前），视图层只管图集
@@ -92,6 +101,12 @@ namespace ET.Client
         {
             self.Sprites.TryGetValue(imgIndex, out Sprite sprite);
             return sprite;
+        }
+
+        public static Vector2 GetFrameOffset(this LSAnimResComponent self, int imgIndex)
+        {
+            self.FrameOffsets.TryGetValue(imgIndex, out Vector2 offset);
+            return offset;
         }
     }
 }
