@@ -19,8 +19,15 @@ namespace ET
         public AnimFrameImage image;
         public AnimFramePos imagePos;
         public int delay;
-        public AnimBox damageBox;       // 受击/身体盒（每帧都有，对应 JSON 已有的 damageBox）
-        // attackBox（攻击盒）等 attack.json 接入时再加；现在 JSON 没有，JsonUtility 也不便处理 nullable
+
+        // 受击/身体盒（单数 = damageBoxes[0]，兼容旧 JSON/现有采样代码）
+        public AnimBox damageBox;
+
+        // 受击盒全量：DNF 一帧可有多个 [DAMAGE BOX]（实测文件均为 1 个；旧 JSON 无此字段 → null）
+        public AnimBox[] damageBoxes;
+
+        // 攻击盒：DNF 一帧可有多个 [ATTACK BOX]（如 kneekick 帧 1-3 各 2 个；无攻击帧 → null）
+        public AnimBox[] attackBoxes;
     }
 
     [Serializable]

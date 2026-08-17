@@ -73,8 +73,15 @@ public struct AnimFrameData
     public AnimFrameImage image;    // 精灵图引用 { path, index }
     public AnimFramePos imagePos;   // 渲染偏移 { x, y }
     public int delay;               // 该帧持续时间（ms）
+    public AnimBox damageBox;       // 受击盒（单数 = damageBoxes[0]，兼容旧 JSON/现有采样代码）
+    public AnimBox[] damageBoxes;   // 受击盒全量（DNF 一帧可有多个；旧 JSON 无此字段 → null）
+    public AnimBox[] attackBoxes;   // 攻击盒（DNF 一帧可有多个，如 kneekick 帧 1-3 各 2 个；无 → null）
 }
 ```
+
+JSON 由 `E:\Projects\cs\parse-img-ani\DnfConfigTranslation`（DNF .ani 翻译工具）生成，盒数据原样直译 DNF 像素（x=横向/y=纵深/z=高度），/100、y/z 轴映射、面左镜像由游戏运行时负责（`LSHitboxComponentSystem.SampleHurtBox`，已实证）。
+
+> **待优化（暂缓）**：当前盒用嵌套 min/max 对象表示太啰嗦（一个盒 16 行），可优化为紧凑数字数组 `"damageBox": [-16,-7,-5,29,14,106]`。没现在改的原因：JsonUtility 不支持自定义转换器，数组→struct 需要把 `AnimFrameData` 字段改成 `int[]` + 语义化访问器（或换序列化方案），且阶段 2 实证的采样链路正在消费 `damageBox`——改动涉及 AnimClipData 结构 + 翻译工具输出 + 采样代码三方联动，放到后面统一做（做的时候翻译工具同步改）。
 
 JSON 示例（配合 Unity JsonUtility 使用）：
 ```json
@@ -82,8 +89,12 @@ JSON 示例（配合 Unity JsonUtility 使用）：
   "loop": true,
   "frameMax": 6,
   "frames": [
-    { "index": 0, "image": { "path": "", "index": 0 }, "imagePos": { "x": 0, "y": 0 }, "delay": 50 },
-    { "index": 1, "image": { "path": "", "index": 1 }, "imagePos": { "x": 0, "y": 0 }, "delay": 50 }
+    {
+      "index": 0, "image": { "path": "", "index": 0 }, "imagePos": { "x": 0, "y": 0 }, "delay": 50,
+      "damageBox":  { "min": { "x": -16, "y": -7, "z": -5 }, "max": { "x": 29, "y": 14, "z": 106 } },
+      "damageBoxes": [ { "min": { "x": -16, "y": -7, "z": -5 }, "max": { "x": 29, "y": 14, "z": 106 } } ],
+      "attackBoxes": []
+    }
   ],
   "totalDuration": 300
 }
