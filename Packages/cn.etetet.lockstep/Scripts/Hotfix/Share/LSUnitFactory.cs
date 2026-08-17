@@ -18,7 +18,13 @@
             num.Set(NumericType.HpBase, 1000);
             num.Set(NumericType.MaxHpBase, 1000);
 
-            // 命中盒组件（skill 包）：受击盒采样 + 攻击盒（阶段3起由攻击键驱动，见 LSInputComponentSystem）
+            // 战斗状态（硬直计时，默认动画 Idle）+ 输入缓冲。
+            // 必须先于 LSHitboxComponent 挂（组件 Id 序 = LSUpdate 执行序）：命中写在 Hitbox 系统里，
+            // Combat 先记上帧值再递减 → 视图层能 diff 到 0→>0 "刚被击中"边沿
+            lsUnit.AddComponent<LSCombatComponent, int>(AnimId.Idle);
+            lsUnit.AddComponent<LSInputBufferComponent>();
+
+            // 命中盒组件（skill 包）：受击/攻击盒采样 + 攻击动作状态机（帧驱动，判定帧=有 attackBoxes 的帧）
             lsUnit.AddComponent<LSHitboxComponent>();
 
             return lsUnit;

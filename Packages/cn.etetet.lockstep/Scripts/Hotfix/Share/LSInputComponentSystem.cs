@@ -5,6 +5,8 @@ namespace ET
 {
     [EntitySystemOf(typeof(LSInputComponent))]
     [LSEntitySystemOf(typeof(LSInputComponent))]
+    [FriendOf(typeof(LSCombatComponent))]
+    [FriendOf(typeof(LSInputBufferComponent))]
     public static partial class LSInputComponentSystem
     {
         [EntitySystem]
@@ -12,14 +14,37 @@ namespace ET
         {
 
         }
-        
+
         [LSEntitySystem]
         private static void LSUpdate(this LSInputComponent self)
         {
             LSUnit unit = self.GetParent<LSUnit>();
 
-            // 阶段3：攻击键驱动攻击盒（按住=激活，松开=关闭；防多重命中在 LSHitboxComponentSystem）
-            unit.GetComponent<LSHitboxComponent>()?.SetAttackInput(self.LSInput.Button == 1);
+            // 按下沿检测：Button 从 0→1 才算一次输入（按住不连发）
+            bool pressed = self.LSInput.Button == 1 && self.LastButton == 0;
+            self.LastButton = self.LSInput.Button;
+
+            LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
+            LSAnimComponent anim = unit.GetComponent<LSAnimComponent>();
+            bool inHitstun = combat != null && combat.HitstunTimer > 0;
+            bool attacking = anim != null && anim.AnimId == AnimId.Attack1 && !anim.IsFinished;
+
+            // 攻击输入：写缓冲（能否起手由 LSHitboxComponentSystem 决定——起手/取消窗口消费，其余持有）
+            if (pressed)
+            {
+                LSInputBufferComponent buf = unit.GetComponent<LSInputBufferComponent>();
+                if (buf != null)
+                {
+                    buf.BufferedButton = self.LSInput.Button;
+                    buf.BufferTimer = LSHitboxComponentSystem.BufferWindowMs;
+                }
+            }
+
+            // 受击硬直中不能移动（也不能起手攻击，见 LSHitboxComponentSystem）
+            if (inHitstun) return;
+
+            // 攻击动作中不能移动（普攻站桩；移动取消以后做）
+            if (attacking) return;
 
             // 眩晕/冰冻等 ForbidMove > 0 时禁止移动（skill 包的 LSNumericComponent）
             var numeric = unit.GetComponent<LSNumericComponent>();

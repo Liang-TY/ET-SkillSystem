@@ -43,7 +43,10 @@ namespace ET
             monsterNum.Set(NumericType.HpBase, 500);
             monsterNum.Set(NumericType.MaxHpBase, 500);
 
-            // 怪物挂命中盒组件（仅受击盒采样，不开攻击盒）
+            // 怪物战斗状态（硬直计时，默认动画 Walk）。先于 Hitbox 挂（LSUpdate 执行序）
+            monster.AddComponent<LSCombatComponent, int>(AnimId.Walk);
+
+            // 怪物挂命中盒组件（受击盒采样；无输入缓冲组件——不攻击）
             monster.AddComponent<LSHitboxComponent>();
         }
 
