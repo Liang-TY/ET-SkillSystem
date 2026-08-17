@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MemoryPack;
 using TrueSync;
 
 namespace ET
