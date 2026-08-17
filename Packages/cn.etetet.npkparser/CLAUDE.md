@@ -117,6 +117,8 @@ AnimClipData clip = AnimConfigRegistry.Get(AnimId.Idle);
 | None | 0 | 无动画 |
 | Idle | 1 | 待机 |
 | Walk | 2 | 行走 |
+| Attack1 | 3 | 普攻第一段（暂用班图膝踢 kneekick.json，帧 1-3 有攻击盒=判定帧） |
+| Hurt | 4 | 受击僵直（damage.json，末帧长 delay 停帧、靠硬直计时切走） |
 
 扩展方式：直接在 `AnimId` 类中添加新常量，或业务层自定义 ID。
 
