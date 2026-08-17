@@ -52,18 +52,12 @@ namespace ET
                 FP facing = unit.Forward.x >= FP.Zero ? FP.One : -FP.One;
                 TSVector center = unit.Position + new TSVector(facing * 2, 0, 0);
                 AABBUtil.UpdateCenter(ref self.CurrentAttackBox, center, new TSVector(1, 1, 1));
-                CheckAttack(self, unit, frameNo, frameNo % LSConstValue.FrameCountPerSecond == 0);
+                CheckAttack(self, unit, frameNo);
             }
-
-            // 3) 验证 Log：每秒 1 次
-            if (frameNo % LSConstValue.FrameCountPerSecond != 0) return;
-            AABB hurt = self.CurrentHurtBox;
-            Log.Info($"[Hitbox] 帧{frameNo} unit{unit.Id} anim{anim?.AnimId}-{anim?.FrameIndex} " +
-                     $"受击盒 Min=({hurt.Min.x},{hurt.Min.y},{hurt.Min.z}) Max=({hurt.Max.x},{hurt.Max.y},{hurt.Max.z})");
         }
 
         // 攻击盒 vs 世界内所有其他单位的受击盒；相交且本次攻击未命中过 → 扣血（防多重命中）
-        private static void CheckAttack(LSHitboxComponent self, LSUnit unit, int frameNo, bool logStatus)
+        private static void CheckAttack(LSHitboxComponent self, LSUnit unit, int frameNo)
         {
             LSUnitComponent unitComponent = unit.LSWorld().GetComponent<LSUnitComponent>();
             foreach (var kv in unitComponent.Children)
@@ -73,18 +67,11 @@ namespace ET
                 LSHitboxComponent otherHitbox = other.GetComponent<LSHitboxComponent>();
                 if (otherHitbox == null) continue;
 
-                bool hit = AABBUtil.Intersects(self.CurrentAttackBox, otherHitbox.CurrentHurtBox);
-                if (hit && !self.HitTargets.Contains(other.Id))
+                if (AABBUtil.Intersects(self.CurrentAttackBox, otherHitbox.CurrentHurtBox)
+                    && !self.HitTargets.Contains(other.Id))
                 {
                     self.HitTargets.Add(other.Id);
                     ApplyDamage(unit, other, frameNo);
-                }
-
-                if (logStatus)
-                {
-                    AABB atk = self.CurrentAttackBox;
-                    Log.Info($"[Hitbox] 帧{frameNo} unit{unit.Id}攻击盒[{atk.Min.x}~{atk.Max.x}] vs " +
-                             $"unit{other.Id}受击盒：{(hit ? "命中" : "未命中")}");
                 }
             }
         }
