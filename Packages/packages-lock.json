@@ -169,6 +169,21 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "cn.etetet.skill": {
+      "version": "file:cn.etetet.skill",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.core": "1.0.0",
+        "cn.etetet.sourcegenerator": "1.0.0",
+        "cn.etetet.truesync": "1.0.0",
+        "cn.etetet.lsentity": "1.0.0",
+        "cn.etetet.aabb": "1.0.0",
+        "cn.etetet.collision": "1.0.0",
+        "cn.etetet.lockstep": "1.0.0",
+        "cn.etetet.npkparser": "1.0.0"
+      }
+    },
     "cn.etetet.sourcegenerator": {
       "version": "file:cn.etetet.sourcegenerator",
       "depth": 0,
