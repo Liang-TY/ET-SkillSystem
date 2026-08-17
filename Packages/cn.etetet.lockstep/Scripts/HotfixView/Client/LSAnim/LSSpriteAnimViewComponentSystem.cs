@@ -19,13 +19,13 @@ namespace ET.Client
         private static void Update(this LSSpriteAnimViewComponent self)
         {
             if (Time.frameCount % 60 == 0)
-                Log.Warning($"[LSAnimView] Update 跑了 SR={(self.SpriteRenderer==null?"NULL":"OK")}");
+                //Log.Warning($"[LSAnimView] Update 跑了 SR={(self.SpriteRenderer==null?"NULL":"OK")}");
             if (self.SpriteRenderer == null) return;
             LSUnitView view = self.GetParent<LSUnitView>();
             LSUnit unit = view.Unit;
             LSAnimComponent anim = unit?.GetComponent<LSAnimComponent>();
             if (Time.frameCount % 60 == 0)
-                Log.Warning($"[LSAnimView] view.Unit={(unit==null?"NULL":"OK")} anim={(anim==null?"NULL":"OK")}");
+                //Log.Warning($"[LSAnimView] view.Unit={(unit==null?"NULL":"OK")} anim={(anim==null?"NULL":"OK")}");
             if (anim == null) return;
 
 #if UNITY_EDITOR
@@ -51,7 +51,7 @@ namespace ET.Client
 #else
                 bool hasDbg = false;
 #endif
-                Log.Warning($"[LSAnimView] go={view.GameObject.name} id={view.GameObject.GetInstanceID()} hasDbg={hasDbg} AnimId={anim.AnimId} FrameIndex={anim.FrameIndex} IsLoop={anim.IsLoop}");
+                //Log.Warning($"[LSAnimView] go={view.GameObject.name} id={view.GameObject.GetInstanceID()} hasDbg={hasDbg} AnimId={anim.AnimId} FrameIndex={anim.FrameIndex} IsLoop={anim.IsLoop}");
             }
 
             // 只有帧真的变了才碰渲染器
