@@ -1,3 +1,5 @@
+using MemoryPack;
+
 namespace ET
 {
     /// <summary>
