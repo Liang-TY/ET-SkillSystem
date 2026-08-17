@@ -1,0 +1,275 @@
+{
+  "loop": false,
+  "frameMax": 5,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 22
+      },
+      "imagePos": {
+        "x": -330,
+        "y": -299
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -49,
+          "y": -7,
+          "z": 0
+        },
+        "max": {
+          "x": 43,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -49,
+            "y": -7,
+            "z": 0
+          },
+          "max": {
+            "x": 43,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 23
+      },
+      "imagePos": {
+        "x": -330,
+        "y": -299
+      },
+      "delay": 40,
+      "damageBox": {
+        "min": {
+          "x": -36,
+          "y": -7,
+          "z": 2
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -36,
+            "y": -7,
+            "z": 2
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -2,
+            "y": -10,
+            "z": 23
+          },
+          "max": {
+            "x": 32,
+            "y": 20,
+            "z": 68
+          }
+        },
+        {
+          "min": {
+            "x": 0,
+            "y": -7,
+            "z": 20
+          },
+          "max": {
+            "x": 32,
+            "y": 14,
+            "z": 47
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 24
+      },
+      "imagePos": {
+        "x": -330,
+        "y": -299
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -36,
+          "y": -7,
+          "z": 3
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -36,
+            "y": -7,
+            "z": 3
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -5,
+            "y": -7,
+            "z": 20
+          },
+          "max": {
+            "x": 32,
+            "y": 14,
+            "z": 69
+          }
+        },
+        {
+          "min": {
+            "x": -5,
+            "y": -7,
+            "z": 20
+          },
+          "max": {
+            "x": 33,
+            "y": 14,
+            "z": 49
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 25
+      },
+      "imagePos": {
+        "x": -330,
+        "y": -299
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -43,
+          "y": -7,
+          "z": 0
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -43,
+            "y": -7,
+            "z": 0
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -9,
+            "y": -7,
+            "z": 24
+          },
+          "max": {
+            "x": 30,
+            "y": 14,
+            "z": 67
+          }
+        },
+        {
+          "min": {
+            "x": -9,
+            "y": -7,
+            "z": 20
+          },
+          "max": {
+            "x": 30,
+            "y": 14,
+            "z": 46
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 26
+      },
+      "imagePos": {
+        "x": -249,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -21,
+          "y": -7,
+          "z": -5
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -21,
+            "y": -7,
+            "z": -5
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 360
+}
