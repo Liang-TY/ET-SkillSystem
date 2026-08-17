@@ -18,6 +18,9 @@ namespace ET
         {
             LSUnit unit = self.GetParent<LSUnit>();
 
+            // 阶段3：攻击键驱动攻击盒（按住=激活，松开=关闭；防多重命中在 LSHitboxComponentSystem）
+            unit.GetComponent<LSHitboxComponent>()?.SetAttackInput(self.LSInput.Button == 1);
+
             // 眩晕/冰冻等 ForbidMove > 0 时禁止移动（skill 包的 LSNumericComponent）
             var numeric = unit.GetComponent<LSNumericComponent>();
             if (numeric != null && numeric.Get(NumericType.ForbidMove) > FP.Zero) return;

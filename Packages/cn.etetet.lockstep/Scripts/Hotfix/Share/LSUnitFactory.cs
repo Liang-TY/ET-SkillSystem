@@ -18,8 +18,8 @@
             num.Set(NumericType.HpBase, 1000);
             num.Set(NumericType.MaxHpBase, 1000);
 
-            // 命中盒组件（skill 包）：受击盒采样 + 攻击盒（阶段2临时 AttackEnabled 供碰撞验证）
-            lsUnit.AddComponent<LSHitboxComponent>().SetAttackEnabled(true);
+            // 命中盒组件（skill 包）：受击盒采样 + 攻击盒（阶段3起由攻击键驱动，见 LSInputComponentSystem）
+            lsUnit.AddComponent<LSHitboxComponent>();
 
             return lsUnit;
         }

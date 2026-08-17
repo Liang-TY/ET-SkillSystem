@@ -25,9 +25,13 @@ namespace ET.Client
             if (Input.GetKey(KeyCode.C)) { vy += 1; }    // y+
             if (Input.GetKey(KeyCode.V)) { vy -= 1; }    // y-
 
+            int button = 0;
+            if (Input.GetKey(KeyCode.J) || Input.GetMouseButton(0)) button = 1;   // 攻击（按住持续，Button: 0=无 1=攻击）
+
             LSClientUpdater lsClientUpdater = self.GetParent<Room>().GetComponent<LSClientUpdater>();
             lsClientUpdater.Input.V = v.normalized;
             lsClientUpdater.Input.VY = vy;
+            lsClientUpdater.Input.Button = button;
         }
 
     }
