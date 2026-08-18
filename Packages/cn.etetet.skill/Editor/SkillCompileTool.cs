@@ -42,9 +42,19 @@ namespace ET
             using Process process = Process.Start(startInfo);
             string output = process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd();
             process.WaitForExit();
+            // 完整日志落盘（UTF-8），Console 只显示真正的 error 行（警告 MSB3277 版本冲突无害，别刷屏）
+            File.WriteAllText("Temp/SkillCompile.log", output, System.Text.Encoding.UTF8);
             if (process.ExitCode != 0)
             {
-                UnityEngine.Debug.LogError($"[SkillCompile] dotnet build 失败（ExitCode={process.ExitCode}）：\n{output}");
+                var errorLines = new System.Text.StringBuilder();
+                foreach (string line in output.Split('\n'))
+                {
+                    if (line.Contains("error") || line.Contains("错误"))
+                        errorLines.AppendLine(line.TrimEnd('\r'));
+                }
+                UnityEngine.Debug.LogError(
+                    $"[SkillCompile] dotnet build 失败（ExitCode={process.ExitCode}）。\n" +
+                    $"--- error 行 ---\n{errorLines}\n--- 完整日志：Temp/SkillCompile.log ---");
                 return;
             }
 
