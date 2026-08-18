@@ -12,14 +12,14 @@ namespace ET.Client
         private static void Awake(this LSAnimResComponent self)
         {
             self.Atlases ??= new(System.StringComparer.OrdinalIgnoreCase);
-            self.AtlasOffsets ??= new(System.StringComparer.OrdinalIgnoreCase);
+            self.AtlasCenters ??= new(System.StringComparer.OrdinalIgnoreCase);
         }
 
         [EntitySystem]
         private static void Destroy(this LSAnimResComponent self)
         {
             self.Atlases.Clear();
-            self.AtlasOffsets.Clear();
+            self.AtlasCenters.Clear();
             // Texture2D 运行时创建的图集不 Destroy（场景级共享，泄露量恒定可接受）
         }
 
@@ -83,23 +83,18 @@ namespace ET.Client
             }
             atlas.Apply(false, makeNoLongerReadable: true);   // 上传 GPU 后释放 CPU 副本
 
-            // Sprite（子区域，中心 pivot）+ 帧偏移注册
+            // Sprite（子区域，中心 pivot）+ 内容中心注册（绝对，摆位公式的原料）
             Dictionary<int, Sprite> sprites = new();
-            Dictionary<int, Vector2> offsets = new();
-            // 校准帧 = 首个实体帧（rectArr 空时 default 不被使用——后续循环不执行）
-            NpkSprite refSprite = rectArr.Length > 0 ? npk[rectArr[0].Id] : default;
+            Dictionary<int, Vector2> centers = new();
             foreach (PackingRectangle r in rectArr)
             {
                 NpkSprite s = npk[r.Id];
                 Rect rect = new(r.X, atlasH - r.Y - s.Height, s.Width, s.Height);  // Y 翻转
                 sprites[r.Id] = Sprite.Create(atlas, rect, new Vector2(0.5f, 0.5f), 100f);
-                // 摆位修正（相对校准帧）：imagePos 锚定 DNF 帧画布，内容中心还要加 X+宽/2（y 翻转）——见 02-坐标系 §2.1
-                offsets[r.Id] = new Vector2(
-                    s.X + s.Width / 2f - (refSprite.X + refSprite.Width / 2f),
-                    -(s.Y + s.Height / 2f) + refSprite.Y + refSprite.Height / 2f);
+                centers[r.Id] = new Vector2(s.X + s.Width / 2f, s.Y + s.Height / 2f);
             }
             self.Atlases[atlasName] = sprites;
-            self.AtlasOffsets[atlasName] = offsets;
+            self.AtlasCenters[atlasName] = centers;
             Log.Info($"[LSAnimRes] {atlasName}: 图集 {atlasW}x{atlasH}，{rectArr.Length} 精灵");
         }
 
@@ -115,12 +110,12 @@ namespace ET.Client
             return null;
         }
 
-        public static Vector2 GetFrameOffset(this LSAnimResComponent self, string atlasName, int imgIndex)
+        public static Vector2 GetFrameCenter(this LSAnimResComponent self, string atlasName, int imgIndex)
         {
-            if (self.AtlasOffsets.TryGetValue(atlasName, out Dictionary<int, Vector2> offsets))
+            if (self.AtlasCenters.TryGetValue(atlasName, out Dictionary<int, Vector2> centers))
             {
-                offsets.TryGetValue(imgIndex, out Vector2 offset);
-                return offset;
+                centers.TryGetValue(imgIndex, out Vector2 center);
+                return center;
             }
             return Vector2.zero;
         }

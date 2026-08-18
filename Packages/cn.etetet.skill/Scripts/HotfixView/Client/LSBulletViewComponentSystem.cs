@@ -137,9 +137,14 @@ namespace ET.Client
             Sprite sprite = res?.GetSprite(frame.image.path, frame.image.index);
             info.Renderer.sprite = sprite;   // 空路径帧 sprite=null（隐形占位）
 
-            Vector2 off = res?.GetFrameOffset(frame.image.path, frame.image.index) ?? Vector2.zero;
-            info.Renderer.transform.localPosition =
-                new Vector3((frame.imagePos.x + off.x) / 100f, (frame.imagePos.y + off.y) / 100f, 0f);
+            // §2.1 绝对摆位公式（与单位同款）：local = 内容真实中心 − prefab 中间层偏移（运行时自标定）
+            Vector2 center = res?.GetFrameCenter(frame.image.path, frame.image.index) ?? Vector2.zero;
+            Transform parentT = info.Renderer.transform.parent;
+            Vector3 chain = parentT != null ? parentT.position - info.Go.transform.position : Vector3.zero;
+            info.Renderer.transform.localPosition = new Vector3(
+                (frame.imagePos.x + center.x) / 100f - chain.x,
+                -(frame.imagePos.y + center.y) / 100f - chain.y,
+                0f);
             info.Renderer.transform.localScale = info.FaceRight
                 ? Vector3.one
                 : new Vector3(-1, 1, 1);   // 面左：绕弹心镜像

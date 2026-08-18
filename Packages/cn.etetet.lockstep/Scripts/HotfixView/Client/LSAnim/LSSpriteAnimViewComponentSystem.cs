@@ -49,11 +49,16 @@ namespace ET.Client
             if (sprite == null) return;
 
             self.SpriteRenderer.sprite = sprite;
-            // imagePos 是像素（100ppu）→ 除以 100 转 Unity 单位。
-            // imagePos 锚定 DNF 帧画布，Sprite 是紧致内容框 → 补每帧"内容中心相对画布中心"偏移
-            Vector2 off = res?.GetFrameOffset(frame.image.path, frame.image.index) ?? Vector2.zero;
-            self.SpriteRenderer.transform.localPosition =
-                new Vector3((frame.imagePos.x + off.x) / 100f, (frame.imagePos.y + off.y) / 100f, 0f);
+            // §2.1 绝对摆位公式：renderer local = 内容真实中心 − prefab 中间层偏移（运行时自标定）
+            //   真实中心(相对锚点) = ((imagePos.x+X+宽/2)/100, -(imagePos.y+Y+高/2)/100)——DNF y 下正要翻转
+            //   中间层偏移 = renderer.parent 世界位 − 根 GO 世界位（prefab 里烤的补偿常数，直读直用不硬编码）
+            Vector2 center = res?.GetFrameCenter(frame.image.path, frame.image.index) ?? Vector2.zero;
+            Transform parentT = self.SpriteRenderer.transform.parent;
+            Vector3 chain = parentT != null ? parentT.position - view.GameObject.transform.position : Vector3.zero;
+            self.SpriteRenderer.transform.localPosition = new Vector3(
+                (frame.imagePos.x + center.x) / 100f - chain.x,
+                -(frame.imagePos.y + center.y) / 100f - chain.y,
+                0f);
 
             self.LastAnimId = anim.AnimId;
             self.LastFrameIndex = anim.FrameIndex;
