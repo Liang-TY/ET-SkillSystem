@@ -2,7 +2,7 @@ namespace ET
 {
     /// <summary>
     /// 普攻（膝踢）。判定框走 kneekick.json 帧数据（多盒，帧 1-3=判定帧）——不用固定盒 API。
-    /// 数值（伤害50/硬直500ms）暂硬编码在 LSHitboxComponentSystem.ApplyHit，Actions 层接入后配置化。
+    /// 命中效果在 HitActions（阶段5 Actions 化）：近战伤害 + 挂燃烧。
     /// </summary>
     [SkillId(SkillIds.NormalAttack)]
     public class NormalAttack : SkillLogic
@@ -15,6 +15,9 @@ namespace ET
 
         // kneekick 总时长，到时自动 OnEnd
         public override int TotalTimeMs => 360;
+
+        private static readonly int[] HitActionsArr = { ActionIds.MeleeHit, ActionIds.AddBurnBuff };
+        public override int[] HitActions => HitActionsArr;
 
         public override void OnCast(SkillContext ctx)
         {

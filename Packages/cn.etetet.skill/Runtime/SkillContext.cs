@@ -32,20 +32,9 @@ namespace ET
         public TSVector GetTargetPosition() => cast.TargetPosition;
 
         // ---- 动画 ----
-        /// <summary>播放动画（内联属性赋值——LSAnimComponentSystem.Play 是 ET.Hotfix 扩展方法，
-        /// ET.Skill 引用不到；逻辑与那边保持同步，改动时两处一起改）</summary>
-        public void PlayAnim(int animId)
-        {
-            LSAnimComponent anim = caster.GetComponent<LSAnimComponent>();
-            if (anim == null) return;
-            anim.AnimId = animId;
-            anim.FrameIndex = 0;
-            anim.FrameTick = FP.Zero;
-            anim.Speed = FP.One;
-            anim.IsFinished = false;
-            AnimClipData clip = AnimConfigRegistry.Get(animId);
-            if (clip != null) anim.IsLoop = clip.loop;
-        }
+        /// <summary>播放动画（LSAnimComponentSystem.Play 是 ET.Hotfix 扩展，ET.Skill 引用不到，
+        /// 统一走 LSAnimPlayUtil 属性赋值实现——与那边保持同步）</summary>
+        public void PlayAnim(int animId) => LSAnimPlayUtil.Play(caster, animId);
 
         public void PlayDefaultAnim()
         {
@@ -118,6 +107,15 @@ namespace ET
             }
             return false;
         }
+
+        // ---- Buff ----
+        /// <summary>给目标挂 Buff（source = 施法者）</summary>
+        public void AddBuff(LSUnit target, int buffId)
+            => target.GetComponent<LSBuffComponent>()?.AddBuff(caster, buffId);
+
+        /// <summary>给施法者自己挂 Buff（自伤/变形/测试用）</summary>
+        public void AddBuffToSelf(int buffId)
+            => caster.GetComponent<LSBuffComponent>()?.AddBuff(caster, buffId);
 
         // ---- 连段取消：结束当前施放并立刻重施同技能（取消窗口用）----
         public void RestartCurrentSkill()

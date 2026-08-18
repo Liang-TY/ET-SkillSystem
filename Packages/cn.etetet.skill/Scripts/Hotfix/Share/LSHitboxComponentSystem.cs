@@ -6,7 +6,6 @@ namespace ET
     [EntitySystemOf(typeof(LSHitboxComponent))]
     [LSEntitySystemOf(typeof(LSHitboxComponent))]
     [FriendOf(typeof(LSHitboxComponent))]
-    [FriendOf(typeof(LSCombatComponent))]   // ApplyHit 写 HitstunTimer（阶段4重写时误删，ET0002）
     [FriendOf(typeof(LSCast))]
     public static partial class LSHitboxComponentSystem
     {
@@ -89,29 +88,32 @@ namespace ET
             }
         }
 
-        // 命中结算。阶段4 临时常量——attack.json 接入后配置化（DNF 实证：命中反应是攻击方配置驱动
-        // damageAct/upForce/backForce/hitStunTime；浮空/击退/倒地等 Z 轴反应后续阶段做）
+        // 命中结算（阶段5 Actions 化）：伤害/硬直/受击动画等效果全部在技能配置的 HitActions 节点里
+        // （SkillContent 的 Action 类，如 MeleeHitAction）；本方法只做防重记录 + cast 回写 + 分发。
         private static void ApplyHit(LSHitboxComponent self, LSUnit attacker, LSUnit target, int frameNo)
         {
-            const int damage = 50;      // 伤害
-            const int hitstunMs = 500;  // 受击硬直
-
-            var targetNum = target.GetComponent<LSNumericComponent>();
-            if (targetNum == null) return;
-            targetNum.Add(NumericType.Hp, -damage);
-
-            LSCombatComponent targetCombat = target.GetComponent<LSCombatComponent>();
-            if (targetCombat != null)
-            {
-                targetCombat.HitstunTimer = hitstunMs;   // 重打刷新（DNF 行为）
-                target.GetComponent<LSAnimComponent>()?.Play(AnimId.Hurt);   // 受击动画，重打重置到帧 0
-            }
-
             // 回写施放实例（Route B：JustHit + TargetIds，阶段7 视图层用）
-            attacker.GetComponent<LSCastComponent>()?.GetActiveCast()?.NotifyHit(target.Id);
+            LSCast activeCast = attacker.GetComponent<LSCastComponent>()?.GetActiveCast();
+            activeCast?.NotifyHit(target.Id);
 
-            Log.Info($"[Combat] 帧{frameNo} unit{attacker.Id} 命中 unit{target.Id}，伤害{damage}，" +
-                     $"HP={targetNum.Get(NumericType.Hp)} hitstun={hitstunMs}ms");
+            // 分发技能命中效果节点（owner=受击者，source=攻击方）
+            SkillLogic logic = activeCast != null ? SkillLoader.Get(activeCast.SkillId) : null;
+            int[] hitActions = logic?.HitActions;
+            if (hitActions == null)
+            {
+                Log.Warning($"[Combat] 帧{frameNo} unit{attacker.Id} 命中 unit{target.Id}，但技能未配 HitActions，无效果");
+                return;
+            }
+            foreach (int actionId in hitActions)
+            {
+                LSAction action = ActionLoader.Get(actionId);
+                if (action == null)
+                {
+                    Log.Error($"[Combat] 技能{activeCast.SkillId} 引用了未注册的 actionId={actionId}，跳过");
+                    continue;
+                }
+                action.Run(new LSActionContext(attacker.LSWorld(), target, attacker, frameNo));
+            }
         }
 
         // DNF 坐标(像素)：x=横向(面右正) y=纵深 z=高度(0=地面脚底)。

@@ -1,8 +1,8 @@
 namespace ET
 {
     /// <summary>
-    /// CD 机制验证技能（K 键）：无动画无伤害，打日志验证生命周期 + 冷却拦截 + ManualCooldown 路径。
-    /// 验证完可删或留作技能模板。
+    /// CD/眩晕双验证技能（K 键）：施放起 2 秒 CD + 给自己挂 Stun（1 秒 WASD 失效），
+    /// 一个键验证 CD 机制和 Buff 的 Add/Remove Actions 链路。
     /// </summary>
     [SkillId(SkillIds.TestCooldown)]
     public class TestCooldownSkill : SkillLogic
@@ -12,7 +12,8 @@ namespace ET
 
         public override void OnCast(SkillContext ctx)
         {
-            Log.Info($"[Skill] unit{ctx.GetCasterId()} TestCooldown 施放（起 2000ms CD），TotalTime=300ms");
+            ctx.AddBuffToSelf(BuffIds.Stun);   // 眩晕验证：1 秒 WASD 失效（ForbidMove 开/关）
+            Log.Info($"[Skill] unit{ctx.GetCasterId()} TestCooldown 施放（起 2000ms CD + 自挂 Stun）");
         }
 
         public override void OnEnd(SkillContext ctx)

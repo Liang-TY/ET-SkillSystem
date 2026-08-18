@@ -20,6 +20,13 @@ namespace ET
         /// <summary>总时长 ms；>0 到时自动 OnEnd，0 = 技能自己控制结束</summary>
         public virtual int TotalTimeMs => 0;
 
+        /// <summary>
+        /// 命中时执行的效果节点列表（ActionIds）——伤害/硬直/挂 Buff 等效果全在节点里配置组合，
+        /// 生命周期类只管"过程"（连段/取消/位移）。用 static readonly 数组避免每次命中分配。
+        /// attack 表化（luban 专题）后此配置迁表。
+        /// </summary>
+        public virtual int[] HitActions => null;
+
         public virtual void OnCast(SkillContext ctx) { }
 
         public virtual void OnUpdate(SkillContext ctx, int dtMs) { }

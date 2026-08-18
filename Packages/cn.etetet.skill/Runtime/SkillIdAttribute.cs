@@ -1,9 +1,9 @@
 namespace ET
 {
-    /// <summary>技能逻辑类标记（值=技能ID）。SkillLoader.RegisterAssembly 反射扫描注册。</summary>
-    public class SkillIdAttribute : BaseAttribute
+    /// <summary>技能逻辑类标记（值=技能ID）。SkillLoader/RegisterAssembly 反射扫描注册。</summary>
+    public class SkillIdAttribute : BaseAttribute, IContentIdAttribute
     {
-        public int Id;
+        public int Id { get; }
 
         public SkillIdAttribute(int id)
         {
@@ -15,7 +15,7 @@ namespace ET
     public static class SkillIds
     {
         public const int NormalAttack = 1;   // 普攻（膝踢，AnimId.Attack1）
-        public const int TestCooldown = 2;   // CD 机制验证用空技能（K 键）
+        public const int TestCooldown = 2;   // CD/眩晕验证技能（K 键：起 CD + 给自己挂 Stun）
 
         /// <summary>按键值 → 技能槽位映射（阶段4：1=普攻 J/左键，2=CD测试 K）</summary>
         public static bool ButtonToSkill(int button, out int skillId)

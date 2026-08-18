@@ -29,7 +29,10 @@ namespace ET.Client
             }
 
             Assembly assembly = Assembly.Load(dllAsset.bytes);
+            // 三类内容同源注册：技能 / Buff 配置 / Action 效果节点（ContentLoader 泛型）
             SkillLoader.RegisterAssembly(assembly);
+            BuffLoader.RegisterAssembly(assembly);
+            ActionLoader.RegisterAssembly(assembly);
         }
     }
 }
