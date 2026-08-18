@@ -45,13 +45,13 @@ namespace ET.Client
 
             AnimFrameData frame = anim.GetCurrentFrame();
             LSAnimResComponent res = self.Room()?.GetComponent<LSAnimResComponent>();
-            Sprite sprite = res?.GetSprite(frame.image.index);
+            Sprite sprite = res?.GetSprite(frame.image.path, frame.image.index);
             if (sprite == null) return;
 
             self.SpriteRenderer.sprite = sprite;
             // imagePos 是像素（100ppu）→ 除以 100 转 Unity 单位。
             // imagePos 锚定 DNF 帧画布，Sprite 是紧致内容框 → 补每帧"内容中心相对画布中心"偏移
-            Vector2 off = res?.GetFrameOffset(frame.image.index) ?? Vector2.zero;
+            Vector2 off = res?.GetFrameOffset(frame.image.path, frame.image.index) ?? Vector2.zero;
             self.SpriteRenderer.transform.localPosition =
                 new Vector3((frame.imagePos.x + off.x) / 100f, (frame.imagePos.y + off.y) / 100f, 0f);
 

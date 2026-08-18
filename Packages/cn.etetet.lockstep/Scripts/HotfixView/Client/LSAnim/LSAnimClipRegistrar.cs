@@ -23,6 +23,7 @@ namespace ET.Client
             await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/move.json", AnimId.Walk);
             await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/kneekick.json", AnimId.Attack1);
             await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/damage.json", AnimId.Hurt);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/normalwave.json", AnimId.NormalWave);
         }
 
         private static async ETTask RegisterOne(ResourcesLoaderComponent resLoader, string path, int animId)

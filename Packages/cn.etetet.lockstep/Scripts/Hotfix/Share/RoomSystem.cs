@@ -24,6 +24,7 @@ namespace ET
             LSWorld lsWorld = self.LSWorld;
             lsWorld.Frame = frame + 1;
             lsWorld.AddComponent<LSUnitComponent>();
+            lsWorld.AddComponent<LSBulletComponent>();   // 投射物容器（世界级——弹不属于单位）
             for (int i = 0; i < unitInfos.Count; ++i)
             {
                 LockStepUnitInfo unitInfo = unitInfos[i];
