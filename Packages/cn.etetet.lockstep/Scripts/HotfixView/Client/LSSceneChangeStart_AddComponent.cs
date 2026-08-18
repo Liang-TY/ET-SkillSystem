@@ -23,7 +23,7 @@ namespace ET.Client
             // 注册动画 clip + 加载技能内容 DLL + 弹视图（必须在 room.Init 建 unit 之前；此事件 await PublishAsync 完成后才 Init）
             await LSAnimClipRegistrar.RegisterAll(clientScene);
             await SkillContentLoader.Load(clientScene);
-            room.AddComponent<LSBulletViewComponent>();
+            await room.AddComponent<LSBulletViewComponent>().InitAsync();
         }
     }
 }

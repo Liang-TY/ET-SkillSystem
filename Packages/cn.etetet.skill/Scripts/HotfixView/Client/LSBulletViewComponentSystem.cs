@@ -17,6 +17,15 @@ namespace ET.Client
         {
         }
 
+        /// <summary>加载 Unit2D 预制体（弹视图复用单位渲染层级——手搓 GO 缺单位层里的摆位补偿，差出常量偏移）</summary>
+        public static async ETTask InitAsync(this LSBulletViewComponent self)
+        {
+            Room room = self.GetParent<Room>();
+            ResourcesLoaderComponent resLoader = room.GetComponent<ResourcesLoaderComponent>();
+            self.Prefab = await resLoader.LoadAssetAsync<GameObject>(
+                "Packages/cn.etetet.lockstep/Bundles/Unit/Unit2D.prefab");
+        }
+
         [EntitySystem]
         private static void Destroy(this LSBulletViewComponent self)
         {
@@ -80,15 +89,13 @@ namespace ET.Client
         {
             BulletDefinition def = BulletLoader.Get(bullet.ConfigId);
             if (def == null || def.ViewAnimId == AnimId.None) return;
+            if (self.Prefab == null) return;   // 预制体没加载好（InitAsync 前），下帧重试
 
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
-            // 两级结构（同单位 Unit2D）：根 GO 定位，子 GO 挂 SpriteRenderer 做 imagePos 摆位
-            // ——renderer 若直接挂在根上，设 localPosition 会覆盖世界定位（弹聚集在原点的 bug）
-            GameObject go = new("Bullet");
-            go.transform.SetParent(globalComponent.Unit, false);
-            GameObject visual = new("Visual");
-            visual.transform.SetParent(go.transform, false);
-            SpriteRenderer renderer = visual.AddComponent<SpriteRenderer>();
+            // 复用 Unit2D 预制体（同单位渲染层级与摆位补偿），只换 sprite
+            GameObject go = UnityEngine.Object.Instantiate(self.Prefab, globalComponent.Unit, true);
+            go.name = "Bullet";
+            SpriteRenderer renderer = go.GetComponentInChildren<SpriteRenderer>();
             renderer.sortingOrder = 10;   // 单位之上
 
             self.Bullets[bullet.Id] = new BulletViewInfo

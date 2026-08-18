@@ -10,6 +10,9 @@ namespace ET.Client
     [ComponentOf(typeof(Room))]
     public class LSBulletViewComponent : Entity, IAwake, IUpdate, IDestroy
     {
+        /// <summary>Unit2D 预制体（弹视图复用单位的渲染层级结构——摆位补偿才和单位一致）</summary>
+        public GameObject Prefab;
+
         /// <summary>每发弹的视图状态（视图侧字典，非逻辑状态，不序列化）</summary>
         public readonly Dictionary<long, BulletViewInfo> Bullets = new();
     }
