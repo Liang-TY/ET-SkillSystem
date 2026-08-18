@@ -100,9 +100,18 @@ BuffRegistry.Register(BuffIds.Stun, new BuffDef {
 
 | 任务 | 状态 | 日期 | 备注 |
 |------|------|------|------|
-| LSBuff + LSBuffComponent | ⬜ | | |
-| BuffDef + BuffRegistry | ⬜ | | |
-| Actions 接口 + 分发器 | ⬜ | | |
-| 内置 Action（NumericChange/Damage/AddBuff） | ⬜ | | |
-| LSBuffComponentSystem | ⬜ | | |
-| 燃烧/眩晕 验证 | ⬜ | | |
+| LSBuff + LSBuffComponent | ✅ | 2026-08-18 | 纯数据实体（Model）；+Stack 叠层 +Removing（存活一帧服务 Route B 标记后回收，同 LSCast.Finished 模式） |
+| BuffDef + BuffRegistry | ✅ | 2026-08-18 | 改为 **BuffDefinition 属性类 + [BuffId] 反射注册**（与技能同构，不用 doc 原方案的手动 Register——要解决"何时调"问题）；TotalTimeMs/TickTimeMs/Add·Tick·RemoveActions 虚属性；static readonly 数组零分配 |
+| Actions 接口 + 分发器 | ✅ | 2026-08-18 | **LSAction 基类 + [ActionId] + ActionLoader**（ContentLoader&lt;TAttr,TBase&gt; 泛型统一：扫描+守门员，SkillLoader 已薄壳化复用同机制）；LSActionContext readonly struct 门面（owner/source/frameNo + Damage/Hp/Hitstun/ForbidMove/PlayAnim/AddBuff） |
+| 内置 Action | ✅ | 2026-08-18 | MeleeHit（原 ApplyHit 硬编码搬家：50 伤害+500 硬直+受击动画）/ FireDamageTick(10) / ForbidMoveOn·Off / AddBurnBuff。参数 const 内嵌，luban 化进表（05 §5 记档） |
+| LSBuffComponentSystem | ✅ | 2026-08-18 | ET.Skill（调 BuffLoader/ActionLoader 防循环依赖）；快照迭代（[StaticField] scratch，tick 动作增删安全）；叠层简版（同 buff 再挂=Stack+1 刷新时长不重跑 AddActions） |
+| ApplyHit Actions 化 | ✅ | 2026-08-18 | 伤害/硬直/Hurt 动画全搬进 MeleeHitAction；ApplyHit 只剩 防重记录 + NotifyHit + 分发技能 HitActions |
+| 燃烧/眩晕 验证 | ✅ | 2026-08-18 | 全通过：J 命中→[Combat] 伤害50 + 燃烧每秒 `[Buff] 燃烧伤害10 HP=...`×3 后自停；K→自挂 Stun（诊断日志实测 ON 帧97→OFF 帧116 = 950ms≈配置 1000ms，期间 WASD 失效）+ CD 拦截照旧。首测"体感 300ms"为误判——OnEnd(300ms) 是技能自身时长，与 buff 无关 |
+
+**实现记录（2026-08-18）**：
+1. **配置形态决策**：Buff/Action 与技能同构（属性类 + 特性反射注册 + 守门员），ET10 spell 对照过（骨架同构：实例+配置+时机化效果节点；差异：它行为树节点+序列化参数+状态同步，我们扁平节点+const 参数+帧同步——见会话记录）。
+2. **ContentLoader 泛型**：抽自 SkillLoader；以后 equipment/monster 内容直接复用。SkillLoader 变薄壳，调用方 API 零改动。
+3. **引用纪律**：内容层（SkillContent）只见 ET.Skill 门面——NumericType.ForbidMove 这类 ET.Model 常量不进内容，收编为 ctx.OwnerForbidMove(bool)。
+4. SkillContentLoader 一次 Assembly.Load 三注册（Skill/Buff/Action）。
+5. 挂载顺序：Buffer→Skill→Cast→**Buff**→Hitbox（命中挂 Buff 的 JustAdded 在清标记之后）。
+6. ET10 有暂缓的记档位：Stack 上限/刷新策略配置化、互斥组/免疫（BuffFlags）、分组覆盖。
