@@ -28,6 +28,9 @@
             lsUnit.AddComponent<LSSkillComponent>();
             lsUnit.AddComponent<LSCastComponent>();
 
+            // Buff 容器（阶段5）：先于 Hitbox 挂（命中挂 Buff 设 JustAdded 在清标记之后）
+            lsUnit.AddComponent<LSBuffComponent>();
+
             // 命中盒组件（skill 包）：受击/攻击盒采样 + 命中检测结算（攻击动作状态机在 Cast 框架）
             lsUnit.AddComponent<LSHitboxComponent>();
 
