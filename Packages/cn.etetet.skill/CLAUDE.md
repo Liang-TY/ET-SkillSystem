@@ -17,7 +17,8 @@ Packages/cn.etetet.skill/
 ├── DotNet~/                 → ET.SkillContent      游戏内容（独立 dotnet 编译，Unity 永不编译）
 │   ├── Skills/*.cs                                技能（过程逻辑）
 │   ├── Actions/*.cs                               效果节点（伤害/硬直/挂Buff...，组合用）
-│   └── Buffs/*.cs                                 Buff 配置
+│   ├── Buffs/*.cs                                 Buff 配置
+│   └── Bullets/*.cs                               投射物配置（速度/射程/碰撞盒/HitActions）
 ├── Bundles/SkillContent/    → 编译输出 ET.SkillContent.dll.bytes（YooAsset 收集）
 └── Editor/SkillCompileTool  → 菜单 ET/Skill/Compile
 ```
@@ -117,7 +118,24 @@ public class XxxBuff : BuffDefinition
 
 叠层简版：同 Buff 再挂 = Stack+1 + 刷新时长（不重跑 AddActions）。Buff 复杂流程（如"受击触发"）不塞配置——那是 SkillLogic/后续系统的职责。
 
-**运行时守门员**：`ContentLoader.RegisterAssembly`（技能/Buff/Action 三类同机制）反射检查内容类实例字段，非 const 字段存在 → 拒绝注册 + 报错。想存状态 → 加到 LSCast/LSBuff 实体（Model/Share）。
+## 投射物配置规范（`DotNet~/Bullets/`，阶段6+）
+
+```csharp
+[BulletId(BulletIds.Xxx)]       // 常量加进 Runtime/BulletDefinition.cs 的 BulletIds 表
+public class XxxBullet : BulletDefinition
+{
+    public override FP Speed => 15;               // 单位/秒
+    public override int TotalTimeMs => 1500;      // 寿命（射程 = Speed × 时长）
+    public override bool DestroyOnHit => false;   // false=穿透（HitTargets 去重）
+    public override TSVector HalfExtents => new((FP)5/10, (FP)4/10, (FP)3/10);  // AABB 半尺寸
+    public override int[] HitActions => ...;      // 命中效果（节点组合，同技能/Buff）
+    public override int ViewAnimId => AnimId.X;   // 视图动画（弹的表现帧视图层自推，逻辑零动画状态）
+}
+```
+
+发射：技能 OnCast 里 `ctx.CreateBullet(BulletIds.Xxx)`（出生=身前 0.8，方向=施法者朝向）。碰撞=弹 AABB vs 单位受击盒（多盒），不打施法者。区域效果 LSArea 延后（无资源，见 07）。
+
+**运行时守门员**：`ContentLoader.RegisterAssembly`（技能/Buff/Action/Bullet 四类同机制）反射检查内容类实例字段，非 const 字段存在 → 拒绝注册 + 报错。想存状态 → 加到 LSCast/LSBuff/LSBullet 实体（Model/Share）。
 
 ## 编译流程（谁编译、怎么触发）
 

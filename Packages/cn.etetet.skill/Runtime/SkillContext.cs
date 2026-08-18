@@ -109,13 +109,18 @@ namespace ET
         }
 
         // ---- Buff ----
-        /// <summary>给目标挂 Buff（source = 施法者）</summary>
+        /// <summary>给目标��� Buff（source = 施法者）</summary>
         public void AddBuff(LSUnit target, int buffId)
             => target.GetComponent<LSBuffComponent>()?.AddBuff(caster, buffId);
 
         /// <summary>给施法者自己挂 Buff（自伤/变形/测试用）</summary>
         public void AddBuffToSelf(int buffId)
             => caster.GetComponent<LSBuffComponent>()?.AddBuff(caster, buffId);
+
+        // ---- 投射物 ----
+        /// <summary>发射投射物（出生=身前 0.8 单位，方向=施法者朝向；配置在 BulletDefinition）</summary>
+        public void CreateBullet(int bulletId)
+            => world.GetComponent<LSBulletComponent>()?.Create(caster, bulletId);
 
         // ---- 连段取消：结束当前施放并立刻重施同技能（取消窗口用）----
         public void RestartCurrentSkill()

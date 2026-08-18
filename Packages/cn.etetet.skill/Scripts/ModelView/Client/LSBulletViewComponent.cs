@@ -1,0 +1,28 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace ET.Client
+{
+    /// <summary>
+    /// 投射物视图容器（Room 级）：轮询逻辑 LSBulletComponent 的子弹做差分——新弹建 GO、消失销毁。
+    /// 弹的动画在视图层自推（渲染时间，表现帧不影响逻辑）——逻辑 LSBullet 无动画状态。
+    /// </summary>
+    [ComponentOf(typeof(Room))]
+    public class LSBulletViewComponent : Entity, IAwake, IUpdate, IDestroy
+    {
+        /// <summary>每发弹的视图状态（视图侧字典，非逻辑状态，不序列化）</summary>
+        public readonly Dictionary<long, BulletViewInfo> Bullets = new();
+    }
+
+    /// <summary>弹的视图运行时状态（[EnableClass]：ModelView 允许字段的普通类）</summary>
+    [EnableClass]
+    public class BulletViewInfo
+    {
+        public GameObject Go;
+        public SpriteRenderer Renderer;
+        public int AnimId;
+        public int FrameIndex;
+        public float Timer;
+        public bool FaceRight;
+    }
+}
