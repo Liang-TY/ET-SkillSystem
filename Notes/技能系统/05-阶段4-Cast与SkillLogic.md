@@ -23,7 +23,7 @@
 
 ```
 ① ET.Skill 框架 = 第 5 个热更程序集（Unity/F6 编译，asmdef）
-   skill/Runtime/ET.Skill.asmdef（热更约束同 ET.Model；引用 Model/LSEntity/Core/TrueSync/Aabb/Npkparser）
+   skill/Runtime/ET.Skill.asmdef（热更约束同 ET.Model；引用 Model/LSEntity/Core/TrueSync/Aabb/Npkparser/**MemoryPack**——实体生成代码的继承链碰 IMemoryPackable，漏了会 CS0012）
    内容：SkillLogic（无状态基类）/ SkillIdAttribute+SkillIds / SkillLoader（RegisterAssembly 反射注册单例）
         / SkillContext（readonly struct——值传递零 GC，技能只见门面 API 不见实体类型）
         / LSCastSystem + LSCastComponentSystem（生命周期机制必须在这层：SkillContext.RestartCurrentSkill
@@ -303,16 +303,30 @@ public class ChargeSkill : SkillLogic
 
 | 任务 | 状态 | 日期 | 备注 |
 |------|------|------|------|
-| LSCast + LSCastComponent + LSSkillComponent（实体） | ✅ 不迁移 | 2026-08-17 | 纯数据实体，留 skill/Scripts/Model/Share（进 ET.Model）；Just\* 标记/TargetIds/SubState/Phase；TotalTimeMs 创建时从 SkillLogic 拷入 |
-| LSSkillComponentSystem（槽位/冷却） | ✅ 不迁移 | 2026-08-17 | TryCast 三重门禁（硬直/在技/冷却）+ CD 递减 + 缓冲消费 + Route B 清标记（先于 Hitbox/Cast 跑）；留 ET.Hotfix |
-| SkillLogic + SkillContext + SkillLoader + [SkillId] | 🔁 待迁移 | 2026-08-17 | 逻辑已写（Hotfix/Share 版）；迁移至 skill/Runtime/（ET.Skill asmdef）+ SkillContext 改 **readonly struct** + SkillLoader 改 RegisterAssembly(Assembly) 反射注册 |
-| LSCastSystem + LSCastComponentSystem | 🔁 待迁移 | 2026-08-17 | Create/LSUpdate/EndNow/NotifyHit 已写；从 Hotfix 迁至 ET.Skill（循环依赖原因见上节） |
-| NormalAttack + TestCooldownSkill | 🔁 待迁移 | 2026-08-17 | 逻辑已写（Hotfix/Skills 版）；迁至 skill/DotNet~/Skills/（ET.SkillContent csproj） |
-| ET.Skill.asmdef + 热更件套接线 | ⬜ | | 新建；loader 包 AssemblyTool.DllNames + CodeLoader 加载；ET.Hotfix.asmdef 加引用 |
-| ET.SkillContent.csproj + Editor 菜单 + Bundles/SkillContent | ⬜ | | dotnet build → .bytes → YooAsset |
-| SkillContentLoader（运行时加载注册） | ⬜ | | HotfixView，room.Init 前；Assembly.Load → SkillLoader.RegisterAssembly（**含运行时守门员**：反射检查技能类实例字段，有非 const 字段拒绝注册——无状态纪律机器强制） |
+| LSCast + LSCastComponent + LSSkillComponent（实体） | ✅ | 2026-08-17 | 纯数据实体，留 skill/Scripts/Model/Share（进 ET.Model）；Just\* 标记/TargetIds/SubState/Phase；TotalTimeMs 创建时从 SkillLogic 拷入 |
+| LSSkillComponentSystem（Hotfix 侧） | ✅ | 2026-08-18 | LSUpdate（Route B 清标记 + 冷却递减 + 缓冲消费）；TryCast 委托 SkillCastHelper（见下） |
+| SkillLogic + SkillContext + SkillLoader + [SkillId] | ✅ | 2026-08-18 | 迁 skill/Runtime/（ET.Skill asmdef）；**SkillContext = readonly struct**（private 字段纯门面 + GetElapsedMs/GetCasterId/GetTargetPosition）；SkillLoader = RegisterAssembly 反射注册 + **守门员** |
+| LSCastSystem + LSCastComponentSystem + SkillCastHelper | ✅ | 2026-08-18 | 迁 ET.Skill；EndNow 直写 Cooldowns（不走 Hotfix 扩展避免循环依赖）；**SkillCastHelper.TryCast** 单一实现（Hotfix 门禁入口 + SkillContext.RestartCurrentSkill 连段路径共用，普通静态类无 [EntitySystemOf] 避免生成器冲突） |
+| NormalAttack + TestCooldownSkill | ✅ | 2026-08-18 | 迁 skill/DotNet~/Skills/；生命周期签名改 (SkillContext ctx[, int dtMs])——技能不摸 LSCast |
+| ET.Skill.asmdef + 热更件套接线 | ✅ | 2026-08-18 | 热更约束同 ET.Model；AssemblyTool.DllNames + AssemblyEditor.DllNames + CodeLoader 三分支加载 + CodeTypes 数组（Model 后 Hotfix 前） |
+| ET.SkillContent.csproj + Editor 菜单 + Bundles/SkillContent | ✅ | 2026-08-18 | netstandard2.1 混合 HintPath（ET.Skill←Temp/Bin/Debug，其余←ScriptAssemblies）；菜单 ET/Skill/Compile（检查 F6 前置→dotnet build→拷 .bytes） |
+| SkillContentLoader（运行时加载注册） | ✅ | 2026-08-18 | HotfixView，LSSceneChangeStart 接线（room.Init 前，AnimRegistrar 同点）；resLoader 载 bytes → Assembly.Load → RegisterAssembly |
+| YooAsset 收集 | ✅ | 2026-08-18 | AssetBundleCollectorSetting 加 SkillContent 组（CollectPath=skill/Bundles/SkillContent，抄 AnimRes 结构；CollectorGUID 为手造 32hex——若 YooAsset 编辑器报 GUID 问题在 UI 里重建该条目即可） |
 | 包规范文档 | ✅ | 2026-08-18 | `Packages/cn.etetet.skill/CLAUDE.md`——程序集拓扑/通用铁律/技能模板与 API 表/编译流程/接入清单（新会话自动读） |
-| Unity 验证（J 手感不变 + K CD 日志） | ⬜ | | 开发机无 Unity，提交后测试机验证 |
+| Unity 验证（J 手感不变 + K CD 日志） | ✅ | 2026-08-18 | 全通过：两技能运行时注册（`[Skill] 注册技能 1/2`）；J 膝踢/扣血/连段与 3.5 一致；K 施放→OnEnd(Elapsed=300ms)→CD 拦截(剩余1400ms)→2s 后恢复。**独立编译管线全链路跑通**（F6→ET/Skill/Compile→YooAsset→Assembly.Load→反射注册→守门员） |
+
+**测试机验证清单（2026-08-18 迁移完成后）**：
+1. 拉代码，Unity 打开等编译过
+2. F6（热更 5 件套 → Temp/Bin/Debug + Bundles/Code 出 ET.Skill.dll.bytes）
+3. 菜单 ET/Skill/Compile（应打日志 `[SkillCompile] 完成` + `[Skill] 注册技能 1/2` 在 Play 时）
+4. Play：J 膝踢手感与 3.5 一致；K 的 CD 日志；无报错无 hash fail
+5. 若 YooAsset 收集报错（SkillContent 组 GUID），在 YooAsset 收集器 UI 里删掉该条重新添加 Packages/cn.etetet.skill/Bundles/SkillContent 即可
+
+**迁移踩坑记录（2026-08-18，测试机首编报错修的）**：
+0. **按下沿检测写死 Button==1**：K（Button=2）永远不触发——改成 `Button != 0 && LastButton == 0`（0→非0 都算按下沿，多按键通吃）。
+1. **生成代码程序集引用**：`[EntitySystemOf]` 生成的 .g.cs 继承链碰 `IMemoryPackable`（ET.MemoryPack）→ ET.Skill.asmdef 必须引用 ET.MemoryPack（CS0012）。
+2. **扩展方法的程序集边界**：ET.Skill 用不了 ET.Hotfix 里的扩展方法（不能反向引用）——`LSAnimComponent.Play`、`LSNumericComponent.Get/Add`、`ClearHitTargets` 全是 Hotfix 扩展（CS1061/CS1929）。修法：**LSNumericComponentSystem 整体挪进 skill/Runtime/**（五层公式不能复制；Hotfix 调用方经 ET.Skill 引用照常可用）；**PlayAnim 内联属性赋值**（LSAnimComponent 全 public 属性；与 LSAnimComponentSystem.Play 同步，改时两处一起）；ClearHitTargets 直摸 HitTargets.Clear()。
+3. 经验：往 ET.Skill 加代码时，先查要调的扩展方法定义在哪个程序集——Hotfix 的扩展一律不可用（内联或把该 System 挪进来）。
 
 **实现记录（2026-08-17，逻辑层，迁移后依然成立）**：
 1. 攻击状态机搬家：阶段3.5 写在 LSHitboxComponentSystem 的起手/取消/结束逻辑移入 Cast 框架；Hitbox 只剩物理职责（盒采样/碰撞/结算/命中回写 cast）。
