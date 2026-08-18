@@ -5,6 +5,7 @@
         "ET.Aabb",
         "ET.Core",
         "ET.LSEntity",
+        "ET.MemoryPack",
         "ET.Model",
         "ET.Npkparser",
         "ET.SourceGeneratorAttribute",
