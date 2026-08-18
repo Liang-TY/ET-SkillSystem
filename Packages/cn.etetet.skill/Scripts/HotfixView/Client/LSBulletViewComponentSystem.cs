@@ -69,7 +69,9 @@ namespace ET.Client
                 LSBullet bullet = bulletComponent.GetChild<LSBullet>(kv.Key);
                 if (bullet == null) continue;
                 BulletViewInfo info = kv.Value;
-                info.Go.transform.position = bullet.Position.ToVector();
+                // 根 GO 锚 = 弹正下方的地面点（DNF 投射物锚语义，imagePos 摆位才与单位同公式）；
+                // 碰撞盒中心的 y（HalfExtents.y）只用于逻辑，视觉贴地
+                info.Go.transform.position = new Vector3((float)bullet.Position.x, 0f, (float)bullet.Position.z);
                 AdvanceFrame(info, res, Time.deltaTime);
             }
         }
@@ -80,9 +82,13 @@ namespace ET.Client
             if (def == null || def.ViewAnimId == AnimId.None) return;
 
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
+            // 两级结构（同单位 Unit2D）：根 GO 定位，子 GO 挂 SpriteRenderer 做 imagePos 摆位
+            // ——renderer 若直接挂在根上，设 localPosition 会覆盖世界定位（弹聚集在原点的 bug）
             GameObject go = new("Bullet");
             go.transform.SetParent(globalComponent.Unit, false);
-            SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
+            GameObject visual = new("Visual");
+            visual.transform.SetParent(go.transform, false);
+            SpriteRenderer renderer = visual.AddComponent<SpriteRenderer>();
             renderer.sortingOrder = 10;   // 单位之上
 
             self.Bullets[bullet.Id] = new BulletViewInfo
