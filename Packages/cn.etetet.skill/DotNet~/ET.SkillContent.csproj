@@ -13,6 +13,8 @@
         <AssemblyName>ET.SkillContent</AssemblyName>
         <RootNamespace>ET</RootNamespace>
         <OutputPath>bin\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <DebugType>portable</DebugType>
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
     </PropertyGroup>

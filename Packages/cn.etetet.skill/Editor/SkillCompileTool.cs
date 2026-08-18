@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 
 namespace ET
@@ -58,17 +59,22 @@ namespace ET
                 return;
             }
 
-            string srcDll = $"{BinDir}/{DllName}.dll";
-            string srcPdb = $"{BinDir}/{DllName}.pdb";
-            if (!File.Exists(srcDll))
+            // 递归找输出（对 OutputPath 布局免疫：bin/ 或 bin/Debug/netstandard2.1/ 都能命中）
+            string srcDll = File.Exists($"{BinDir}/{DllName}.dll")
+                ? $"{BinDir}/{DllName}.dll"
+                : Directory.GetFiles(BinDir, $"{DllName}.dll", SearchOption.AllDirectories).FirstOrDefault();
+            string srcPdb = File.Exists($"{BinDir}/{DllName}.pdb")
+                ? $"{BinDir}/{DllName}.pdb"
+                : Directory.GetFiles(BinDir, $"{DllName}.pdb", SearchOption.AllDirectories).FirstOrDefault();
+            if (srcDll == null)
             {
-                UnityEngine.Debug.LogError($"[SkillCompile] 编译成功但找不到输出 {srcDll}");
+                UnityEngine.Debug.LogError($"[SkillCompile] 编译成功但在 {BinDir} 下找不到 {DllName}.dll（看 Temp/SkillCompile.log 排查输出路径）");
                 return;
             }
 
             Directory.CreateDirectory(OutDir);
             File.Copy(srcDll, $"{OutDir}/{DllName}.dll.bytes", true);
-            if (File.Exists(srcPdb)) File.Copy(srcPdb, $"{OutDir}/{DllName}.pdb.bytes", true);
+            if (srcPdb != null) File.Copy(srcPdb, $"{OutDir}/{DllName}.pdb.bytes", true);
 
             AssetDatabase.Refresh();
             UnityEngine.Debug.Log($"[SkillCompile] 完成：{OutDir}/{DllName}.dll.bytes");
