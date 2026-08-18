@@ -34,6 +34,12 @@
             <HintPath>../../../Library/ScriptAssemblies/ET.Npkparser.dll</HintPath>
             <Private>false</Private>
         </Reference>
+        <!-- [SkillId]→BaseAttribute(ET.Core)→EnableClassAttribute(ET.SourceGeneratorAttribute)：
+             特性继承链必须完整可见，Reference 不传递所以显式引 -->
+        <Reference Include="ET.SourceGeneratorAttribute">
+            <HintPath>../../../Library/ScriptAssemblies/ET.SourceGeneratorAttribute.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
     </ItemGroup>
 
 </Project>
