@@ -5,6 +5,9 @@ namespace ET
     [FriendOf(typeof(LSInputBufferComponent))]
     public static partial class LSInputBufferComponentSystem
     {
+        // 输入缓冲窗口 ms（DNF 连段窗口=[cancelFrame,动画末]，取 300）
+        public const int BufferWindowMs = 300;
+
         [EntitySystem]
         private static void Awake(this LSInputBufferComponent self)
         {

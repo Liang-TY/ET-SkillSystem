@@ -6,16 +6,9 @@ namespace ET
     [EntitySystemOf(typeof(LSHitboxComponent))]
     [LSEntitySystemOf(typeof(LSHitboxComponent))]
     [FriendOf(typeof(LSHitboxComponent))]
-    [FriendOf(typeof(LSCombatComponent))]
-    [FriendOf(typeof(LSInputBufferComponent))]
+    [FriendOf(typeof(LSCast))]
     public static partial class LSHitboxComponentSystem
     {
-        // kneekick（5 帧）取消窗口从帧 3 起（收招）；阶段4 从 attack.json 的 cancelFrame 读
-        private const int Attack1CancelFrame = 3;
-
-        // 输入缓冲窗口 ms（阶段3.5 临时常量，DNF 连段窗口=[cancelFrame,动画末]）
-        public const int BufferWindowMs = 300;
-
         [EntitySystem]
         private static void Awake(this LSHitboxComponent self)
         {
@@ -24,31 +17,16 @@ namespace ET
             self.CurrentAttackBoxes ??= new();
         }
 
+        /// <summary>新一轮攻击前清空已命中表（SkillContext.ClearHitTargets / NormalAttack.OnCast 调）</summary>
+        public static void ClearHitTargets(this LSHitboxComponent self) => self.HitTargets.Clear();
+
         [LSEntitySystem]
         private static void LSUpdate(this LSHitboxComponent self)
         {
             LSUnit unit = self.GetParent<LSUnit>();
             LSAnimComponent anim = unit.GetComponent<LSAnimComponent>();
-            LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
-            LSInputBufferComponent buf = unit.GetComponent<LSInputBufferComponent>();
-            bool attacking = anim != null && anim.AnimId == AnimId.Attack1;
 
-            // 1) 攻击动作状态机（阶段3.5：动画帧驱动；阶段4 由 Cast/SkillLogic 接管）
-            //    起手：非攻击中、无硬直、缓冲有攻击（写入在 LSInputComponentSystem，按下沿检测不连发）
-            //    取消：攻击中且进入取消窗口（收招帧起）→ 重新起手 = 连段
-            //    屏蔽：前摇/判定帧中缓冲只持有不消费——狂按不会中断当前攻击
-            if (buf != null && buf.BufferedButton == 1 && anim != null)
-            {
-                bool canStart = !attacking && (combat == null || combat.HitstunTimer <= 0);
-                bool canCancel = attacking && anim.FrameIndex >= Attack1CancelFrame;
-                if (canStart || canCancel) StartAttack(self, anim, buf);
-            }
-            if (attacking && anim.IsFinished)
-            {
-                anim.Play(combat != null ? combat.DefaultAnimId : AnimId.Idle);
-            }
-
-            // 2) 盒采样（多盒）：受击盒每帧重采样；攻击盒仅攻击动作的判定帧
+            // 1) 受击盒：每帧从当前动画帧 damageBoxes 重采样（多盒；旧 JSON 回退单数字段）
             AnimFrameData frame = anim != null ? anim.GetCurrentFrame() : default;
             self.CurrentHurtBoxes.Clear();
             if (frame.damageBoxes is { Length: > 0 } hurtBoxes)
@@ -57,31 +35,27 @@ namespace ET
             }
             else
             {
-                // 旧 JSON 无 damageBoxes 数组 → 单数字段（兼容 stay/move.json）
                 self.CurrentHurtBoxes.Add(SampleBox(unit, frame.damageBox));
             }
 
-            self.CurrentAttackBoxes.Clear();
-            if (attacking && frame.attackBoxes is { Length: > 0 } attackBoxes)
+            // 2) 攻击盒：攻击动作的判定帧（有 attackBoxes 的帧）驱动，帧 0/4 无盒 = 前摇/收招无判定。
+            //    其他动画不动列表——固定盒技能走 SkillContext.SetAttackHitbox 手动管理；
+            //    攻击动作状态机（起手/取消/结束）在 Cast 框架（LSSkillComponentSystem / NormalAttack）。
+            if (anim != null && anim.AnimId == AnimId.Attack1)
             {
-                foreach (AnimBox box in attackBoxes) self.CurrentAttackBoxes.Add(SampleBox(unit, box));
+                self.CurrentAttackBoxes.Clear();
+                if (frame.attackBoxes is { Length: > 0 } attackBoxes)
+                {
+                    foreach (AnimBox box in attackBoxes) self.CurrentAttackBoxes.Add(SampleBox(unit, box));
+                }
             }
-            self.AttackEnabled = self.CurrentAttackBoxes.Count > 0;
+            self.AttackEnabled = self.CurrentAttackBoxes.Count > 0;   // 派生态（观察用）
 
-            // 3) 命中检测 + 结算（每帧；本轮攻击同一目标只结算一次）
+            // 3) 命中检测 + 结算（本次攻击同一目标只结算一次）
             if (self.AttackEnabled)
             {
                 CheckAttack(self, unit, unit.LSWorld().Frame);
             }
-        }
-
-        // 起手（也用于取消窗口的重新起手）：重置动画到帧 0 + 清缓冲 + 清已命中列表
-        private static void StartAttack(LSHitboxComponent self, LSAnimComponent anim, LSInputBufferComponent buf)
-        {
-            anim.Play(AnimId.Attack1);
-            buf.BufferedButton = 0;
-            buf.BufferTimer = 0;
-            self.HitTargets.Clear();
         }
 
         // 攻击盒 × 受击盒 双层循环；命中且本次攻击未命中过 → 结算
@@ -110,13 +84,13 @@ namespace ET
                 if (!hit) continue;
 
                 self.HitTargets.Add(other.Id);
-                ApplyHit(unit, other, frameNo);
+                ApplyHit(self, unit, other, frameNo);
             }
         }
 
-        // 命中结算。阶段3.5 临时常量（阶段4 attack.json 配置化——DNF 实证：命中反应是攻击方配置驱动
+        // 命中结算。阶段4 临时常量——attack.json 接入后配置化（DNF 实证：命中反应是攻击方配置驱动
         // damageAct/upForce/backForce/hitStunTime；浮空/击退/倒地等 Z 轴反应后续阶段做）
-        private static void ApplyHit(LSUnit attacker, LSUnit target, int frameNo)
+        private static void ApplyHit(LSHitboxComponent self, LSUnit attacker, LSUnit target, int frameNo)
         {
             const int damage = 50;      // 伤害
             const int hitstunMs = 500;  // 受击硬直
@@ -131,6 +105,9 @@ namespace ET
                 targetCombat.HitstunTimer = hitstunMs;   // 重打刷新（DNF 行为）
                 target.GetComponent<LSAnimComponent>()?.Play(AnimId.Hurt);   // 受击动画，重打重置到帧 0
             }
+
+            // 回写施放实例（Route B：JustHit + TargetIds，阶段7 视图层用）
+            attacker.GetComponent<LSCastComponent>()?.GetActiveCast()?.NotifyHit(target.Id);
 
             Log.Info($"[Combat] 帧{frameNo} unit{attacker.Id} 命中 unit{target.Id}，伤害{damage}，" +
                      $"HP={targetNum.Get(NumericType.Hp)} hitstun={hitstunMs}ms");

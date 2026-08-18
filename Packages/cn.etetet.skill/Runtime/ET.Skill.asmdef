@@ -1,0 +1,25 @@
+{
+    "name": "ET.Skill",
+    "rootNamespace": "",
+    "references": [
+        "ET.Aabb",
+        "ET.Core",
+        "ET.LSEntity",
+        "ET.Model",
+        "ET.Npkparser",
+        "ET.SourceGeneratorAttribute",
+        "ET.TrueSync"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "INITED",
+        "IS_COMPILING || UNITY_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

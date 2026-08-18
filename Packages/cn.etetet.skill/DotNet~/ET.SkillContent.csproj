@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- 技能内容独立编译（Unity 永不编译本目录，DotNet~ 后缀被 Unity 无视）。
+         菜单 ET/Skill/Compile 触发 dotnet build → 输出拷到 ../Bundles/SkillContent/*.bytes（YooAsset 收集）。
+         运行时 Assembly.Load 后 SkillLoader.RegisterAssembly 反射注册。
+         引用（混合 HintPath）：
+           热更程序集 ET.Skill ← Temp/Bin/Debug（F6 产物，改框架后需先 F6）
+           非热程序集 ← Library/ScriptAssemblies（Unity 常驻产物） -->
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>9.0</LangVersion>
+        <Nullable>disable</Nullable>
+        <AssemblyName>ET.SkillContent</AssemblyName>
+        <RootNamespace>ET</RootNamespace>
+        <OutputPath>bin\</OutputPath>
+        <DebugType>portable</DebugType>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="ET.Skill">
+            <HintPath>../../../Temp/Bin/Debug/ET.Skill.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="ET.Core">
+            <HintPath>../../../Library/ScriptAssemblies/ET.Core.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="ET.TrueSync">
+            <HintPath>../../../Library/ScriptAssemblies/ET.TrueSync.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="ET.Npkparser">
+            <HintPath>../../../Library/ScriptAssemblies/ET.Npkparser.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+
+</Project>
