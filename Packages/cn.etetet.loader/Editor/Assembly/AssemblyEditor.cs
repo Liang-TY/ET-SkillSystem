@@ -6,7 +6,7 @@ namespace ET
 {
     public static class AssemblyEditor
     {
-        private static readonly string[] DllNames = { "ET.Hotfix", "ET.HotfixView", "ET.Model", "ET.ModelView" };
+        private static readonly string[] DllNames = { "ET.Hotfix", "ET.HotfixView", "ET.Model", "ET.ModelView", "ET.Skill" };
         
         [InitializeOnLoadMethod]
         static void Initialize()

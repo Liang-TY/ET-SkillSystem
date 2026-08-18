@@ -12,6 +12,7 @@ namespace ET
     {
         private Assembly modelAssembly;
         private Assembly modelViewAssembly;
+        private Assembly skillAssembly;   // ET.Skill（技能框架，热更第5件套：Model 后 Hotfix 前加载）
 
         private Dictionary<string, TextAsset> dlls;
         private Dictionary<string, TextAsset> aotDlls;
@@ -58,6 +59,7 @@ namespace ET
                 }
                 this.modelAssembly = Assembly.Load(modelAssBytes, modelPdbBytes);
                 this.modelViewAssembly = Assembly.Load(modelViewAssBytes, modelViewPdbBytes);
+                this.skillAssembly = Assembly.Load(this.dlls["ET.Skill.dll"].bytes, this.dlls["ET.Skill.pdb"].bytes);
             }
             else
             {
@@ -68,6 +70,8 @@ namespace ET
                         .First(a => a.GetName().Name == "ET.Model");
                     this.modelViewAssembly = AppDomain.CurrentDomain.GetAssemblies()
                         .First(a => a.GetName().Name == "ET.ModelView");
+                    this.skillAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                        .First(a => a.GetName().Name == "ET.Skill");
                 }
                 else
                 {
@@ -77,14 +81,17 @@ namespace ET
                     byte[] modelViewPdbBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.ModelView.pdb.bytes"));
                     this.modelAssembly = Assembly.Load(modelAssBytes, modelPdbBytes);
                     this.modelViewAssembly = Assembly.Load(modelViewAssBytes, modelViewPdbBytes);
+                    this.skillAssembly = Assembly.Load(
+                        File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Skill.dll.bytes")),
+                        File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Skill.pdb.bytes")));
                 }
             }
-            
+
             (Assembly hotfixAssembly, Assembly hotfixViewAssembly) = this.LoadHotfix();
 
             World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
             {
-                typeof (World).Assembly, typeof (Init).Assembly, this.modelAssembly, this.modelViewAssembly, hotfixAssembly,
+                typeof (World).Assembly, typeof (Init).Assembly, this.modelAssembly, this.modelViewAssembly, this.skillAssembly, hotfixAssembly,
                 hotfixViewAssembly
             });
 
@@ -133,7 +140,7 @@ namespace ET
 
             CodeTypes codeTypes = World.Instance.AddSingleton<CodeTypes, Assembly[]>(new[]
             {
-                typeof (World).Assembly, typeof (Init).Assembly, this.modelAssembly, this.modelViewAssembly, hotfixAssembly,
+                typeof (World).Assembly, typeof (Init).Assembly, this.modelAssembly, this.modelViewAssembly, this.skillAssembly, hotfixAssembly,
                 hotfixViewAssembly
             });
             codeTypes.CodeProcess();
