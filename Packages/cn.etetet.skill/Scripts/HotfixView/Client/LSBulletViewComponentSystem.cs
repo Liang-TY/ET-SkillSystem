@@ -9,6 +9,7 @@ namespace ET.Client
     /// </summary>
     [EntitySystemOf(typeof(LSBulletViewComponent))]
     [FriendOf(typeof(LSBulletViewComponent))]
+    [FriendOf(typeof(LSBullet))]   // 视图读 Position/Direction/ConfigId（HotfixView 受 ET0002 管辖）
     public static partial class LSBulletViewComponentSystem
     {
         [EntitySystem]
@@ -21,7 +22,7 @@ namespace ET.Client
         {
             foreach (var kv in self.Bullets)
             {
-                if (kv.Value.Go != null) Object.Destroy(kv.Value.Go);
+                if (kv.Value.Go != null) UnityEngine.Object.Destroy(kv.Value.Go);   // 全限定：避开 ET.Object
             }
             self.Bullets.Clear();
         }
@@ -98,7 +99,7 @@ namespace ET.Client
         private static void RemoveView(LSBulletViewComponent self, long bulletId)
         {
             if (!self.Bullets.TryGetValue(bulletId, out BulletViewInfo info)) return;
-            if (info.Go != null) Object.Destroy(info.Go);
+            if (info.Go != null) UnityEngine.Object.Destroy(info.Go);
             self.Bullets.Remove(bulletId);
         }
 
