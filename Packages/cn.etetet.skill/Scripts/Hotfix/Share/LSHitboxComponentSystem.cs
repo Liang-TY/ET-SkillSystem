@@ -6,6 +6,7 @@ namespace ET
     [EntitySystemOf(typeof(LSHitboxComponent))]
     [LSEntitySystemOf(typeof(LSHitboxComponent))]
     [FriendOf(typeof(LSHitboxComponent))]
+    [FriendOf(typeof(LSCombatComponent))]   // ApplyHit 写 HitstunTimer（阶段4重写时误删，ET0002）
     [FriendOf(typeof(LSCast))]
     public static partial class LSHitboxComponentSystem
     {
