@@ -26,7 +26,8 @@ namespace ET.Client
             if (Input.GetKey(KeyCode.V)) { vy -= 1; }    // y-
 
             int button = 0;
-            if (Input.GetKey(KeyCode.J) || Input.GetMouseButton(0)) button = 1;   // 攻击（按住持续，Button: 0=无 1=攻击）
+            if (Input.GetKey(KeyCode.J) || Input.GetMouseButton(0)) button = 1;   // 普攻（按下沿触发，逻辑层检测）
+            else if (Input.GetKey(KeyCode.K)) button = 2;                          // CD 测试技能（阶段4）
 
             LSClientUpdater lsClientUpdater = self.GetParent<Room>().GetComponent<LSClientUpdater>();
             lsClientUpdater.Input.V = v.normalized;

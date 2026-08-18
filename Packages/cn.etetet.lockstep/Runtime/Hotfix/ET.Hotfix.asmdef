@@ -10,6 +10,7 @@
         "ET.MemoryPack",
         "ET.Model",
         "ET.Npkparser",
+        "ET.Skill",
         "ET.SourceGeneratorAttribute",
         "ET.TrueSync",
         "Unity.Mathematics"

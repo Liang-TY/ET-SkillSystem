@@ -13,6 +13,7 @@
         "ET.ModelView",
         "ET.Npkparser",
         "ET.ReferenceCollector",
+        "ET.Skill",
         "ET.SourceGeneratorAttribute",
         "ET.TrueSync",
         "ET.UI",

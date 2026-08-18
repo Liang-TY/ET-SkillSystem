@@ -24,7 +24,11 @@
             lsUnit.AddComponent<LSCombatComponent, int>(AnimId.Idle);
             lsUnit.AddComponent<LSInputBufferComponent>();
 
-            // 命中盒组件（skill 包）：受击/攻击盒采样 + 攻击动作状态机（帧驱动，判定帧=有 attackBoxes 的帧）
+            // 技能（阶段4）：先于 Hitbox 挂——清 cast 标记 + 消费缓冲施放，都在 Hitbox 设 JustHit 之前
+            lsUnit.AddComponent<LSSkillComponent>();
+            lsUnit.AddComponent<LSCastComponent>();
+
+            // 命中盒组件（skill 包）：受击/攻击盒采样 + 命中检测结算（攻击动作状态机在 Cast 框架）
             lsUnit.AddComponent<LSHitboxComponent>();
 
             return lsUnit;

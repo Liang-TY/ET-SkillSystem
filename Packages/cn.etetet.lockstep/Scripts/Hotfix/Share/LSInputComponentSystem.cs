@@ -29,14 +29,14 @@ namespace ET
             bool inHitstun = combat != null && combat.HitstunTimer > 0;
             bool attacking = anim != null && anim.AnimId == AnimId.Attack1 && !anim.IsFinished;
 
-            // 攻击输入：写缓冲（能否起手由 LSHitboxComponentSystem 决定——起手/取消窗口消费，其余持有）
+            // 攻击输入：写缓冲（能否起手由 LSSkillComponentSystem.TryCast 决定——三重门禁；取消窗口由技能 OnUpdate 消费）
             if (pressed)
             {
                 LSInputBufferComponent buf = unit.GetComponent<LSInputBufferComponent>();
                 if (buf != null)
                 {
                     buf.BufferedButton = self.LSInput.Button;
-                    buf.BufferTimer = LSHitboxComponentSystem.BufferWindowMs;
+                    buf.BufferTimer = LSInputBufferComponentSystem.BufferWindowMs;
                 }
             }
 
