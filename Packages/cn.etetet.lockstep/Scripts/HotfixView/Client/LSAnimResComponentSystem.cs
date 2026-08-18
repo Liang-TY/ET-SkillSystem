@@ -86,7 +86,8 @@ namespace ET.Client
             // Sprite（子区域，中心 pivot）+ 帧偏移注册
             Dictionary<int, Sprite> sprites = new();
             Dictionary<int, Vector2> offsets = new();
-            NpkSprite refSprite = rectArr.Length > 0 ? npk[rectArr[0].Id] : null;   // 校准帧 = 首个实体帧
+            // 校准帧 = 首个实体帧（rectArr 空时 default 不被使用——后续循环不执行）
+            NpkSprite refSprite = rectArr.Length > 0 ? npk[rectArr[0].Id] : default;
             foreach (PackingRectangle r in rectArr)
             {
                 NpkSprite s = npk[r.Id];
