@@ -38,9 +38,6 @@ namespace ET
             bullet.Direction = new TSVector(forward.x >= FP.Zero ? FP.One : -FP.One, FP.Zero, FP.Zero);
             bullet.Position = caster.Position + bullet.Direction * (FP)8 / 10 + new TSVector(FP.Zero, def.HalfExtents.y, FP.Zero);
             bullet.RemainingMs = def.TotalTimeMs;
-            // TODO 诊断日志（弹定位问题排查完删）
-            Log.Info($"[Bullet] 弹{bullet.Id} 出生 pos=({bullet.Position.x},{bullet.Position.y},{bullet.Position.z}) " +
-                     $"life={def.TotalTimeMs}ms speed={def.Speed}");
             return bullet;
         }
 
@@ -60,8 +57,6 @@ namespace ET
             self.RemainingMs -= LSConstValue.UpdateInterval;
             if (self.RemainingMs <= 0)
             {
-                // TODO 诊断日志（弹销毁问题排查完删）
-                Log.Info($"[Bullet] 弹{self.Id} 到时销毁（命中{self.HitTargets.Count}个，剩余位移前 pos={self.Position.x}）");
                 self.Dispose();
                 return;
             }
