@@ -32,12 +32,25 @@ namespace ET
         public TSVector GetTargetPosition() => cast.TargetPosition;
 
         // ---- 动画 ----
-        public void PlayAnim(int animId) => caster.GetComponent<LSAnimComponent>()?.Play(animId);
+        /// <summary>播放动画（内联属性赋值——LSAnimComponentSystem.Play 是 ET.Hotfix 扩展方法，
+        /// ET.Skill 引用不到；逻辑与那边保持同步，改动时两处一起改）</summary>
+        public void PlayAnim(int animId)
+        {
+            LSAnimComponent anim = caster.GetComponent<LSAnimComponent>();
+            if (anim == null) return;
+            anim.AnimId = animId;
+            anim.FrameIndex = 0;
+            anim.FrameTick = FP.Zero;
+            anim.Speed = FP.One;
+            anim.IsFinished = false;
+            AnimClipData clip = AnimConfigRegistry.Get(animId);
+            if (clip != null) anim.IsLoop = clip.loop;
+        }
 
         public void PlayDefaultAnim()
         {
             LSCombatComponent combat = caster.GetComponent<LSCombatComponent>();
-            caster.GetComponent<LSAnimComponent>()?.Play(combat != null ? combat.DefaultAnimId : AnimId.Idle);
+            PlayAnim(combat != null ? combat.DefaultAnimId : AnimId.Idle);
         }
 
         public int CurrentFrameIndex() => caster.GetComponent<LSAnimComponent>()?.FrameIndex ?? 0;
@@ -66,7 +79,7 @@ namespace ET
 
         public void DisableAttackHitbox() => caster.GetComponent<LSHitboxComponent>()?.CurrentAttackBoxes.Clear();
 
-        public void ClearHitTargets() => caster.GetComponent<LSHitboxComponent>()?.ClearHitTargets();
+        public void ClearHitTargets() => caster.GetComponent<LSHitboxComponent>()?.HitTargets.Clear();
 
         // ---- 数值 ----
         public void AddNumeric(LSUnit target, int numericKey, FP value)

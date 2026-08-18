@@ -3,6 +3,11 @@ using TrueSync;
 
 namespace ET
 {
+    /// <summary>
+    /// 注意：本 System 在 ET.Skill 程序集（不在 ET.Hotfix）——SkillContext（同程序集）要调 Get/Set/Add
+    /// 扩展方法，而 ET.Skill 不能引用 Hotfix（循环依赖）。Hotfix 侧调用方经 ET.Skill 引用照常可用；
+    /// 实体 LSNumericComponent 仍在 ET.Model。
+    /// </summary>
     [EntitySystemOf(typeof(LSNumericComponent))]
     [FriendOf(typeof(LSNumericComponent))]
     public static partial class LSNumericComponentSystem
