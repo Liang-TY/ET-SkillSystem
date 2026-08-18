@@ -12,22 +12,44 @@
 
 ---
 
-## ⚠️ 关键决策：技能代码放哪、怎么编译
+## ⚠️ 关键决策：技能代码放哪、怎么编译（2026-08-18 定案）
 
-> **项目命名**：不叫"SkillDefs"——因为不只技能，还有装备/怪物数据。叫 **GameContent**（所有可热更的游戏内容的家）。早期全 C# 一个 DLL，详见 `Notes/dnf源码研究/配置方案选型与DNF翻译管线.md` §11。
+> 一次到位，不分开发期/发布期。背景（为什么不是"技能放 Hotfix"）：
+> 1. **ET 程序集规则**：Hotfix 禁属性/禁非 const 字段/非静态类须 [EnableClass]——技能类要写 `CooldownMs => 500` 配置属性，在 Hotfix 写不了
+> 2. **用户工作流要求**：改技能数值不能触发 Unity 自动编译；要独立 csproj 手动触发编译，DLL 改名 .bytes 走资源加载（loader 模式）
+> 3. **HybridCLR 铁律**：AOT 程序集不能引用热更程序集（ET.Model 等 4 件套）→ 引用了 ET.Model 类型的 ET.Skill 框架必须自己也是热更程序集
 
-技能编译有两种模式（demo / 开发期用第一种，不搞 DotNet~ DLL）：
+### 最终架构（三块）
 
-| | 开发期（现在用） | 发布期（以后联机热更才用） |
-|---|---|---|
-| 技能 .cs 放哪 | `skill/Scripts/Hotfix/Share/Skills/*.cs` | `skill/Skills/*.cs` → DotNet~ 编译成 DLL |
-| 谁编译 | **Unity 自动编译**（asmref → ET.Hotfix 程序集） | `dotnet build` → HybridCLR 加载 |
-| 能断点 | ✅ 正常打 | ❌ 要配 HybridCLR |
-| 你现在需要吗 | ✅ **就用这个** | ❌ 不碰 |
+```
+① ET.Skill 框架 = 第 5 个热更程序集（Unity/F6 编译，asmdef）
+   skill/Runtime/ET.Skill.asmdef（热更约束同 ET.Model；引用 Model/LSEntity/Core/TrueSync/Aabb/Npkparser）
+   内容：SkillLogic（无状态基类）/ SkillIdAttribute+SkillIds / SkillLoader（RegisterAssembly 反射注册单例）
+        / SkillContext（readonly struct——值传递零 GC，技能只见门面 API 不见实体类型）
+        / LSCastSystem + LSCastComponentSystem（生命周期机制必须在这层：SkillContext.RestartCurrentSkill
+          需要它们，放 ET.Hotfix 会循环依赖）
+   loader 包配套：AssemblyTool.DllNames 加 "ET.Skill"；CodeLoader 加载 ET.Skill.dll.bytes（Model 后 Hotfix 前）
 
-**技能写法**：在 `skill/Scripts/Hotfix/Share/Skills/` 下建普通 .cs，继承 `SkillLogic`，打 `[SkillId(n)]` 特性。Unity 自动编译，跟写 LSAnimComponent 没区别。SkillLoader 扫描 `[SkillId]` 自动注册。
+② ET.SkillContent 内容 = 独立 dotnet csproj（Unity 永不编译）
+   skill/DotNet~/ET.SkillContent.csproj + Skills/*.cs（NormalAttack/TestCooldownSkill，属性随便写）
+   引用（混合 HintPath）：ET.Skill ← Temp/Bin/Debug（F6 产物）；ET.Core/TrueSync/Npkparser ← Library/ScriptAssemblies
+   工作流：改技能 → 菜单 ET/Skill/Compile（不绑快捷键）→ dotnet build → 拷 .dll.bytes/.pdb.bytes
+        → skill/Bundles/SkillContent/ → YooAsset 收集。改框架 → 先 F6 再菜单。
 
-以后联机热更时，把 `Skills/` 目录迁到 DotNet~ 编译管线——代码本身不用改（SkillLogic 子类还是那些），只是换个编译方式。
+③ 运行时加载链
+   CodeLoader 载热更 5 件套 → SkillContentLoader（skill 包 HotfixView，room.Init 前、LSAnimClipRegistrar 同时机）
+   载 ET.SkillContent.dll.bytes → Assembly.Load → SkillLoader.RegisterAssembly（扫 [SkillId]）
+```
+
+### 关键事实备忘（踩过/验证过的坑）
+
+- ET 的分析器管辖名单（AnalyzeAssembly）按程序集名字面匹配：ET.Core/Model/Hotfix/ModelView/HotfixView——**ET.Skill 不在名单**，字段属性随便写，[EnableClass] 也不用加
+- ET.Model 等 4 件套在 editor 下 Unity 正常编译进内存，但**进 Play 时 AssemblyEditor 把文件从 ScriptAssemblies 删掉**（ETModelLoadFromBytes.json 存在时），运行时��� Bundles/Code/*.bytes 加载 → **csproj 引用热更 DLL 只能用 Temp/Bin/Debug（F6 产物），不能用 ScriptAssemblies**
+- [EnableClass] 是纯分析器标记，不进 Generator，零生成零 GC；真正的 GC 点是 new SkillContext——改 readonly struct 消除（24 字节栈拷贝）
+- AOT 不能引用热更，但**热更引用热更随便**（SkillContent 引用 ET.Skill/ET.Model 合法）；dotnet 编译 ≠ AOT
+- SkillLogic 无状态 = 帧同步回滚硬要求（实例不进快照），与程序集无关；运行时状态全在 LSCast 实体
+
+> **规范文档**：新程序集脱离分析器管辖 ≠ 随便写。程序集拓扑、通用铁律（禁 UnityEngine/禁 float/禁实例字段...）、技能模板与 API 表、编译流程、新技能接入清单——全部固化在 **`Packages/cn.etetet.skill/CLAUDE.md`**（包内 CLAUDE.md 会话自动注入）。无状态纪律由 SkillLoader.RegisterAssembly 运行时守门员机器强制。
 
 ---
 
@@ -275,11 +297,41 @@ public class ChargeSkill : SkillLogic
 
 ## 4. 进度记录
 
+> **状态说明**：2026-08-17 按旧方案（技能放 Hotfix/Skills）写完了第一版全部逻辑代码（未在 Unity 验证）。
+> 2026-08-18 用户指出 ET 规则违反（Hotfix 禁属性/字段/普通类）+ 提出独立编译要求 → 架构定案（见上节）。
+> 逻辑设计全部保留，按新架构**迁移**（等用户确认后执行）。
+
 | 任务 | 状态 | 日期 | 备注 |
 |------|------|------|------|
-| LSCast + LSCastComponent | ⬜ | | |
-| SkillLogic + SkillContext | ⬜ | | |
-| LSCastSystem（逻辑驱动 + Route B 标记） | ⬜ | | |
-| LSSkillComponent（槽位/冷却） | ⬜ | | |
-| SkillLoader（扫描 [SkillId] 注册） | ⬜ | | |
-| NormalAttack 技能 + 验证 | ⬜ | | 放 Scripts/Hotfix/Share/Skills/ |
+| LSCast + LSCastComponent + LSSkillComponent（实体） | ✅ 不迁移 | 2026-08-17 | 纯数据实体，留 skill/Scripts/Model/Share（进 ET.Model）；Just\* 标记/TargetIds/SubState/Phase；TotalTimeMs 创建时从 SkillLogic 拷入 |
+| LSSkillComponentSystem（槽位/冷却） | ✅ 不迁移 | 2026-08-17 | TryCast 三重门禁（硬直/在技/冷却）+ CD 递减 + 缓冲消费 + Route B 清标记（先于 Hitbox/Cast 跑）；留 ET.Hotfix |
+| SkillLogic + SkillContext + SkillLoader + [SkillId] | 🔁 待迁移 | 2026-08-17 | 逻辑已写（Hotfix/Share 版）；迁移至 skill/Runtime/（ET.Skill asmdef）+ SkillContext 改 **readonly struct** + SkillLoader 改 RegisterAssembly(Assembly) 反射注册 |
+| LSCastSystem + LSCastComponentSystem | 🔁 待迁移 | 2026-08-17 | Create/LSUpdate/EndNow/NotifyHit 已写；从 Hotfix 迁至 ET.Skill（循环依赖原因见上节） |
+| NormalAttack + TestCooldownSkill | 🔁 待迁移 | 2026-08-17 | 逻辑已写（Hotfix/Skills 版）；迁至 skill/DotNet~/Skills/（ET.SkillContent csproj） |
+| ET.Skill.asmdef + 热更件套接线 | ⬜ | | 新建；loader 包 AssemblyTool.DllNames + CodeLoader 加载；ET.Hotfix.asmdef 加引用 |
+| ET.SkillContent.csproj + Editor 菜单 + Bundles/SkillContent | ⬜ | | dotnet build → .bytes → YooAsset |
+| SkillContentLoader（运行时加载注册） | ⬜ | | HotfixView，room.Init 前；Assembly.Load → SkillLoader.RegisterAssembly（**含运行时守门员**：反射检查技能类实例字段，有非 const 字段拒绝注册——无状态纪律机器强制） |
+| 包规范文档 | ✅ | 2026-08-18 | `Packages/cn.etetet.skill/CLAUDE.md`——程序集拓扑/通用铁律/技能模板与 API 表/编译流程/接入清单（新会话自动读） |
+| Unity 验证（J 手感不变 + K CD 日志） | ⬜ | | 开发机无 Unity，提交后测试机验证 |
+
+**实现记录（2026-08-17，逻辑层，迁移后依然成立）**：
+1. 攻击状态机搬家：阶段3.5 写在 LSHitboxComponentSystem 的起手/取消/结束逻辑移入 Cast 框架；Hitbox 只剩物理职责（盒采样/碰撞/结算/命中回写 cast）。
+2. 攻击盒双路径：帧驱动（判定帧=有 attackBoxes 的帧，NormalAttack 用）+ 固定盒（SkillContext.SetAttackHitbox）；hitbox 只在"动画=Attack1"时重采样帧盒，其他动画不动列表。
+3. Route B 标记清理由 LSSkillComponentSystem 开头做（先于 Hitbox/Cast）——修掉"hitbox 先设 cast 后清"的同帧覆灭问题；Finished cast 下帧 Dispose。
+4. CD 验证技能 TestCooldownSkill（K 键 CD 2000ms 纯 Log）；NormalAttack CooldownMs=0（DNF 普攻无真 CD）。
+5. 取消窗口常量 CancelFrame=3（kneekick 收招帧）；RestartCurrentSkill = 结束当前 + 重施（连段）。
+6. 待办：伤害50/硬直500ms 硬编码（Actions 层 + 表化后消除）；Bullet/Area/Buff API 阶段5/6 加。
+
+## 5. 未来演进决策（2026-08-18，记档）
+
+**Actions 效果层（阶段 5 引入）**：参考 `E:\Projects\cs\et7.2skillsystemlession\ET-SkillSystem`（skillSystemLession 分支）的 Actions 模式——
+- 技能 = 配置行（actions 列表组合原子节点）；节点 = 无状态 handler 类（`[Actions(type)]` + 反射注册单例，与 SkillLoader 同机制）
+- 分工：**过程逻辑（连段/取消/多段）留 SkillLogic 类；时机效果（命中扣血/硬直/击退/加Buff）走 Actions 表组合**——DNF 本来就是 .skl 配置 + nut 脚本双轨
+- 节点库放 ET.SkillContent DLL（独立编译管线已支持）；attack/buff 表届时用 luban 或 json（见下）
+- ET10 `E:\Projects\cs\etmaster\ET\Packages\cn.etetet.spell`（图形编辑器+多态节点）远期参考其分层，帧同步下不照搬 Unity SerializeReference
+
+**luban 迁移专题（延后，内容规模化时做）**：
+- 现状：本项目无 luban——cn.etetet.excel 是 ET 自带简易导出器（EPPlus+Roslyn，表头即 schema）；战斗配置全走手写 json + 注册表（AnimConfigRegistry 模式）
+- etmaster 有完整设施：cn.etetet.yiuiluban（Luban.dll，**net10.0**）+ cn.etetet.config（luban.conf 汇总各包 schema + LubanGen.ps1 + 生成基类 [ConfigProcess]/ResolveRef）
+- 迁移成本：约半天~一天独立工程（net10 工具适配或源码重编 net8、ET10 基类适配、生成流程接入）；与技能系统解耦
+- 决策：**先不迁**。阶段 4-6 用 json 注册表跑通；怪物 AI/装备内容规模化时（约阶段 7 前后）单独做 luban 专题，届时 attack/buff/monster 表 luban 化（json→表平移，注册表读法不变）
