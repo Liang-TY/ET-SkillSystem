@@ -20,8 +20,8 @@ namespace ET
         {
             LSUnit unit = self.GetParent<LSUnit>();
 
-            // 按下沿检测：Button 从 0→1 才算一次输入（按住不连发）
-            bool pressed = self.LSInput.Button == 1 && self.LastButton == 0;
+            // 按下沿检测：Button 从 0→非0 才算一次输入（按住不连发；支持多按键值）
+            bool pressed = self.LSInput.Button != 0 && self.LastButton == 0;
             self.LastButton = self.LSInput.Button;
 
             LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
