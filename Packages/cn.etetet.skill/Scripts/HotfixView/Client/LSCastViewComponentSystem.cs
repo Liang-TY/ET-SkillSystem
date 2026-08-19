@@ -37,19 +37,25 @@ namespace ET.Client
             {
                 if (kv.Value is not LSUnit unit) continue;
 
-                // ---- Cast 标记（技能起手/命中/结束）—— UI 接入点 ----
+                // ---- Cast 标记（技能起手/命中/结束）—— UI 接入点：特效/音效在这里写 ----
                 LSCastComponent castComp = unit.GetComponent<LSCastComponent>();
                 if (castComp != null)
                 {
                     foreach (var ckv in castComp.Children)
                     {
-                        if (ckv.Value is not LSCast cast || cast.Finished) continue;   // LSCast 用 Finished 不是 Removing
+                        if (ckv.Value is not LSCast cast || cast.Finished) continue;
                         if (cast.JustStarted)
-                            Log.Info($"[SkillView] UI接入点·起手特效 unit={unit.Id} skill={cast.SkillId}");
+                        {
+                            // 起手特效/音效
+                        }
                         if (cast.JustHit)
-                            Log.Info($"[SkillView] UI接入点·命中火花 unit={unit.Id} skill={cast.SkillId} targets={cast.TargetIds.Count}");
+                        {
+                            // 命中火花/音效
+                        }
                         if (cast.JustFinished)
-                            Log.Info($"[SkillView] UI接入点·结束清理 unit={unit.Id} skill={cast.SkillId}");
+                        {
+                            // 结束清理特效
+                        }
                     }
                 }
 
@@ -61,9 +67,13 @@ namespace ET.Client
                     {
                         if (bkv.Value is not LSBuff buff || buff.Removing) continue;
                         if (buff.JustAdded)
-                            Log.Info($"[SkillView] UI接入点·Buff图标出现 unit={unit.Id} buff={buff.ConfigId} stack={buff.Stack}");
+                        {
+                            // Buff 图标出现
+                        }
                         if (buff.JustRemoved)
-                            Log.Info($"[SkillView] UI接入点·Buff图标消失 unit={unit.Id} buff={buff.ConfigId}");
+                        {
+                            // Buff 图标消失
+                        }
                     }
                 }
 
@@ -78,7 +88,7 @@ namespace ET.Client
                     {
                         if (hp < lastHp)
                         {
-                            Log.Info($"[SkillView] UI接入点·伤害数字 unit={unit.Id} -{lastHp - hp} HP={hp}");
+                            // 伤害数字（飞数字）
 
                             if (SkillSystemConfig.HitFlashEnabled)
                             {
