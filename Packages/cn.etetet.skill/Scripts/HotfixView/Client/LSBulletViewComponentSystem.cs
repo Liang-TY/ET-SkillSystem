@@ -10,6 +10,7 @@ namespace ET.Client
     [EntitySystemOf(typeof(LSBulletViewComponent))]
     [FriendOf(typeof(LSBulletViewComponent))]
     [FriendOf(typeof(LSBullet))]   // 视图读 Position/Direction/ConfigId（HotfixView 受 ET0002 管辖）
+    [FriendOf(typeof(LSAnimResComponent))]  // 加法混合读 AdditiveMaterial（ET0002）
     public static partial class LSBulletViewComponentSystem
     {
         [EntitySystem]
