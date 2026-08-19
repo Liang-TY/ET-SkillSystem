@@ -23,6 +23,7 @@ namespace ET.Client
     {
         public GameObject Go;
         public SpriteRenderer Renderer;
+        public Material OriginalMaterial;
         public int AnimId;
         public int FrameIndex;
         public float Timer;

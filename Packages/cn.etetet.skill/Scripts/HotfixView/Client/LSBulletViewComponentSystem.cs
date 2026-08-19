@@ -102,6 +102,7 @@ namespace ET.Client
             {
                 Go = go,
                 Renderer = renderer,
+                OriginalMaterial = renderer.sharedMaterial,   // 缓存原始材质（加法混合帧切走后要切回来）
                 AnimId = def.ViewAnimId,
                 FrameIndex = 0,
                 Timer = 0,
@@ -148,6 +149,12 @@ namespace ET.Client
             info.Renderer.transform.localScale = info.FaceRight
                 ? Vector3.one
                 : new Vector3(-1, 1, 1);   // 面左：绕弹心镜像
+
+            // LINEARDODGE 加法混合（弹的帧数据驱动——波动剑全部帧 graphicEffect=1）
+            if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
+                info.Renderer.sharedMaterial = res.AdditiveMaterial;
+            else if (info.OriginalMaterial != null)
+                info.Renderer.sharedMaterial = info.OriginalMaterial;
         }
     }
 }

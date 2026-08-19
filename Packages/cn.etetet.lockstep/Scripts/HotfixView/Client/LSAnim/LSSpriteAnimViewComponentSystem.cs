@@ -15,6 +15,7 @@ namespace ET.Client
         private static void Awake(this LSSpriteAnimViewComponent self)
         {
             self.SpriteRenderer = self.GetParent<LSUnitView>().SpriteRenderer;
+            self.OriginalMaterial = self.SpriteRenderer != null ? self.SpriteRenderer.sharedMaterial : null;
         }
 
         [EntitySystem]
@@ -81,11 +82,12 @@ namespace ET.Client
                 -(frame.imagePos.y + center.y) / 100f - chain.y,
                 0f);
 
-            // LINEARDODGE 加法混合（DNF 发光特效标配）：帧数据驱动，共享材质切换（无实例分配）
+            // LINEARDODGE 加法混合（DNF 发光特效标配）：帧数据驱动，共享材质切换
+            // ⚠️ 不能设 null（Unity 会丢 shader → 粉红），必须恢复缓存的原始材质
             if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
                 self.SpriteRenderer.sharedMaterial = res.AdditiveMaterial;
-            else
-                self.SpriteRenderer.sharedMaterial = null;   // null = SpriteRenderer 默认材质
+            else if (self.OriginalMaterial != null)
+                self.SpriteRenderer.sharedMaterial = self.OriginalMaterial;
 
             self.LastAnimId = anim.AnimId;
             self.LastFrameIndex = anim.FrameIndex;

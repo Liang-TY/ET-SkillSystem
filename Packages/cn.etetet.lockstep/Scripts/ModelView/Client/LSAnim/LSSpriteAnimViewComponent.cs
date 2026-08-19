@@ -15,5 +15,8 @@ namespace ET.Client
 
         /// <summary>受击闪白剩余时间（秒；>0 时 sprite 白色高亮。SkillSystemConfig.HitFlashEnabled 控制）</summary>
         public float FlashTimer;
+
+        /// <summary>原始材质缓存（Awake 时抓取；加法混合帧切走后要切回来，设 null 会丢 shader→粉红）</summary>
+        public Material OriginalMaterial;
     }
 }
