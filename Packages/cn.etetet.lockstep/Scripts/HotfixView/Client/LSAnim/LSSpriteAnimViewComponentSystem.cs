@@ -27,22 +27,11 @@ namespace ET.Client
             LSAnimComponent anim = unit?.GetComponent<LSAnimComponent>();
             if (anim == null) return;
 
-            // ---- 受击闪白（Route B：硬直进入边沿触发，SkillSystemConfig.HitFlashEnabled 控制）----
-            if (SkillSystemConfig.HitFlashEnabled)
-            {
-                LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
-                if (combat != null && combat.LastHitstunTimer == 0 && combat.HitstunTimer > 0)
-                {
-                    self.FlashTimer = 0.15f;
-                    // TODO 诊断日志（闪白排查完删）
-                    Log.Info($"[Flash] unit={unit.Id} 闪白触发！last={combat.LastHitstunTimer} cur={combat.HitstunTimer}");
-                }
-            }
+            // ---- 受击闪白（效果执行在这里；触发由 LSCastViewComponentSystem 检测后设 FlashTimer）----
             if (self.FlashTimer > 0)
             {
                 self.FlashTimer -= Time.deltaTime;
-                // 红色 tint 闪（2D 经典受击指示；非 HDR 管线下 Color(8,8,8) 会 clamp 到白色=无效）
-                self.SpriteRenderer.color = new Color(1f, 0.3f, 0.3f, 1f);
+                self.SpriteRenderer.color = new Color(1f, 0.3f, 0.3f, 1f);   // 红色 tint 闪
             }
             else
             {

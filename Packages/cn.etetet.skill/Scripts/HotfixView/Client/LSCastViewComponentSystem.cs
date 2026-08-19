@@ -14,6 +14,7 @@ namespace ET.Client
     /// </summary>
     [EntitySystemOf(typeof(LSCastViewComponent))]
     [FriendOf(typeof(LSCastViewComponent))]
+    [FriendOf(typeof(LSSpriteAnimViewComponent))]   // 写 FlashTimer（闪白触发）
     [ET.FriendOf(typeof(ET.LSCast))]
     [ET.FriendOf(typeof(ET.LSBuff))]
     [ET.FriendOf(typeof(ET.LSCombatComponent))]
@@ -63,6 +64,30 @@ namespace ET.Client
                             Log.Info($"[SkillView] UI接入点·Buff图标出现 unit={unit.Id} buff={buff.ConfigId} stack={buff.Stack}");
                         if (buff.JustRemoved)
                             Log.Info($"[SkillView] UI接入点·Buff图标消失 unit={unit.Id} buff={buff.ConfigId}");
+                    }
+                }
+
+                // ---- 受击闪白触发（SkillSystemConfig.HitFlashEnabled 控制）----
+                // 放这里不放 LSSpriteAnimViewComponentSystem：那边被空检查拦截的概率高（本次诊断实证）
+                if (SkillSystemConfig.HitFlashEnabled)
+                {
+                    LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
+                    if (combat != null && combat.LastHitstunTimer == 0 && combat.HitstunTimer > 0)
+                    {
+                        LSUnitViewComponent viewComp = room.GetComponent<LSUnitViewComponent>();
+                        if (viewComp != null)
+                        {
+                            LSUnitView unitView = viewComp.GetChild<LSUnitView>(unit.Id);
+                            if (unitView != null)
+                            {
+                                LSSpriteAnimViewComponent spriteView = unitView.GetComponent<LSSpriteAnimViewComponent>();
+                                if (spriteView != null)
+                                {
+                                    spriteView.FlashTimer = 0.5f;   // 调试用 500ms（正式 150ms，调试完改回）
+                                    Log.Info($"[Flash] unit={unit.Id} 闪白触发");
+                                }
+                            }
+                        }
                     }
                 }
 
