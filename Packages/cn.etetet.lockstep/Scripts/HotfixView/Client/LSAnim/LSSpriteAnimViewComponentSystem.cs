@@ -33,7 +33,9 @@ namespace ET.Client
                 LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
                 if (combat != null && combat.LastHitstunTimer == 0 && combat.HitstunTimer > 0)
                 {
-                    self.FlashTimer = 0.15f;   // 150ms 白闪
+                    self.FlashTimer = 0.15f;
+                    // TODO 诊断日志（闪白排查完删）
+                    Log.Info($"[Flash] unit={unit.Id} 闪白触发！last={combat.LastHitstunTimer} cur={combat.HitstunTimer}");
                 }
             }
             if (self.FlashTimer > 0)
