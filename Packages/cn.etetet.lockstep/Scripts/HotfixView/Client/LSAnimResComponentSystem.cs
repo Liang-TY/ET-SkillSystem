@@ -31,6 +31,19 @@ namespace ET.Client
             // 多图集：角色图集 + 投射物图集（key = 动画 json 里 image.path 的文件名，忽略大小写）
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bantuamazones.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/NormalWave1.img.bytes");
+
+            // LINEARDODGE 加法混合材质（共享，所有需要发光的帧用同一个实例）
+            Shader additiveShader = Shader.Find("ET/SpriteAdditive");
+            if (additiveShader != null)
+            {
+                self.AdditiveMaterial = new Material(additiveShader);
+                Log.Info("[LSAnimRes] 加法混合材质就绪");
+            }
+            else
+            {
+                Log.Warning("[LSAnimRes] 找不到 ET/SpriteAdditive shader——加法混合帧会退化为普通渲染");
+            }
+
             Log.Info($"[LSAnimRes] 图集构建完成：{self.Atlases.Count} 张（{string.Join(", ", self.Atlases.Keys)}）");
         }
 

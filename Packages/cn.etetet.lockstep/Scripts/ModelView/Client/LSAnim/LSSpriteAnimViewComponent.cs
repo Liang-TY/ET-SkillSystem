@@ -12,5 +12,8 @@ namespace ET.Client
         public SpriteRenderer SpriteRenderer;
         public int LastAnimId = -1;
         public int LastFrameIndex = -1;
+
+        /// <summary>受击闪白剩余时间（秒；>0 时 sprite 白色高亮。SkillSystemConfig.HitFlashEnabled 控制）</summary>
+        public float FlashTimer;
     }
 }

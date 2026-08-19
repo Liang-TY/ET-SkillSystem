@@ -20,10 +20,11 @@ namespace ET.Client
             // 加载场景资源
             await resourcesLoaderComponent.LoadSceneAsync($"Packages/cn.etetet.demores/Scenes/{"Game"}.unity", LoadSceneMode.Single);
 
-            // 注册动画 clip + 加载技能内容 DLL + 弹视图（必须在 room.Init 建 unit 之前；此事件 await PublishAsync 完成后才 Init）
+            // 注册动画 clip + 加载技能内容 DLL + 弹视图 + 战斗表现钩子（必须在 room.Init 建 unit 之前）
             await LSAnimClipRegistrar.RegisterAll(clientScene);
             await SkillContentLoader.Load(clientScene);
             await room.AddComponent<LSBulletViewComponent>().InitAsync();
+            room.AddComponent<LSCastViewComponent>();
         }
     }
 }

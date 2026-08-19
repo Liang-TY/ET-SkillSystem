@@ -24,6 +24,25 @@ namespace ET.Client
             LSAnimComponent anim = unit?.GetComponent<LSAnimComponent>();
             if (anim == null) return;
 
+            // ---- 受击闪白（Route B：硬直进入边沿触发，SkillSystemConfig.HitFlashEnabled 控制）----
+            if (SkillSystemConfig.HitFlashEnabled)
+            {
+                LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
+                if (combat != null && combat.LastHitstunTimer == 0 && combat.HitstunTimer > 0)
+                {
+                    self.FlashTimer = 0.15f;   // 150ms 白闪
+                }
+            }
+            if (self.FlashTimer > 0)
+            {
+                self.FlashTimer -= Time.deltaTime;
+                self.SpriteRenderer.color = new Color(8f, 8f, 8f, 1f);   // HDR 白（clamp 后 = 纯白剪影）
+            }
+            else
+            {
+                self.SpriteRenderer.color = Color.white;   // 正常
+            }
+
 #if UNITY_EDITOR
             // 调试镜像：每帧把逻辑状态推到 LSUnitViewDebug（编辑器运行时 Inspector 可见）
             LSUnitViewDebug dbg = view.GameObject.GetComponentInChildren<LSUnitViewDebug>();
@@ -59,6 +78,12 @@ namespace ET.Client
                 (frame.imagePos.x + center.x) / 100f - chain.x,
                 -(frame.imagePos.y + center.y) / 100f - chain.y,
                 0f);
+
+            // LINEARDODGE 加法混合（DNF 发光特效标配）：帧数据驱动，共享材质切换（无实例分配）
+            if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
+                self.SpriteRenderer.sharedMaterial = res.AdditiveMaterial;
+            else
+                self.SpriteRenderer.sharedMaterial = null;   // null = SpriteRenderer 默认材质
 
             self.LastAnimId = anim.AnimId;
             self.LastFrameIndex = anim.FrameIndex;
