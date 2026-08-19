@@ -42,7 +42,7 @@ namespace ET.Client
                 {
                     foreach (var ckv in castComp.Children)
                     {
-                        if (ckv.Value is not LSCast cast || cast.Removing) continue;
+                        if (ckv.Value is not LSCast cast || cast.Finished) continue;   // LSCast 用 Finished 不是 Removing
                         if (cast.JustStarted)
                             Log.Info($"[SkillView] UI接入点·起手特效 unit={unit.Id} skill={cast.SkillId}");
                         if (cast.JustHit)

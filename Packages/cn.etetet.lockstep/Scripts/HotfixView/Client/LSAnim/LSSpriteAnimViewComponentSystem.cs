@@ -7,6 +7,7 @@ namespace ET.Client
     [FriendOf(typeof(LSSpriteAnimViewComponent))]
     [FriendOf(typeof(LSUnitView))]
     [FriendOf(typeof(LSAnimComponent))]
+    [FriendOf(typeof(LSCombatComponent))]   // 受击闪白读 LastHitstunTimer/HitstunTimer（ET0002）
     public static partial class LSSpriteAnimViewComponentSystem
     {
         [EntitySystem]
