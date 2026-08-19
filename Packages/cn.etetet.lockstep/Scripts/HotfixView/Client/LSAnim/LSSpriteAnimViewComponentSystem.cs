@@ -39,7 +39,8 @@ namespace ET.Client
             if (self.FlashTimer > 0)
             {
                 self.FlashTimer -= Time.deltaTime;
-                self.SpriteRenderer.color = new Color(8f, 8f, 8f, 1f);   // HDR 白（clamp 后 = 纯白剪影）
+                // 红色 tint 闪（2D 经典受击指示；非 HDR 管线下 Color(8,8,8) 会 clamp 到白色=无效）
+                self.SpriteRenderer.color = new Color(1f, 0.3f, 0.3f, 1f);
             }
             else
             {
