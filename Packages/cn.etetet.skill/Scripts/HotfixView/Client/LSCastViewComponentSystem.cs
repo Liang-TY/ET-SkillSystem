@@ -67,33 +67,9 @@ namespace ET.Client
                     }
                 }
 
-                // ---- 受击闪白触发 ----
-                // TODO 诊断：直接打出硬直值，排查边沿检测为什么失败
-                LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
-                if (combat != null && combat.HitstunTimer > 0)
-                {
-                    Log.Info($"[Flash诊断] unit={unit.Id} hitstun={combat.HitstunTimer} " +
-                             $"last={combat.LastHitstunTimer} config={SkillSystemConfig.HitFlashEnabled}");
-                    if (combat.LastHitstunTimer == 0)
-                    {
-                        LSUnitViewComponent viewComp = room.GetComponent<LSUnitViewComponent>();
-                        if (viewComp != null)
-                        {
-                            LSUnitView unitView = viewComp.GetChild<LSUnitView>(unit.Id);
-                            if (unitView != null)
-                            {
-                                LSSpriteAnimViewComponent spriteView = unitView.GetComponent<LSSpriteAnimViewComponent>();
-                                if (spriteView != null)
-                                {
-                                    spriteView.FlashTimer = 0.5f;
-                                    Log.Info($"[Flash] unit={unit.Id} 闪白触发");
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // ---- HP diff（伤害数字）—— UI 接入点 ----
+                // ---- HP diff（伤害数字 + 受击闪白）—— UI 接入点 ----
+                // 闪白不用 LastHitstunTimer 边沿（逻辑帧和视图在同一 Unity Update 里跑，
+                // 边沿值永远被下一帧递减覆盖——本次诊断实证），改用 HP 下降（持久值可靠）
                 var numeric = unit.GetComponent<LSNumericComponent>();
                 if (numeric != null)
                 {
@@ -101,7 +77,26 @@ namespace ET.Client
                     if (self.LastHp.TryGetValue(unit.Id, out int lastHp))
                     {
                         if (hp < lastHp)
+                        {
                             Log.Info($"[SkillView] UI接入点·伤害数字 unit={unit.Id} -{lastHp - hp} HP={hp}");
+
+                            if (SkillSystemConfig.HitFlashEnabled)
+                            {
+                                LSUnitViewComponent viewComp = room.GetComponent<LSUnitViewComponent>();
+                                if (viewComp != null)
+                                {
+                                    LSUnitView unitView = viewComp.GetChild<LSUnitView>(unit.Id);
+                                    if (unitView != null)
+                                    {
+                                        LSSpriteAnimViewComponent spriteView = unitView.GetComponent<LSSpriteAnimViewComponent>();
+                                        if (spriteView != null)
+                                        {
+                                            spriteView.FlashTimer = 0.15f;   // 150ms 红闪
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     self.LastHp[unit.Id] = hp;
                 }
