@@ -67,12 +67,14 @@ namespace ET.Client
                     }
                 }
 
-                // ---- 受击闪白触发（SkillSystemConfig.HitFlashEnabled 控制）----
-                // 放这里不放 LSSpriteAnimViewComponentSystem：那边被空检查拦截的概率高（本次诊断实证）
-                if (SkillSystemConfig.HitFlashEnabled)
+                // ---- 受击闪白触发 ----
+                // TODO 诊断：直接打出硬直值，排查边沿检测为什么失败
+                LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
+                if (combat != null && combat.HitstunTimer > 0)
                 {
-                    LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
-                    if (combat != null && combat.LastHitstunTimer == 0 && combat.HitstunTimer > 0)
+                    Log.Info($"[Flash诊断] unit={unit.Id} hitstun={combat.HitstunTimer} " +
+                             $"last={combat.LastHitstunTimer} config={SkillSystemConfig.HitFlashEnabled}");
+                    if (combat.LastHitstunTimer == 0)
                     {
                         LSUnitViewComponent viewComp = room.GetComponent<LSUnitViewComponent>();
                         if (viewComp != null)
@@ -83,7 +85,7 @@ namespace ET.Client
                                 LSSpriteAnimViewComponent spriteView = unitView.GetComponent<LSSpriteAnimViewComponent>();
                                 if (spriteView != null)
                                 {
-                                    spriteView.FlashTimer = 0.5f;   // 调试用 500ms（正式 150ms，调试完改回）
+                                    spriteView.FlashTimer = 0.5f;
                                     Log.Info($"[Flash] unit={unit.Id} 闪白触发");
                                 }
                             }
