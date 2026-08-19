@@ -19,6 +19,7 @@ namespace ET
         public AnimFrameImage image;
         public AnimFramePos imagePos;
         public int delay;
+        public int graphicEffect;       // 0=无, 1=LINEARDODGE(加法混合发光)——视图层消费，逻辑层不用
 
         // 受击/身体盒（单数 = damageBoxes[0]，兼容旧 JSON/现有采样代码）
         public AnimBox damageBox;
