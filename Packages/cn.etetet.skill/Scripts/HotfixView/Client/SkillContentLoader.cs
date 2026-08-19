@@ -29,11 +29,24 @@ namespace ET.Client
             }
 
             Assembly assembly = Assembly.Load(dllAsset.bytes);
-            // 四类内容同源注册：技能 / Buff 配置 / Action 效果节点 / 投射物配置（ContentLoader 泛型）
+            // 四类内容同源注册：技能 / Buff 配��� / Action 效果节点 / 投射物配置（ContentLoader 泛型）
             SkillLoader.RegisterAssembly(assembly);
             BuffLoader.RegisterAssembly(assembly);
             ActionLoader.RegisterAssembly(assembly);
             BulletLoader.RegisterAssembly(assembly);
+
+            // 技能系统配置 json（改配置零编译：改 json → YooAsset 重收集 → Play）
+            TextAsset configAsset = await resLoader.LoadAssetAsync<TextAsset>(
+                "Packages/cn.etetet.lockstep/Bundles/AnimRes/skillconfig.json");
+            if (configAsset != null)
+            {
+                SkillSystemConfigData data = JsonUtility.FromJson<SkillSystemConfigData>(configAsset.text);
+                SkillSystemConfig.HitFlashEnabled = data.hitFlashEnabled;
+                SkillSystemConfig.ScreenShakeEnabled = data.screenShakeEnabled;
+                SkillSystemConfig.DebugDrawHitbox = data.debugDrawHitbox;
+                Log.Info($"[SkillConfig] 加载：hitFlash={SkillSystemConfig.HitFlashEnabled} " +
+                         $"screenShake={SkillSystemConfig.ScreenShakeEnabled} debugBox={SkillSystemConfig.DebugDrawHitbox}");
+            }
         }
     }
 }
