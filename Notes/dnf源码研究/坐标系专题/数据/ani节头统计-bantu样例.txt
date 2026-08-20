@@ -1,0 +1,16 @@
+# ani 节头频次统计（口径：pvf/monster/bantu 全部 126 个 .ani，共 695 帧）
+# 生成：grep -o 逐帧节头计数，2026-08-19
+    695 [IMAGE]
+    695 [IMAGE POS]
+    695 [DELAY]
+    615 [DAMAGE BOX]
+    277 [ATTACK BOX]
+    144 [IMAGE RATE]
+    127 [DAMAGE TYPE]
+    126 [FRAME MAX]
+     69 [GRAPHIC EFFECT]
+     67 [INTERPOLATION]
+     27 [RGBA]
+     24 [SHADOW]
+      9 [LOOP]
+      7 [IMAGE ROTATE]

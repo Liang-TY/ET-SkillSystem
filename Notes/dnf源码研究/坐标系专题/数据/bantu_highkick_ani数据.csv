@@ -1,0 +1,7 @@
+﻿frame,image,imgIndex,posX,posY,delay,damageBoxes,attackBoxes,skippedSections
+0,Monster/Bantu/BantuAmazones.img,26,-259,-301,50,-32|-7|0|34|14|104,,
+1,Monster/Bantu/BantuAmazones.img,27,-259,-301,40,-42|-7|-3|44|14|106,,
+2,Monster/Bantu/BantuAmazones.img,28,-259,-301,40,-47|-7|-3|44|14|106,-3|-7|52|48|14|84,
+3,Monster/Bantu/BantuAmazones.img,29,-259,-301,80,-53|-7|-1|44|14|106,-8|-7|42|46|14|52,
+4,Monster/Bantu/BantuAmazones.img,30,-259,-301,80,-49|-7|0|44|14|106,,
+5,Monster/Bantu/BantuAmazones.img,31,-259,-301,80,-52|-7|-1|44|14|106,,

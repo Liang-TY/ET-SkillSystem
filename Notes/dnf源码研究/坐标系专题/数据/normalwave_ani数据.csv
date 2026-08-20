@@ -1,0 +1,8 @@
+﻿frame,image,imgIndex,posX,posY,delay,damageBoxes,attackBoxes,skippedSections
+0,,0,-43,-106,50,,,
+1,Character/Swordman/Effect/NormalWave1.img,0,-43,-106,50,,,
+2,Character/Swordman/Effect/NormalWave1.img,1,-43,-106,50,,,
+3,Character/Swordman/Effect/NormalWave1.img,2,-43,-106,50,,,
+4,Character/Swordman/Effect/NormalWave1.img,3,-43,-106,50,,,
+5,Character/Swordman/Effect/NormalWave1.img,4,-43,-106,50,,,
+6,Character/Swordman/Effect/NormalWave1.img,5,-43,-106,50,,,
