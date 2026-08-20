@@ -122,6 +122,19 @@ namespace ET
         public void CreateBullet(int bulletId)
             => world.GetComponent<LSBulletComponent>()?.Create(caster, bulletId);
 
+        // ---- 区域效果 ----
+        /// <summary>在指定位置创建区域（火圈等持续型场地效果；配置在 AreaDefinition）</summary>
+        public void CreateArea(int areaId, TSVector position)
+            => world.GetComponent<LSAreaComponent>()?.Create(caster, position, areaId);
+
+        /// <summary>在施法者身前创建区域</summary>
+        public void CreateAreaInFront(int areaId, FP distance)
+        {
+            TSVector forward = caster.Forward;
+            TSVector pos = caster.Position + new TSVector(forward.x >= FP.Zero ? distance : -distance, FP.Zero, FP.Zero);
+            world.GetComponent<LSAreaComponent>()?.Create(caster, pos, areaId);
+        }
+
         // ---- 连段取消：结束当前施放并立刻重施同技能（取消窗口用）----
         public void RestartCurrentSkill()
         {

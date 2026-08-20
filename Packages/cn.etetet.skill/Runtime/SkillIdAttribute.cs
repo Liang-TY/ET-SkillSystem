@@ -16,9 +16,10 @@ namespace ET
     {
         public const int NormalAttack = 1;   // 普攻（膝踢，AnimId.Attack1）
         public const int TestCooldown = 2;   // CD/眩晕验证技能（K 键：起 CD + 给自己挂 Stun）
-        public const int WaveSword = 3;      // 地裂·波动剑（I 键，阶段6 投射物验证）
+        public const int WaveSword = 3;      // 地裂·波动剑（I 键，投射物）
+        public const int FireCircle = 4;     // 火圈（O 键，区域效果）
 
-        /// <summary>按键值 → 技能槽位映射（1=普攻 J/左键，2=CD测试 K，3=波动剑 I）</summary>
+        /// <summary>按键值 → 技能槽位映射</summary>
         public static bool ButtonToSkill(int button, out int skillId)
         {
             switch (button)
@@ -26,6 +27,7 @@ namespace ET
                 case 1: skillId = NormalAttack; return true;
                 case 2: skillId = TestCooldown; return true;
                 case 3: skillId = WaveSword; return true;
+                case 4: skillId = FireCircle; return true;
                 default: skillId = 0; return false;
             }
         }

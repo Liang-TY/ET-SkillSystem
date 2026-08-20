@@ -34,6 +34,7 @@ namespace ET.Client
             BuffLoader.RegisterAssembly(assembly);
             ActionLoader.RegisterAssembly(assembly);
             BulletLoader.RegisterAssembly(assembly);
+            AreaLoader.RegisterAssembly(assembly);
 
             // 技能系统配置 json（改配置零编译：改 json → YooAsset 重收集 → Play）
             TextAsset configAsset = await resLoader.LoadAssetAsync<TextAsset>(
