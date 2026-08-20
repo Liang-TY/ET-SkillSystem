@@ -21,7 +21,8 @@
             // 战斗状态（硬直计时，默认动画 Idle）+ 输入缓冲。
             // 必须先于 LSHitboxComponent 挂（组件 Id 序 = LSUpdate 执行序）：命中写在 Hitbox 系统里，
             // Combat 先记上帧值再递减 → 视图层能 diff 到 0→>0 "刚被击中"边沿
-            lsUnit.AddComponent<LSCombatComponent, int>(AnimId.Idle);
+            lsUnit.AddComponent<LSCombatComponent, int>(AnimId.SwordmanIdle);   // 鬼剑士待机
+            lsUnit.GetComponent<LSCombatComponent>().HurtAnimId = AnimId.SwordmanHurt;
             lsUnit.AddComponent<LSInputBufferComponent>();
 
             // 技能（阶段4）：先于 Hitbox 挂——清 cast 标记 + 消费缓冲施放，都在 Hitbox 设 JustHit 之前

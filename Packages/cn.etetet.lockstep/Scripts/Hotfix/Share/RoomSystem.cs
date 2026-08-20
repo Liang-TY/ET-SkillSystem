@@ -45,8 +45,9 @@ namespace ET
             monsterNum.Set(NumericType.HpBase, 500);
             monsterNum.Set(NumericType.MaxHpBase, 500);
 
-            // 怪物战斗状态（硬直计时，默认动画 Walk）。先于 Hitbox 挂（LSUpdate 执行序）
+            // 怪物战斗状态（硬直计时，默认动画 Walk + 受击动画 Hurt）。先于 Hitbox 挂
             monster.AddComponent<LSCombatComponent, int>(AnimId.Walk);
+            monster.GetComponent<LSCombatComponent>().HurtAnimId = AnimId.Hurt;
 
             // 怪物 Buff 容器（阶段5：燃烧目标是怪物）。先于 Hitbox 挂
             monster.AddComponent<LSBuffComponent>();

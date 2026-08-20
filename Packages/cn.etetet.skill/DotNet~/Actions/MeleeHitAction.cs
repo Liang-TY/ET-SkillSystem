@@ -14,7 +14,8 @@ namespace ET
         {
             ctx.DamageOwner(Damage);
             ctx.SetOwnerHitstun(HitstunMs);
-            ctx.PlayOwnerAnim(AnimId.Hurt);   // 受击动画，重打重置到帧 0
+            int hurtAnim = ctx.GetOwnerHurtAnimId();
+            if (hurtAnim > 0) ctx.PlayOwnerAnim(hurtAnim);   // 受击者自己的受击动画（DNF sq_GetDamageAni 同构）
 
             Log.Info($"[Combat] 帧{ctx.FrameNo} unit{ctx.GetSourceId()} 命中 unit{ctx.GetOwnerId()}，" +
                      $"伤害{Damage}，HP={ctx.GetOwnerHp()} hitstun={HitstunMs}ms");

@@ -2,13 +2,17 @@ using UnityEngine;
 
 namespace ET.Client
 {
+    /// <summary>
+    /// 视图层动画：读逻辑层 LSAnimComponent 的 AnimId/FrameIndex，diff 到变化就换 sprite。
+    /// 分层渲染：遍历 RenderConfig.Layers，同帧号从各自图集取 sprite（DNF 换装同构）。
+    /// </summary>
     [EntitySystemOf(typeof(LSSpriteAnimViewComponent))]
     [LSEntitySystemOf(typeof(LSSpriteAnimViewComponent))]
     [FriendOf(typeof(LSSpriteAnimViewComponent))]
     [FriendOf(typeof(LSUnitView))]
     [FriendOf(typeof(LSAnimComponent))]
-    [FriendOf(typeof(LSCombatComponent))]   // 受击闪白读 LastHitstunTimer/HitstunTimer（ET0002）
-    [FriendOf(typeof(LSAnimResComponent))]  // 加法混合读 AdditiveMaterial（ET0002）
+    [FriendOf(typeof(LSCombatComponent))]
+    [FriendOf(typeof(LSAnimResComponent))]
     public static partial class LSSpriteAnimViewComponentSystem
     {
         [EntitySystem]
@@ -21,25 +25,26 @@ namespace ET.Client
         [EntitySystem]
         private static void Update(this LSSpriteAnimViewComponent self)
         {
-            if (self.SpriteRenderer == null) return;
             LSUnitView view = self.GetParent<LSUnitView>();
             LSUnit unit = view.Unit;
             LSAnimComponent anim = unit?.GetComponent<LSAnimComponent>();
             if (anim == null) return;
+            if (view.RenderConfig == null) return;
 
-            // ---- 受击闪白（效果执行在这里；触发由 LSCastViewComponentSystem 检测后设 FlashTimer）----
+            // ---- 受击闪白（效果执行；触发由 LSCastViewComponentSystem 的 HP diff 检测）----
             if (self.FlashTimer > 0)
             {
                 self.FlashTimer -= Time.deltaTime;
-                self.SpriteRenderer.color = new Color(1f, 0.3f, 0.3f, 1f);   // 红色 tint 闪
+                foreach (RenderLayer layer in view.RenderConfig.Layers)
+                    if (layer.Renderer != null) layer.Renderer.color = new Color(1f, 0.3f, 0.3f, 1f);
             }
             else
             {
-                self.SpriteRenderer.color = Color.white;   // 正常
+                foreach (RenderLayer layer in view.RenderConfig.Layers)
+                    if (layer.Renderer != null) layer.Renderer.color = Color.white;
             }
 
 #if UNITY_EDITOR
-            // 调试镜像：每帧把逻辑状态推到 LSUnitViewDebug（编辑器运行时 Inspector 可见）
             LSUnitViewDebug dbg = view.GameObject.GetComponentInChildren<LSUnitViewDebug>();
             if (dbg != null)
             {
@@ -50,7 +55,8 @@ namespace ET.Client
                 dbg.IsLoop = anim.IsLoop;
                 dbg.IsFinished = anim.IsFinished;
                 dbg.FaceRight = view.FaceRight;
-                dbg.SpriteName = self.SpriteRenderer.sprite ? self.SpriteRenderer.sprite.name : "null";
+                RenderLayer firstLayer = view.RenderConfig.Layers.Count > 0 ? view.RenderConfig.Layers[0] : null;
+                dbg.SpriteName = firstLayer?.Renderer != null && firstLayer.Renderer.sprite ? firstLayer.Renderer.sprite.name : "null";
             }
 #endif
 
@@ -58,28 +64,32 @@ namespace ET.Client
             if (anim.AnimId == self.LastAnimId && anim.FrameIndex == self.LastFrameIndex) return;
 
             AnimFrameData frame = anim.GetCurrentFrame();
+            if (frame.image.path == null || frame.image.path.Length == 0) return;
             LSAnimResComponent res = self.Room()?.GetComponent<LSAnimResComponent>();
-            Sprite sprite = res?.GetSprite(frame.image.path, frame.image.index);
-            if (sprite == null) return;
 
-            self.SpriteRenderer.sprite = sprite;
-            // §2.1 绝对摆位公式：renderer local = 内容真实中心 − prefab 中间层偏移（运行时自标定）
-            //   真实中心(相对锚点) = ((imagePos.x+X+宽/2)/100, -(imagePos.y+Y+高/2)/100)——DNF y 下正要翻转
-            //   中间层偏移 = renderer.parent 世界位 − 根 GO 世界位（prefab 里烤的补偿常数，直读直用不硬编码）
-            Vector2 center = res?.GetFrameCenter(frame.image.path, frame.image.index) ?? Vector2.zero;
-            Transform parentT = self.SpriteRenderer.transform.parent;
-            Vector3 chain = parentT != null ? parentT.position - view.GameObject.transform.position : Vector3.zero;
-            self.SpriteRenderer.transform.localPosition = new Vector3(
-                (frame.imagePos.x + center.x) / 100f - chain.x,
-                -(frame.imagePos.y + center.y) / 100f - chain.y,
-                0f);
+            // ---- 分层渲染：遍历 RenderConfig.Layers，同帧号从各自图集取 sprite ----
+            foreach (RenderLayer layer in view.RenderConfig.Layers)
+            {
+                if (layer.Renderer == null) continue;
+                Sprite sprite = res?.GetSprite(layer.AtlasName, frame.image.index);
+                if (sprite == null) continue;
+                layer.Renderer.sprite = sprite;
 
-            // LINEARDODGE 加法混合（DNF 发光特效标配）：帧数据驱动，共享材质切换
-            // ⚠️ 不能设 null（Unity 会丢 shader → 粉红），必须恢复缓存的原始材质
-            if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
-                self.SpriteRenderer.sharedMaterial = res.AdditiveMaterial;
-            else if (self.OriginalMaterial != null)
-                self.SpriteRenderer.sharedMaterial = self.OriginalMaterial;
+                // §2.1 绝对摆位（每层独立——各自图集的帧位置不同）
+                Vector2 center = res?.GetFrameCenter(layer.AtlasName, frame.image.index) ?? Vector2.zero;
+                Transform parentT = layer.Renderer.transform.parent;
+                Vector3 chain = parentT != null ? parentT.position - view.GameObject.transform.position : Vector3.zero;
+                layer.Renderer.transform.localPosition = new Vector3(
+                    (frame.imagePos.x + center.x) / 100f - chain.x,
+                    -(frame.imagePos.y + center.y) / 100f - chain.y,
+                    0f);
+
+                // LINEARDODGE 加法混合
+                if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
+                    layer.Renderer.sharedMaterial = res.AdditiveMaterial;
+                else if (layer.OriginalMaterial != null)
+                    layer.Renderer.sharedMaterial = layer.OriginalMaterial;
+            }
 
             self.LastAnimId = anim.AnimId;
             self.LastFrameIndex = anim.FrameIndex;
@@ -88,7 +98,6 @@ namespace ET.Client
         [LSEntitySystem]
         private static void LSRollback(this LSSpriteAnimViewComponent self)
         {
-            // 逻辑快照已恢复 AnimId/FrameIndex；重置缓存强制下次 Update 重新同步
             self.LastAnimId = -1;
             self.LastFrameIndex = -1;
         }

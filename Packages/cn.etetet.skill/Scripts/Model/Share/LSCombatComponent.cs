@@ -26,5 +26,9 @@ namespace ET
         // 硬直/攻击结束后回的默认动画（玩家 Idle / 怪物 Walk）
         [MemoryPackOrder(3)]
         public int DefaultAnimId;
+
+        // 受击动画（每角色自带，DNF sq_GetDamageAni 同构；0=未配置→红闪兜底）
+        [MemoryPackOrder(4)]
+        public int HurtAnimId;
     }
 }

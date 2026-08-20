@@ -1,0 +1,311 @@
+{
+  "loop": true,
+  "frameMax": 8,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 180
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -14,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 27,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -14,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 27,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 181
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -12,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 25,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -12,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 25,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 182
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -14,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 27,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -14,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 27,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 183
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -13,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 26,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -13,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 26,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 184
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -14,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 27,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -14,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 27,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 185
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -11,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 24,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -11,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 24,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 186
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -11,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 24,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -11,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 24,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 187
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -13,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 26,
+          "y": 10,
+          "z": 107
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -13,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 26,
+            "y": 10,
+            "z": 107
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 800
+}

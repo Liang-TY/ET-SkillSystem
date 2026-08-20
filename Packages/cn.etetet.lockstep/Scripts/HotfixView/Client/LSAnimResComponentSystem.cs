@@ -28,10 +28,13 @@ namespace ET.Client
             Room room = self.Room();
             ResourcesLoaderComponent resLoader = room.GetComponent<ResourcesLoaderComponent>();
 
-            // 多图集：角色 + 投射物 + 区域特效（key = 动画 json 里 image.path 的文件名，忽略大小写）
+            // 多图集：怪物 + 投射物 + 区域特效 + 鬼剑士分层（key = 文件名去 .bytes，忽略大小写）
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bantuamazones.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/NormalWave1.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/AT_Up.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/sm_body0000.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/katana_blade.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/katana_handle.img.bytes");
 
             // LINEARDODGE 加法混合材质（共享，所有需要发光的帧用同一个实例）
             Shader additiveShader = Shader.Find("ET/SpriteAdditive");

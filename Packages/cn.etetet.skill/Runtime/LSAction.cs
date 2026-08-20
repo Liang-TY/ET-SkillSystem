@@ -89,6 +89,13 @@ namespace ET
         public void OwnerForbidMove(bool on)
             => owner.GetComponent<LSNumericComponent>()?.Add(NumericType.ForbidMove, on ? 1 : -1);
 
+        /// <summary>受击者自己的受击动画 ID（DNF sq_GetDamageAni 同构——每角色自带，0=未配置）</summary>
+        public int GetOwnerHurtAnimId()
+        {
+            LSCombatComponent combat = owner.GetComponent<LSCombatComponent>();
+            return combat != null ? combat.HurtAnimId : 0;
+        }
+
         // ---- 动画 ----
         public void PlayOwnerAnim(int animId) => LSAnimPlayUtil.Play(owner, animId);
 

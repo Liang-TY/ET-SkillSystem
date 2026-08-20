@@ -26,6 +26,14 @@ namespace ET.Client
             await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/normalwave.json", AnimId.NormalWave);
             await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/firecircle.json", AnimId.FireCircle);
             await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/firecircleend.json", AnimId.FireCircleEnd);
+            // 鬼剑士（玩家）
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_stay.json", AnimId.SwordmanIdle);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_move.json", AnimId.SwordmanWalk);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_attack1.json", AnimId.SwordmanAttack1);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_attack2.json", AnimId.SwordmanAttack2);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_attack3.json", AnimId.SwordmanAttack3);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_damage.json", AnimId.SwordmanHurt);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_bloodboom.json", AnimId.SwordmanBloodboom);
         }
 
         private static async ETTask RegisterOne(ResourcesLoaderComponent resLoader, string path, int animId)

@@ -90,7 +90,10 @@ namespace ET.Client
                         {
                             // 伤害数字（飞数字）
 
-                            if (SkillSystemConfig.HitFlashEnabled)
+                            // 受击闪白：只在"没有受击动画"时触发（互斥——有动画播动画就够了）
+                            LSCombatComponent combatForFlash = unit.GetComponent<LSCombatComponent>();
+                            bool hasHurtAnim = combatForFlash != null && combatForFlash.HurtAnimId > 0;
+                            if (SkillSystemConfig.HitFlashEnabled && !hasHurtAnim)
                             {
                                 LSUnitViewComponent viewComp = room.GetComponent<LSUnitViewComponent>();
                                 if (viewComp != null)

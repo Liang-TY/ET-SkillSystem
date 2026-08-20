@@ -1,0 +1,57 @@
+{
+  "loop": false,
+  "frameMax": 1,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 96
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 10000,
+      "damageBox": {
+        "min": {
+          "x": -28,
+          "y": -5,
+          "z": 0
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 93
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -28,
+            "y": -5,
+            "z": 0
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 93
+          }
+        },
+        {
+          "min": {
+            "x": 2,
+            "y": -3,
+            "z": 1
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 65
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 10000
+}
