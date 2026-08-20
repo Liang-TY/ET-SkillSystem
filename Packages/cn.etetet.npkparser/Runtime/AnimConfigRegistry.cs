@@ -27,5 +27,7 @@ namespace ET
         public const int Attack1 = 3;   // 普攻第一段（暂用班图膝踢 kneekick.json，判定帧 1-3 有攻击盒）
         public const int Hurt = 4;      // 受击僵直（damage.json；末帧长 delay 停帧，靠硬直计时切走）
         public const int NormalWave = 5; // 地裂波动剑投射物（normalwave.json + NormalWave1.img，视图层自推帧）
+        public const int FireCircle = 6;  // 火圈持续燃烧（firecircle.json + AT_Up.img，循环）
+        public const int FireCircleEnd = 7; // 火圈熄灭收尾（firecircleend.json，不循环）
     }
 }
