@@ -66,8 +66,10 @@ namespace ET.Client
             {
                 view.FaceRight = faceRight;
                 view.GameObject.transform.localScale = new Vector3(faceRight ? 1f : -1f, 1f, 1f);
-                self.LastAnimId = -1;   // 强制重新摆位（镜像后位置需重算）
+                self.LastAnimId = -1;
                 self.LastFrameIndex = -1;
+                // TODO 诊断日志（转向排查完删）
+                Log.Info($"[Flip] unit={unit.Id} faceRight={faceRight} forward.x={unit.Forward.x} scale={view.GameObject.transform.localScale}");
             }
 
             // 只有帧真的变了才碰渲染器
