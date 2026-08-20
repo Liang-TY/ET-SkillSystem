@@ -26,9 +26,10 @@ namespace ET.Client
             if (Input.GetKey(KeyCode.V)) { vy -= 1; }    // y-
 
             int button = 0;
-            if (Input.GetKey(KeyCode.J)) button = 1;    // 普攻（按下沿触发，逻辑层检测）
-            else if (Input.GetKey(KeyCode.K)) button = 2;   // CD/眩晕测试技能（阶段4/5）
-            else if (Input.GetKey(KeyCode.I)) button = 3;   // 波动剑（阶段6投射物）
+            if (Input.GetKey(KeyCode.J)) button = 1;    // 普攻
+            else if (Input.GetKey(KeyCode.K)) button = 2;   // CD/眩晕测试
+            else if (Input.GetKey(KeyCode.I)) button = 3;   // 波动剑（投射物）
+            else if (Input.GetKey(KeyCode.O)) button = 4;   // 火圈（区域效果）
 
             LSClientUpdater lsClientUpdater = self.GetParent<Room>().GetComponent<LSClientUpdater>();
             lsClientUpdater.Input.V = v.normalized;

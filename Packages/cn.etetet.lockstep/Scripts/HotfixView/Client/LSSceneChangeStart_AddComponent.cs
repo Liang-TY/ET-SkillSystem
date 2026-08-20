@@ -24,6 +24,7 @@ namespace ET.Client
             await LSAnimClipRegistrar.RegisterAll(clientScene);
             await SkillContentLoader.Load(clientScene);
             await room.AddComponent<LSBulletViewComponent>().InitAsync();
+            await room.AddComponent<LSAreaViewComponent>().InitAsync();
             room.AddComponent<LSCastViewComponent>();
         }
     }

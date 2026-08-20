@@ -1,0 +1,111 @@
+{
+  "loop": false,
+  "frameMax": 8,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 7
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 8
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 9
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "AT_Up.img",
+        "index": 10
+      },
+      "imagePos": {
+        "x": -143,
+        "y": -139
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 560
+}
