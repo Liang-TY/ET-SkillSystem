@@ -12,7 +12,7 @@
 	        lsUnit.Rotation = unitInfo.Rotation;
 
 			lsUnit.AddComponent<LSInputComponent>();
-            lsUnit.AddComponent<LSAnimComponent>();   // Half B: 动画状态（Awake 自动 Play(Idle)）
+            lsUnit.AddComponent<LSAnimComponent>().Play(AnimId.SwordmanIdle);   // 鬼剑士待机（覆盖默认 bantu Idle）
 
             // 数值组件（skill 包）：HP/速度/攻击力 等
             var num = lsUnit.AddComponent<LSNumericComponent>();

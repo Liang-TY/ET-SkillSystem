@@ -60,6 +60,16 @@ namespace ET.Client
             }
 #endif
 
+            // ---- 朝向翻转：根 GO localScale.x = -1 翻转所有子层（刀跟着转）----
+            bool faceRight = unit.Forward.x >= TrueSync.FP.Zero;
+            if (faceRight != view.FaceRight)
+            {
+                view.FaceRight = faceRight;
+                view.GameObject.transform.localScale = new Vector3(faceRight ? 1f : -1f, 1f, 1f);
+                self.LastAnimId = -1;   // 强制重新摆位（镜像后位置需重算）
+                self.LastFrameIndex = -1;
+            }
+
             // 只有帧真的变了才碰渲染器
             if (anim.AnimId == self.LastAnimId && anim.FrameIndex == self.LastFrameIndex) return;
 
