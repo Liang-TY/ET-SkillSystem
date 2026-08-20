@@ -1,5 +1,6 @@
 ﻿namespace ET
 {
+    [FriendOf(typeof(LSCombatComponent))]   // 工厂写 HurtAnimId（ET0002）
     public static partial class LSUnitFactory
     {
         public static LSUnit Init(LSWorld lsWorld, LockStepUnitInfo unitInfo)
