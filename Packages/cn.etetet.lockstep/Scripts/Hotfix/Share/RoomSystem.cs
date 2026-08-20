@@ -6,6 +6,7 @@ using TrueSync;
 namespace ET
 {
     [FriendOf(typeof(Room))]
+    [FriendOf(typeof(LSCombatComponent))]   // 怪物工厂写 HurtAnimId（ET0002）
     public static partial class RoomSystem
     {
         public static Room Room(this Entity entity)
