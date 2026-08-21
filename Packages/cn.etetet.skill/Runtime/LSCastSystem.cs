@@ -20,6 +20,7 @@ namespace ET
             cast.CasterId = caster.Id;
             SkillLogic logic = SkillLoader.Get(skillId);
             cast.TotalTimeMs = logic?.TotalTimeMs ?? 0;
+            Log.Info($"[Skill] unit{caster.Id} cast {skillId}（{logic?.GetType().Name ?? "未注册"}）");   // 诊断：谁放了什么招
 
             SkillContext ctx = new(parent.LSWorld(), caster, cast);
             logic?.OnCast(ctx);

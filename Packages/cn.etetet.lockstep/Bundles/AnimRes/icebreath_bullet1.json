@@ -13,7 +13,6 @@
         "y": -49
       },
       "delay": 150,
-      "graphicEffect": 1,
       "damageBox": {
         "min": {
           "x": -21,
@@ -66,7 +65,6 @@
         "y": -49
       },
       "delay": 150,
-      "graphicEffect": 1,
       "damageBox": {
         "min": {
           "x": -21,
@@ -131,7 +129,6 @@
         "y": -49
       },
       "delay": 150,
-      "graphicEffect": 1,
       "damageBox": {
         "min": {
           "x": -21,
@@ -196,7 +193,6 @@
         "y": -49
       },
       "delay": 150,
-      "graphicEffect": 1,
       "damageBox": {
         "min": {
           "x": 14,
@@ -261,7 +257,6 @@
         "y": -49
       },
       "delay": 150,
-      "graphicEffect": 1,
       "damageBox": {
         "min": {
           "x": 16,
@@ -314,7 +309,6 @@
         "y": -49
       },
       "delay": 150,
-      "graphicEffect": 1,
       "damageBox": {
         "min": {
           "x": 14,

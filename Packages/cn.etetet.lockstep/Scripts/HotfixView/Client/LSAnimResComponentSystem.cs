@@ -140,7 +140,8 @@ namespace ET.Client
             if (atlasName == null || atlasName.Length == 0) return null;   // 空路径帧（隐形占位）
             if (self.Atlases.TryGetValue(atlasName, out Dictionary<int, Sprite> sprites))
             {
-                sprites.TryGetValue(imgIndex, out Sprite sprite);
+                if (!sprites.TryGetValue(imgIndex, out Sprite sprite))
+                    Log.Warning($"[LSAnimRes] {atlasName}[{imgIndex}] 越界（图集 {sprites.Count} 帧）——该帧渲染空白");
                 return sprite;
             }
             Log.Warning($"[LSAnimRes] 未注册图集 {atlasName}");

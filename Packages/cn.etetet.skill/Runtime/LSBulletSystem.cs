@@ -38,6 +38,7 @@ namespace ET
             bullet.Direction = new TSVector(forward.x >= FP.Zero ? FP.One : -FP.One, FP.Zero, FP.Zero);
             bullet.Position = caster.Position + bullet.Direction * (FP)8 / 10 + new TSVector(FP.Zero, def.HalfExtents.y, FP.Zero);
             bullet.RemainingMs = def.TotalTimeMs;
+            Log.Info($"[Bullet] unit{caster.Id} 发射 {def.GetType().Name} @ {bullet.Position}");
             return bullet;
         }
 
