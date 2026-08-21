@@ -26,6 +26,9 @@
             lsUnit.GetComponent<LSCombatComponent>().HurtAnimId = AnimId.SwordmanHurt;
             lsUnit.AddComponent<LSInputBufferComponent>();
 
+            // 击退/浮空飞行（push aside/lift up）：静默组件，被 LaunchOwner 激活
+            lsUnit.AddComponent<LSFlightComponent>();
+
             // 技能（阶段4）：先于 Hitbox 挂——清 cast 标记 + 消费缓冲施放，都在 Hitbox 设 JustHit 之前
             lsUnit.AddComponent<LSSkillComponent>();
             lsUnit.AddComponent<LSCastComponent>();

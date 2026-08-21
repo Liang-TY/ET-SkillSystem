@@ -97,6 +97,24 @@ namespace ET
         public void OwnerForbidMove(bool on)
             => owner.GetComponent<LSNumericComponent>()?.Add(NumericType.ForbidMove, on ? 1 : -1);
 
+        /// <summary>
+        /// 击退/浮空（DNF .atk push aside / lift up 同构）：给 owner 写飞行初速度，
+        /// 之后 LSFlightComponentSystem 重力积分（抛物线 + 落地即停，参数见那边注释）。
+        /// 参数为 DNF 像素值：knockbackX 400 → 水平初速 10 单位/s；liftY 400 → 垂直初速 8 单位/s。
+        /// 方向 = 攻击者指向受击者（被推开）。
+        /// </summary>
+        public void LaunchOwner(FP knockbackX, FP liftY)
+        {
+            LSFlightComponent flight = owner.GetComponent<LSFlightComponent>();
+            if (flight == null) return;
+            FP dir = source != null && owner.Position.x < source.Position.x ? -FP.One : FP.One;
+            flight.Velocity = new TSVector(
+                dir * (knockbackX / 100) * ((FP)5 / 2),   // px → 单位/s ×2.5
+                (liftY / 100) * (FP)2,                      // px → 单位/s ×2.0
+                FP.Zero);
+            flight.Active = true;   // 重打刷新（空中再被击 → 覆盖速度，DNF 行为）
+        }
+
         /// <summary>受击者自己的受击动画 ID（DNF sq_GetDamageAni 同构——每角色自带，0=未配置）</summary>
         public int GetOwnerHurtAnimId()
         {

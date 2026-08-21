@@ -16,8 +16,11 @@ namespace ET.Client
         /// <summary>当前父动画缓存（变化 = 重建叠加组）</summary>
         public int LastParentAnimId = -1;
 
-        /// <summary>当前父动画的叠加层运行时状态（父动画切换时全清重建）</summary>
+        /// <summary>当前父动画的叠加层运行时状态（父动画切换时转入 Detaching）</summary>
         public readonly List<OverlayViewInfo> Overlays = new();
+
+        /// <summary>父动画已切走、还在自推收尾的层（DNF [none effect add] 语义：播完为止）</summary>
+        public readonly List<OverlayViewInfo> Detaching = new();
     }
 
     /// <summary>单条叠加层的视图运行时状态</summary>

@@ -30,5 +30,7 @@ namespace ET.Client
         public int BackFrameIndex;
         public float BackTimer;
         public bool Ending;   // 到时后播收尾动画（不循环），播完销毁
+        public bool ViewDone; // 主动画播完：隐藏渲染器但保留视图占位，防差分重建回闪（等逻辑 Dispose 移除）
+        public List<OverlayViewInfo> Overlays;     // .als 叠加子层（LSAnimOverlayUtil 建/推/销）
     }
 }

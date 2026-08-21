@@ -32,6 +32,8 @@ namespace ET.Client
             if (view.RenderConfig == null) return;
 
             // ---- 受击闪白（效果执行；触发由 LSCastViewComponentSystem 的 HP diff 检测）----
+            // 闪白优先；否则应用当前帧的 RGBA 染色（0 = 无染色回白）
+            AnimFrameData curFrame = anim.GetCurrentFrame();
             if (self.FlashTimer > 0)
             {
                 self.FlashTimer -= Time.deltaTime;
@@ -40,8 +42,12 @@ namespace ET.Client
             }
             else
             {
+                Color tint = curFrame.rgba != 0
+                    ? new Color32((byte)((curFrame.rgba >> 16) & 0xFF), (byte)((curFrame.rgba >> 8) & 0xFF),
+                        (byte)(curFrame.rgba & 0xFF), (byte)((curFrame.rgba >> 24) & 0xFF))
+                    : Color.white;
                 foreach (RenderLayer layer in view.RenderConfig.Layers)
-                    if (layer.Renderer != null) layer.Renderer.color = Color.white;
+                    if (layer.Renderer != null) layer.Renderer.color = tint;
             }
 
 #if UNITY_EDITOR

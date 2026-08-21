@@ -159,5 +159,13 @@ namespace ET
             cast.EndNow(this);
             SkillCastHelper.TryCast(caster, cast.SkillId);
         }
+
+        // ---- 施法者位移（DNF onProc sq_setCurrentAxisPos 逐帧插值同构；无地图碰撞，碰撞系统后补）----
+        /// <summary>沿面朝方向位移（面左自动镜像；每帧增量调用，累计位移由技能自己算——纯函数回滚安全）</summary>
+        public void MoveCasterForward(FP distance)
+        {
+            FP facing = caster.Forward.x >= FP.Zero ? FP.One : -FP.One;
+            caster.Position += new TSVector(facing * distance, FP.Zero, FP.Zero);
+        }
     }
 }

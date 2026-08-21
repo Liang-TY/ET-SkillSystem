@@ -151,11 +151,8 @@ namespace ET.Client
                 ? Vector3.one
                 : new Vector3(-1, 1, 1);   // 面左：绕弹心镜像
 
-            // LINEARDODGE 加法混合（弹的帧数据驱动——波动剑全部帧 graphicEffect=1）
-            if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
-                info.Renderer.sharedMaterial = res.AdditiveMaterial;
-            else if (info.OriginalMaterial != null)
-                info.Renderer.sharedMaterial = info.OriginalMaterial;
+            // 帧级效果：LINEARDODGE 加法混合 + RGBA 染色（LSAnimOverlayUtil 共享实现）
+            LSAnimOverlayUtil.ApplyFrameEffects(info.Renderer, info.OriginalMaterial, frame, res);
         }
     }
 }

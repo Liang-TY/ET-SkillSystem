@@ -16,8 +16,14 @@ namespace ET
             int hurtAnim = ctx.GetOwnerHurtAnimId();
             if (hurtAnim > 0) ctx.PlayOwnerAnim(hurtAnim);   // 受击者自己的受击动画（DNF sq_GetDamageAni 同构）
 
+            // 击退/浮空（DNF .atk push aside / lift up；未配置 = 0 保持旧行为）
+            if (reaction.KnockbackX != 0 || reaction.LaunchY != 0)
+                ctx.LaunchOwner(reaction.KnockbackX, reaction.LaunchY);
+
             Log.Info($"[Combat] 帧{ctx.FrameNo} unit{ctx.GetSourceId()} 命中 unit{ctx.GetOwnerId()}，" +
-                     $"伤害{reaction.Damage}，HP={ctx.GetOwnerHp()} hitstun={reaction.HitstunMs}ms");
+                     $"伤害{reaction.Damage}，HP={ctx.GetOwnerHp()} hitstun={reaction.HitstunMs}ms" +
+                     (reaction.KnockbackX != 0 || reaction.LaunchY != 0
+                         ? $" 击退{reaction.KnockbackX}/浮空{reaction.LaunchY}" : ""));
         }
     }
 }

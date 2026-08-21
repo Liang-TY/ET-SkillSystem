@@ -44,23 +44,16 @@ namespace ET
                 buff.JustAdded = buff.JustRemoved = false;
             }
 
-            // 2) 倒计时 + Tick + 到时移除（快照迭代：tick 动作可安全增删 Buff）
+            // 2) Tick + 倒计时 + 到时移除（快照迭代：tick 动作可安全增删 Buff）。
+            //    顺序铁律：Tick 在到期判断**之前**——3s/1s 配置的最后一跳恰好落在到期帧，
+            //    先判到期会 continue 吞掉末跳（只 tick 2 次），审查 2026-08-21 修复；
+            //    同帧顺序 = 末跳伤害 → RemoveActions，DNF 节奏（掉血在消失前）。
             for (int i = 0; i < buffScratch.Count; i++)
             {
                 LSBuff buff = buffScratch[i];
                 if (buff.Removing) continue;
                 BuffDefinition def = BuffLoader.Get(buff.ConfigId);
                 if (def == null) continue;
-
-                if (def.TotalTimeMs > 0)
-                {
-                    buff.RemainingMs -= LSConstValue.UpdateInterval;
-                    if (buff.RemainingMs <= 0)
-                    {
-                        self.RemoveBuff(buff, def, frameNo);
-                        continue;
-                    }
-                }
 
                 if (def.TickTimeMs > 0)
                 {
@@ -69,6 +62,15 @@ namespace ET
                     {
                         buff.TickTimer -= def.TickTimeMs;
                         RunActions(unit, buff.SourceId, buff.ConfigId, def.TickActions, frameNo);
+                    }
+                }
+
+                if (def.TotalTimeMs > 0)
+                {
+                    buff.RemainingMs -= LSConstValue.UpdateInterval;
+                    if (buff.RemainingMs <= 0)
+                    {
+                        self.RemoveBuff(buff, def, frameNo);
                     }
                 }
             }

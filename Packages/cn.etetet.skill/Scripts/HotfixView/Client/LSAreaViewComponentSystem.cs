@@ -85,9 +85,8 @@ namespace ET.Client
                 foreach (long id in new List<long>(self.Areas.Keys)) RemoveView(self, id);
             }
 
-            // 2) 推进：位置 + 帧自推（循环的持续播，收尾的播完销毁）
+            // 2) 推进：位置 + 帧自推（循环的持续播，非循环的播完隐藏占位——等逻辑 Dispose 差分移除）
             if (areaComponent == null) return;
-            List<long> finished = null;   // 收尾动画播完的区域（循环中不改字典，收集后统一销毁）
             foreach (var kv in self.Areas)
             {
                 LSArea area = areaComponent.GetChild<LSArea>(kv.Key);
@@ -96,7 +95,9 @@ namespace ET.Client
                 if (area != null)
                     info.Go.transform.position = new Vector3((float)area.Position.x, 0f, (float)area.Position.z);
 
-                // 主层（主动画播完 = 视图生命周期终点）；背面层独立帧推进（播完停末帧，不触发销毁）
+                if (info.ViewDone) continue;   // 已播完隐藏，等逻辑 Dispose 走 RemoveView
+
+                // 主层（主动画播完 = 视觉终点）；背面层独立帧推进（播完停末帧）
                 bool done = AdvanceOne(info.Renderer, info.OriginalMaterial, info.AnimId,
                     ref info.FrameIndex, ref info.Timer, info.Go, res, Time.deltaTime);
                 if (info.BackRenderer != null)
@@ -104,15 +105,18 @@ namespace ET.Client
                     AdvanceOne(info.BackRenderer, info.BackOriginalMaterial, info.BackAnimId,
                         ref info.BackFrameIndex, ref info.BackTimer, info.Go, res, Time.deltaTime);
                 }
+                // .als 叠加子层（同弹视图模式自推帧；门控用主层帧号）
+                LSAnimOverlayUtil.AdvanceOverlays(info.Overlays, info.FrameIndex, res, Time.deltaTime);
+
                 if (done)
                 {
-                    finished ??= new List<long>();
-                    finished.Add(kv.Key);
+                    // 播完不立即 RemoveView：逻辑 Area 还会存活 1-2 tick，直接删会被差分步骤重建
+                    // 导致 backwind/黑烟等 startFrame=-1 子层从头重播（回闪 1-3 帧）。隐藏占位到逻辑移除。
+                    info.ViewDone = true;
+                    LSAnimOverlayUtil.DestroyOverlays(info.Overlays);
+                    info.Renderer.enabled = false;
+                    if (info.BackRenderer != null) info.BackRenderer.enabled = false;
                 }
-            }
-            if (finished != null)
-            {
-                foreach (long id in finished) RemoveView(self, id);   // 收尾动画播完 → 销毁
             }
         }
 
@@ -158,12 +162,15 @@ namespace ET.Client
                 BackFrameIndex = 0,
                 BackTimer = 0,
                 Ending = false,
+                // .als 叠加子层（区域主层 sortingOrder=5，子层 base=6 绕主层排：正 z 在主层前，负在后）
+                Overlays = LSAnimOverlayUtil.CreateOverlays(go.transform, def.ViewAnimId, 6),
             };
         }
 
         private static void RemoveView(LSAreaViewComponent self, long areaId)
         {
             if (!self.Areas.TryGetValue(areaId, out AreaViewInfo info)) return;
+            LSAnimOverlayUtil.DestroyOverlays(info.Overlays);
             if (info.Go != null) UnityEngine.Object.Destroy(info.Go);
             self.Areas.Remove(areaId);
         }
@@ -215,11 +222,8 @@ namespace ET.Client
                 -(frame.imagePos.y + center.y) / 100f - chain.y,
                 0f);
 
-            // 加法混合（火圈/爆炸 LINEARDODGE）
-            if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
-                renderer.sharedMaterial = res.AdditiveMaterial;
-            else if (originalMaterial != null)
-                renderer.sharedMaterial = originalMaterial;
+            // 帧级效果：加法混合 + RGBA 染色（LSAnimOverlayUtil 共享实现）
+            LSAnimOverlayUtil.ApplyFrameEffects(renderer, originalMaterial, frame, res);
 
             return false;   // 还在播
         }

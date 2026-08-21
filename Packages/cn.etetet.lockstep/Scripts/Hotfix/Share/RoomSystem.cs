@@ -50,6 +50,9 @@ namespace ET
             monster.AddComponent<LSCombatComponent, int>(AnimId.Walk);
             monster.GetComponent<LSCombatComponent>().HurtAnimId = AnimId.Hurt;
 
+            // 怪物击退/浮空飞行（被波动爆发推飞的目标）
+            monster.AddComponent<LSFlightComponent>();
+
             // 怪物 Buff 容器（阶段5：燃烧目标是怪物）。先于 Hitbox 挂
             monster.AddComponent<LSBuffComponent>();
 
