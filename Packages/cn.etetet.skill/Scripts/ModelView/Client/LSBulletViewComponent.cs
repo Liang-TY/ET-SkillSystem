@@ -28,6 +28,7 @@ namespace ET.Client
         public int FrameIndex;
         public float Timer;
         public bool FaceRight;
+        public bool ViewGrounded = true;   // true=GO 贴地面（地波）；false=GO 用逻辑高度（空中弹）
         public System.Collections.Generic.List<OverlayViewInfo> Overlays;   // .als 叠加子层
     }
 }

@@ -52,7 +52,8 @@
             "z": 26
           }
         }
-      ]
+      ],
+      "graphicEffect": 1
     },
     {
       "index": 1,
@@ -116,7 +117,8 @@
             "z": 15
           }
         }
-      ]
+      ],
+      "graphicEffect": 1
     },
     {
       "index": 2,
@@ -180,7 +182,8 @@
             "z": 14
           }
         }
-      ]
+      ],
+      "graphicEffect": 1
     },
     {
       "index": 3,
@@ -244,7 +247,8 @@
             "z": 14
           }
         }
-      ]
+      ],
+      "graphicEffect": 1
     },
     {
       "index": 4,
@@ -296,7 +300,8 @@
             "z": 33
           }
         }
-      ]
+      ],
+      "graphicEffect": 1
     },
     {
       "index": 5,
@@ -348,7 +353,8 @@
             "z": 31
           }
         }
-      ]
+      ],
+      "graphicEffect": 1
     }
   ],
   "totalDuration": 900

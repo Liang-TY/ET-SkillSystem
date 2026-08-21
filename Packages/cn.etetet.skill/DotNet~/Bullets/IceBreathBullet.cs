@@ -29,6 +29,10 @@ namespace ET
         // bantuicebreath1.ani 雾团判定：ATTACK BOX 约 ±120px 宽/±15 深 → 半尺寸 1.2×0.4×0.2（DNF 原值缩小适配贴身弹）
         public override TSVector HalfExtents => new((FP)12 / 10, (FP)4 / 10, (FP)15 / 100);
 
+        // .mob [throw attack] 出生偏移直译：x=60px身前 / y=0纵深 / z=70px头部高度
+        public override TSVector SpawnOffset => new((FP)6 / 10, (FP)7 / 10, FP.Zero);
+        public override bool ViewGrounded => false;   // 空中弹：视图用逻辑高度，不贴地
+
         private static readonly int[] HitActionsArr = { ActionIds.MeleeHit };
         public override int[] HitActions => HitActionsArr;
 

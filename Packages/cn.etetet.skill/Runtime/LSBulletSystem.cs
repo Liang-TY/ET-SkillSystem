@@ -36,7 +36,10 @@ namespace ET
             LSBullet bullet = parent.AddChild<LSBullet, int>(bulletId);
             bullet.CasterId = caster.Id;
             bullet.Direction = new TSVector(forward.x >= FP.Zero ? FP.One : -FP.One, FP.Zero, FP.Zero);
-            bullet.Position = caster.Position + bullet.Direction * (FP)8 / 10 + new TSVector(FP.Zero, def.HalfExtents.y, FP.Zero);
+            // 出生 = 施法者位置 + 朝向 × 身前距离 + 高度/纵深偏移（def.SpawnOffset 直译 DNF 投掷参数）
+            bullet.Position = caster.Position
+                              + new TSVector(bullet.Direction.x * def.SpawnOffset.x, FP.Zero, FP.Zero)
+                              + new TSVector(FP.Zero, def.SpawnOffset.y, def.SpawnOffset.z);
             bullet.RemainingMs = def.TotalTimeMs;
             Log.Info($"[Bullet] unit{caster.Id} 发射 {def.GetType().Name} @ {bullet.Position}");
             return bullet;

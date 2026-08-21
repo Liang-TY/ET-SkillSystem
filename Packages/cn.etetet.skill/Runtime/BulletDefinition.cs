@@ -45,6 +45,14 @@ namespace ET
         /// <summary>命中反应参数（DNF .atk 同构：命中单位用；MeleeHit 等节点读取）</summary>
         public virtual HitReaction HitReaction => HitReaction.Default;
 
+        /// <summary>出生偏移（DNF .mob [throw attack] 三轴 / .nut CreatePassiveObject 参数 直译；单位=游戏单位）。
+        /// x=身前距离（沿朝向）、y=高度、z=纵深。默认：身前 0.8（通用出生位）+ 碰撞盒半高（贴地飞行）。
+        /// 每个 DNF 弹按原数据 override 三轴即可，无需手调。</summary>
+        public virtual TSVector SpawnOffset => new((FP)8 / 10, HalfExtents.y, FP.Zero);
+
+        /// <summary>视图是否贴地渲染（true=GO 落地面，地波类；false=GO 用逻辑高度，空中弹类）</summary>
+        public virtual bool ViewGrounded => true;
+
         /// <summary>视图动画 id（视图层按此查 clip 自推帧；逻辑不消费。属性名避开 AnimId 类型名）</summary>
         public virtual int ViewAnimId => AnimId.None;
     }
