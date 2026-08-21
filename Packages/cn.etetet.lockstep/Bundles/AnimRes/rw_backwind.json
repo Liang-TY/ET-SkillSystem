@@ -1,0 +1,174 @@
+{
+  "loop": false,
+  "frameMax": 7,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "twister00.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -379,
+        "y": -483
+      },
+      "delay": 40,
+      "rgba": -7104769,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -248,
+            "y": -100,
+            "z": -103
+          },
+          "max": {
+            "x": 279,
+            "y": 200,
+            "z": 269
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "twister00.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -379,
+        "y": -483
+      },
+      "delay": 40,
+      "rgba": -7104769,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -248,
+            "y": -100,
+            "z": -103
+          },
+          "max": {
+            "x": 279,
+            "y": 200,
+            "z": 269
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "twister00.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -379,
+        "y": -483
+      },
+      "delay": 40,
+      "rgba": -7104769,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -248,
+            "y": -100,
+            "z": -103
+          },
+          "max": {
+            "x": 279,
+            "y": 200,
+            "z": 269
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "twister00.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -379,
+        "y": -483
+      },
+      "delay": 40,
+      "rgba": -7104769,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -248,
+            "y": -100,
+            "z": -103
+          },
+          "max": {
+            "x": 279,
+            "y": 200,
+            "z": 269
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "twister00.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -379,
+        "y": -483
+      },
+      "delay": 40,
+      "rgba": -7104769,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -248,
+            "y": -100,
+            "z": -103
+          },
+          "max": {
+            "x": 279,
+            "y": 200,
+            "z": 278
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "twister00.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -379,
+        "y": -483
+      },
+      "delay": 40,
+      "rgba": -7104769,
+      "graphicEffect": 1
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 17,
+        "y": 115
+      },
+      "delay": 40,
+      "rgba": -7104769
+    }
+  ],
+  "totalDuration": 280
+}

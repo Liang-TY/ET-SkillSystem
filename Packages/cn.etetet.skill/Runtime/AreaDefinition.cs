@@ -18,6 +18,7 @@ namespace ET
     {
         public const int FireCircle = 1;   // 火圈：持续燃烧，单位在内每秒扣血
         public const int BloodBoom = 2;    // 浴血之怒爆炸：以施法者为中心的一次性血爆（伤害+出血）
+        public const int ReleaseWave = 3;  // 波动爆发：以施放点为中心的一次性爆发（伤害+击退浮空）
     }
 
     /// <summary>

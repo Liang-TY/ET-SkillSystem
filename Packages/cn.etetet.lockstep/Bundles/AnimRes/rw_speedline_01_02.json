@@ -1,0 +1,82 @@
+{
+  "loop": false,
+  "frameMax": 6,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 337,
+        "y": -70
+      },
+      "delay": 60
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 337,
+        "y": -70
+      },
+      "delay": 30
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "RWI_speedLine.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -179,
+        "y": -387
+      },
+      "delay": 45,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "RWI_speedLine.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -179,
+        "y": -387
+      },
+      "delay": 45,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "RWI_speedLine.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -159,
+        "y": -387
+      },
+      "delay": 20,
+      "graphicEffect": 1
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 35,
+        "y": -712
+      },
+      "delay": 50
+    }
+  ],
+  "totalDuration": 250
+}

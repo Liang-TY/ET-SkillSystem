@@ -1,0 +1,59 @@
+{
+  "overlays": [
+    {
+      "startFrame": 1,
+      "z": -3,
+      "effectAni": "ReleaseWaveIDash_creature"
+    },
+    {
+      "startFrame": 1,
+      "z": -2,
+      "effectAni": "ReleaseWaveIDash_creature_01"
+    },
+    {
+      "startFrame": 1,
+      "z": -1,
+      "effectAni": "ReleaseWaveIDash_ExplosionElectric02_01"
+    },
+    {
+      "startFrame": 1,
+      "z": 1,
+      "effectAni": "ReleaseWaveIDash_bodyGlow"
+    },
+    {
+      "startFrame": 0,
+      "z": 2,
+      "effectAni": "ReleaseWaveIDash_StartSpeedLine"
+    },
+    {
+      "startFrame": 0,
+      "z": 3,
+      "effectAni": "ReleaseWaveIDash_StartSpeedLine_01"
+    },
+    {
+      "startFrame": 0,
+      "z": 4,
+      "effectAni": "ReleaseWaveIDash_StartSpeedLine_01_02"
+    },
+    {
+      "startFrame": 0,
+      "z": 5,
+      "effectAni": "ReleaseWaveIDash_StartSpeedLine_01_01"
+    },
+    {
+      "startFrame": 1,
+      "z": 6,
+      "effectAni": "ReleaseWaveIDash_CenterElectric3"
+    },
+    {
+      "startFrame": 0,
+      "z": 7,
+      "effectAni": "ReleaseWaveIDash_CenterElectric3_01"
+    },
+    {
+      "startFrame": 0,
+      "z": 8,
+      "effectAni": "ReleaseWaveIDash_ExplosionElectric02"
+    }
+  ]
+}

@@ -27,12 +27,13 @@ namespace ET
             LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
             LSAnimComponent anim = unit.GetComponent<LSAnimComponent>();
             bool inHitstun = combat != null && combat.HitstunTimer > 0;
-            // 攻击中不能移动：检查所有攻击动画 ID（怪物 kneekick + 鬼剑士 attack1-3）
+            // 攻击中不能移动：检查所有攻击动画 ID（怪物 kneekick + 鬼剑士 attack1-3 + 冲刺）
             bool attacking = anim != null && !anim.IsFinished
                 && (anim.AnimId == AnimId.Attack1
                     || anim.AnimId == AnimId.SwordmanAttack1
                     || anim.AnimId == AnimId.SwordmanAttack2
-                    || anim.AnimId == AnimId.SwordmanAttack3);
+                    || anim.AnimId == AnimId.SwordmanAttack3
+                    || anim.AnimId == AnimId.SwordmanReleaseWaveDash);
 
             // 攻击输入：写缓冲（能否起手由 LSSkillComponentSystem.TryCast 决定——三重门禁；取消窗口由技能 OnUpdate 消费）
             if (pressed)

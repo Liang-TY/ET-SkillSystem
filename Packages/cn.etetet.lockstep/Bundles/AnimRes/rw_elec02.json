@@ -1,0 +1,104 @@
+{
+  "loop": false,
+  "frameMax": 7,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -1150,
+        "y": 292
+      },
+      "delay": 60,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -987,
+        "y": 573
+      },
+      "delay": 220,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 59,
+        "y": -54
+      },
+      "delay": 60,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -90,
+        "y": -69
+      },
+      "delay": 60,
+      "rgba": 1687807,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -33,
+        "y": -119
+      },
+      "delay": 60,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": 19,
+        "y": -96
+      },
+      "delay": 60,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -320,
+        "y": -72
+      },
+      "delay": 60,
+      "rgba": -15089409
+    }
+  ],
+  "totalDuration": 580
+}

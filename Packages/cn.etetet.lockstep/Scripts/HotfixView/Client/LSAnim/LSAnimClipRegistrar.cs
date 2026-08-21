@@ -50,6 +50,62 @@ namespace ET.Client
             };
             await RegisterOverlay(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_cast_overlay.json",
                 AnimId.SwordmanBloodboom, bloodboomAlias);
+
+            // 波动爆发（角色冲刺 + 特效 + 爆炸）
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/swordman_releasewavedash.json", AnimId.SwordmanReleaseWaveDash);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_creature.json", AnimId.ReleaseWaveCreature);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_creature_01.json", AnimId.ReleaseWaveCreature01);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_bodyglow.json", AnimId.ReleaseWaveBodyGlow);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_speedline.json", AnimId.ReleaseWaveSpeedLine);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_speedline_01.json", AnimId.ReleaseWaveSpeedLine01);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_speedline_01_01.json", AnimId.ReleaseWaveSpeedLine01_01);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_speedline_01_02.json", AnimId.ReleaseWaveSpeedLine01_02);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_center.json", AnimId.ReleaseWaveCenter);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_center_01.json", AnimId.ReleaseWaveCenter01);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_elec02.json", AnimId.ReleaseWaveElec02);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_elec02_01.json", AnimId.ReleaseWaveElec02_01);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_backwind.json", AnimId.ReleaseWaveBackwind);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_castlightning.json", AnimId.ReleaseWaveCastLightning);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_circle.json", AnimId.ReleaseWaveCircle);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_smoke.json", AnimId.ReleaseWaveSmoke);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_gust.json", AnimId.ReleaseWaveGust);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_burst1.json", AnimId.ReleaseWaveBurst1);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_burst2.json", AnimId.ReleaseWaveBurst2);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_burst3.json", AnimId.ReleaseWaveBurst3);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_burst4.json", AnimId.ReleaseWaveBurst4);
+
+            // 冲刺 .als（releasewavedash_body.ani.als，[none effect add] 11 层全映射）
+            Dictionary<string, int> dashAlias = new()
+            {
+                ["ReleaseWaveIDash_creature"] = AnimId.ReleaseWaveCreature,
+                ["ReleaseWaveIDash_creature_01"] = AnimId.ReleaseWaveCreature01,
+                ["ReleaseWaveIDash_bodyGlow"] = AnimId.ReleaseWaveBodyGlow,
+                ["ReleaseWaveIDash_StartSpeedLine"] = AnimId.ReleaseWaveSpeedLine,
+                ["ReleaseWaveIDash_StartSpeedLine_01"] = AnimId.ReleaseWaveSpeedLine01,
+                ["ReleaseWaveIDash_StartSpeedLine_01_01"] = AnimId.ReleaseWaveSpeedLine01_01,
+                ["ReleaseWaveIDash_StartSpeedLine_01_02"] = AnimId.ReleaseWaveSpeedLine01_02,
+                ["ReleaseWaveIDash_CenterElectric3"] = AnimId.ReleaseWaveCenter,
+                ["ReleaseWaveIDash_CenterElectric3_01"] = AnimId.ReleaseWaveCenter01,
+                ["ReleaseWaveIDash_ExplosionElectric02"] = AnimId.ReleaseWaveElec02,
+                ["ReleaseWaveIDash_ExplosionElectric02_01"] = AnimId.ReleaseWaveElec02_01,
+            };
+            await RegisterOverlay(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_dash_overlay.json",
+                AnimId.SwordmanReleaseWaveDash, dashAlias);
+
+            // 爆炸 .als（手组装：releasewave1.ani.als 的 3 子层 + backwind 蓄气 5 层合并挂爆炸主动画）
+            Dictionary<string, int> burstAlias = new()
+            {
+                ["rw_burst2"] = AnimId.ReleaseWaveBurst2,
+                ["rw_burst3"] = AnimId.ReleaseWaveBurst3,
+                ["rw_burst4"] = AnimId.ReleaseWaveBurst4,
+                ["rw_backwind"] = AnimId.ReleaseWaveBackwind,
+                ["rw_smoke"] = AnimId.ReleaseWaveSmoke,
+                ["rw_gust"] = AnimId.ReleaseWaveGust,
+                ["rw_castlightning"] = AnimId.ReleaseWaveCastLightning,
+                ["rw_circle"] = AnimId.ReleaseWaveCircle,
+            };
+            await RegisterOverlay(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_burst_overlay.json",
+                AnimId.ReleaseWaveBurst1, burstAlias);
         }
 
         private static async ETTask RegisterOne(ResourcesLoaderComponent resLoader, string path, int animId)

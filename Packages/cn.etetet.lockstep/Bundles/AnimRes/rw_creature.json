@@ -1,0 +1,44 @@
+{
+  "loop": false,
+  "frameMax": 3,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "RWI_creature.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -728,
+        "y": -403
+      },
+      "delay": 120
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "RWI_creature.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -728,
+        "y": -403
+      },
+      "delay": 20,
+      "rgba": -436207617
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -277,
+        "y": -20
+      },
+      "delay": 20
+    }
+  ],
+  "totalDuration": 160
+}

@@ -19,6 +19,7 @@ namespace ET
         public const int WaveSword = 3;      // 地裂·波动剑（I 键，投射物）
         public const int FireCircle = 4;     // 火圈（O 键，区域效果）
         public const int BloodBoom = 5;      // 浴血之怒（U 键，自耗 HP 的自身中心血爆）
+        public const int ReleaseWave = 6;    // 波动爆发（Y 键，前冲+原地爆发击退，mod 技能）
 
         /// <summary>按键值 → 技能槽位映射</summary>
         public static bool ButtonToSkill(int button, out int skillId)
@@ -30,6 +31,7 @@ namespace ET
                 case 3: skillId = WaveSword; return true;
                 case 4: skillId = FireCircle; return true;
                 case 5: skillId = BloodBoom; return true;
+                case 6: skillId = ReleaseWave; return true;
                 default: skillId = 0; return false;
             }
         }

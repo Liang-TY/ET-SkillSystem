@@ -9,6 +9,10 @@ namespace ET
     [FriendOf(typeof(LSCast))]
     public static partial class LSHitboxComponentSystem
     {
+        /// <summary>判定帧驱动攻击盒的动画（json 自带 attackBoxes 的）：怪物 kneekick + 波动爆发冲刺</summary>
+        private static bool IsAttackDrivenAnim(int animId)
+            => animId == AnimId.Attack1 || animId == AnimId.SwordmanReleaseWaveDash;
+
         [EntitySystem]
         private static void Awake(this LSHitboxComponent self)
         {
@@ -38,10 +42,11 @@ namespace ET
                 self.CurrentHurtBoxes.Add(SampleBox(unit, frame.damageBox));
             }
 
-            // 2) 攻击盒：攻击动作的判定帧（有 attackBoxes 的帧）驱动，帧 0/4 无盒 = 前摇/收招无判定。
+            // 2) 攻击盒：攻击动作的判定帧（有 attackBoxes 的帧）驱动，无盒帧 = 前摇/收招无判定。
+            //    判定帧驱动的动画 = json 里带 attackBoxes 的（kneekick / 波动爆发冲刺）；
             //    其他动画不动列表——固定盒技能走 SkillContext.SetAttackHitbox 手动管理；
             //    攻击动作状态机（起手/取消/结束）在 Cast 框架（LSSkillComponentSystem / NormalAttack）。
-            if (anim != null && anim.AnimId == AnimId.Attack1)
+            if (anim != null && IsAttackDrivenAnim(anim.AnimId))
             {
                 self.CurrentAttackBoxes.Clear();
                 if (frame.attackBoxes is { Length: > 0 } attackBoxes)

@@ -1,0 +1,149 @@
+{
+  "loop": false,
+  "frameMax": 3,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 240
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 60,
+      "damageBox": {
+        "min": {
+          "x": 1,
+          "y": -5,
+          "z": 5
+        },
+        "max": {
+          "x": 52,
+          "y": 10,
+          "z": 61
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 1,
+            "y": -5,
+            "z": 5
+          },
+          "max": {
+            "x": 52,
+            "y": 10,
+            "z": 61
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 241
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 120,
+      "damageBox": {
+        "min": {
+          "x": 19,
+          "y": -5,
+          "z": 5
+        },
+        "max": {
+          "x": 64,
+          "y": 10,
+          "z": 55
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 19,
+            "y": -5,
+            "z": 5
+          },
+          "max": {
+            "x": 64,
+            "y": 10,
+            "z": 55
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -152,
+            "y": -50,
+            "z": -53
+          },
+          "max": {
+            "x": 300,
+            "y": 100,
+            "z": 204
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sm_body0000.img",
+        "index": 240
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": 1,
+          "y": -5,
+          "z": 5
+        },
+        "max": {
+          "x": 52,
+          "y": 10,
+          "z": 61
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 1,
+            "y": -5,
+            "z": 5
+          },
+          "max": {
+            "x": 52,
+            "y": 10,
+            "z": 61
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -177,
+            "y": -50,
+            "z": -53
+          },
+          "max": {
+            "x": 300,
+            "y": 100,
+            "z": 204
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 230
+}

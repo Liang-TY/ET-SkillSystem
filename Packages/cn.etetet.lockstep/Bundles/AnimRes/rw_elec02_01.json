@@ -1,0 +1,76 @@
+{
+  "loop": false,
+  "frameMax": 5,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 32,
+        "y": -163
+      },
+      "delay": 60,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": 7,
+        "y": -164
+      },
+      "delay": 60,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": 7,
+        "y": -172
+      },
+      "delay": 30,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "ExplosionElectric02.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -5,
+        "y": -172
+      },
+      "delay": 30,
+      "rgba": -15089409,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -389,
+        "y": -79
+      },
+      "delay": 30,
+      "rgba": -15089409
+    }
+  ],
+  "totalDuration": 210
+}

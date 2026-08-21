@@ -31,6 +31,7 @@ namespace ET.Client
             else if (Input.GetKey(KeyCode.I)) button = 3;   // 波动剑（投射物）
             else if (Input.GetKey(KeyCode.O)) button = 4;   // 火圈（区域效果）
             else if (Input.GetKey(KeyCode.U)) button = 5;   // 浴血之怒（自耗 HP 血爆）
+            else if (Input.GetKey(KeyCode.Y)) button = 6;   // 波动爆发（前冲+爆发击退）
 
             LSClientUpdater lsClientUpdater = self.GetParent<Room>().GetComponent<LSClientUpdater>();
             lsClientUpdater.Input.V = v.normalized;

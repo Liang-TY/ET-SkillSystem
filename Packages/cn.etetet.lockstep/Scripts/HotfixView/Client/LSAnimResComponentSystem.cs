@@ -40,6 +40,18 @@ namespace ET.Client
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_casting_back.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_boomfront.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_boomback.img.bytes");
+            // 波动爆发特效（mod NPK 4 张 + 官方/替代 7 张）
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_bodyglow.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_creature.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_speedline.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_wave.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/releasewave3.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/explosionelectric02.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/blackdust.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/circle.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/twister00.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/lightningfairy12.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/sphereexplosionnormal01.img.bytes");
 
             // LINEARDODGE 加法混合材质（共享，所有需要发光的帧用同一个实例）
             Shader additiveShader = Shader.Find("ET/SpriteAdditive");

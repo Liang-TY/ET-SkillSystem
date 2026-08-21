@@ -1,0 +1,12 @@
+{
+  "overlays": [
+    { "startFrame": 0, "z": 1, "effectAni": "rw_burst2" },
+    { "startFrame": 0, "z": 2, "effectAni": "rw_burst3" },
+    { "startFrame": 0, "z": 3, "effectAni": "rw_burst4" },
+    { "startFrame": -1, "z": -6, "effectAni": "rw_backwind" },
+    { "startFrame": -1, "z": -5, "effectAni": "rw_smoke" },
+    { "startFrame": 0, "z": -4, "effectAni": "rw_gust" },
+    { "startFrame": 1, "z": -3, "effectAni": "rw_castlightning" },
+    { "startFrame": 2, "z": -2, "effectAni": "rw_circle" }
+  ]
+}

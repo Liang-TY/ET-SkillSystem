@@ -1,0 +1,98 @@
+{
+  "loop": false,
+  "frameMax": 7,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "lightningfairy12.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -266,
+        "y": -281
+      },
+      "delay": 30,
+      "rgba": 872415231,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "lightningfairy12.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -266,
+        "y": -281
+      },
+      "delay": 30,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "lightningfairy12.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -266,
+        "y": -281
+      },
+      "delay": 40,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "lightningfairy12.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -266,
+        "y": -268
+      },
+      "delay": 25,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "lightningfairy12.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -266,
+        "y": -268
+      },
+      "delay": 25,
+      "graphicEffect": 1
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "lightningfairy12.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -266,
+        "y": -268
+      },
+      "delay": 25,
+      "graphicEffect": 1
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -17,
+        "y": -17
+      },
+      "delay": 25
+    }
+  ],
+  "totalDuration": 200
+}
