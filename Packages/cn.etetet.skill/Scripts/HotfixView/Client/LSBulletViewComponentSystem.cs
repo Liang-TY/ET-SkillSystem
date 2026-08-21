@@ -83,6 +83,8 @@ namespace ET.Client
                 // 碰撞盒中心的 y（HalfExtents.y）只用于逻辑，视觉贴地
                 info.Go.transform.position = new Vector3((float)bullet.Position.x, 0f, (float)bullet.Position.z);
                 AdvanceFrame(info, res, Time.deltaTime);
+                // .als 叠加子层自推（门控用弹主层帧号）
+                LSAnimOverlayUtil.AdvanceOverlays(info.Overlays, info.FrameIndex, res, Time.deltaTime);
             }
         }
 
@@ -108,12 +110,15 @@ namespace ET.Client
                 FrameIndex = 0,
                 Timer = 0,
                 FaceRight = bullet.Direction.x >= 0,
+                // .als 叠加子层（弹主层 sortingOrder=10，子层 base=11 绕主层排）
+                Overlays = LSAnimOverlayUtil.CreateOverlays(go.transform, def.ViewAnimId, 11),
             };
         }
 
         private static void RemoveView(LSBulletViewComponent self, long bulletId)
         {
             if (!self.Bullets.TryGetValue(bulletId, out BulletViewInfo info)) return;
+            LSAnimOverlayUtil.DestroyOverlays(info.Overlays);
             if (info.Go != null) UnityEngine.Object.Destroy(info.Go);
             self.Bullets.Remove(bulletId);
         }

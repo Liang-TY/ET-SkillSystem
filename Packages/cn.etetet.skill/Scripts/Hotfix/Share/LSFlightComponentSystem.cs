@@ -5,6 +5,7 @@ namespace ET
     [EntitySystemOf(typeof(LSFlightComponent))]
     [LSEntitySystemOf(typeof(LSFlightComponent))]
     [FriendOf(typeof(LSFlightComponent))]
+    [FriendOf(typeof(LSCombatComponent))]   // 落地播倒地动画 + 硬直托底（ET0002）
     public static partial class LSFlightComponentSystem
     {
         [EntitySystem]
@@ -35,9 +36,18 @@ namespace ET
                 pos.y = FP.Zero;
                 if (wasAirborne)
                 {
-                    // 击飞落地：动量清零趴住（DNF 击倒手感；起身时机由 HitstunTimer 管）
+                    // 击飞落地：动量清零趴住（DNF 击倒手感）——播倒地动画 + 硬直托底到动画播完
+                    // （起身由 LSCombatComponentSystem 硬直结束逻辑切回 DefaultAnimId）
                     v = TSVector.zero;
                     self.Active = false;
+                    LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
+                    if (combat != null && combat.DownAnimId != 0)
+                    {
+                        unit.GetComponent<LSAnimComponent>()?.Play(combat.DownAnimId);
+                        AnimClipData downClip = AnimConfigRegistry.Get(combat.DownAnimId);
+                        int downMs = downClip?.totalDuration ?? 0;
+                        if (downMs > combat.HitstunTimer) combat.HitstunTimer = downMs;
+                    }
                 }
                 else
                 {

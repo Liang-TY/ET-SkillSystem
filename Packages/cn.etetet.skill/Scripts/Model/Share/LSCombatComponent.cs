@@ -30,5 +30,9 @@ namespace ET
         // 受击动画（每角色自带，DNF sq_GetDamageAni 同构；0=未配置→红闪兜底）
         [MemoryPackOrder(4)]
         public int HurtAnimId;
+
+        // 击倒落地动画（LSFlightComponentSystem 落地时播放 + 硬直托底；0=未配置→落地直接回默认）
+        [MemoryPackOrder(5)]
+        public int DownAnimId;
     }
 }

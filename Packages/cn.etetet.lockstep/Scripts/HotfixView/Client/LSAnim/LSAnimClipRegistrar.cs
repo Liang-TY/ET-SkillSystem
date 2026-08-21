@@ -106,6 +106,19 @@ namespace ET.Client
             };
             await RegisterOverlay(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rw_burst_overlay.json",
                 AnimId.ReleaseWaveBurst1, burstAlias);
+
+            // 班图女战士（怪物）：技能动画 + 倒地 + 冰息弹
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/monster_lowkick.json", AnimId.MonsterLowKick);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/monster_highkick.json", AnimId.MonsterHighKick);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/monster_icebreath.json", AnimId.MonsterIceBreath);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/monster_down.json", AnimId.MonsterDown);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/icebreath_bullet1.json", AnimId.IceBreathBullet1);
+            await RegisterOne(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/icebreath_bullet2.json", AnimId.IceBreathBullet2);
+
+            // 冰息弹第二层视觉（BantuIceBreath1.obj [add object effect] → .als overlay 挂主层）
+            Dictionary<string, int> bulletAlias = new() { ["icebreath2"] = AnimId.IceBreathBullet2 };
+            await RegisterOverlay(resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/icebreath_bullet_overlay.json",
+                AnimId.IceBreathBullet1, bulletAlias);
         }
 
         private static async ETTask RegisterOne(ResourcesLoaderComponent resLoader, string path, int animId)

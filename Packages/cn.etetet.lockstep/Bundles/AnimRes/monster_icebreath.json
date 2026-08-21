@@ -1,0 +1,311 @@
+{
+  "loop": false,
+  "frameMax": 8,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -46,
+          "y": -7,
+          "z": 1
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -46,
+            "y": -7,
+            "z": 1
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -51,
+          "y": -7,
+          "z": -1
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -51,
+            "y": -7,
+            "z": -1
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 100,
+      "damageBox": {
+        "min": {
+          "x": -51,
+          "y": -7,
+          "z": -3
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -51,
+            "y": -7,
+            "z": -3
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -51,
+          "y": -7,
+          "z": 1
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -51,
+            "y": -7,
+            "z": 1
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -52,
+          "y": -7,
+          "z": -3
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -52,
+            "y": -7,
+            "z": -3
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -53,
+          "y": -7,
+          "z": -4
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -53,
+            "y": -7,
+            "z": -4
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 7
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -54,
+          "y": -7,
+          "z": -4
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -54,
+            "y": -7,
+            "z": -4
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "BantuAmazones.img",
+        "index": 8
+      },
+      "imagePos": {
+        "x": -259,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -53,
+          "y": -7,
+          "z": -4
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -53,
+            "y": -7,
+            "z": -4
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 660
+}

@@ -1,5 +1,6 @@
 {
   "hitFlashEnabled": true,
   "screenShakeEnabled": false,
-  "debugDrawHitbox": false
+  "debugDrawHitbox": false,
+  "rngSeed": 20260821
 }

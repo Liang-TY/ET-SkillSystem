@@ -56,6 +56,9 @@ namespace ET
         public void PlayDefaultAnim()
         {
             LSCombatComponent combat = caster.GetComponent<LSCombatComponent>();
+            // 硬直/倒地期间动画由受击系统接管（Hurt/Down + 硬直结束切回默认）——
+            // 技能收招不抢（审查修复：在技中被击飞时 OnEnd 会把落地的 Down 覆盖成默认）
+            if (combat != null && combat.HitstunTimer > 0) return;
             PlayAnim(combat != null ? combat.DefaultAnimId : AnimId.Idle);
         }
 

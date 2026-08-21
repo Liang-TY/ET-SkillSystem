@@ -7,5 +7,6 @@ namespace ET
         public bool hitFlashEnabled;
         public bool screenShakeEnabled;
         public bool debugDrawHitbox;
+        public int rngSeed;
     }
 }

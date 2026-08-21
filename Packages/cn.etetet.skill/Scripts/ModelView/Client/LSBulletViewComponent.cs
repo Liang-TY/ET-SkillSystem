@@ -28,5 +28,6 @@ namespace ET.Client
         public int FrameIndex;
         public float Timer;
         public bool FaceRight;
+        public System.Collections.Generic.List<OverlayViewInfo> Overlays;   // .als 叠加子层
     }
 }

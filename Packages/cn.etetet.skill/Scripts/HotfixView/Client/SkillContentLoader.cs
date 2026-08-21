@@ -45,8 +45,10 @@ namespace ET.Client
                 SkillSystemConfig.HitFlashEnabled = data.hitFlashEnabled;
                 SkillSystemConfig.ScreenShakeEnabled = data.screenShakeEnabled;
                 SkillSystemConfig.DebugDrawHitbox = data.debugDrawHitbox;
+                SkillSystemConfig.RngSeed = data.rngSeed;
                 Log.Info($"[SkillConfig] 加载：hitFlash={SkillSystemConfig.HitFlashEnabled} " +
-                         $"screenShake={SkillSystemConfig.ScreenShakeEnabled} debugBox={SkillSystemConfig.DebugDrawHitbox}");
+                         $"screenShake={SkillSystemConfig.ScreenShakeEnabled} debugBox={SkillSystemConfig.DebugDrawHitbox} " +
+                         $"rngSeed={SkillSystemConfig.RngSeed}");
             }
         }
     }

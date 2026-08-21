@@ -17,6 +17,7 @@ namespace ET
     public static class BulletIds
     {
         public const int NormalWave = 1;   // 地裂·波动剑（穿透地波，命中伤害+硬直）
+        public const int IceBreath = 2;    // 冰息弹（班图女战士冰雾，穿透+10% 冰冻）
     }
 
     /// <summary>

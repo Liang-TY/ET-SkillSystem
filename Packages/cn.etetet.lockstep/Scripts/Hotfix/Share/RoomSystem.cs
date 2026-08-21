@@ -34,30 +34,36 @@ namespace ET
                 self.PlayerIds.Add(unitInfo.PlayerId);
             }
 
-            // Half B 测试桩：建一个怪物原地循环走 move.json（无 AI；正式刷怪配置以后再做）
+            // Half B 测试桩：班图女战士（阶段1 技能轮播驱动；阶段2 换 AI）
             // 不进 PlayerIds、不加 LSInputComponent（不是玩家：不吃输入、相机不跟）
             LSUnitComponent lsUnitComponent = lsWorld.GetComponent<LSUnitComponent>();
             LSUnit monster = lsUnitComponent.AddChild<LSUnit>();
             monster.Position = new TSVector(3, 0, 0);
-            monster.AddComponent<LSAnimComponent>().Play(AnimId.Walk);
+            monster.Forward = new TSVector(-1, 0, 0);   // 面向玩家出生点（0,0,0）——攻击盒采样/发弹方向都吃朝向
+            monster.AddComponent<LSAnimComponent>().Play(AnimId.Idle);
 
-            // 怪物也挂数值组件（HP）
+            // 数值（HP）
             var monsterNum = monster.AddComponent<LSNumericComponent>();
             monsterNum.Set(NumericType.HpBase, 500);
             monsterNum.Set(NumericType.MaxHpBase, 500);
 
-            // 怪物战斗状态（硬直计时，默认动画 Walk + 受击动画 Hurt）。先于 Hitbox 挂
-            monster.AddComponent<LSCombatComponent, int>(AnimId.Walk);
+            // 战斗状态（默认动画 Stay=Idle、受击 Damage、击倒落地 Down）。先于 Hitbox 挂
+            monster.AddComponent<LSCombatComponent, int>(AnimId.Idle);
             monster.GetComponent<LSCombatComponent>().HurtAnimId = AnimId.Hurt;
+            monster.GetComponent<LSCombatComponent>().DownAnimId = AnimId.MonsterDown;
 
-            // 怪物击退/浮空飞行（被波动爆发推飞的目标）
             monster.AddComponent<LSFlightComponent>();
-
-            // 怪物 Buff 容器（阶段5：燃烧目标是怪物）。先于 Hitbox 挂
             monster.AddComponent<LSBuffComponent>();
 
-            // 怪物挂命中盒组件（受击盒采样；无输入缓冲组件——不攻击）
+            // 技能（怪物走玩家同款 Cast 框架：CD/硬直门禁/帧驱动攻击盒/HitReaction 全复用）
+            monster.AddComponent<LSSkillComponent>();
+            monster.AddComponent<LSCastComponent>();
+
+            // 命中盒组件（受击盒采样 + 攻击判定帧驱动）
             monster.AddComponent<LSHitboxComponent>();
+
+            // 阶段1 临时轮播驱动（每 3s 依次放一个技能；阶段2 AI 替换）
+            monster.AddComponent<LSMonsterDebugDriverComponent>();
         }
 
         public static void Update(this Room self, OneFrameInputs oneFrameInputs)

@@ -24,11 +24,12 @@ namespace ET
                 self.HitstunTimer -= LSConstValue.UpdateInterval;
                 if (self.HitstunTimer < 0) self.HitstunTimer = 0;
 
-                // 硬直结束：受击动画切回默认（用 HurtAnimId 匹配——每角色可能不同，不硬编码）
+                // 硬直结束：受击/倒地动画切回默认（用动画 Id 匹配——每角色可能不同，不硬编码）
                 if (self.HitstunTimer == 0)
                 {
                     LSAnimComponent anim = self.GetParent<LSUnit>().GetComponent<LSAnimComponent>();
-                    if (anim != null && anim.AnimId == self.HurtAnimId) anim.Play(self.DefaultAnimId);
+                    if (anim != null && (anim.AnimId == self.HurtAnimId || anim.AnimId == self.DownAnimId))
+                        anim.Play(self.DefaultAnimId);
                 }
             }
 

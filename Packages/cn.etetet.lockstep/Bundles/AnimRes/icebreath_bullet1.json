@@ -1,0 +1,361 @@
+{
+  "loop": false,
+  "frameMax": 6,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "IceBreath1.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -54,
+        "y": -49
+      },
+      "delay": 150,
+      "graphicEffect": 1,
+      "damageBox": {
+        "min": {
+          "x": -21,
+          "y": -16,
+          "z": -5
+        },
+        "max": {
+          "x": 44,
+          "y": 30,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -21,
+            "y": -16,
+            "z": -5
+          },
+          "max": {
+            "x": 44,
+            "y": 30,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -42,
+            "y": -10,
+            "z": -10
+          },
+          "max": {
+            "x": 77,
+            "y": 20,
+            "z": 26
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "IceBreath1.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -54,
+        "y": -49
+      },
+      "delay": 150,
+      "graphicEffect": 1,
+      "damageBox": {
+        "min": {
+          "x": -21,
+          "y": -16,
+          "z": -5
+        },
+        "max": {
+          "x": 44,
+          "y": 30,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -21,
+            "y": -16,
+            "z": -5
+          },
+          "max": {
+            "x": 44,
+            "y": 30,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -41,
+            "y": -10,
+            "z": -15
+          },
+          "max": {
+            "x": 120,
+            "y": 20,
+            "z": 29
+          }
+        },
+        {
+          "min": {
+            "x": -6,
+            "y": -10,
+            "z": 13
+          },
+          "max": {
+            "x": 73,
+            "y": 20,
+            "z": 15
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "IceBreath1.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -54,
+        "y": -49
+      },
+      "delay": 150,
+      "graphicEffect": 1,
+      "damageBox": {
+        "min": {
+          "x": -21,
+          "y": -16,
+          "z": -5
+        },
+        "max": {
+          "x": 44,
+          "y": 30,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -21,
+            "y": -16,
+            "z": -5
+          },
+          "max": {
+            "x": 44,
+            "y": 30,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 24,
+            "y": -10,
+            "z": -15
+          },
+          "max": {
+            "x": 107,
+            "y": 20,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": 16,
+            "y": -10,
+            "z": 9
+          },
+          "max": {
+            "x": 62,
+            "y": 20,
+            "z": 14
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "IceBreath1.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -54,
+        "y": -49
+      },
+      "delay": 150,
+      "graphicEffect": 1,
+      "damageBox": {
+        "min": {
+          "x": 14,
+          "y": -16,
+          "z": -2
+        },
+        "max": {
+          "x": 44,
+          "y": 30,
+          "z": 108
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 14,
+            "y": -16,
+            "z": -2
+          },
+          "max": {
+            "x": 44,
+            "y": 30,
+            "z": 108
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 13,
+            "y": -10,
+            "z": -18
+          },
+          "max": {
+            "x": 108,
+            "y": 20,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": 28,
+            "y": -10,
+            "z": 13
+          },
+          "max": {
+            "x": 63,
+            "y": 20,
+            "z": 14
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "IceBreath1.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -54,
+        "y": -49
+      },
+      "delay": 150,
+      "graphicEffect": 1,
+      "damageBox": {
+        "min": {
+          "x": 16,
+          "y": -16,
+          "z": 0
+        },
+        "max": {
+          "x": 44,
+          "y": 30,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 16,
+            "y": -16,
+            "z": 0
+          },
+          "max": {
+            "x": 44,
+            "y": 30,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 21,
+            "y": -10,
+            "z": -12
+          },
+          "max": {
+            "x": 110,
+            "y": 20,
+            "z": 33
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "IceBreath1.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -54,
+        "y": -49
+      },
+      "delay": 150,
+      "graphicEffect": 1,
+      "damageBox": {
+        "min": {
+          "x": 14,
+          "y": -16,
+          "z": -1
+        },
+        "max": {
+          "x": 44,
+          "y": 30,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 14,
+            "y": -16,
+            "z": -1
+          },
+          "max": {
+            "x": 44,
+            "y": 30,
+            "z": 106
+          }
+        }
+      ],
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 56,
+            "y": -10,
+            "z": 0
+          },
+          "max": {
+            "x": 96,
+            "y": 20,
+            "z": 31
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 900
+}

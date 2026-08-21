@@ -19,7 +19,12 @@ namespace ET
 
         public int Damage;      // 伤害
         public int HitstunMs;   // 受击硬直 ms（重打刷新）
-        public int KnockbackX;  // 击退力（延后：需要位移系统集成）
-        public int LaunchY;     // 浮空力（延后：需要 Z 轴物理）
+        public int KnockbackX;  // 击退力（px）
+        public int LaunchY;     // 浮空力（px）
+
+        // 命中按概率附加的 Buff（DNF .atk [active status] 同构：出血/冰冻/感电…）
+        // v1 简化：时长/每跳伤害用各 Buff 预设，不随 .atk 参数化（记档 02 文档 §9）
+        public int ProcBuffId;  // 0 = 无
+        public int ProcChance;  // 概率 %（0-100；LSRng 确定性判定）
     }
 }

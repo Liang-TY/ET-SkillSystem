@@ -20,6 +20,13 @@ namespace ET
             if (reaction.KnockbackX != 0 || reaction.LaunchY != 0)
                 ctx.LaunchOwner(reaction.KnockbackX, reaction.LaunchY);
 
+            // 概率附加状态（DNF .atk [active status]：出血/冰冻…；LSRng 确定性种子判定）
+            if (reaction.ProcBuffId != 0 && LSRng.Roll(ctx.FrameNo, ctx.GetOwnerId(), LSRng.PurposeProcStatus) < reaction.ProcChance)
+            {
+                ctx.AddBuffToOwner(reaction.ProcBuffId);
+                Log.Info($"[Combat] unit{ctx.GetOwnerId()} 触发附加状态 buff{reaction.ProcBuffId}（{reaction.ProcChance}%）");
+            }
+
             Log.Info($"[Combat] 帧{ctx.FrameNo} unit{ctx.GetSourceId()} 命中 unit{ctx.GetOwnerId()}，" +
                      $"伤害{reaction.Damage}，HP={ctx.GetOwnerHp()} hitstun={reaction.HitstunMs}ms" +
                      (reaction.KnockbackX != 0 || reaction.LaunchY != 0

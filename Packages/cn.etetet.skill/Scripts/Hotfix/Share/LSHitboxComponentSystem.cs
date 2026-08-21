@@ -9,9 +9,13 @@ namespace ET
     [FriendOf(typeof(LSCast))]
     public static partial class LSHitboxComponentSystem
     {
-        /// <summary>判定帧驱动攻击盒的动画（json 自带 attackBoxes 的）：怪物 kneekick + 波动爆发冲刺</summary>
+        /// <summary>判定帧驱动攻击盒的动画（json 自带 attackBoxes 的）：怪物系（kneekick/lowkick/highkick）
+        /// + 波动爆发冲刺。冰息本体无盒（判定在弹上）。</summary>
         private static bool IsAttackDrivenAnim(int animId)
-            => animId == AnimId.Attack1 || animId == AnimId.SwordmanReleaseWaveDash;
+            => animId == AnimId.Attack1
+               || animId == AnimId.MonsterLowKick
+               || animId == AnimId.MonsterHighKick
+               || animId == AnimId.SwordmanReleaseWaveDash;
 
         [EntitySystem]
         private static void Awake(this LSHitboxComponent self)

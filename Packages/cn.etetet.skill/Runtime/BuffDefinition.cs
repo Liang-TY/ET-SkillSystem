@@ -17,6 +17,7 @@ namespace ET
         public const int Burn = 1;   // 燃烧：每 1 秒扣 10，持续 3 秒（FireDamageTick）
         public const int Stun = 2;   // 眩晕：1 秒禁移动（ForbidMove 开/关）
         public const int Bleed = 3;  // 出血：每 1 秒扣 15，持续 3 秒（BleedDamageTick；浴血之怒附带）
+        public const int Freeze = 4; // 冰冻：3.5 秒定身（ForbidMove 开/关；冰息弹附带）
     }
 
     /// <summary>

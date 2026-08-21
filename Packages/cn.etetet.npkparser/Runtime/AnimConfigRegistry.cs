@@ -83,5 +83,14 @@ namespace ET
         public const int ReleaseWaveBurst2 = 39;        // rw_burst2.json（爆炸子层：冲击环）
         public const int ReleaseWaveBurst3 = 40;        // rw_burst3.json（爆炸子层：蓄风）
         public const int ReleaseWaveBurst4 = 41;        // rw_burst4.json（爆炸子层：终结爆炸）
+
+        // 班图女战士（BantuAmazones）怪物段（BantuAmazones.img 54 帧已在库）
+        public const int MonsterLowKick = 42;       // monster_lowkick.json（下段踢 7 帧，判定帧 3-5）
+        public const int MonsterHighKick = 43;      // monster_highkick.json（高踢 6 帧，判定帧 2-3）
+        public const int MonsterIceBreath = 44;     // monster_icebreath.json（冰息施法 8 帧，帧 3 发弹）
+        public const int MonsterDown = 45;          // monster_down.json（击倒落地 3 帧 900ms）
+        public const int MonsterOverturn = 46;      // 预留（起身动画依赖 IMAGE ROTATE，未注册）
+        public const int IceBreathBullet1 = 47;     // icebreath_bullet1.json（冰息弹主层 6 帧 150ms）
+        public const int IceBreathBullet2 = 48;     // icebreath_bullet2.json（冰息弹第二层视觉）
     }
 }

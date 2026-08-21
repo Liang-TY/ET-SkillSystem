@@ -19,5 +19,9 @@ namespace ET
         /// <summary>调试绘制判定框（阶段2 计划的 Gizmo——暂不实现，开关先行）</summary>
         [StaticField]
         public static bool DebugDrawHitbox;
+
+        /// <summary>确定性随机种子（LSRng 用——两端同 json 同种子，回放/回滚一致；换种子 = 换一套概率序列）</summary>
+        [StaticField]
+        public static int RngSeed;
     }
 }

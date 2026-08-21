@@ -52,6 +52,9 @@ namespace ET.Client
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/twister00.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/lightningfairy12.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/sphereexplosionnormal01.img.bytes");
+            // 班图女战士冰息弹（冰雾双层视觉）
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/icebreath1.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/icebreath2.img.bytes");
 
             // LINEARDODGE 加法混合材质（共享，所有需要发光的帧用同一个实例）
             Shader additiveShader = Shader.Find("ET/SpriteAdditive");
