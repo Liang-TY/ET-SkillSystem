@@ -7,6 +7,9 @@ namespace ET
         [StaticField]
         private static readonly Dictionary<int, AnimClipData> configs = new();
 
+        [StaticField]
+        private static readonly Dictionary<int, AnimOverlayConfig> overlayConfigs = new();
+
         public static void Register(int animId, AnimClipData data)
         {
             configs[animId] = data;
@@ -16,6 +19,19 @@ namespace ET
         {
             configs.TryGetValue(animId, out AnimClipData data);
             return data;
+        }
+
+        /// <summary>注册 .als 特效叠加配置（animId = 挂接的父动画；entry.effectAnimId 需先解析好）</summary>
+        public static void RegisterOverlay(int animId, AnimOverlayConfig config)
+        {
+            overlayConfigs[animId] = config;
+        }
+
+        /// <summary>查父动画的叠加配置（无 = null）</summary>
+        public static AnimOverlayConfig GetOverlay(int animId)
+        {
+            overlayConfigs.TryGetValue(animId, out AnimOverlayConfig config);
+            return config;
         }
     }
 
@@ -37,6 +53,12 @@ namespace ET
         public const int SwordmanAttack2 = 13;   // swordman_attack2.json
         public const int SwordmanAttack3 = 14;   // swordman_attack3.json（有 2 个 attackBox）
         public const int SwordmanHurt = 15;      // swordman_damage.json
-        public const int SwordmanBloodboom = 16; // swordman_bloodboom.json
+        public const int SwordmanBloodboom = 16; // swordman_bloodboom.json（施法动画，叠加 bloodboom_cast_overlay）
+
+        // 浴血之怒特效段（bloodboom_cast_overlay.json 的别名 → AnimId 映射）
+        public const int BloodboomCastingBack = 17;  // bloodboom_casting_back.json（施法蓄力背面层）
+        public const int BloodboomCasting = 18;      // bloodboom_casting.json（施法蓄力正面层）
+        public const int BloodboomBoomFront = 19;    // bloodboom_boomfront.json（爆炸正面，区域视图主层）
+        public const int BloodboomBoomBack = 20;     // bloodboom_boomback.json（爆炸背面，区域视图背层）
     }
 }

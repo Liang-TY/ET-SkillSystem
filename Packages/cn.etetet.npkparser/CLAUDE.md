@@ -108,6 +108,28 @@ AnimConfigRegistry.Register(AnimId.Idle, idleClipData);
 
 // 获取
 AnimClipData clip = AnimConfigRegistry.Get(AnimId.Idle);
+
+// .als 特效叠加（DNF .ani 同名边车）：挂在父动画上
+AnimConfigRegistry.RegisterOverlay(AnimId.SwordmanBloodboom, overlayConfig);
+AnimOverlayConfig cfg = AnimConfigRegistry.GetOverlay(animId);   // 无 = null
+```
+
+### AnimOverlayConfig — .als 特效叠加配置
+
+DNF `.als` 边车（如 `bloodboom.ani.als`）的翻译产物（`DnfConfigTranslation` 的 `als` 子命令生成，JsonUtility 反序列化）。父动画播放时，视图层 LSAnimOverlayViewComponent 按配置在指定帧/层叠加特效动画：
+
+```csharp
+[Serializable]
+public class AnimOverlayConfig { public AnimOverlayEntry[] overlays; }
+
+[Serializable]
+public class AnimOverlayEntry
+{
+    public int startFrame;      // -1 = 全帧生效（DNF 帧号直译）
+    public int z;               // 层号直译：负 = 身后；10001+ = 前景标记段（身前）
+    public string effectAni;    // 特效动画别名（.als [use animation] 注册名）
+    [NonSerialized] public int effectAnimId;   // 注册时由别名解析填充（0=未映射，视图层跳过该层）
+}
 ```
 
 ### AnimId — 动画 ID 常量
@@ -119,6 +141,18 @@ AnimClipData clip = AnimConfigRegistry.Get(AnimId.Idle);
 | Walk | 2 | 行走 |
 | Attack1 | 3 | 普攻第一段（暂用班图膝踢 kneekick.json，帧 1-3 有攻击盒=判定帧） |
 | Hurt | 4 | 受击僵直（damage.json，末帧长 delay 停帧、靠硬直计时切走） |
+| NormalWave | 5 | 地裂波动剑投射物 |
+| FireCircle | 6 | 火圈持续燃烧 |
+| FireCircleEnd | 7 | 火圈熄灭收尾 |
+| SwordmanIdle | 10 | 鬼剑士待机 |
+| SwordmanWalk | 11 | 鬼剑士行走 |
+| SwordmanAttack1~3 | 12-14 | 鬼剑士普攻三段 |
+| SwordmanHurt | 15 | 鬼剑士受击 |
+| SwordmanBloodboom | 16 | 鬼剑士浴血之怒施法（挂 bloodboom_cast_overlay） |
+| BloodboomCastingBack | 17 | 浴血之怒施法蓄力背面层 |
+| BloodboomCasting | 18 | 浴血之怒施法蓄力正面层 |
+| BloodboomBoomFront | 19 | 浴血之怒爆炸正面（区域视图主层） |
+| BloodboomBoomBack | 20 | 浴血之怒爆炸背面（区域视图背层） |
 
 扩展方式：直接在 `AnimId` 类中添加新常量，或业务层自定义 ID。
 
