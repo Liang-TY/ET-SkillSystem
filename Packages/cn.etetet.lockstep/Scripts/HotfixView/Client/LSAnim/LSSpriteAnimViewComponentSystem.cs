@@ -60,18 +60,7 @@ namespace ET.Client
             }
 #endif
 
-            // ---- 朝向翻转：根 GO localScale.x = -1 翻转所有子层（刀跟着转）----
-            bool faceRight = unit.Forward.x >= TrueSync.FP.Zero;
-            if (faceRight != view.FaceRight)
-            {
-                view.FaceRight = faceRight;
-                view.GameObject.transform.localScale = new Vector3(faceRight ? 1f : -1f, 1f, 1f);
-                self.LastAnimId = -1;
-                self.LastFrameIndex = -1;
-                // TODO 诊断日志（转向排查完删）
-                Log.Info($"[Flip] unit={unit.Id} faceRight={faceRight} forward.x={unit.Forward.x} scale={view.GameObject.transform.localScale}");
-            }
-
+            // 朝向翻转在 LSUnitViewSystem（父组件先跑，翻根 GO 或单层 renderer）——此处不重复处理
             // 只有帧真的变了才碰渲染器
             if (anim.AnimId == self.LastAnimId && anim.FrameIndex == self.LastFrameIndex) return;
 
@@ -87,10 +76,11 @@ namespace ET.Client
                 if (sprite == null) continue;
                 layer.Renderer.sprite = sprite;
 
-                // §2.1 绝对摆位（每层独立——各自图集的帧位置不同）
+                // §2.1 绝对摆位（chain 用 localPosition——不受根 GO 翻转影响，世界坐标差值会随 scale 符号变）
                 Vector2 center = res?.GetFrameCenter(layer.AtlasName, frame.image.index) ?? Vector2.zero;
                 Transform parentT = layer.Renderer.transform.parent;
-                Vector3 chain = parentT != null ? parentT.position - view.GameObject.transform.position : Vector3.zero;
+                Vector3 chain = parentT != null && parentT != view.GameObject.transform
+                    ? parentT.localPosition : Vector3.zero;
                 layer.Renderer.transform.localPosition = new Vector3(
                     (frame.imagePos.x + center.x) / 100f - chain.x,
                     -(frame.imagePos.y + center.y) / 100f - chain.y,

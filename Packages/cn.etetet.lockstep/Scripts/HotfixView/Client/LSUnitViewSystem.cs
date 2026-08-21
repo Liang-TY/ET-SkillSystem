@@ -50,15 +50,21 @@ namespace ET.Client
                 self.Position = screenPos;
             }
 
-            // 朝向：根据逻辑层的 Forward.x 翻转精灵
-            // 翻转作用在 SpriteRenderer.transform（子），不是根——否则 imagePos 偏移会被镜像导致位置跳变
+            // 朝向：根据逻辑层的 Forward.x 翻转——分层渲染翻根 GO（所有层一起转）
+            // 旧代码只翻单个 SpriteRenderer（单层时代），分层后武器层不跟转
             TSVector forward = unit.Forward;
             bool shouldFaceRight = forward.x >= FP.Zero;
             if (shouldFaceRight != self.FaceRight)
             {
                 self.FaceRight = shouldFaceRight;
-                if (self.SpriteRenderer != null)
+                if (self.RenderConfig != null)
                 {
+                    // 分层：翻根 GO（所有子层图像+位置一体镜像）
+                    self.GameObject.transform.localScale = new Vector3(shouldFaceRight ? 1f : -1f, 1f, 1f);
+                }
+                else if (self.SpriteRenderer != null)
+                {
+                    // 单层兼容（怪物）：翻 renderer 的 transform
                     Vector3 scale = self.SpriteRenderer.transform.localScale;
                     scale.x = shouldFaceRight ? 1 : -1;
                     self.SpriteRenderer.transform.localScale = scale;
