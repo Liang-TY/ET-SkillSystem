@@ -38,7 +38,8 @@ namespace ET
             int skillId = GetSkillId(self.SkillIndex);
             self.SkillIndex++;
             // 三重门禁照走（硬直中/在技中/CD 中放不出来——正常，下轮试下一个）
-            SkillCastHelper.TryCast(unit, skillId);
+            bool ok = SkillCastHelper.TryCast(unit, skillId);
+            Log.Info($"[MonsterDriver] unit{unit.Id} 第{self.SkillIndex}发 skillId={skillId} → {(ok ? "成功" : "被门禁拦下")}");
         }
     }
 }

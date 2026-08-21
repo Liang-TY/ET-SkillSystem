@@ -32,6 +32,7 @@ namespace ET
                 LockStepUnitInfo unitInfo = unitInfos[i];
                 LSUnitFactory.Init(lsWorld, unitInfo);
                 self.PlayerIds.Add(unitInfo.PlayerId);
+                Log.Info($"[Room] 玩家单位创建：PlayerId={unitInfo.PlayerId}");
             }
 
             // Half B 测试桩：班图女战士（阶段1 技能轮播驱动；阶段2 换 AI）
@@ -64,6 +65,7 @@ namespace ET
 
             // 阶段1 临时轮播驱动（每 3s 依次放一个技能；阶段2 AI 替换）
             monster.AddComponent<LSMonsterDebugDriverComponent>();
+            Log.Info($"[Monster] 测试桩怪物 unit{monster.Id} @ {monster.Position}（轮播驱动）");
         }
 
         public static void Update(this Room self, OneFrameInputs oneFrameInputs)
@@ -74,8 +76,25 @@ namespace ET
             foreach (var kv in oneFrameInputs.Inputs)
             {
                 LSUnit lsUnit = unitComponent.GetChild<LSUnit>(kv.Key);
+                if (lsUnit == null)
+                {
+                    Log.Warning($"[Room] 输入 key={kv.Key} 找不到单位，丢弃该输入");
+                    continue;
+                }
                 LSInputComponent lsInputComponent = lsUnit.GetComponent<LSInputComponent>();
+                if (lsInputComponent == null)
+                {
+                    // 输入 key 撞上了非玩家单位（如怪物局部 Id）——绝不把输入喂给无输入组件的单位
+                    Log.Warning($"[Room] 输入 key={kv.Key} 命中 unit{lsUnit.Id}（无 LSInputComponent，非玩家单位？），丢弃");
+                    continue;
+                }
+                if (lsUnit.Id != kv.Key)
+                {
+                    Log.Warning($"[Room] 输入 key={kv.Key} 解析到 unit{lsUnit.Id}（Id 不匹配！）");
+                }
                 lsInputComponent.LSInput = kv.Value;
+                if (kv.Value.Button != 0)
+                    Log.Info($"[Room] 帧{lsWorld.Frame} 输入 key={kv.Key} → unit{lsUnit.Id} button={kv.Value.Button}");
             }
             
             if (!self.IsReplay)
