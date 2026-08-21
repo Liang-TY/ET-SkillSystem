@@ -41,13 +41,21 @@
 │   LSCast/LSCastComponent     施法实例（生命周期状态/Route B 标记）    │
 │   LSSkillComponent           技能槽位（冷却/缓冲消费）               │
 │   LSHitboxComponent          受击/攻击盒采样（帧驱动/多盒）          │
-│   LSCombatComponent          战斗状态（硬直/HurtAnimId/DefaultAnimId）│
+│   LSCombatComponent          战斗状态（硬直/Hurt/Default/Down 动画链）│
+│   LSFlightComponent          击退/浮空物理（初速度+重力+落地摩擦）  │
 │   LSBuff/LSBuffComponent     Buff 实例（Tick/进出检测/叠层）         │
 │   LSBullet/LSBulletComponent 投射物（飞行/穿透/碰撞）                │
 │   LSArea/LSAreaComponent     区域效果（进出检测/Tick/收尾动画）      │
 │   LSInputBufferComponent     输入缓冲（按下沿检测/超时清空）         │
 │   LSNumericComponent         数值系统（五层公式）                    │
+│   LSMonsterDebugDriverComponent 怪物轮播驱动（阶段1 临时，AI 替换）  │
 └──────────────────────────────────────────────────────────────────────┘
+
+框架层新件（ET.Skill Runtime）：HitReaction（.atk 同构命中反应 + ProcBuffId/
+ProcChance 概率挂状态）、LSRng（确定性概率，种子写 skillconfig.json rngSeed）、
+SkillContext.MoveCasterForward/GetCasterHp、LSActionContext.LaunchOwner。
+怪物侧：怪物挂玩家同款组件走同一 Cast 门禁——详见《02-班图女战士怪物技能
+实现方案》（怪物技能已完 + §10 阶段2 AI 开工指引，数据已全录无需翻 pvf）。
 
 ┌─── 视图层（lockstep 包）─────────────────────────────────────────────┐
 │   LSUnitView + RenderConfig    分层渲染（prefab 21 层 + sortingOrder）│
