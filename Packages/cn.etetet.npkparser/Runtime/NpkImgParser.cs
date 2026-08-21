@@ -178,10 +178,12 @@ namespace ET
                     }
                     case TypeArgb8888:
                     {
-                        // Storage order: R, G, B, A
-                        int r = data[offset];
+                        // 存储序 = 小端 ARGB 整型：字节 B, G, R, A（与 1555/4444 的小端读法一致）。
+                        // 实证 2026-08-21：bloodboom 8888 特效按 R,G,B,A 读会红蓝互换（血红变蓝），
+                        // 用 wpf-img-ani 查看器 + 逐字节通道统计确证真实序为 B,G,R,A。
+                        int b = data[offset];
                         int g = data[offset + 1];
-                        int b = data[offset + 2];
+                        int r = data[offset + 2];
                         int a = data[offset + 3];
                         result[i] = (a << 24) | (r << 16) | (g << 8) | b;
                         break;

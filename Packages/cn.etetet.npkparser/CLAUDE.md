@@ -51,7 +51,7 @@ NpkSprite[] sprites = NpkImgParser.Parse(byte[] imgFileData);
 ```
 
 支持的格式：
-- IMG v2：ARGB1555、ARGB4444、ARGB8888 像素格式
+- IMG v2：ARGB1555、ARGB4444、ARGB8888 像素格式（统一小端 ARGB 整型：8888 字节序 = B,G,R,A；按 R,G,B,A 读会红蓝互换，2026-08-21 bloodboom 特效实证）
 - IMG v4：索引色 + 调色板
 - zlib 压缩帧
 - 引用帧（TypeReference，复用已有帧数据）
