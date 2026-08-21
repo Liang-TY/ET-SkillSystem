@@ -7,20 +7,13 @@ namespace ET
     [FriendOf(typeof(LSFlightComponent))]
     public static partial class LSFlightComponentSystem
     {
-        // 物理常量（单位/秒体系）：重力 40 → lift 400px(初速 8) 空中约 0.4s、最高 0.8 单位；
-        // 贴地摩擦 8/s → 水平击退滑行约 0.4s 衰减殆尽。手感不对在测试机改这三个数。
-        [StaticField]
-        private static readonly FP Gravity = (FP)40;
-
-        [StaticField]
-        private static readonly FP GroundFriction = (FP)8;
-
-        [StaticField]
-        private static readonly FP MinSlideSpeed = (FP)1 / 10;
-
         [EntitySystem]
         private static void Awake(this LSFlightComponent self)
         {
+            // 默认物理参数（调参入口；按单位覆盖可做抗击飞差异，如重型 Boss）
+            self.Gravity = (FP)40;
+            self.GroundFriction = (FP)8;
+            self.MinSlideSpeed = (FP)1 / 10;
         }
 
         [LSEntitySystem]
@@ -34,7 +27,7 @@ namespace ET
             // 不算空中会被误判成滑行——虽然小初速下一帧就落地，语义上仍是击飞）
             bool wasAirborne = unit.Position.y > FP.Zero || self.Velocity.y > FP.Zero;
             TSVector v = self.Velocity;
-            v.y -= Gravity * dt;
+            v.y -= self.Gravity * dt;
             TSVector pos = unit.Position + v * dt;
 
             if (pos.y <= FP.Zero)
@@ -50,9 +43,10 @@ namespace ET
                 {
                     // 贴地滑行（纯水平击退）：只衰减水平速度
                     v.y = FP.Zero;
-                    v.x -= v.x * GroundFriction * dt;
-                    v.z -= v.z * GroundFriction * dt;
-                    if (v.x * v.x + v.z * v.z < MinSlideSpeed * MinSlideSpeed)
+                    v.x -= v.x * self.GroundFriction * dt;
+                    v.z -= v.z * self.GroundFriction * dt;
+                    FP min = self.MinSlideSpeed;
+                    if (v.x * v.x + v.z * v.z < min * min)
                     {
                         v = TSVector.zero;
                         self.Active = false;
