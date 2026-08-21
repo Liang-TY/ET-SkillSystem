@@ -25,6 +25,10 @@ namespace ET
         private static void Awake(this LSMonsterDebugDriverComponent self)
         {
             self.TimerMs = IntervalMs;
+            // 编译期常量自检（const 是内联的——这行打印的是 ET.Hotfix 编译时链接的 ET.Skill.dll 里的值，
+            // 不是当前源码的值。若与源码（7/8/9/10/4）不符 = 编译产物陈旧）
+            Log.Info($"[MonsterDriver] 常量自检：LowKick={SkillIds.MonsterLowKick} KneeKick={SkillIds.MonsterKneeKick} " +
+                     $"HighKick={SkillIds.MonsterHighKick} IceBreath={SkillIds.MonsterIceBreath} RotationCount={RotationCount}");
         }
 
         [LSEntitySystem]
