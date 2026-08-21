@@ -112,7 +112,7 @@ namespace ET
                     Log.Error($"[Combat] 技能{activeCast.SkillId} 引用了未注册的 actionId={actionId}，跳过");
                     continue;
                 }
-                action.Run(new LSActionContext(attacker.LSWorld(), target, attacker, frameNo));
+                action.Run(new LSActionContext(attacker.LSWorld(), target, attacker, frameNo, logic?.HitReaction));
             }
         }
 

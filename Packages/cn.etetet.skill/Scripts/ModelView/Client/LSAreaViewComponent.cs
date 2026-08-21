@@ -18,12 +18,17 @@ namespace ET.Client
     public class AreaViewInfo
     {
         public GameObject Go;
-        public SpriteRenderer Renderer;
+        public SpriteRenderer Renderer;            // 主层（正面/循环）
         public Material OriginalMaterial;
+        public SpriteRenderer BackRenderer;        // 背面层（ViewBackAnimId；null = 单层）
+        public Material BackOriginalMaterial;
         public int AnimId;
         public int EndAnimId;
         public int FrameIndex;
         public float Timer;
+        public int BackAnimId;
+        public int BackFrameIndex;
+        public float BackTimer;
         public bool Ending;   // 到时后播收尾动画（不循环），播完销毁
     }
 }

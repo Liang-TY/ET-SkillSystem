@@ -1,3 +1,5 @@
+using TrueSync;
+
 namespace ET
 {
     /// <summary>
@@ -19,6 +21,19 @@ namespace ET
 
         /// <summary>总时长 ms；>0 到时自动 OnEnd，0 = 技能自己控制结束</summary>
         public virtual int TotalTimeMs => 0;
+
+        /// <summary>
+        /// 施放所需最低自身 HP 百分比（0 = 无门槛；DNF checkExecutableSkill 的 static[0] 同构，
+        /// 如浴血之怒"可发动的最低 HP 10%"）。TryCast 检查：不满足 → 拒绝施放且不进 CD。
+        /// </summary>
+        public virtual FP MinCastHpPct => FP.Zero;
+
+        /// <summary>
+        /// 命中反应参数（DNF .atk 同构）：伤害/硬直/击退/浮空。override 时用 static readonly
+        /// 预分配实例（零 GC）；默认 = 50 伤害 + 500ms 硬直（与旧 MeleeHit 硬编码一致）。
+        /// 区域/投射物结算的伤害在各自 AreaDefinition/BulletDefinition.HitReaction。
+        /// </summary>
+        public virtual HitReaction HitReaction => HitReaction.Default;
 
         /// <summary>
         /// 命中时执行的效果节点列表（ActionIds）——伤害/硬直/挂 Buff 等效果全在节点里配置组合，

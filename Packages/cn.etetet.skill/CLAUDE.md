@@ -64,6 +64,9 @@ namespace ET
         public override int CooldownMs => 0;        // CD；普攻类=0（动画+取消窗口门禁）
         public override int TotalTimeMs => 360;     // 总时长，到时自动 OnEnd；0=自己控制
         // public override bool ManualCooldown => true;  // 多段技能 OnEnd 才起 CD（默认 false）
+        // public override FP MinCastHpPct => 10;        // 施放最低自身 HP%（DNF checkExecutableSkill 同构）
+        // private static readonly HitReaction Reaction = new() { Damage = 300, HitstunMs = 1000 };
+        // public override HitReaction HitReaction => Reaction;   // 命中反应（DNF .atk 同构；static readonly 零 GC）
 
         private static readonly int[] HitActionsArr = { ActionIds.MeleeHit };  // 命中效果组合
         public override int[] HitActions => HitActionsArr;
@@ -82,7 +85,8 @@ namespace ET
 | 播动画 | `ctx.PlayAnim(AnimId.X)` / `ctx.PlayDefaultAnim()` |
 | 攻击盒（无帧数据技能） | `ctx.SetAttackHitbox(offset, halfExtents)` / `ctx.DisableAttackHitbox()` |
 | 输入缓冲（连段取消） | `ctx.PeekBufferedButton()` / `ctx.RestartCurrentSkill()` |
-| 数值 | `ctx.AddNumeric(target, NumericType.X, v)` / `ctx.GetNumeric(...)` |
+| 子状态（一次性触发标记） | `ctx.GetSubState()` / `ctx.SetSubState(v)`（LSCast.SubState，进快照回滚安全） |
+| 数值 | `ctx.AddNumeric(target, NumericType.X, v)` / `ctx.GetNumeric(...)`；自身 HP：`ctx.GetCasterHp()/GetCasterMaxHp()/ConsumeCasterHp(v)` |
 | Buff | `ctx.AddBuff(target, BuffIds.X)` / `ctx.AddBuffToSelf(BuffIds.X)` |
 | 查询 | `ctx.GetEnemies()`（共享缓冲勿持有）/ `ctx.CheckHit(a, b)` / `ctx.GetCasterId()` / `ctx.CurrentFrameIndex()` |
 

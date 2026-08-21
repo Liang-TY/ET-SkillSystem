@@ -108,7 +108,7 @@ namespace ET
                     Log.Error($"[Bullet] bulletId 配置引用了未注册的 actionId={actionId}，跳过");
                     continue;
                 }
-                action.Run(new LSActionContext(world, target, caster, frameNo));
+                action.Run(new LSActionContext(world, target, caster, frameNo, def.HitReaction));
             }
         }
     }

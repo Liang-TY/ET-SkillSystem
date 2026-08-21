@@ -1,3 +1,5 @@
+using TrueSync;
+
 namespace ET
 {
     /// <summary>
@@ -22,6 +24,19 @@ namespace ET
             LSCastComponent castComp = unit.GetComponent<LSCastComponent>();
             if (castComp == null) return false;
             if (castComp.GetActiveCast() != null) return false;
+
+            // 施放门槛：最低自身 HP 百分比（DNF checkExecutableSkill 同构；不满足不进 CD 不建 cast）
+            if (logic.MinCastHpPct > FP.Zero)
+            {
+                LSNumericComponent num = unit.GetComponent<LSNumericComponent>();
+                FP hp = num?.Get(NumericType.Hp) ?? FP.Zero;
+                FP maxHp = num?.Get(NumericType.MaxHp) ?? FP.Zero;
+                if (hp * 100 < maxHp * logic.MinCastHpPct)
+                {
+                    Log.Info($"[Skill] unit{unit.Id} 技能{skillId} HP 不足（{hp}/{maxHp} < {logic.MinCastHpPct}%），拒绝施放");
+                    return false;
+                }
+            }
 
             LSSkillComponent skill = unit.GetComponent<LSSkillComponent>();
             if (skill != null && skill.Cooldowns.TryGetValue(skillId, out int remain) && remain > 0)

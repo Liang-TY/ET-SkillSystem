@@ -41,6 +41,9 @@ namespace ET
         /// <summary>命中效果（ActionIds）</summary>
         public virtual int[] HitActions => null;
 
+        /// <summary>命中反应参数（DNF .atk 同构：命中单位用；MeleeHit 等节点读取）</summary>
+        public virtual HitReaction HitReaction => HitReaction.Default;
+
         /// <summary>视图动画 id（视图层按此查 clip 自推帧；逻辑不消费。属性名避开 AnimId 类型名）</summary>
         public virtual int ViewAnimId => AnimId.None;
     }

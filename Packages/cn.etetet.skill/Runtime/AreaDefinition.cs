@@ -17,6 +17,7 @@ namespace ET
     public static class AreaIds
     {
         public const int FireCircle = 1;   // 火圈：持续燃烧，单位在内每秒扣血
+        public const int BloodBoom = 2;    // 浴血之怒爆炸：以施法者为中心的一次性血爆（伤害+出血）
     }
 
     /// <summary>
@@ -44,11 +45,18 @@ namespace ET
         /// <summary>离开/消失时执行</summary>
         public virtual int[] ExitActions => null;
 
+        /// <summary>命中反应参数（DNF .atk 同构：Enter/Tick/Exit 打到的单位用；MeleeHit 等节点读取）</summary>
+        public virtual HitReaction HitReaction => HitReaction.Default;
+
         /// <summary>视图动画 id（循环的火焰/地面特效）</summary>
         public virtual int ViewAnimId => AnimId.None;
 
         /// <summary>视图收尾动画 id（到时熄灭，不循环；AnimId.None = 无收尾）</summary>
         public virtual int ViewEndAnimId => AnimId.None;
+
+        /// <summary>背面视图动画 id（爆炸前后两层，如浴血之怒 boomback；独立帧推进，播完停末帧。
+        /// AnimId.None = 单层。渲染在主层之后（sortingOrder 更低））</summary>
+        public virtual int ViewBackAnimId => AnimId.None;
     }
 
     /// <summary>Area 注册表薄壳。</summary>

@@ -18,6 +18,7 @@ namespace ET
         public const int TestCooldown = 2;   // CD/眩晕验证技能（K 键：起 CD + 给自己挂 Stun）
         public const int WaveSword = 3;      // 地裂·波动剑（I 键，投射物）
         public const int FireCircle = 4;     // 火圈（O 键，区域效果）
+        public const int BloodBoom = 5;      // 浴血之怒（U 键，自耗 HP 的自身中心血爆）
 
         /// <summary>按键值 → 技能槽位映射</summary>
         public static bool ButtonToSkill(int button, out int skillId)
@@ -28,6 +29,7 @@ namespace ET
                 case 2: skillId = TestCooldown; return true;
                 case 3: skillId = WaveSword; return true;
                 case 4: skillId = FireCircle; return true;
+                case 5: skillId = BloodBoom; return true;
                 default: skillId = 0; return false;
             }
         }

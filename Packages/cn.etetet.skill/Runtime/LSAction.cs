@@ -16,11 +16,13 @@ namespace ET
     /// <summary>效果节点 ID 常量。参数第一版内嵌在节点类 const（luban 化时参数进表，见 05 §5 记档）。</summary>
     public static class ActionIds
     {
-        public const int MeleeHit = 1;        // 近战命中：伤害 + 硬直 + 受击动画
+        public const int MeleeHit = 1;        // 近战命中：伤害 + 硬直 + 受击动画（参数读来源 HitReaction）
         public const int FireDamageTick = 2;  // 燃烧 tick 伤害
         public const int ForbidMoveOn = 3;    // 禁移动开（眩晕 AddActions）
         public const int ForbidMoveOff = 4;   // 禁移动关（眩晕 RemoveActions）
         public const int AddBurnBuff = 5;     // 命中挂燃烧
+        public const int BleedDamageTick = 6; // 出血 tick 伤害
+        public const int AddBleedBuff = 7;    // 命中挂出血
     }
 
     /// <summary>
@@ -53,13 +55,15 @@ namespace ET
         private readonly LSUnit owner;
         private readonly LSUnit source;
         private readonly int frameNo;
+        private readonly HitReaction hitReaction;   // 来源（技能/区域/投射物）的命中反应参数；null = 默认
 
-        public LSActionContext(LSWorld world, LSUnit owner, LSUnit source, int frameNo)
+        public LSActionContext(LSWorld world, LSUnit owner, LSUnit source, int frameNo, HitReaction hitReaction = null)
         {
             this.world = world;
             this.owner = owner;
             this.source = source;
             this.frameNo = frameNo;
+            this.hitReaction = hitReaction;
         }
 
         public int FrameNo => frameNo;
@@ -67,6 +71,10 @@ namespace ET
         public long GetOwnerId() => owner.Id;
 
         public long GetSourceId() => source != null ? source.Id : 0;
+
+        /// <summary>来源命中反应参数（SkillLogic/AreaDefinition/BulletDefinition.HitReaction 由调用方传入；
+        /// 未传如 Buff 动作 = Default 50/500，与旧行为一致）</summary>
+        public HitReaction GetSourceHitReaction() => hitReaction ?? HitReaction.Default;
 
         // ---- 数值 ----
         public void DamageOwner(int damage)

@@ -96,7 +96,7 @@ namespace ET
             {
                 if (self.InsideUnits.Contains(unitId)) continue;
                 self.InsideUnits.Add(unitId);
-                RunActions(def.EnterActions, world, unitComponent, unitId, self.CasterId, frameNo);
+                RunActions(def.EnterActions, def.HitReaction, world, unitComponent, unitId, self.CasterId, frameNo);
             }
 
             // 离开 → ExitActions（在缓存但不在当前帧）
@@ -112,7 +112,7 @@ namespace ET
                 foreach (long unitId in exited)
                 {
                     self.InsideUnits.Remove(unitId);
-                    RunActions(def.ExitActions, world, unitComponent, unitId, self.CasterId, frameNo);
+                    RunActions(def.ExitActions, def.HitReaction, world, unitComponent, unitId, self.CasterId, frameNo);
                 }
             }
 
@@ -125,7 +125,7 @@ namespace ET
                     self.TickTimer -= def.TickTimeMs;
                     foreach (long unitId in self.InsideUnits)
                     {
-                        RunActions(def.TickActions, world, unitComponent, unitId, self.CasterId, frameNo);
+                        RunActions(def.TickActions, def.HitReaction, world, unitComponent, unitId, self.CasterId, frameNo);
                     }
                 }
             }
@@ -139,12 +139,12 @@ namespace ET
             LSWorld world = self.GetParent<LSAreaComponent>().Parent as LSWorld;
             foreach (long unitId in self.InsideUnits)
             {
-                RunActions(def.ExitActions, world, unitComponent, unitId, self.CasterId, frameNo);
+                RunActions(def.ExitActions, def.HitReaction, world, unitComponent, unitId, self.CasterId, frameNo);
             }
             self.InsideUnits.Clear();
         }
 
-        private static void RunActions(int[] actionIds, LSWorld world, LSUnitComponent unitComponent, long targetId, long casterId, int frameNo)
+        private static void RunActions(int[] actionIds, HitReaction hitReaction, LSWorld world, LSUnitComponent unitComponent, long targetId, long casterId, int frameNo)
         {
             if (actionIds == null) return;
             LSUnit target = unitComponent.GetChild<LSUnit>(targetId);
@@ -154,7 +154,7 @@ namespace ET
             {
                 LSAction action = ActionLoader.Get(actionId);
                 if (action == null) continue;
-                action.Run(new LSActionContext(world, target, caster, frameNo));
+                action.Run(new LSActionContext(world, target, caster, frameNo, hitReaction));
             }
         }
     }

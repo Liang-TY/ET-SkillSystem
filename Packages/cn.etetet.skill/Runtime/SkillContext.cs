@@ -31,6 +31,23 @@ namespace ET
 
         public TSVector GetTargetPosition() => cast.TargetPosition;
 
+        /// <summary>技能子状态（LSCast.SubState 门面：DNF setSkillSubState 同构——帧内一次性触发的
+        /// "已引爆/已进入下一阶段"标记用；进快照回滚安全，施放开始时为 0）</summary>
+        public int GetSubState() => cast.SubState;
+
+        public void SetSubState(int value) => cast.SubState = value;
+
+        // ---- 施法者数值（自耗 HP 类技能用；DNF onSetState 扣血同构）----
+        public FP GetCasterHp()
+            => caster.GetComponent<LSNumericComponent>()?.Get(NumericType.Hp) ?? FP.Zero;
+
+        public FP GetCasterMaxHp()
+            => caster.GetComponent<LSNumericComponent>()?.Get(NumericType.MaxHp) ?? FP.Zero;
+
+        /// <summary>扣除施法者自身 HP（直减不经公式重算；量自己算，如 maxHp × 5%）</summary>
+        public void ConsumeCasterHp(FP amount)
+            => caster.GetComponent<LSNumericComponent>()?.Add(NumericType.Hp, -amount);
+
         // ---- 动画 ----
         /// <summary>播放动画（LSAnimComponentSystem.Play 是 ET.Hotfix 扩展，ET.Skill 引用不到，
         /// 统一走 LSAnimPlayUtil 属性赋值实现——与那边保持同步）</summary>

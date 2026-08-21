@@ -87,6 +87,7 @@ namespace ET.Client
 
             // 2) 推进：位置 + 帧自推（循环的持续播，收尾的播完销毁）
             if (areaComponent == null) return;
+            List<long> finished = null;   // 收尾动画播完的区域（循环中不改字典，收集后统一销毁）
             foreach (var kv in self.Areas)
             {
                 LSArea area = areaComponent.GetChild<LSArea>(kv.Key);
@@ -95,8 +96,23 @@ namespace ET.Client
                 if (area != null)
                     info.Go.transform.position = new Vector3((float)area.Position.x, 0f, (float)area.Position.z);
 
-                bool done = AdvanceFrame(info, res, Time.deltaTime);
-                if (done) RemoveView(self, kv.Key);   // 收尾动画播完 → 销毁
+                // 主层（主动画播完 = 视图生命周期终点）；背面层独立帧推进（播完停末帧，不触发销毁）
+                bool done = AdvanceOne(info.Renderer, info.OriginalMaterial, info.AnimId,
+                    ref info.FrameIndex, ref info.Timer, info.Go, res, Time.deltaTime);
+                if (info.BackRenderer != null)
+                {
+                    AdvanceOne(info.BackRenderer, info.BackOriginalMaterial, info.BackAnimId,
+                        ref info.BackFrameIndex, ref info.BackTimer, info.Go, res, Time.deltaTime);
+                }
+                if (done)
+                {
+                    finished ??= new List<long>();
+                    finished.Add(kv.Key);
+                }
+            }
+            if (finished != null)
+            {
+                foreach (long id in finished) RemoveView(self, id);   // 收尾动画播完 → 销毁
             }
         }
 
@@ -112,15 +128,35 @@ namespace ET.Client
             SpriteRenderer renderer = go.GetComponentInChildren<SpriteRenderer>();
             renderer.sortingOrder = 5;   // 单位之下弹之上
 
+            // 背面层（爆炸前后两层，如浴血之怒 boomback）：取 prefab 第二个 renderer（子 GO "1"），
+            // 排主层之后（4 < 5），独立帧推进
+            SpriteRenderer backRenderer = null;
+            if (def.ViewBackAnimId != AnimId.None)
+            {
+                foreach (SpriteRenderer r in go.GetComponentsInChildren<SpriteRenderer>(true))
+                {
+                    if (r == renderer || r.sortingOrder != 1) continue;
+                    backRenderer = r;
+                    break;
+                }
+                if (backRenderer != null) backRenderer.sortingOrder = 4;   // 主层(5)之后
+                else Log.Warning("[AreaView] 找不到背面层 renderer（prefab 子 GO sortingOrder=1），背面层跳过");
+            }
+
             self.Areas[area.Id] = new AreaViewInfo
             {
                 Go = go,
                 Renderer = renderer,
                 OriginalMaterial = renderer.sharedMaterial,
+                BackRenderer = backRenderer,
+                BackOriginalMaterial = backRenderer != null ? backRenderer.sharedMaterial : null,
                 AnimId = def.ViewAnimId,
                 EndAnimId = def.ViewEndAnimId,
                 FrameIndex = 0,
                 Timer = 0,
+                BackAnimId = def.ViewBackAnimId,
+                BackFrameIndex = 0,
+                BackTimer = 0,
                 Ending = false,
             };
         }
@@ -132,54 +168,58 @@ namespace ET.Client
             self.Areas.Remove(areaId);
         }
 
-        /// <summary>渲染时间自推帧（循环动画持续播；收尾播完返回 true 触发销毁）</summary>
-        private static bool AdvanceFrame(AreaViewInfo info, LSAnimResComponent res, float dt)
+        /// <summary>
+        /// 渲染时间自推帧（循环动画持续播；非循环播完停末帧返回 true）。
+        /// 主层与背面层共用：主层返回 true = 视图销毁；背面层返回值忽略（播完停末帧）。
+        /// </summary>
+        private static bool AdvanceOne(SpriteRenderer renderer, Material originalMaterial, int animId,
+            ref int frameIndex, ref float timer, GameObject go, LSAnimResComponent res, float dt)
         {
-            AnimClipData clip = AnimConfigRegistry.Get(info.AnimId);
-            if (clip?.frames == null || clip.frames.Length == 0) return !info.Ending;
+            AnimClipData clip = AnimConfigRegistry.Get(animId);
+            if (clip?.frames == null || clip.frames.Length == 0) return true;   // 无帧数据视为播完
 
-            info.Timer += dt;
-            float delay = clip.frames[info.FrameIndex].delay / 1000f;
+            timer += dt;
+            float delay = clip.frames[frameIndex].delay / 1000f;
             if (delay <= 0) delay = 0.05f;
 
-            while (info.Timer >= delay)
+            while (timer >= delay)
             {
-                info.Timer -= delay;
-                info.FrameIndex++;
-                if (info.FrameIndex >= clip.frames.Length)
+                timer -= delay;
+                frameIndex++;
+                if (frameIndex >= clip.frames.Length)
                 {
                     if (clip.loop)
                     {
-                        info.FrameIndex = 0;   // 循环
+                        frameIndex = 0;   // 循环
                     }
                     else
                     {
-                        info.FrameIndex = clip.frames.Length - 1;
-                        return true;   // 收尾播完 → 销毁
+                        frameIndex = clip.frames.Length - 1;
+                        return true;   // 播完 → 停末帧
                     }
                 }
-                delay = clip.frames[info.FrameIndex].delay / 1000f;
+                delay = clip.frames[frameIndex].delay / 1000f;
                 if (delay <= 0) delay = 0.05f;
             }
 
-            AnimFrameData frame = clip.frames[info.FrameIndex];
+            AnimFrameData frame = clip.frames[frameIndex];
             Sprite sprite = res?.GetSprite(frame.image.path, frame.image.index);
-            info.Renderer.sprite = sprite;
+            renderer.sprite = sprite;
 
             // §2.1 绝对摆位（同单位/弹）
             Vector2 center = res?.GetFrameCenter(frame.image.path, frame.image.index) ?? Vector2.zero;
-            Transform parentT = info.Renderer.transform.parent;
-            Vector3 chain = parentT != null ? parentT.position - info.Go.transform.position : Vector3.zero;
-            info.Renderer.transform.localPosition = new Vector3(
+            Transform parentT = renderer.transform.parent;
+            Vector3 chain = parentT != null ? parentT.position - go.transform.position : Vector3.zero;
+            renderer.transform.localPosition = new Vector3(
                 (frame.imagePos.x + center.x) / 100f - chain.x,
                 -(frame.imagePos.y + center.y) / 100f - chain.y,
                 0f);
 
-            // 加法混合（火圈 LINEARDODGE）
+            // 加法混合（火圈/爆炸 LINEARDODGE）
             if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)
-                info.Renderer.sharedMaterial = res.AdditiveMaterial;
-            else if (info.OriginalMaterial != null)
-                info.Renderer.sharedMaterial = info.OriginalMaterial;
+                renderer.sharedMaterial = res.AdditiveMaterial;
+            else if (originalMaterial != null)
+                renderer.sharedMaterial = originalMaterial;
 
             return false;   // 还在播
         }
