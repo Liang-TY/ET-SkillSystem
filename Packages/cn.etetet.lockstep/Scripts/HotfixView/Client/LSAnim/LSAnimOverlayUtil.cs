@@ -9,6 +9,7 @@ namespace ET.Client
     /// → 各自渲染时间自推帧（startFrame 门控、播完停末帧、LINEARDODGE/RGBA 帧级效果）→ 销毁。
     /// 子 GO 挂 parent 变换下：自动跟随位置（单位根还有朝向镜像）。
     /// </summary>
+    [FriendOf(typeof(LSAnimResComponent))]   // 加法混合读 AdditiveMaterial（ET0002）
     public static class LSAnimOverlayUtil
     {
         /// <summary>
