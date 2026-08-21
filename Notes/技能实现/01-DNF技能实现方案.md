@@ -79,6 +79,7 @@
 | I | WaveSword | 波动剑投射物（穿透弹） |
 | O | FireCircle | 火圈区域效果（持续燃烧） |
 | U | BloodBoom | 浴血之怒（自耗 5% HP 的自身中心血爆 + .als 施法特效叠加） |
+| Y | ReleaseWave | 波动爆发（前冲 3 单位 + 原地爆发击退浮空 + .als 冲刺特效 + RGBA 染色） |
 
 ### 0.4 未实现/延后的 DNF 特性
 
@@ -90,8 +91,8 @@
 | **屏震/闪屏** | ⏸ 延后 | 开关已有（SkillSystemConfig），效果未实现 | 视图 camera |
 | **音效** | ⏸ 延后 | 无音频系统 | 接入音频 |
 | **多段命中** | ⏸ 延后 | HitTargets 定时清空（DNF resetHitObjectList） | Area/Bullet 加字段 |
-| **浮空/击退** | ⏸ 延后 | 需要 Z 轴物理（位移+落地） | 新系统 |
-| **[RGBA] 帧染色** | ⏸ 延后 | 隐形帧/闪白/淡入淡出 | 视图 color |
+| **浮空/击退** | ✅ 已做（2026-08-21） | LSFlightComponent（初速度+重力积分+落地即停/贴地摩擦）+ LaunchOwner 门面；HitReaction.KnockbackX/LaunchY 生效 | — |
+| **[RGBA] 帧染色** | ✅ 已做（2026-08-21） | 工具 rgba 字段（有符号 int 注意）→ AnimFrameData.rgba → 四视图 renderer.color（0=无染色） | — |
 | **[IMAGE RATE] 缩放** | ⏸ 延后 | 帧缩放/镜像 | 视图 scale |
 | **luban 迁移** | ⏸ 延后 | 配置表化（Excel→json→运行时） | 工具链适配 |
 | **Area 火圈视觉** | ✅ 已做 | firecircle.json + AT_Up.img | — |
@@ -598,7 +599,7 @@ passiveobject/character/swordman/
 | 血气旺盛(63)增伤联动 | ⏸ 延后 | ap_bloodboom appendage：对出血敌人攻击力增加——需 Buff 查询门面 + 增伤公式位 |
 | 帝血弑天已损 HP 增伤 | ⏸ 延后 | nut：(hpMax-hp)/1% × level 列7 增伤向量——demo 固定伤害 |
 | 施放时停止移动 | ⏸ 延后 | DNF sq_StopMove；现有技能（波动剑等）也未禁移动，统一在攻击状态机做 |
-| Buff 末跳被到期吞掉 | 🐛 既有系统性 | LSBuffComponentSystem.LSUpdate 到期检查在 Tick 之前并 continue → 3s/1s 配置实际只 tick 2 次（燃烧/出血均如此）。要修把 Tick 段移到到期判断前即可，但会改变既有 Burn/Stun 结算节奏——待定夺 |
+| ~~Buff 末跳被到期吞掉~~ | ✅ 已修（2026-08-21 用户定夺） | Tick 段移到到期判断前：3s/1s 现在完整 tick 3 次（燃烧 30、出血 45——比修复前多一跳，回到配置本意）；同帧顺序 = 末跳 → RemoveActions |
 
 #### 4.7 实现落地记录（2026-08-21，as-built）
 
@@ -667,13 +668,44 @@ passiveobject/character/swordman/
 | 任务 | 状态 | 日期 | 备注 |
 |---|---|---|---|
 | mod 文件分析 | ✅ | 2026-08-20 | 本文 §5 |
-| 角色动画翻译 | ⬜ | | releasewavedash_body.ani |
-| 特效翻译 | ⬜ | | 多个子目录 |
-| 技能类实现 | ⬜ | | |
+| mod 文件深读（nut/skl/atk/ani/obj/NPK 六路） | ✅ | 2026-08-21 | 冲刺 230ms/位移 300px/flag10001@F0/爆炸 490ms/atk push400 lift400 全链考证 |
+| 资源收集 | ✅ | 2026-08-21 | mod NPK 4 张 + 官方 releasewave3 等 4 张 + 替代品 3 张（下表） |
+| 角色动画翻译 | ✅ | 2026-08-21 | swordman_releasewavedash.json（3 帧，sm_body 240/241 皮肤已在库） |
+| 特效翻译 | ✅ | 2026-08-21 | 冲刺 11 层 + 蓄气 5 层 + 爆炸 4 层 + 2 个 .als（[none effect add] 新节名已支持） |
+| [RGBA] 帧染色链路 | ✅ | 2026-08-21 | 工具（有符号 int 陷阱修复）→ AnimFrameData.rgba → 单位/区域/弹/overlay 四视图 |
+| 击退/浮空物理 | ✅ | 2026-08-21 | LSFlightComponent + LaunchOwner（DNF push/lift 同构，落地即停/贴地摩擦） |
+| 冲刺位移 | ✅ | 2026-08-21 | ElapsedMs 纯函数匀速插值（DNF onProc 同构）+ MoveCasterForward 门面 + 移动锁 |
+| 爆炸 Area（含 .als 子层） | ✅ | 2026-08-21 | ReleaseWaveArea + overlay 泛化到区域视图（LSAnimOverlayUtil 共享助手） |
+| 技能类实现 | ✅ | 2026-08-21 | ReleaseWaveSkill（Y 键，伤害 80/150，击退 400/400，CD 5s demo） |
+| 验证 | ⬜ | | 待测试机（拉代码 → F6 → ET/Skill/Compile → Play，按 Y） |
 
 ### 5.5 遗留/未处理
 
-（实现后记录）
+| 问题 | 状态 | 说明 |
+|---|---|---|
+| 霸体帧（SUPERARMOR ×3） | ⏸ 延后 | 冲刺全程霸体；AnimFrameData 加 damageType + 受击检查（血爆也欠） |
+| 施放后自身僵直 600ms | ⏸ 延后 | skl static data；现有技能无此机制（回待机即解控） |
+| 元素二选一（雷神之息） | ⏸ 延后 | DNF：习得技能 251 时用光属性版（子id10 + light ani）；无元素系统 |
+| 等级缩放 | ⏸ 延后 | 列1 爆发大小%（图像+攻击盒三重同步缩放）；demo 固定 100% |
+| 冲刺撞墙检测 | ⏸ 延后 | DNF isMovablePos 撞墙止损；无地图碰撞系统 |
+| MP 消耗（65-630） | ⏸ 延后 | 无 MP 系统 |
+| [IMAGE RATE]/[IMAGE ROTATE] | ⏸ 延后 | 冲刺/蓄气特效大量用缩放旋转（speedline 镜像、backwind 旋转 90°）——当前直出原始帧，视觉有偏差 |
+| ~~[none effect add] 截断~~ | ✅ 审查修复 | 父动画切走时叠加层转入 Detaching 继续播完自毁（电光尾段不再被硬切） |
+| ~~区域视图回闪~~ | ✅ 审查修复 | 主动画播完 ViewDone 隐藏占位（不立即删视图），防差分重建导致 backwind/黑烟从头重播 1-3 帧闪现；血爆同受益 |
+| 特效替代品 | 📌 占位 | Ice02→twister00（白旋涡+染蓝）、CenterElectric3→sphereexplosionnormal01（球爆+染蓝）、ParumeruCastLightning→lightningfairy12（闪电✓）；找到原件改 json 的 path/index 即可替换 |
+| backwind 合并渲染 | 📌 决策 | DNF 蓄气特效留在施放点（locakonhit 不跟随）；实现上与爆炸同点合并挂 Area overlay（时序 startFrame 对应 dash F0/F1/F2 flag） |
+| 区域视图朝向镜像 | ⏸ 延后 | 爆炸/火圈区域 GO 不镜像（弹有）；releasewave 视觉近似对称，暂可接受 |
+| Area 攻击盒格式差异 | 📌 记档 | 被动对象 .ani 的 ATTACK BOX 是「偏移+尺寸」格式（中心对称），角色 .ani 是「min/max」——翻译工具按 min/max 解析，区域判定走 HalfExtents 不受影响；角色侧 F1/F2 盒按 min/max 采用 |
+
+#### 5.6 实现落地记录（2026-08-21，as-built）
+
+1. **爆炸在起点不在终点**：flag 10001 挂冲刺动画 F0 = 施放瞬间原地爆，角色随后冲出爆炸（DNF 手感"把自己弹出去"）。实现：OnCast 即 CreateAreaInFront(0)。
+2. **冲刺位移是纯函数**：位移 = min(ElapsedMs, 230)/230 × 3 单位按帧差增量（MoveCasterForward 沿朝向镜像）；不存起点，回滚重放天然一致。最后一 tick dtMs 超总时长需钳制。
+3. **击退物理**（用户方案定稿）：LSFlightComponent 挂所有单位；命中 LaunchOwner 写初速度（水平 ×2.5、垂直 ×2.0，400px→10/8 单位/s）；重力 40 单位/s² 抛物线；**空中落地动量清零趴住**（击倒手感）、**纯水平击退贴地摩擦滑行**（8/s 衰减）。受击硬直门禁输入移动，无冲突。
+4. **overlay 泛化**：LSAnimOverlayUtil 共享助手（单位 base sortingOrder=0 层号直译 / 区域 base=6 绕主层 5 排序）；爆炸 Area 挂手组装的 8 层合并 overlay（3 爆炸子层 z1-3 + 5 蓄气层 z-6..-2）。
+5. **RGBA 有符号陷阱**：(255<<24)|… 是负 int——写出条件必须 != -1 而非 >= 0（曾致 alpha≥128 的染色全丢）；视图判 0 = 无染色。
+6. **冲刺攻击盒走帧驱动**：releasewavedash json 自带 F1/F2 attackBox → LSHitboxComponentSystem 判定帧表从 {Attack1} 扩为 {Attack1, SwordmanReleaseWaveDash}。
+7. **[none effect add]**：mod 特效边车的 .als 变体节名，值结构同 [add]，AlsParser 同等解析。
 
 ---
 
