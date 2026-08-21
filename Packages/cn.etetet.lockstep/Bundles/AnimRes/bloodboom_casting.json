@@ -1,0 +1,247 @@
+{
+  "loop": false,
+  "frameMax": 20,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 8,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 9,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 10,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 11,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 7
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 12,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 8
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 13,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 9
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 14,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 10
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 35
+    },
+    {
+      "index": 15,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 11
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 70
+    },
+    {
+      "index": 16,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 12
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 70
+    },
+    {
+      "index": 17,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 13
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 70
+    },
+    {
+      "index": 18,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 14
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 70
+    },
+    {
+      "index": 19,
+      "image": {
+        "path": "bloodboom_casting.img",
+        "index": 15
+      },
+      "imagePos": {
+        "x": -361,
+        "y": -447
+      },
+      "delay": 70
+    }
+  ],
+  "totalDuration": 875
+}

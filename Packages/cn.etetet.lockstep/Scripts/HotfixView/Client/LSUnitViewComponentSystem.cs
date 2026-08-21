@@ -79,6 +79,7 @@ namespace ET.Client
                     : unitGo.GetComponentInChildren<SpriteRenderer>();
 
                 lsUnitView.AddComponent<LSSpriteAnimViewComponent>();
+                lsUnitView.AddComponent<LSAnimOverlayViewComponent>();   // .als 特效叠加（有配置才建层）
             }
         }
     }

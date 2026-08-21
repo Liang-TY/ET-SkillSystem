@@ -1,0 +1,34 @@
+{
+  "overlays": [
+    {
+      "startFrame": 3,
+      "z": -2,
+      "effectAni": "casting_bloodboom_casting_back"
+    },
+    {
+      "startFrame": -1,
+      "z": -1,
+      "effectAni": "casting_bloodboom_boomback"
+    },
+    {
+      "startFrame": 3,
+      "z": 10001,
+      "effectAni": "casting_bloodboom_casting"
+    },
+    {
+      "startFrame": -1,
+      "z": 10002,
+      "effectAni": "casting_bloodboom_boomfront"
+    },
+    {
+      "startFrame": -1,
+      "z": 10003,
+      "effectAni": "casting_bloodboom_circle1"
+    },
+    {
+      "startFrame": -1,
+      "z": 10004,
+      "effectAni": "casting_bloodboom_circle2"
+    }
+  ]
+}

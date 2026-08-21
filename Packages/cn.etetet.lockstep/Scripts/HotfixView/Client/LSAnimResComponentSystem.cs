@@ -35,6 +35,11 @@ namespace ET.Client
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/sm_body0000.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/katana_blade.img.bytes");
             await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/katana_handle.img.bytes");
+            // 浴血之怒特效（施法叠加 2 张 + 爆炸 2 张）
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_casting.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_casting_back.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_boomfront.img.bytes");
+            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_boomback.img.bytes");
 
             // LINEARDODGE 加法混合材质（共享，所有需要发光的帧用同一个实例）
             Shader additiveShader = Shader.Find("ET/SpriteAdditive");
