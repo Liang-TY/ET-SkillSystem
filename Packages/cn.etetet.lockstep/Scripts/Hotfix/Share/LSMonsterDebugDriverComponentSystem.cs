@@ -12,8 +12,9 @@ namespace ET
         private const int IntervalMs = 3000;
         private const int RotationCount = 4;   // 轮播表长度（ET0004：Hotfix 禁非 const 字段，表用 switch 表达式）
 
-        /// <summary>轮播表（index → SkillId）</summary>
-        private static int GetSkillId(int index) => index % RotationCount switch
+        /// <summary>轮播表（index → SkillId）。注意括号：`a % b switch {...}` 会解析成 `a % (b switch {...})`
+        /// ——switch 表达式作右操作数时优先级高于二元运算符，曾因此变成 index%10 循环放全技能（2026-08-22 排查实录）</summary>
+        private static int GetSkillId(int index) => (index % RotationCount) switch
         {
             0 => SkillIds.MonsterLowKick,
             1 => SkillIds.MonsterKneeKick,
