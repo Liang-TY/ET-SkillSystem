@@ -76,7 +76,25 @@ namespace ET
                 // DNF [pass type] 原值直译：'2'=可走(1)，其余('0' 等)=阻挡(0)；串短于矩阵时尾部全阻挡
                 collision.PassGrid[i] = i < layout.passTypes.Length && layout.passTypes[i] == '2' ? (byte)1 : (byte)0;
             }
-            Log.Info($"[Room] 碰撞矩阵就绪：{collision.GridWidth}x{collision.GridHeight} 格，cell={collision.CellSize}");
+
+            // 坐标对齐：瓦片贴图以中心对齐世界原点（Sprite pivot=0.5, localPosition=0）
+            // → 网格 col=0（左边缘）的世界 x = -gridWidth×CellSize/2
+            collision.OriginX = -(FP)collision.GridWidth * collision.CellSize / 2;
+
+            // z 对齐：找可行走带的行范围中线 → 让 z=0 落在行走带中间（单位战斗的 z 活动区间）
+            int minRow = -1, maxRow = -1;
+            for (int row = 0; row < collision.GridHeight && minRow < 0; row++)
+                for (int col = 0; col < collision.GridWidth; col++)
+                    if (collision.PassGrid[row * collision.GridWidth + col] == 1) { minRow = row; break; }
+            for (int row = collision.GridHeight - 1; row >= 0 && maxRow < 0; row--)
+                for (int col = 0; col < collision.GridWidth; col++)
+                    if (collision.PassGrid[row * collision.GridWidth + col] == 1) { maxRow = row; break; }
+            int centerRow = minRow < 0 ? collision.GridHeight / 2 : (minRow + maxRow) / 2;
+            // row = (z - OriginZ) / CellSize → z=0 时 row=centerRow → OriginZ = -centerRow × CellSize
+            collision.OriginZ = -(FP)centerRow * collision.CellSize;
+
+            Log.Info($"[Room] 碰撞矩阵就绪：{collision.GridWidth}x{collision.GridHeight} 格，cell={collision.CellSize}，" +
+                     $"origin=({collision.OriginX},{collision.OriginZ})，可行走行 {minRow}~{maxRow} 中线={centerRow}");
         }
 
         /// <summary>按地图配置创建怪物（原测试桩抽取参数化；组件挂载序 = LSUpdate 执行序，勿动）</summary>

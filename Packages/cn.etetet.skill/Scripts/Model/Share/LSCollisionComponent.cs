@@ -26,5 +26,13 @@ namespace ET
         /// <summary>每格大小（单位）。DNF 80px/格 → 0.8（1 单位=100px）</summary>
         [MemoryPackOrder(3)]
         public FP CellSize;
+
+        /// <summary>网格 col=0 的世界 x（瓦片贴图左边缘 = -gridWidth×CellSize/2）</summary>
+        [MemoryPackOrder(4)]
+        public FP OriginX;
+
+        /// <summary>网格 row=0 的世界 z（对齐可行走带中线：z=0 ≈ 行走带中间行）</summary>
+        [MemoryPackOrder(5)]
+        public FP OriginZ;
     }
 }

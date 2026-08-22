@@ -19,13 +19,13 @@ namespace ET
 
         /// <summary>
         /// 位置是否被阻挡。网格外一律阻挡（地图边界=墙）。
-        /// 只看 (x, z)：x→列、z→行（DNF y 纵深 ↔ 我们 z，1 单位=100px；行 0 = 世界 z=0 自上而下）。
+        /// 坐标换算：格子 = (世界坐标 - Origin) / CellSize——Origin 在 InitCollision 时对齐瓦片贴图和可行走带。
         /// </summary>
         public static bool IsBlocked(this LSCollisionComponent self, TSVector position)
         {
             if (self.PassGrid == null || self.GridWidth <= 0 || self.GridHeight <= 0) return false;
-            int col = (int)TSMath.Floor(position.x / self.CellSize);
-            int row = (int)TSMath.Floor(position.z / self.CellSize);
+            int col = (int)TSMath.Floor((position.x - self.OriginX) / self.CellSize);
+            int row = (int)TSMath.Floor((position.z - self.OriginZ) / self.CellSize);
             if (col < 0 || col >= self.GridWidth || row < 0 || row >= self.GridHeight) return true;
             return self.PassGrid[row * self.GridWidth + col] == 0;
         }
