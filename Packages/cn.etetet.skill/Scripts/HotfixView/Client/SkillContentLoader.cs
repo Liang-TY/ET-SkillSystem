@@ -29,12 +29,13 @@ namespace ET.Client
             }
 
             Assembly assembly = Assembly.Load(dllAsset.bytes);
-            // 四类内容同源注册：技能 / Buff 配��� / Action 效果节点 / 投射物配置（ContentLoader 泛型）
+            // 六类内容同源注册：技能 / Buff / Action / 投射物 / 区域 / 怪物AI配置（ContentLoader 泛型）
             SkillLoader.RegisterAssembly(assembly);
             BuffLoader.RegisterAssembly(assembly);
             ActionLoader.RegisterAssembly(assembly);
             BulletLoader.RegisterAssembly(assembly);
             AreaLoader.RegisterAssembly(assembly);
+            MonsterAiLoader.RegisterAssembly(assembly);
 
             // 技能系统配置 json（改配置零编译：改 json → YooAsset 重收集 → Play）
             TextAsset configAsset = await resLoader.LoadAssetAsync<TextAsset>(

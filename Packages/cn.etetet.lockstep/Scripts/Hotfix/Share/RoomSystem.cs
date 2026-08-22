@@ -63,9 +63,9 @@ namespace ET
             // 命中盒组件（受击盒采样 + 攻击判定帧驱动）
             monster.AddComponent<LSHitboxComponent>();
 
-            // 阶段1 临时轮播驱动（每 3s 依次放一个技能；阶段2 AI 替换）
-            monster.AddComponent<LSMonsterDebugDriverComponent>();
-            Log.Info($"[Monster] 测试桩怪物 unit{monster.Id} @ {monster.Position}（轮播驱动）");
+            // 阶段2 AI（行为机 + 第六类内容配置驱动，见 02 文档 §10.4）
+            monster.AddComponent<LSMonsterAIComponent, int>(MonsterAiIds.BantuAmazones);
+            Log.Info($"[Monster] 测试桩怪物 unit{monster.Id} @ {monster.Position}（AI 驱动）");
         }
 
         public static void Update(this Room self, OneFrameInputs oneFrameInputs)
