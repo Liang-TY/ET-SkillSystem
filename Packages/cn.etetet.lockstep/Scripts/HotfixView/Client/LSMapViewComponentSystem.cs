@@ -97,7 +97,8 @@ namespace ET.Client
                         if (srcIdx >= tile.passTypes.Length) break;
                         int gridCol = baseCol + col;
                         if (gridCol >= layout.gridWidth) break;
-                        flat[row * layout.gridWidth + gridCol] = tile.passTypes[srcIdx] == 2 ? '2' : '0';
+                        // DNF [pass type]：0=可通行，非 0（1/2/4）=阻挡——与之前假设相反！
+                        flat[row * layout.gridWidth + gridCol] = tile.passTypes[srcIdx] == 0 ? '2' : '0';
                     }
                 }
             }
