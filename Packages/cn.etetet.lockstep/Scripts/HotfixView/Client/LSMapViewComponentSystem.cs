@@ -175,17 +175,17 @@ namespace ET.Client
             texture.SetPixels32(buf);
             texture.Apply(false, makeNoLongerReadable: true);
 
-            // 4) 地面 SpriteRenderer——PPU 按碰撞网格的世界尺寸反算（贴图像素 ≠ 网格逻辑像素，需缩放对齐）
+            // 4) 地面 SpriteRenderer——100 PPU 原生分辨率（不缩放，DNF 贴图原生就是这个大小）
             GameObject ground = new("MapGround");
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
             ground.transform.SetParent(globalComponent.Unit, false);
             SpriteRenderer renderer = ground.AddComponent<SpriteRenderer>();
             renderer.sortingOrder = -1000;
-            // 逻辑世界宽度 = gridWidth × CellSize（如 56×0.8=44.8 单位）
-            // 贴图世界宽度 = width / PPU → PPU = width / 逻辑宽度（如 896/44.8=20）
-            float logicalWidth = (float)layout.gridWidth * (float)layout.cellSizePx / 100f;
-            float ppu = width / logicalWidth;
-            renderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), ppu);
+            renderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 100f);
+
+            // 记录贴图实际世界尺寸（碰撞网格的 CellSize 按此对齐——逻辑层 InitCollision 读）
+            layout.visualWidth = (FP)width / 100;
+            layout.visualHeight = (FP)height / 100;
 
             // 5) 摆位：大图中心对齐原点
             ground.transform.localPosition = new Vector3(0f, 0f, 0f);

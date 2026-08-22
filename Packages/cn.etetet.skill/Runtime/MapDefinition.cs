@@ -82,6 +82,12 @@ namespace ET
 
         /// <summary>压平碰撞矩阵（DeriveLayout 填充）</summary>
         public string passTypes;
+
+        /// <summary>贴图实际世界宽（单位，100 PPU；BuildTileTexture 填充——碰撞 CellSize 按此对齐）</summary>
+        public FP visualWidth;
+
+        /// <summary>贴图实际世界高（单位）</summary>
+        public FP visualHeight;
     }
 
     /// <summary>单个瓦片贴图引用（.til 直译：imgPath + imgFrame + 压平碰撞矩阵）</summary>

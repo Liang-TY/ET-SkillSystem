@@ -43,7 +43,7 @@ namespace ET
             }
 
             // 按地图配置创建怪物（替代原硬编码测试桩；怪物不进 PlayerIds、不加 LSInputComponent）
-            if (mapDef?.MonsterAiIds != null)
+            if (mapDef?.MonsterAiIds != null && false)   // TODO: 碰撞调试，暂时禁用怪物
             {
                 for (int i = 0; i < mapDef.MonsterAiIds.Length; i++)
                 {
@@ -69,7 +69,8 @@ namespace ET
             LSCollisionComponent collision = lsWorld.AddComponent<LSCollisionComponent>();
             collision.GridWidth = layout.gridWidth;
             collision.GridHeight = layout.gridHeight;
-            collision.CellSize = (FP)layout.cellSizePx / 100;   // px → 单位（1 单位=100px）
+            // CellSize 对齐贴图实际世界尺寸（不是 DNF 逻辑 80px——贴图分辨率 ≠ 网格逻辑像素）
+            collision.CellSize = layout.visualWidth / collision.GridWidth;
             collision.PassGrid = new byte[layout.gridWidth * layout.gridHeight];
             for (int i = 0; i < collision.PassGrid.Length; i++)
             {
