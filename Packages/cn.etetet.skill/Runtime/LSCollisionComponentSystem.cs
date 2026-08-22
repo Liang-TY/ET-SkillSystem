@@ -43,6 +43,16 @@ namespace ET
         public static void TryMove(this LSCollisionComponent self, LSUnit unit, TSVector delta)
         {
             TSVector oldPos = unit.Position;
+            // 诊断（按一次 WASD 后看第一行）
+            {
+                int dCol = (int)TSMath.Floor((oldPos.x - self.OriginX) / self.CellSize);
+                int dRow = (int)TSMath.Floor((oldPos.z - self.OriginZ) / self.CellSize);
+                bool ok = dCol >= 0 && dCol < self.GridWidth && dRow >= 0 && dRow < self.GridHeight;
+                byte val = ok ? self.PassGrid[dRow * self.GridWidth + dCol] : (byte)255;
+                int walkable = 0; foreach (byte b in self.PassGrid) if (b == 1) walkable++;
+                Log.Info($"[Collision_diag] pos=({oldPos.x:F2},{oldPos.z:F2}) → cell=({dCol},{dRow}) ok={ok} val={val} " +
+                         $"walkable={walkable}/{self.PassGrid.Length} cellSize={self.CellSize} origin=({self.OriginX},{self.OriginZ})");
+            }
             if (!self.IsBlocked(oldPos + delta))
             {
                 unit.Position = oldPos + delta;
