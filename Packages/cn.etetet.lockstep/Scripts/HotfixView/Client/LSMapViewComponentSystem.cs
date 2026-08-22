@@ -5,15 +5,17 @@ using UnityEngine;
 namespace ET.Client
 {
     /// <summary>
-    /// 地图瓦片视图系统：按 Room.MapId 读 MapDefinition.TileLayoutPath 懒加载（03 文档 §3.2/§4.1）——
-    /// 1) tile_layout.json → MapTileLayoutCache（逻辑层 room.Init 建碰撞矩阵——本组件必须在 room.Init 前完成，
-    ///    由 LSSceneChangeStart_AddComponent 的 await PublishAsync 时序保证）；
-    /// 2) 瓦片 img 逐帧 Blit 到一张大 Texture2D → SpriteRenderer 铺地面（不打包图集，同 LSAnimRes 解析方式）。
+    /// 地图瓦片视图系统：按 Room.MapId 读 MapDefinition.TileLayoutPath 懒加载（03 文档 §3.2/§4.1）。
+    /// tile_layout.json 的 tiles[] 水平拼接 → 合并大 Texture2D 铺地面 + 合成碰撞矩阵进缓存。
     /// </summary>
     [EntitySystemOf(typeof(LSMapViewComponent))]
     [FriendOf(typeof(LSMapViewComponent))]
     public static partial class LSMapViewComponentSystem
     {
+        private const int TileColumns = 14;   // DNF .til 固定 14 列
+        private const int TileRows = 30;      // DNF .til 固定 30 行
+        private const int CellSizePx = 80;    // DNF [img pos] 每格像素
+
         [EntitySystem]
         private static void Awake(this LSMapViewComponent self)
         {
@@ -24,17 +26,16 @@ namespace ET.Client
         {
             if (self.Ground != null)
             {
-                UnityEngine.Object.Destroy(self.Ground);   // 全限定：避开 ET.Object
+                UnityEngine.Object.Destroy(self.Ground);
                 self.Ground = null;
             }
         }
 
-        /// <summary>按当前 Room.MapId 加载地图（SkillContentLoader 之后调——MapLoader 那时才注册完）</summary>
         public static async ETTask InitAsync(this LSMapViewComponent self)
         {
             Room room = self.GetParent<Room>();
             MapDefinition mapDef = MapLoader.Get(room.MapId);
-            if (mapDef?.TileLayoutPath == null) return;   // 空地（mapId=0 或未配瓦片）——无地面无碰撞
+            if (mapDef?.TileLayoutPath == null) return;
 
             ResourcesLoaderComponent resLoader = room.GetComponent<ResourcesLoaderComponent>();
             if (resLoader == null)
@@ -46,25 +47,27 @@ namespace ET.Client
             TileLayoutData layout = await LoadTileLayout(resLoader, mapDef.TileLayoutPath);
             if (layout == null) return;
 
-            // 先进缓存再渲染：room.Init（碰撞矩阵）只依赖缓存，渲染失败不影响逻辑
+            // 合成派生字段（碰撞矩阵 + cellSize）
+            DeriveLayout(layout);
+
+            // 先进缓存再渲染（逻辑层 room.Init 只读缓存）
             MapTileLayoutCache.Set(mapDef.TileLayoutPath, layout);
             await BuildTileTexture(self, resLoader, mapDef.TileLayoutPath, layout);
         }
 
-        /// <summary>读 tile_layout.json（瓦片布局 + 碰撞矩阵；翻译工具 til 子命令产物）</summary>
+        /// <summary>读 tile_layout.json 并校验</summary>
         private static async ETTask<TileLayoutData> LoadTileLayout(ResourcesLoaderComponent resLoader, string jsonPath)
         {
             TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>(jsonPath);
             if (asset == null)
             {
-                Log.Warning($"[LSMapView] tile_layout.json 不存在：{jsonPath}（翻译工具 til 子命令产物）——空地无碰撞");
+                Log.Warning($"[LSMapView] tile_layout.json 不存在：{jsonPath}——空地无碰撞");
                 return null;
             }
 
             TileLayoutData layout = JsonUtility.FromJson<TileLayoutData>(asset.text);
-            if (layout == null || layout.gridWidth <= 0 || layout.gridHeight <= 0
-                || layout.passTypes == null || layout.passTypes.Length < layout.gridWidth * layout.gridHeight
-                || layout.tiles == null || layout.tiles.Length == 0)
+            if (layout?.tiles == null || layout.tiles.Length == 0
+                || layout.gridWidth <= 0 || layout.gridHeight <= 0)
             {
                 Log.Error($"[LSMapView] tile_layout.json 数据不完整：{jsonPath}——空地无碰撞");
                 return null;
@@ -72,85 +75,106 @@ namespace ET.Client
             return layout;
         }
 
-        /// <summary>
-        /// 瓦片帧 Blit 到一张大 Texture2D → SpriteRenderer 铺地面。
-        /// 瓦片图集按需逐个解析（NpkImgParser，同 LSAnimResComponentSystem.BuildAtlas 的取帧方式），
-        /// 不打包图集——每帧直接画到大图对应位置。
-        /// </summary>
+        /// <summary>从各瓦片 passTypes 合成全图碰撞矩阵 + 填 cellSizePx</summary>
+        private static void DeriveLayout(TileLayoutData layout)
+        {
+            layout.cellSizePx = CellSizePx;
+            char[] flat = new char[layout.gridWidth * layout.gridHeight];
+            for (int i = 0; i < flat.Length; i++) flat[i] = '0';   // 默认阻挡
+
+            for (int t = 0; t < layout.tiles.Length; t++)
+            {
+                TileLayoutTile tile = layout.tiles[t];
+                if (tile?.passTypes == null) continue;
+                int baseCol = t * TileColumns;
+                for (int row = 0; row < tile.passTypes.Length && row < layout.gridHeight; row++)
+                {
+                    int[] rowData = tile.passTypes[row];
+                    if (rowData == null) continue;
+                    for (int col = 0; col < rowData.Length && col < TileColumns; col++)
+                    {
+                        int gridCol = baseCol + col;
+                        if (gridCol >= layout.gridWidth) break;
+                        flat[row * layout.gridWidth + gridCol] = rowData[col] == 2 ? '2' : '0';
+                    }
+                }
+            }
+            layout.passTypes = new string(flat);
+        }
+
+        /// <summary>瓦片帧 Blit 到一张大 Texture2D → SpriteRenderer 铺地面</summary>
         private static async ETTask BuildTileTexture(
             LSMapViewComponent self, ResourcesLoaderComponent resLoader, string layoutPath, TileLayoutData layout)
         {
             string dir = Path.GetDirectoryName(layoutPath)?.Replace('\\', '/');
 
-            // 1) 解析去重后的瓦片图集（多瓦片常共用一张 img，如 4 张 .til 全引 aganzo.img 不同帧）
+            // 1) 解析去重后的瓦片图集
             Dictionary<string, NpkSprite[]> atlases = new(System.StringComparer.OrdinalIgnoreCase);
             foreach (TileLayoutTile tile in layout.tiles)
             {
-                if (tile == null || tile.imgName == null || atlases.ContainsKey(tile.imgName)) continue;
-                TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>($"{dir}/{tile.imgName}.img.bytes");
-                if (imgAsset == null)
-                {
-                    Log.Warning($"[LSMapView] 瓦片图集不存在：{tile.imgName}.img.bytes（同目录）——地面缺帧");
-                    atlases[tile.imgName] = null;
-                    continue;
-                }
-                atlases[tile.imgName] = NpkImgParser.Parse(imgAsset.bytes);
+                if (tile?.imgPath == null) continue;
+                string imgName = tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
+                    ? tile.imgPath[..^4] : tile.imgPath;
+                if (atlases.ContainsKey(imgName)) continue;
+                TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>($"{dir}/{imgName}.img.bytes");
+                atlases[imgName] = imgAsset != null ? NpkImgParser.Parse(imgAsset.bytes) : null;
+                if (imgAsset == null) Log.Warning($"[LSMapView] 瓦片图集不存在：{imgName}.img.bytes——地面缺帧");
             }
 
-            // 2) 大图尺寸 = 全部瓦片帧的包围盒（大图坐标 = 瓦片 Blit 位置的像素空间）
+            // 2) 大图尺寸（各瓦片帧 Blit 位置 = tile 序号 × 帧宽，水平拼）
             int width = 0, height = 0;
-            foreach (TileLayoutTile tile in layout.tiles)
+            foreach (KeyValuePair<string, NpkSprite[]> kv in atlases)
             {
-                if (tile == null || !atlases.TryGetValue(tile.imgName, out NpkSprite[] frames)
-                    || frames == null || tile.frame < 0 || tile.frame >= frames.Length) continue;
-                NpkSprite s = frames[tile.frame];
-                if (s.ArgbData == null) continue;   // 引用帧无数据（翻译工具应引实体帧）
-                width = System.Math.Max(width, tile.x + s.Width);
-                height = System.Math.Max(height, tile.y + s.Height);
+                if (kv.Value == null || kv.Value.Length == 0) continue;
+                NpkSprite s = kv.Value[0];
+                width = System.Math.Max(width, s.FrameWidth);
+                height = System.Math.Max(height, s.FrameHeight);
             }
             if (width <= 0 || height <= 0)
             {
                 Log.Warning("[LSMapView] 瓦片帧全空——不铺地面（碰撞矩阵不受影响）");
                 return;
             }
+            width *= layout.tiles.Length;   // 水平拼 N 张
 
-            // 3) 逐瓦片像素 Blit（ARGB int → RGBA 字节，Y 翻转：大图 top-left ↔ Unity bottom-left）
+            // 3) 逐瓦片像素 Blit
             Texture2D texture = new(width, height, TextureFormat.RGBA32, false);
-            texture.filterMode = FilterMode.Point;       // 像素图防糊
+            texture.filterMode = FilterMode.Point;
             texture.wrapMode = TextureWrapMode.Clamp;
             Color32[] buf = new Color32[width * height];
-            foreach (TileLayoutTile tile in layout.tiles)
+            // 初始化透明
+            for (int i = 0; i < buf.Length; i++) buf[i] = new Color32(0, 0, 0, 0);
+
+            int tileWidth = width / layout.tiles.Length;
+            for (int t = 0; t < layout.tiles.Length; t++)
             {
-                if (tile == null || !atlases.TryGetValue(tile.imgName, out NpkSprite[] frames) || frames == null) continue;
-                if (tile.frame < 0 || tile.frame >= frames.Length)
-                {
-                    Log.Warning($"[LSMapView] {tile.imgName}[{tile.frame}] 越界（{frames.Length} 帧）——该瓦片空白");
-                    continue;
-                }
-                NpkSprite s = frames[tile.frame];
-                if (s.ArgbData == null)
-                {
-                    Log.Warning($"[LSMapView] {tile.imgName}[{tile.frame}] 无像素数据（引用帧）——该瓦片空白");
-                    continue;
-                }
+                TileLayoutTile tile = layout.tiles[t];
+                if (tile?.imgPath == null) continue;
+                string imgName = tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
+                    ? tile.imgPath[..^4] : tile.imgPath;
+                if (!atlases.TryGetValue(imgName, out NpkSprite[] frames) || frames == null) continue;
+                if (tile.imgFrame < 0 || tile.imgFrame >= frames.Length) continue;
+                NpkSprite s = frames[tile.imgFrame];
+                if (s.ArgbData == null) continue;
+
+                int offsetX = t * tileWidth;
                 for (int y = 0; y < s.Height; y++)
                 for (int x = 0; x < s.Width; x++)
                 {
-                    if (tile.x + x >= width || tile.y + y >= height) continue;   // 帧越界部分裁掉
+                    int px = offsetX + x;
+                    if (px >= width) continue;
                     int argb = s.ArgbData[y * s.Width + x];
-                    int dstY = height - 1 - tile.y - y;
-                    buf[dstY * width + tile.x + x] = new Color32(
-                        (byte)((argb >> 16) & 0xFF),   // R
-                        (byte)((argb >>  8) & 0xFF),   // G
-                        (byte)((argb        ) & 0xFF), // B
-                        (byte)((argb >> 24) & 0xFF));  // A
+                    int dstY = height - 1 - y;   // Y 翻转
+                    if (dstY < 0 || dstY >= height) continue;
+                    buf[dstY * width + px] = new Color32(
+                        (byte)((argb >> 16) & 0xFF), (byte)((argb >> 8) & 0xFF),
+                        (byte)(argb & 0xFF), (byte)((argb >> 24) & 0xFF));
                 }
             }
             texture.SetPixels32(buf);
-            texture.Apply(false, makeNoLongerReadable: true);   // 上传 GPU 后释放 CPU 副本
+            texture.Apply(false, makeNoLongerReadable: true);
 
-            // 4) 地面 SpriteRenderer：单位间深度排序占 [-1000,0]（LSUnitViewSystem: order=-z*100，
-            //    行走带 z<10）——地面取 -1000 垫底（方案草案的 -10 会被深处单位盖住，弃用）
+            // 4) 地面 SpriteRenderer
             GameObject ground = new("MapGround");
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
             ground.transform.SetParent(globalComponent.Unit, false);
@@ -158,34 +182,10 @@ namespace ET.Client
             renderer.sortingOrder = -1000;
             renderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 100f);
 
-            // 5) 摆位：大图像素列 px ↔ 世界 x = px/100（无压缩，中线对齐）；
-            //    行 py ↔ 深度 z = py/100，屏幕纵向有 0.6 纵深压缩（LSUnitViewSystem depthRatio）——
-            //    只在可行走带中线严格对齐（带内上下缘各漂 0.4×带宽/2，demo 精度）
-            int anchorPx = WalkBandCenterPx(layout);
-            ground.transform.localPosition = new Vector3(
-                width / 200f,
-                (1.6f * anchorPx - height * 0.5f) / 100f,
-                0f);
+            // 5) 摆位：大图中心对齐原点
+            ground.transform.localPosition = new Vector3(0f, 0f, 0f);
             self.Ground = ground;
             Log.Info($"[LSMapView] 地面就绪：{width}x{height}px，{layout.tiles.Length} 瓦片，碰撞 {layout.gridWidth}x{layout.gridHeight} 格");
-        }
-
-        /// <summary>可行走带的垂直中线（像素行）：碰撞矩阵里含可走格的行范围中点——地面与单位对齐的锚</summary>
-        private static int WalkBandCenterPx(TileLayoutData layout)
-        {
-            int minRow = -1, maxRow = -1;
-            for (int row = 0; row < layout.gridHeight; row++)
-            {
-                for (int col = 0; col < layout.gridWidth; col++)
-                {
-                    if (layout.passTypes[row * layout.gridWidth + col] != '2') continue;
-                    if (minRow < 0) minRow = row;
-                    maxRow = row;
-                    break;
-                }
-            }
-            if (minRow < 0) return layout.gridHeight * layout.cellSizePx / 2;   // 全阻挡：退化为图中线
-            return (minRow + maxRow + 1) * layout.cellSizePx / 2;
         }
     }
 }

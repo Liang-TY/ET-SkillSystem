@@ -56,47 +56,44 @@ namespace ET
             => ContentLoader<MapIdAttribute, MapDefinition>.Get(mapId);
     }
 
-    // ---- 瓦片布局数据（tile_layout.json 的形状，视图层 JsonUtility 反序列化）----
+    // ---- 瓦片布局数据（tile_layout.json 的形状，与翻译工具 til 子命令输出对齐）----
 
     /// <summary>
-    /// 地图瓦片布局（翻译工具 til 子命令产物 tile_layout.json 的形状，03 文档 §3.2/§4.1）。
-    /// 像素坐标 = 大图（多瓦片水平拼）坐标，网格原点 (0,0) = 大图左上角；
-    /// 1px 深度 = 0.01 单位（DNF y 纵深 ↔ 我们 z，行 0 = 世界 z=0 自上而下）。
+    /// 地图瓦片布局（翻译工具 til 子命令产物 tile_layout.json 的形状）。
+    /// tiles[] 水平拼接；gridWidth = tiles.Length × 14，gridHeight = 30。
     /// </summary>
     [Serializable]
     public class TileLayoutData
     {
-        /// <summary>碰撞矩阵宽（格）</summary>
+        /// <summary>瓦片贴图条目（按水平拼接顺序）</summary>
+        public TileLayoutTile[] tiles;
+
+        /// <summary>总网格宽（格）= tiles.Length × 14</summary>
         public int gridWidth;
 
-        /// <summary>碰撞矩阵高（格）</summary>
+        /// <summary>总网格高（格）= 30</summary>
         public int gridHeight;
 
-        /// <summary>每格像素（DNF 80，[img pos]）</summary>
-        public int cellSizePx;
+        // ---- 以下为运行时派生（非 json 字段，JsonUtility 忽略 [NonSerialized]）----
+        /// <summary>每格像素（DNF 80，[img pos]；加载时填充）</summary>
+        [NonSerialized] public int cellSizePx;
 
-        /// <summary>压平 pass type 串（gridWidth*gridHeight 个字符，行优先自上而下；DNF 原值：'2'=可走 '0'=阻挡）</summary>
-        public string passTypes;
-
-        /// <summary>瓦片贴图条目（全部 Blit 到一张大 Texture2D 铺地面）</summary>
-        public TileLayoutTile[] tiles;
+        /// <summary>压平碰撞矩阵（gridWidth*gridHeight，行优先；'2'=可走 其他=阻挡；加载时从各瓦片 passTypes 合成）</summary>
+        [NonSerialized] public string passTypes;
     }
 
-    /// <summary>单个瓦片贴图引用（.til [IMAGE] 段直译 + 大图 Blit 位置）</summary>
+    /// <summary>单个瓦片贴图引用（.til 直译：imgPath + imgFrame + 每瓦片独立的碰撞矩阵）</summary>
     [Serializable]
     public class TileLayoutTile
     {
-        /// <summary>瓦片图集文件名（不含 .img.bytes 后缀——与 tile_layout.json 同目录）</summary>
-        public string imgName;
+        /// <summary>瓦片图集文件名（含 .img 后缀，如 "Aganzo.img"——运行时去后缀加载 .img.bytes）</summary>
+        public string imgPath;
 
-        /// <summary>img 内帧号（[IMAGE] 段第二个数：tile00=0、tile01=1 依序）</summary>
-        public int frame;
+        /// <summary>img 内帧号</summary>
+        public int imgFrame;
 
-        /// <summary>Blit 到大图的左上角 X（px）</summary>
-        public int x;
-
-        /// <summary>Blit 到大图的左上角 Y（px）</summary>
-        public int y;
+        /// <summary>该瓦片的碰撞矩阵（30 行 × 14 列；DNF 原值 0=阻挡 2=可走）</summary>
+        public int[][] passTypes;
     }
 
     /// <summary>
