@@ -115,6 +115,19 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags:
         UserData:
+    - GroupName: MapRes
+      GroupDesc:
+      AssetTags:
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Packages/cn.etetet.lockstep/Bundles/MapRes
+        CollectorGUID: 6b2e8d41a9f03c7581d4e2b90a7c5f38
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags:
+        UserData:
     - GroupName: SkillContent
       GroupDesc:
       AssetTags:

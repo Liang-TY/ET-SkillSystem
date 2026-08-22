@@ -7,29 +7,30 @@ namespace ET.Server
     [FriendOf(typeof(MatchComponent))]
     public static partial class MatchComponentSystem
     {
-        public static async ETTask Match(this MatchComponent self, long playerId)
+        public static async ETTask Match(this MatchComponent self, long playerId, int mapId)
         {
             if (self.waitMatchPlayers.Contains(playerId))
             {
                 return;
             }
-            
+
             self.waitMatchPlayers.Add(playerId);
 
             if (self.waitMatchPlayers.Count < LSConstValue.MatchCount)
             {
                 return;
             }
-            
+
             // 申请一个房间
             List<StartSceneConfig> maps = StartSceneConfigCategory.Instance.GetBySceneType(self.Zone(), SceneType.Map);
             StartSceneConfig startSceneConfig = RandomGenerator.RandomArray(maps);
             Match2Map_GetRoom match2MapGetRoom = Match2Map_GetRoom.Create();
+            match2MapGetRoom.MapId = mapId;
             foreach (long id in self.waitMatchPlayers)
             {
                 match2MapGetRoom.PlayerIds.Add(id);
             }
-            
+
             self.waitMatchPlayers.Clear();
 
             Scene root = self.Root();
@@ -38,6 +39,7 @@ namespace ET.Server
 
             Match2G_NotifyMatchSuccess match2GNotifyMatchSuccess = Match2G_NotifyMatchSuccess.Create();
             match2GNotifyMatchSuccess.ActorId = map2MatchGetRoom.ActorId;
+            match2GNotifyMatchSuccess.MapId = map2MatchGetRoom.MapId;   // 客户端场景切换前就要（瓦片懒加载早于 Room2C_Start）
             MessageLocationSenderComponent messageLocationSenderComponent = root.GetComponent<MessageLocationSenderComponent>();
             
             foreach (long id in match2MapGetRoom.PlayerIds) // 这里发送消息线程不会修改PlayerInfo，所以可以直接使用

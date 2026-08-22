@@ -16,6 +16,12 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
 
+        /// <summary>
+        /// 地图Id（MapIds；0=空地）
+        /// </summary>
+        [MemoryPackOrder(1)]
+        public int MapId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -24,6 +30,7 @@ namespace ET
             }
 
             this.RpcId = default;
+            this.MapId = default;
 
             ObjectPool.Recycle(this);
         }
@@ -83,6 +90,12 @@ namespace ET
         [MemoryPackOrder(1)]
         public ActorId ActorId { get; set; }
 
+        /// <summary>
+        /// 本局地图Id（场景切换时视图层按它懒加载瓦片，早于 Room2C_Start）
+        /// </summary>
+        [MemoryPackOrder(2)]
+        public int MapId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -92,6 +105,7 @@ namespace ET
 
             this.RpcId = default;
             this.ActorId = default;
+            this.MapId = default;
 
             ObjectPool.Recycle(this);
         }
@@ -176,6 +190,12 @@ namespace ET
         [MemoryPackOrder(1)]
         public List<LockStepUnitInfo> UnitInfo { get; set; } = new();
 
+        /// <summary>
+        /// 本局地图Id（room.Init 按它建怪物+碰撞）
+        /// </summary>
+        [MemoryPackOrder(2)]
+        public int MapId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -185,6 +205,7 @@ namespace ET
 
             this.StartTime = default;
             this.UnitInfo.Clear();
+            this.MapId = default;
 
             ObjectPool.Recycle(this);
         }

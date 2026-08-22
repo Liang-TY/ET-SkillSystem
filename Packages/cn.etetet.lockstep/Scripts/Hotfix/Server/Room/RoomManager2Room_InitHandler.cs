@@ -9,6 +9,7 @@ namespace ET.Server
         {
             Room room = root.AddComponent<Room>();
             room.Name = "Server";
+            room.MapId = request.MapId;   // 匹配链带进（C2G_Match 起源）——Room2C_Start/room.Init 消费
             room.AddComponent<RoomServerComponent, List<long>>(request.PlayerIds);
 
             room.LSWorld = new LSWorld(SceneType.LockStepServer);

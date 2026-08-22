@@ -5,6 +5,8 @@ package ET;
 message C2G_Match // ISessionRequest
 {
 	int32 RpcId = 1;
+	/// 地图Id（MapIds；0=空地）
+	int32 MapId = 2;
 }
 
 message G2C_Match // ISessionResponse
@@ -20,6 +22,8 @@ message Match2G_NotifyMatchSuccess // IMessage
 	int32 RpcId = 1;
 	/// 房间的ActorId
 	ActorId ActorId = 2;
+	/// 本局地图Id（场景切换时视图层按它懒加载瓦片，早于 Room2C_Start）
+	int32 MapId = 3;
 }
 
 /// 客户端通知房间切换场景完成
@@ -40,6 +44,8 @@ message Room2C_Start // IMessage
 {
 	int64 StartTime = 1;
 	repeated LockStepUnitInfo UnitInfo = 2;
+	/// 本局地图Id（room.Init 按它建怪物+碰撞）
+	int32 MapId = 3;
 }
 
 message FrameMessage // IMessage

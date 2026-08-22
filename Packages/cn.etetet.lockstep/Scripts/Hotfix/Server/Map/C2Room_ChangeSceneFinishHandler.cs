@@ -21,18 +21,23 @@ namespace ET.Server
             
             await room.Fiber.Root.GetComponent<TimerComponent>().WaitAsync(1000);
 
+            // 玩家出生点来自地图配置（MapDefinition.PlayerSpawn；空地图退化为原点）
+            MapDefinition mapDef = MapLoader.Get(room.MapId);
+            TSVector playerSpawn = mapDef != null ? mapDef.PlayerSpawn : TSVector.zero;
+
             Room2C_Start room2CStart = Room2C_Start.Create();
             room2CStart.StartTime = TimeInfo.Instance.ServerFrameTime();
+            room2CStart.MapId = room.MapId;
             foreach (RoomPlayer rp in roomServerComponent.Children.Values)
             {
                 LockStepUnitInfo lockStepUnitInfo = LockStepUnitInfo.Create();
                 lockStepUnitInfo.PlayerId = rp.Id;
-                lockStepUnitInfo.Position = new TSVector(0, 0, 0);
+                lockStepUnitInfo.Position = playerSpawn;
                 lockStepUnitInfo.Rotation = TSQuaternion.identity;
                 room2CStart.UnitInfo.Add(lockStepUnitInfo);
             }
 
-            room.Init(room2CStart.UnitInfo, room2CStart.StartTime);
+            room.Init(room2CStart.UnitInfo, room2CStart.StartTime, room.MapId);
 
             room.AddComponent<LSServerUpdater>();
 

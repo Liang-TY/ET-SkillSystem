@@ -127,10 +127,20 @@ namespace ET
 
             if (dist > def.MeleeRange)
             {
-                // 追击：朝目标移动（抄玩家移动公式）+ 播 Walk（防重启）
+                // 追击：朝目标移动（抄玩家移动公式）+ 播 Walk（防重启）。
+                // 碰撞同玩家：被挡轴回退（贴墙滑动）——卡墙就卡着（demo 直线追击，以后 A*，03 文档 §8）
                 FP dir = target.Position.x >= unit.Position.x ? FP.One : -FP.One;
                 unit.Forward = new TSVector(dir, FP.Zero, FP.Zero);
-                unit.Position += new TSVector(dir * def.MoveSpeed * dt, FP.Zero, FP.Zero);
+                TSVector delta = new(dir * def.MoveSpeed * dt, FP.Zero, FP.Zero);
+                LSCollisionComponent collision = unit.LSWorld().GetComponent<LSCollisionComponent>();
+                if (collision != null)
+                {
+                    collision.TryMove(unit, delta);
+                }
+                else
+                {
+                    unit.Position += delta;
+                }
                 if (anim != null && anim.AnimId != def.MoveAnimId) anim.Play(def.MoveAnimId);
                 return;
             }

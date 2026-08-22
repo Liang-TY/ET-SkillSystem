@@ -17,7 +17,8 @@ _ReSharper.CSharp/
 Bundles
 !Packages/cn.etetet.lockstep/Bundles/
 Packages/cn.etetet.lockstep/Bundles/*
-!Packages/cn.etetet.lockstep/Bundles/AnimRes/ 
+!Packages/cn.etetet.lockstep/Bundles/AnimRes/
+!Packages/cn.etetet.lockstep/Bundles/MapRes/
 Library
 Logs
 UserSettings

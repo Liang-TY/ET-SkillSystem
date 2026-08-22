@@ -6,8 +6,10 @@ package ET;
 message G2Match_Match // IRequest
 {
 	int32 RpcId = 1;
-	
+
 	int64 Id = 2;
+
+	int32 MapId = 3;
 }
 
 message Match2G_Match // IResponse
@@ -22,6 +24,7 @@ message Match2Map_GetRoom // IRequest
 {
 	int32 RpcId = 1;
 	repeated int64 PlayerIds = 2;
+	int32 MapId = 3;
 }
 
 message Map2Match_GetRoom // IResponse
@@ -32,6 +35,8 @@ message Map2Match_GetRoom // IResponse
 
 	/// 房间的ActorId
 	ActorId ActorId = 4;
+
+	int32 MapId = 5;
 }
 
 // ResponseType Room2G_Reconnect
@@ -57,6 +62,7 @@ message RoomManager2Room_Init // IRequest
 {
 	int32 RpcId = 1;
 	repeated int64 PlayerIds = 2;
+	int32 MapId = 3;
 }
 
 message Room2RoomManager_Init // IResponse

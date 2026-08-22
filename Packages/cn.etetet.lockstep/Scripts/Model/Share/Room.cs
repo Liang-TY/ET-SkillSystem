@@ -8,7 +8,11 @@ namespace ET
         public Fiber Fiber { get; set; }
         public int SceneType { get; set; }
         public string Name { get; set; }
-        
+
+        // 本局地图Id（MapIds；0=空地）。匹配链带进（C2G_Match→...→RoomManager2Room_Init），
+        // 客户端在 LSSceneChangeStart（room.Init 前）就读它懒加载瓦片
+        public int MapId { get; set; }
+
         public long StartTime { get; set; }
 
         // 帧缓存

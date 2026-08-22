@@ -7,14 +7,19 @@ namespace ET
 {
     [FriendOf(typeof(Room))]
     [FriendOf(typeof(LSCombatComponent))]   // 怪物工厂写 HurtAnimId（ET0002）
+    [FriendOf(typeof(LSCollisionComponent))]   // 碰撞矩阵初始化写字段（ET0002）
     public static partial class RoomSystem
     {
         public static Room Room(this Entity entity)
         {
             return entity.IScene as Room;
         }
-        
-        public static void Init(this Room self, List<LockStepUnitInfo> unitInfos, long startTime, int frame = -1)
+
+        /// <summary>
+        /// 初始化房间世界。mapId=0 或未注册 = 空地（无怪物无碰撞，回放/旧流程走这条）。
+        /// 怪物/碰撞全部配置驱动（MapDefinition 第七类内容，03 文档 §3.3）——两端跑同一份 Init，Id 序天然一致。
+        /// </summary>
+        public static void Init(this Room self, List<LockStepUnitInfo> unitInfos, long startTime, int mapId = 0, int frame = -1)
         {
             self.StartTime = startTime;
             self.AuthorityFrame = frame;
@@ -27,6 +32,8 @@ namespace ET
             lsWorld.AddComponent<LSUnitComponent>();
             lsWorld.AddComponent<LSBulletComponent>();   // 投射物容器
             lsWorld.AddComponent<LSAreaComponent>();     // 区域效果容器（火圈等）
+            MapDefinition mapDef = MapLoader.Get(mapId);
+            InitCollision(lsWorld, mapDef);              // 碰撞矩阵（先建——组件 Id 序 = 快照一致性）
             for (int i = 0; i < unitInfos.Count; ++i)
             {
                 LockStepUnitInfo unitInfo = unitInfos[i];
@@ -35,12 +42,50 @@ namespace ET
                 Log.Info($"[Room] 玩家单位创建：PlayerId={unitInfo.PlayerId}");
             }
 
-            // Half B 测试桩：班图女战士（阶段1 技能轮播驱动；阶段2 换 AI）
-            // 不进 PlayerIds、不加 LSInputComponent（不是玩家：不吃输入、相机不跟）
+            // 按地图配置创建怪物（替代原硬编码测试桩；怪物不进 PlayerIds、不加 LSInputComponent）
+            if (mapDef?.MonsterAiIds != null)
+            {
+                for (int i = 0; i < mapDef.MonsterAiIds.Length; i++)
+                {
+                    CreateMonster(lsWorld, mapDef.MonsterAiIds[i], mapDef.MonsterSpawns[i], mapDef.MonsterForwards[i]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 碰撞矩阵初始化：读 MapTileLayoutCache（视图层已解析 tile_layout.json）→ LSCollisionComponent（进快照）。
+        /// 缓存未命中（地图没配 TileLayoutPath / json 缺失）= 空地无碰撞。
+        /// </summary>
+        private static void InitCollision(LSWorld lsWorld, MapDefinition mapDef)
+        {
+            if (mapDef?.TileLayoutPath == null) return;
+            TileLayoutData layout = MapTileLayoutCache.Get(mapDef.TileLayoutPath);
+            if (layout == null)
+            {
+                Log.Warning($"[Room] 瓦片布局未加载：{mapDef.TileLayoutPath}——空地无碰撞");
+                return;
+            }
+
+            LSCollisionComponent collision = lsWorld.AddComponent<LSCollisionComponent>();
+            collision.GridWidth = layout.gridWidth;
+            collision.GridHeight = layout.gridHeight;
+            collision.CellSize = (FP)layout.cellSizePx / 100;   // px → 单位（1 单位=100px）
+            collision.PassGrid = new byte[layout.gridWidth * layout.gridHeight];
+            for (int i = 0; i < collision.PassGrid.Length; i++)
+            {
+                // DNF [pass type] 原值直译：'2'=可走(1)，其余('0' 等)=阻挡(0)；串短于矩阵时尾部全阻挡
+                collision.PassGrid[i] = i < layout.passTypes.Length && layout.passTypes[i] == '2' ? (byte)1 : (byte)0;
+            }
+            Log.Info($"[Room] 碰撞矩阵就绪：{collision.GridWidth}x{collision.GridHeight} 格，cell={collision.CellSize}");
+        }
+
+        /// <summary>按地图配置创建怪物（原测试桩抽取参数化；组件挂载序 = LSUpdate 执行序，勿动）</summary>
+        private static void CreateMonster(LSWorld lsWorld, int monsterAiId, TSVector position, TSVector forward)
+        {
             LSUnitComponent lsUnitComponent = lsWorld.GetComponent<LSUnitComponent>();
             LSUnit monster = lsUnitComponent.AddChild<LSUnit>();
-            monster.Position = new TSVector(3, 0, 0);
-            monster.Forward = new TSVector(-1, 0, 0);   // 面向玩家出生点（0,0,0）——攻击盒采样/发弹方向都吃朝向
+            monster.Position = position;
+            monster.Forward = forward;   // 出生朝向（配置直译）——攻击盒采样/发弹方向都吃朝向
             monster.AddComponent<LSAnimComponent>().Play(AnimId.Idle);
 
             // 数值（HP）
@@ -63,9 +108,9 @@ namespace ET
             // 命中盒组件（受击盒采样 + 攻击判定帧驱动）
             monster.AddComponent<LSHitboxComponent>();
 
-            // 阶段2 AI（行为机 + 第六类内容配置驱动，见 02 文档 §10.4）
-            monster.AddComponent<LSMonsterAIComponent, int>(MonsterAiIds.BantuAmazones);
-            Log.Info($"[Monster] 测试桩怪物 unit{monster.Id} @ {monster.Position}（AI 驱动）");
+            // AI（行为机 + 第六类内容配置驱动，见 02 文档 §10.4）
+            monster.AddComponent<LSMonsterAIComponent, int>(monsterAiId);
+            Log.Info($"[Monster] unit{monster.Id} @ {monster.Position} AI={monsterAiId}（地图配置驱动）");
         }
 
         public static void Update(this Room self, OneFrameInputs oneFrameInputs)

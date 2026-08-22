@@ -96,6 +96,13 @@ namespace ET
 
             // 3) 位移（50ms 固定步长：Speed 单位/秒 × dt）
             self.Position += self.Direction * def.Speed * LSConstValue.UpdateInterval / 1000;
+
+            // 4) 撞墙：飞行后查网格碰撞，阻挡销毁弹（空地图无碰撞组件=不判）
+            LSCollisionComponent collision = world.GetComponent<LSCollisionComponent>();
+            if (collision != null && collision.IsBlocked(self.Position))
+            {
+                self.Dispose();
+            }
         }
 
         /// <summary>命中效果（owner=受击单位，source=施法者）</summary>

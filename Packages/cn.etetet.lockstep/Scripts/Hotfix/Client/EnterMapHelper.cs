@@ -26,12 +26,14 @@ namespace ET.Client
         {
             try
             {
-                G2C_Match g2CEnterMap = await fiber.Root.GetComponent<ClientSenderComponent>().Call(C2G_Match.Create()) as G2C_Match;
+                C2G_Match c2GMatch = C2G_Match.Create();
+                c2GMatch.MapId = MapIds.TrainingRoom;   // demo：唯一地图（选图 UI 以后做，03 文档 §8）
+                G2C_Match g2CEnterMap = await fiber.Root.GetComponent<ClientSenderComponent>().Call(c2GMatch) as G2C_Match;
             }
             catch (Exception e)
             {
                 Log.Error(e);
-            }	
+            }
         }
     }
 }

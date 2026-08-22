@@ -22,6 +22,9 @@ namespace ET
         [MemoryPackOrder(1)]
         public long Id { get; set; }
 
+        [MemoryPackOrder(2)]
+        public int MapId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -31,6 +34,7 @@ namespace ET
 
             this.RpcId = default;
             this.Id = default;
+            this.MapId = default;
 
             ObjectPool.Recycle(this);
         }
@@ -85,6 +89,9 @@ namespace ET
         [MemoryPackOrder(1)]
         public List<long> PlayerIds { get; set; } = new();
 
+        [MemoryPackOrder(2)]
+        public int MapId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -94,6 +101,7 @@ namespace ET
 
             this.RpcId = default;
             this.PlayerIds.Clear();
+            this.MapId = default;
 
             ObjectPool.Recycle(this);
         }
@@ -123,6 +131,9 @@ namespace ET
         [MemoryPackOrder(3)]
         public ActorId ActorId { get; set; }
 
+        [MemoryPackOrder(4)]
+        public int MapId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -134,6 +145,7 @@ namespace ET
             this.Error = default;
             this.Message = default;
             this.ActorId = default;
+            this.MapId = default;
 
             ObjectPool.Recycle(this);
         }
@@ -230,6 +242,9 @@ namespace ET
         [MemoryPackOrder(1)]
         public List<long> PlayerIds { get; set; } = new();
 
+        [MemoryPackOrder(2)]
+        public int MapId { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -239,6 +254,7 @@ namespace ET
 
             this.RpcId = default;
             this.PlayerIds.Clear();
+            this.MapId = default;
 
             ObjectPool.Recycle(this);
         }

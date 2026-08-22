@@ -61,8 +61,17 @@ namespace ET
             FP vy = input.VY * 6 * 50 / 1000;
             bool hasMovement = v2.LengthSquared() > FP.Zero || vy != FP.Zero;
             if (!hasMovement) return;
-            TSVector oldPos = unit.Position;
-            unit.Position += new TSVector(v2.x, vy, v2.y);
+            // 网格碰撞：被挡轴回退（贴墙滑动）；空地图无 LSCollisionComponent 直落
+            TSVector delta = new(v2.x, vy, v2.y);
+            LSCollisionComponent collision = unit.LSWorld().GetComponent<LSCollisionComponent>();
+            if (collision != null)
+            {
+                collision.TryMove(unit, delta);
+            }
+            else
+            {
+                unit.Position += delta;
+            }
             // 只有 A/D 才改变朝向，W/S/C/V 不改
             if (v2.x > FP.Zero)
             {

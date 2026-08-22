@@ -17,9 +17,11 @@ namespace ET.Server
 			// 发送消息给房间纤程，初始化
 			RoomManager2Room_Init roomManager2RoomInit = RoomManager2Room_Init.Create();
 			roomManager2RoomInit.PlayerIds.AddRange(request.PlayerIds);
+			roomManager2RoomInit.MapId = request.MapId;
 			await root.GetComponent<MessageSender>().Call(roomRootActorId, roomManager2RoomInit);
 			
 			response.ActorId = roomRootActorId;
+			response.MapId = request.MapId;   // 回带给匹配：NotifyMatchSuccess 提前告知客户端（瓦片懒加载早于 Room2C_Start）
 			await ETTask.CompletedTask;
 		}
 	}
