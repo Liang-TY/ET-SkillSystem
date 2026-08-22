@@ -10,7 +10,8 @@ namespace ET
     [MapId(MapIds.TrainingRoom)]
     public class TrainingRoom : MapDefinition
     {
-        private static readonly int[] MonsterAiIdsArr = { MonsterAiIds.BantuAmazones, MonsterAiIds.BantuAmazones };
+        // 属性名 MonsterAiIds 与静态类 MonsterAiIds 同名冲突（CS0236），用字面值 + 注释标注
+        private static readonly int[] MonsterAiIdsArr = { 1, 1 };   // MonsterAiIds.BantuAmazones
         private static readonly TSVector[] MonsterSpawnsArr = { new(3, 0, 0), new(5, 0, 0) };
         private static readonly TSVector[] MonsterForwardsArr = { new(-1, 0, 0), new(-1, 0, 0) };
 
