@@ -65,9 +65,17 @@ namespace ET.Client
                 return null;
             }
 
-            TileLayoutData layout = JsonUtility.FromJson<TileLayoutData>(asset.text);
-            if (layout?.tiles == null || layout.tiles.Length == 0
+            TileLayoutData layout = Newtonsoft.Json.JsonConvert.DeserializeObject<TileLayoutData>(asset.text);
+            if (layout == null || layout.tiles == null || layout.tiles.Length == 0
                 || layout.gridWidth <= 0 || layout.gridHeight <= 0)
+            {
+                // 诊断：打印实际加载的内容前 200 字符（排查 YooAsset 缓存旧版 json）
+                Log.Error($"[LSMapView] tile_layout.json 数据不完整：{jsonPath}——空地无碰撞\n" +
+                          $"  layout={layout?.ToString() ?? "null"} tiles={layout?.tiles?.Length ?? -1} " +
+                          $"gridW={layout?.gridWidth ?? -1} gridH={layout?.gridHeight ?? -1}\n" +
+                          $"  json前200字：{(asset.text != null && asset.text.Length > 0 ? asset.text.Substring(0, System.Math.Min(200, asset.text.Length)) : "(空)")}");
+                return null;
+            }
             {
                 Log.Error($"[LSMapView] tile_layout.json 数据不完整：{jsonPath}——空地无碰撞");
                 return null;

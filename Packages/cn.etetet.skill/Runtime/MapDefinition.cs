@@ -74,12 +74,14 @@ namespace ET
         /// <summary>总网格高（格）= 30</summary>
         public int gridHeight;
 
-        // ---- 以下为运行时派生（非 json 字段，JsonUtility 忽略 [NonSerialized]）----
-        /// <summary>每格像素（DNF 80，[img pos]；加载时填充）</summary>
-        [NonSerialized] public int cellSizePx;
+        // ---- 以下为运行时派生字段（json 里不存在，JsonUtility 反序列化后保持默认值，加载时 DeriveLayout 填充）----
+        // 注意：不加 [NonSerialized]——部分 Unity 版本该属性会干扰同类数组字段的反序列化（tiles 变 null 的坑）
 
-        /// <summary>压平碰撞矩阵（gridWidth*gridHeight，行优先；'2'=可走 其他=阻挡；加载时从各瓦片 passTypes 合成）</summary>
-        [NonSerialized] public string passTypes;
+        /// <summary>每格像素（DNF 80，[img pos]；DeriveLayout 填充）</summary>
+        public int cellSizePx;
+
+        /// <summary>压平碰撞矩阵（DeriveLayout 填充）</summary>
+        public string passTypes;
     }
 
     /// <summary>单个瓦片贴图引用（.til 直译：imgPath + imgFrame + 压平碰撞矩阵）</summary>
