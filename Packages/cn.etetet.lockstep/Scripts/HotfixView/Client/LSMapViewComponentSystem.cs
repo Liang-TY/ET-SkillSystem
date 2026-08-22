@@ -114,8 +114,8 @@ namespace ET.Client
             foreach (TileLayoutTile tile in layout.tiles)
             {
                 if (tile?.imgPath == null) continue;
-                string imgName = tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
-                    ? tile.imgPath[..^4] : tile.imgPath;
+                string imgName = (tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
+                    ? tile.imgPath[..^4] : tile.imgPath).ToLowerInvariant();   // 统一小写（YooAsset 路径大小写敏感）
                 if (atlases.ContainsKey(imgName)) continue;
                 TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>($"{dir}/{imgName}.img.bytes");
                 atlases[imgName] = imgAsset != null ? NpkImgParser.Parse(imgAsset.bytes) : null;
@@ -151,8 +151,8 @@ namespace ET.Client
             {
                 TileLayoutTile tile = layout.tiles[t];
                 if (tile?.imgPath == null) continue;
-                string imgName = tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
-                    ? tile.imgPath[..^4] : tile.imgPath;
+                string imgName = (tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
+                    ? tile.imgPath[..^4] : tile.imgPath).ToLowerInvariant();
                 if (!atlases.TryGetValue(imgName, out NpkSprite[] frames) || frames == null) continue;
                 if (tile.imgFrame < 0 || tile.imgFrame >= frames.Length) continue;
                 NpkSprite s = frames[tile.imgFrame];
