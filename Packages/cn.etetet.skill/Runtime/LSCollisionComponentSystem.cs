@@ -24,14 +24,13 @@ namespace ET
         public static bool IsBlocked(this LSCollisionComponent self, TSVector position)
         {
             if (self.PassGrid == null || self.GridWidth <= 0 || self.GridHeight <= 0) return false;
-            // 诊断：CellSize=0 会导致除零 → 全方向阻挡（一次性日志，不每帧刷）
-            if (self.CellSize <= FP.Zero)
-            {
-                Log.Error($"[Collision] CellSize={self.CellSize}（visualWidth 未写入？）——碰撞全阻挡");
-                return false;   // CellSize 无效时不阻挡（退化为无碰撞）
-            }
+            if (self.CellSize <= FP.Zero) return false;
             int col = (int)TSMath.Floor((position.x - self.OriginX) / self.CellSize);
-            int row = (int)TSMath.Floor((position.z - self.OriginZ) / self.CellSize);
+            // z 轴反转：网格 row 0 = 贴图顶部（远端墙），row max = 贴图底部（近端地板）
+            // 我们 z+ = 深入场景（视觉往上=远端），z- = 靠近摄像机（视觉往下=近端）
+            // 所以 z 越大 → row 越小（越靠近贴图顶部）
+            int rowFromBottom = (int)TSMath.Floor((position.z - self.OriginZ) / self.CellSize);
+            int row = self.GridHeight - 1 - rowFromBottom;
             if (col < 0 || col >= self.GridWidth || row < 0 || row >= self.GridHeight) return true;
             return self.PassGrid[row * self.GridWidth + col] == 0;
         }
