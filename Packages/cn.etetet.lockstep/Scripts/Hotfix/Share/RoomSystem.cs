@@ -71,6 +71,7 @@ namespace ET
             collision.GridHeight = layout.gridHeight;
             // CellSize 对齐贴图实际世界尺寸（不是 DNF 逻辑 80px——贴图分辨率 ≠ 网格逻辑像素）
             collision.CellSize = layout.visualWidth / collision.GridWidth;
+            Log.Info($"[Collision] visualWidth={layout.visualWidth} visualHeight={layout.visualHeight} → CellSize={collision.CellSize}");
             collision.PassGrid = new byte[layout.gridWidth * layout.gridHeight];
             for (int i = 0; i < collision.PassGrid.Length; i++)
             {

@@ -24,6 +24,12 @@ namespace ET
         public static bool IsBlocked(this LSCollisionComponent self, TSVector position)
         {
             if (self.PassGrid == null || self.GridWidth <= 0 || self.GridHeight <= 0) return false;
+            // 诊断：CellSize=0 会导致除零 → 全方向阻挡（一次性日志，不每帧刷）
+            if (self.CellSize <= FP.Zero)
+            {
+                Log.Error($"[Collision] CellSize={self.CellSize}（visualWidth 未写入？）——碰撞全阻挡");
+                return false;   // CellSize 无效时不阻挡（退化为无碰撞）
+            }
             int col = (int)TSMath.Floor((position.x - self.OriginX) / self.CellSize);
             int row = (int)TSMath.Floor((position.z - self.OriginZ) / self.CellSize);
             if (col < 0 || col >= self.GridWidth || row < 0 || row >= self.GridHeight) return true;
