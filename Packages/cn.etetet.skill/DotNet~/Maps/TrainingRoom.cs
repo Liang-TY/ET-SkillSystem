@@ -24,6 +24,6 @@ namespace ET
         public override TSVector PlayerSpawn => new(0, 0, 0);
 
         /// <summary>瓦片布局（翻译工具 til 子命令产物，Bundles/MapRes/aganzo_training/）</summary>
-        public override string TileLayoutPath => "Packages/cn.etetet.lockstep/Bundles/MapRes/aganzo_training/tile_layout.json";
+        public override string TileLayoutPath => "Packages/cn.etetet.lockstep/Bundles/MapRes/aganzo_training/aganzo_tile_layout.json";
     }
 }
