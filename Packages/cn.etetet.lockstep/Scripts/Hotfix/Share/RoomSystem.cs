@@ -95,6 +95,13 @@ namespace ET
 
             Log.Info($"[Room] 碰撞矩阵就绪：{collision.GridWidth}x{collision.GridHeight} 格，cell={collision.CellSize}，" +
                      $"origin=({collision.OriginX},{collision.OriginZ})，可行走行 {minRow}~{maxRow} 中线={centerRow}");
+            // 诊断：碰撞框的世界范围 vs 单位出生点（排查对齐）
+            FP leftX = collision.OriginX;
+            FP rightX = collision.OriginX + (FP)collision.GridWidth * collision.CellSize;
+            FP frontZ = collision.OriginZ;   // row=gridHeight-1（最前/最近摄像机）
+            FP backZ = collision.OriginZ + (FP)collision.GridHeight * collision.CellSize;  // row=0（最后）
+            Log.Info($"[Room] 碰撞世界范围：x[{leftX:F2}~{rightX:F2}] z[{frontZ:F2}~{backZ:F2}]，" +
+                     $"玩家出生(0,0,0)→格子(col={(int)((0-leftX)/collision.CellSize)},row={(int)((0-frontZ)/collision.CellSize)})");
         }
 
         /// <summary>按地图配置创建怪物（原测试桩抽取参数化；组件挂载序 = LSUpdate 执行序，勿动）</summary>
