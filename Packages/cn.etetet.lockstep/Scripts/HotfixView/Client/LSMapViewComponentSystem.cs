@@ -75,27 +75,27 @@ namespace ET.Client
             return layout;
         }
 
-        /// <summary>从各瓦片 passTypes 合成全图碰撞矩阵 + 填 cellSizePx</summary>
+        /// <summary>从各瓦片压平 passTypes 合成全图碰撞矩阵 + 填 cellSizePx</summary>
         private static void DeriveLayout(TileLayoutData layout)
         {
             layout.cellSizePx = CellSizePx;
             char[] flat = new char[layout.gridWidth * layout.gridHeight];
-            for (int i = 0; i < flat.Length; i++) flat[i] = '0';   // 默认阻挡
+            for (int i = 0; i < flat.Length; i++) flat[i] = '0';
 
             for (int t = 0; t < layout.tiles.Length; t++)
             {
                 TileLayoutTile tile = layout.tiles[t];
                 if (tile?.passTypes == null) continue;
                 int baseCol = t * TileColumns;
-                for (int row = 0; row < tile.passTypes.Length && row < layout.gridHeight; row++)
+                for (int row = 0; row < TileRows; row++)
                 {
-                    int[] rowData = tile.passTypes[row];
-                    if (rowData == null) continue;
-                    for (int col = 0; col < rowData.Length && col < TileColumns; col++)
+                    for (int col = 0; col < TileColumns; col++)
                     {
+                        int srcIdx = row * TileColumns + col;   // 压平索引
+                        if (srcIdx >= tile.passTypes.Length) break;
                         int gridCol = baseCol + col;
                         if (gridCol >= layout.gridWidth) break;
-                        flat[row * layout.gridWidth + gridCol] = rowData[col] == 2 ? '2' : '0';
+                        flat[row * layout.gridWidth + gridCol] = tile.passTypes[srcIdx] == 2 ? '2' : '0';
                     }
                 }
             }

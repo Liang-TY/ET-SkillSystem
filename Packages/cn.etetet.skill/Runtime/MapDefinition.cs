@@ -82,7 +82,7 @@ namespace ET
         [NonSerialized] public string passTypes;
     }
 
-    /// <summary>单个瓦片贴图引用（.til 直译：imgPath + imgFrame + 每瓦片独立的碰撞矩阵）</summary>
+    /// <summary>单个瓦片贴图引用（.til 直译：imgPath + imgFrame + 压平碰撞矩阵）</summary>
     [Serializable]
     public class TileLayoutTile
     {
@@ -92,8 +92,8 @@ namespace ET
         /// <summary>img 内帧号</summary>
         public int imgFrame;
 
-        /// <summary>该瓦片的碰撞矩阵（30 行 × 14 列；DNF 原值 0=阻挡 2=可走）</summary>
-        public int[][] passTypes;
+        /// <summary>该瓦片的碰撞矩阵压平（行优先 30 行×14 列=420 个 int；DNF 原值 0=阻挡 2=可走）</summary>
+        public int[] passTypes;
     }
 
     /// <summary>
