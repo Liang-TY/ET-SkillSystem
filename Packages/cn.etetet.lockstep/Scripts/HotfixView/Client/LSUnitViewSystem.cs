@@ -17,6 +17,18 @@ namespace ET.Client
 
         }
 
+        [EntitySystem]
+        private static void Destroy(this LSUnitView self)
+        {
+            // 切场景（Room 连根 Dispose）时销毁 GO——GO 挂在 DontDestroyOnLoad 的 /Global/Unit 下，
+            // 不销毁就每打一把泄漏一个角色克隆（怪物走差分移除没这问题，玩家活到拆场才漏）
+            if (self.GameObject != null)
+            {
+                UnityEngine.Object.Destroy(self.GameObject);
+                self.GameObject = null;
+            }
+        }
+
         [LSEntitySystem]
         private static void LSRollback(this LSUnitView self)
         {
