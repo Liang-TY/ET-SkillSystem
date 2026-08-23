@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SunshineForest
       objectReference: {fileID: 0}
+    - target: {fileID: 1972377153373868, guid: 52a35ca04bcd42342b797ef69416a3e1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4349288000698660, guid: 52a35ca04bcd42342b797ef69416a3e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

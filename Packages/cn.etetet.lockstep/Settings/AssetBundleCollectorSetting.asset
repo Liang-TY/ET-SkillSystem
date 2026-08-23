@@ -103,8 +103,8 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
     - GroupName: AnimRes
-      GroupDesc:
-      AssetTags:
+      GroupDesc: 
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Packages/cn.etetet.lockstep/Bundles/AnimRes
@@ -113,11 +113,11 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
     - GroupName: MapRes
-      GroupDesc:
-      AssetTags:
+      GroupDesc: 
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Packages/cn.etetet.lockstep/Bundles/MapRes
@@ -126,11 +126,11 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
     - GroupName: SkillContent
-      GroupDesc:
-      AssetTags:
+      GroupDesc: 
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Packages/cn.etetet.skill/Bundles/SkillContent
@@ -139,8 +139,8 @@ MonoBehaviour:
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
     - GroupName: YIUI
       GroupDesc: 
       AssetTags: 
