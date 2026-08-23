@@ -11,7 +11,7 @@ namespace ET
     /// </summary>
     [ComponentOf(typeof(LSWorld))]
     [MemoryPackable]
-    public partial class LSCollisionComponent : LSEntity, IAwake, ISerializeToEntity
+    public partial class LSCollisionComponent : LSEntity, IAwake, ILSUpdate, ISerializeToEntity
     {
         /// <summary>压平碰撞矩阵（gridWidth*gridHeight）：0=阻挡 1=可走；行优先自上而下（行 0 = 贴图顶部 z=+OriginZ，行增大向屏幕下方）</summary>
         [MemoryPackOrder(0)]

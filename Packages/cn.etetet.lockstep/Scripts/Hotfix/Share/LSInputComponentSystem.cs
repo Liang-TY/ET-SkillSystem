@@ -20,6 +20,20 @@ namespace ET
         {
             LSUnit unit = self.GetParent<LSUnit>();
 
+            // R（button=7）：调试回出生点（方案3——位移出界救援）。走输入帧保证两端确定性；
+            // 先于其他输入门禁（硬直/攻击中也生效——救援语义）
+            if (self.LSInput.Button == 7)
+            {
+                Room room = unit.LSWorld().GetParent<Room>();
+                MapDefinition mapDef = MapLoader.Get(room?.MapId ?? 0);
+                if (mapDef?.PlayerSpawn != null)
+                {
+                    unit.Position = mapDef.PlayerSpawn;
+                    Log.Info($"[Debug] 单位{unit.Id} R 键回出生点 {mapDef.PlayerSpawn}");
+                }
+                return;
+            }
+
             // 按下沿检测：Button 从 0→非0 才算一次输入（按住不连发；支持多按键值）
             bool pressed = self.LSInput.Button != 0 && self.LastButton == 0;
             self.LastButton = self.LSInput.Button;

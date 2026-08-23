@@ -128,7 +128,7 @@ namespace ET.Client
                 foreach (TileLayoutTile tile in layout.overlayTiles) await LoadAtlas(tile?.imgPath);
             }
 
-            NpkSprite FrameOf(TileLayoutTile tile)
+            NpkSprite? FrameOf(TileLayoutTile tile)
             {
                 if (tile?.imgPath == null) return null;
                 string imgName = (tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
@@ -141,18 +141,18 @@ namespace ET.Client
             int width = 0, baseHeight = 0, extHeight = 0;
             foreach (TileLayoutTile tile in layout.tiles)
             {
-                NpkSprite s = FrameOf(tile);
+                NpkSprite? s = FrameOf(tile);
                 if (s == null) continue;
-                width = System.Math.Max(width, s.FrameWidth);
-                baseHeight = System.Math.Max(baseHeight, s.FrameHeight);
+                width = System.Math.Max(width, s.Value.FrameWidth);
+                baseHeight = System.Math.Max(baseHeight, s.Value.FrameHeight);
             }
             if (layout.extendedTiles != null)
             {
                 foreach (TileLayoutTile tile in layout.extendedTiles)
                 {
-                    NpkSprite s = FrameOf(tile);
+                    NpkSprite? s = FrameOf(tile);
                     if (s == null) continue;
-                    extHeight = System.Math.Max(extHeight, s.FrameHeight);
+                    extHeight = System.Math.Max(extHeight, s.Value.FrameHeight);
                 }
             }
             if (width <= 0 || baseHeight <= 0)
@@ -174,8 +174,9 @@ namespace ET.Client
             int tileWidth = width / layout.tiles.Length;
             void Blit(TileLayoutTile tile, int t, int baseTop)
             {
-                NpkSprite s = FrameOf(tile);
-                if (s?.ArgbData == null) return;
+                NpkSprite? got = FrameOf(tile);
+                if (got?.ArgbData == null) return;
+                NpkSprite s = got.Value;
                 int offsetX = t * tileWidth;
                 for (int y = 0; y < s.Height; y++)
                 for (int x = 0; x < s.Width; x++)

@@ -63,7 +63,21 @@ namespace ET
                     }
                 }
             }
-            unit.Position = pos;
+            // 位移走碰撞子步进（方案1）：击退/击飞水平分量撞墙截断——DNF 推到墙边停；
+            // 撞墙清水平动量（贴墙下落），y 物理照常
+            LSCollisionComponent collision = unit.LSWorld()?.GetComponent<LSCollisionComponent>();
+            if (collision != null)
+            {
+                if (!collision.MoveByStep(unit, pos - unit.Position))
+                {
+                    v.x = FP.Zero;
+                    v.z = FP.Zero;
+                }
+            }
+            else
+            {
+                unit.Position = pos;
+            }
             self.Velocity = v;
         }
     }

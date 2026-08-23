@@ -8,13 +8,76 @@ namespace ET
     /// 放 ET.Skill（同 LSBulletSystem）：弹的撞墙检查在本程序集，而 ET.Skill 不得引用 ET.Hotfix（循环依赖）。
     /// </summary>
     [EntitySystemOf(typeof(LSCollisionComponent))]
+    [LSEntitySystemOf(typeof(LSCollisionComponent))]
     [FriendOf(typeof(LSCollisionComponent))]
-    [FriendOf(typeof(LSUnit))]   // TryMove 写 Position（ET0002）
+    [FriendOf(typeof(LSUnit))]   // TryMove/兜底 写 Position（ET0002）
     public static partial class LSCollisionComponentSystem
     {
         [EntitySystem]
         private static void Awake(this LSCollisionComponent self)
         {
+        }
+
+        [LSEntitySystem]
+        private static void LSUpdate(this LSCollisionComponent self)
+        {
+            // 出界兜底（方案2）：位移漏网导致单位落在阻挡格/网格外 → 螺旋搜索最近可走格拉回。
+            // 方案1（位移走碰撞）生效后本兜底正常静默；留着防未来新位移类型漏网 + 救旧存档卡死单位。
+            if (self.PassGrid == null) return;
+            LSUnitComponent unitComponent = self.GetParent<LSWorld>()?.GetComponent<LSUnitComponent>();
+            if (unitComponent == null) return;
+            foreach (var kv in unitComponent.Children)
+            {
+                LSUnit unit = (LSUnit)kv.Value;
+                if (!self.IsBlocked(unit.Position)) continue;
+                self.RelocateToNearestWalkable(unit);
+            }
+        }
+
+        /// <summary>螺旋扩圈找最近可走格，把单位传送到格心（保留高度 y；扫描顺序固定=两端确定）</summary>
+        private static void RelocateToNearestWalkable(this LSCollisionComponent self, LSUnit unit)
+        {
+            TSVector pos = unit.Position;
+            int col = CellClamp((int)TSMath.Floor((pos.x - self.OriginX) / self.CellSize), self.GridWidth);
+            int row = CellClamp((int)TSMath.Floor((self.OriginZ - pos.z) / self.CellSizeZ), self.GridHeight);
+            if (self.PassGrid[row * self.GridWidth + col] == 1)
+            {
+                // 夹取后的格子可走=只是出了网格外沿 → 直接进该格心
+                unit.Position = CellCenter(self, col, row, pos.y);
+                Log.Warning($"[Collision] 单位{unit.Id} 出界拉回：格({col},{row})");
+                return;
+            }
+
+            int maxR = System.Math.Max(self.GridWidth, self.GridHeight);
+            for (int r = 1; r < maxR; r++)
+            {
+                for (int dy = -r; dy <= r; dy++)
+                for (int dx = -r; dx <= r; dx++)
+                {
+                    if (System.Math.Abs(dx) != r && System.Math.Abs(dy) != r) continue;   // 只扫第 r 圈
+                    int c = col + dx, w = row + dy;
+                    if (c < 0 || c >= self.GridWidth || w < 0 || w >= self.GridHeight) continue;
+                    if (self.PassGrid[w * self.GridWidth + c] != 1) continue;
+                    unit.Position = CellCenter(self, c, w, pos.y);
+                    Log.Warning($"[Collision] 单位{unit.Id} 阻挡格拉回：({col},{row})→({c},{w})");
+                    return;
+                }
+            }
+        }
+
+        private static int CellClamp(int v, int max)
+        {
+            if (v < 0) return 0;
+            if (v >= max) return max - 1;
+            return v;
+        }
+
+        private static TSVector CellCenter(LSCollisionComponent self, int col, int row, FP y)
+        {
+            return new TSVector(
+                self.OriginX + ((FP)col + (FP)1 / 2) * self.CellSize,
+                y,
+                self.OriginZ - ((FP)row + (FP)1 / 2) * self.CellSizeZ);
         }
 
         /// <summary>
@@ -47,6 +110,41 @@ namespace ET
         {
             if (self.CellSize <= FP.Zero || self.CellSizeZ <= FP.Zero) return FP.One;
             return self.CellSizeZ / self.CellSize;
+        }
+
+        /// <summary>
+        /// 子步进位移（方案1，位移技能/击退用，DNF 同款"撞墙截断停住"）：
+        /// 把水平 delta 切成 ≤半格 的子步逐格走碰撞——步长大于格宽会隧穿薄墙（如冲刺一步 0.3 > 格 0.16）；
+        /// 第一步被挡即截断（不贴墙滑行——DNF 冲刺/击退是停在墙边）。y 分量不参与网格直加（网格忽略高度）。
+        /// 返回是否走完全程（false=中途撞墙——击退方据此清水平动量）。
+        /// </summary>
+        public static bool MoveByStep(this LSCollisionComponent self, LSUnit unit, TSVector delta)
+        {
+            if (self.CellSize <= FP.Zero || self.CellSizeZ <= FP.Zero)
+            {
+                unit.Position += delta;   // 尺寸非法=无碰撞语义（同 IsBlocked 守卫）
+                return true;
+            }
+
+            TSVector pos = unit.Position;
+            FP lenSqr = delta.x * delta.x + delta.z * delta.z;
+            if (lenSqr <= FP.Zero)
+            {
+                unit.Position = pos + new TSVector(FP.Zero, delta.y, FP.Zero);
+                return true;
+            }
+
+            FP maxStep = (self.CellSize < self.CellSizeZ ? self.CellSize : self.CellSizeZ) / 2;
+            int steps = (int)TSMath.Ceiling(TSMath.Sqrt(lenSqr) / maxStep);
+            TSVector sub = new(delta.x / steps, FP.Zero, delta.z / steps);
+            TSVector moved = pos;
+            for (int i = 0; i < steps; i++)
+            {
+                if (self.IsBlocked(moved + sub)) return false;   // 撞墙截断
+                moved += sub;
+            }
+            unit.Position = moved + new TSVector(FP.Zero, delta.y, FP.Zero);
+            return true;
         }
 
         /// <summary>
