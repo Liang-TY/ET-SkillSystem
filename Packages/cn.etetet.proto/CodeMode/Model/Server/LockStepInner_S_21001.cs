@@ -293,6 +293,102 @@ namespace ET
         }
     }
 
+    // ---------- 城镇（Gate→TownScene 纤程，21010 起，只能追加）----------
+    [MemoryPackable]
+    [Message(LockStepInner.G2Town_EnterPlayer)]
+    [ResponseType(nameof(Town2G_EnterPlayer))]
+    public partial class G2Town_EnterPlayer : MessageObject, IRequest
+    {
+        public static G2Town_EnterPlayer Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<G2Town_EnterPlayer>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public long PlayerId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.PlayerId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(LockStepInner.Town2G_EnterPlayer)]
+    public partial class Town2G_EnterPlayer : MessageObject, IResponse
+    {
+        public static Town2G_EnterPlayer Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<Town2G_EnterPlayer>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        [MemoryPackOrder(3)]
+        public List<TownPlayerInfo> Members { get; set; } = new();
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Members.Clear();
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 玩家离开城镇（匹配进战斗时 Gate 通知；fire-and-forget）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepInner.G2Town_LeavePlayer)]
+    public partial class G2Town_LeavePlayer : MessageObject, IMessage
+    {
+        public static G2Town_LeavePlayer Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<G2Town_LeavePlayer>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class LockStepInner
     {
         public const ushort G2Match_Match = 21002;
@@ -303,5 +399,8 @@ namespace ET
         public const ushort Room2G_Reconnect = 21007;
         public const ushort RoomManager2Room_Init = 21008;
         public const ushort Room2RoomManager_Init = 21009;
+        public const ushort G2Town_EnterPlayer = 21010;
+        public const ushort Town2G_EnterPlayer = 21011;
+        public const ushort G2Town_LeavePlayer = 21012;
     }
 }

@@ -71,3 +71,26 @@ message Room2RoomManager_Init // IResponse
 	int32 Error = 2;
 	string Message = 3;
 }
+
+// ---------- 城镇（Gate→TownScene 纤程，21010 起，只能追加）----------
+
+// ResponseType Town2G_EnterPlayer
+message G2Town_EnterPlayer // IRequest
+{
+	int32 RpcId = 1;
+	int64 PlayerId = 2;
+}
+
+message Town2G_EnterPlayer // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated TownPlayerInfo Members = 4;
+}
+
+/// 玩家离开城镇（匹配进战斗时 Gate 通知；fire-and-forget）
+message G2Town_LeavePlayer // IMessage
+{
+	int64 PlayerId = 1;
+}

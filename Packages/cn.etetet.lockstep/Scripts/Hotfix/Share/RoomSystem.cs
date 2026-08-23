@@ -43,7 +43,7 @@ namespace ET
             }
 
             // 按地图配置创建怪物（替代原硬编码测试桩；怪物不进 PlayerIds、不加 LSInputComponent）
-            if (mapDef?.MonsterAiIds != null && false)   // TODO: 碰撞调试，暂时禁用怪物
+            if (mapDef?.MonsterAiIds != null)
             {
                 for (int i = 0; i < mapDef.MonsterAiIds.Length; i++)
                 {

@@ -24,6 +24,11 @@ namespace ET.Server
                 int sceneType = SceneTypeSingleton.Instance.GetSceneType(startConfig.SceneType);
                 await FiberManager.Instance.Create(SchedulerType.ThreadPool, startConfig.Id, startConfig.Zone, sceneType, startConfig.Name);
             }
+
+            // TownScene 常驻纤程（代码驱动创建不走 StartSceneConfig——Excel 导表流程重；启动即建、永不销毁，03 文档 §2.1）
+            Fiber fiber = root.Fiber();
+            int townFiberId = await FiberManager.Instance.Create(SchedulerType.ThreadPool, fiber.Zone, SceneType.Town, "Town");
+            TownSceneHolder.TownActorId = new ActorId(fiber.Process, townFiberId);
         }
     }
 }

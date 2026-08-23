@@ -7,8 +7,9 @@ namespace ET
         public const int Match = PackageType.LockStep * 1000 + 3;
         public const int Map = PackageType.LockStep * 1000 + 4;
         public const int LockStepServer = PackageType.LockStep * 1000 + 5;
-        
+        public const int Town = PackageType.LockStep * 1000 + 6;   // 城镇常驻纤程（03 文档 §2.1）
+
         public const int LockStepClient = PackageType.LockStep * 1000 + 21;
-        
+
     }
 }

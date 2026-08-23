@@ -564,6 +564,306 @@ namespace ET
         }
     }
 
+    // ---------- 城镇系统（03 文档 §2/§5）----------
+    // 注意：opcode 按消息顺序分配，只能追加在文件末尾，不能在中间插入（11020 起）
+    [MemoryPackable]
+    [Message(LockStepOuter.C2G_EnterTown)]
+    [ResponseType(nameof(T2C_EnterTownConfirm))]
+    public partial class C2G_EnterTown : MessageObject, ISessionRequest
+    {
+        public static C2G_EnterTown Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<C2G_EnterTown>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(LockStepOuter.T2C_EnterTownConfirm)]
+    public partial class T2C_EnterTownConfirm : MessageObject, ISessionResponse
+    {
+        public static T2C_EnterTownConfirm Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<T2C_EnterTownConfirm>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+
+        /// <summary>
+        /// 已在城镇的成员（远端角色渲染用，单人 demo 为空）
+        /// </summary>
+        [MemoryPackOrder(3)]
+        public List<TownPlayerInfo> Members { get; set; } = new();
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Members.Clear();
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 城镇成员信息
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepOuter.TownPlayerInfo)]
+    public partial class TownPlayerInfo : MessageObject
+    {
+        public static TownPlayerInfo Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<TownPlayerInfo>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public TrueSync.TSVector Position { get; set; }
+
+        [MemoryPackOrder(2)]
+        public int CharacterId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+            this.Position = default;
+            this.CharacterId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 有玩家进城镇（广播其他成员）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepOuter.T2C_PlayerEnterTown)]
+    public partial class T2C_PlayerEnterTown : MessageObject, IMessage
+    {
+        public static T2C_PlayerEnterTown Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<T2C_PlayerEnterTown>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public TrueSync.TSVector Position { get; set; }
+
+        [MemoryPackOrder(2)]
+        public int CharacterId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+            this.Position = default;
+            this.CharacterId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 有玩家离开城镇（广播其他成员）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepOuter.T2C_PlayerLeaveTown)]
+    public partial class T2C_PlayerLeaveTown : MessageObject, IMessage
+    {
+        public static T2C_PlayerLeaveTown Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<T2C_PlayerLeaveTown>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 城镇位置上报（客户端→TownScene 纯转发；同步开关默认关，03 文档 §2.2）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepOuter.C2T_PositionUpdate)]
+    public partial class C2T_PositionUpdate : MessageObject, ITownMessage
+    {
+        public static C2T_PositionUpdate Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<C2T_PositionUpdate>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public TrueSync.TSVector Position { get; set; }
+
+        [MemoryPackOrder(2)]
+        public TrueSync.TSVector Forward { get; set; }
+
+        [MemoryPackOrder(3)]
+        public bool IsMoving { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+            this.Position = default;
+            this.Forward = default;
+            this.IsMoving = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 城镇位置转发（TownScene→其他成员）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepOuter.T2C_PositionBroadcast)]
+    public partial class T2C_PositionBroadcast : MessageObject, IMessage
+    {
+        public static T2C_PositionBroadcast Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<T2C_PositionBroadcast>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        [MemoryPackOrder(1)]
+        public TrueSync.TSVector Position { get; set; }
+
+        [MemoryPackOrder(2)]
+        public TrueSync.TSVector Forward { get; set; }
+
+        [MemoryPackOrder(3)]
+        public bool IsMoving { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+            this.Position = default;
+            this.Forward = default;
+            this.IsMoving = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 战斗结束（RoomRoot 广播；纤程等玩家走完才销毁，03 文档 §1.4）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepOuter.Room2C_BattleEnd)]
+    public partial class Room2C_BattleEnd : MessageObject, IMessage
+    {
+        public static Room2C_BattleEnd Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<Room2C_BattleEnd>(isFromPool);
+        }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    /// <summary>
+    /// 客户端上报怪物全灭（战斗结束触发）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepOuter.C2Room_BattleClear)]
+    public partial class C2Room_BattleClear : MessageObject, IRoomMessage
+    {
+        public static C2Room_BattleClear Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<C2Room_BattleClear>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class LockStepOuter
     {
         public const ushort C2G_Match = 11002;
@@ -584,5 +884,14 @@ namespace ET
         public const ushort G2C_Test = 11017;
         public const ushort C2M_TransferMap = 11018;
         public const ushort M2C_TransferMap = 11019;
+        public const ushort C2G_EnterTown = 11020;
+        public const ushort T2C_EnterTownConfirm = 11021;
+        public const ushort TownPlayerInfo = 11022;
+        public const ushort T2C_PlayerEnterTown = 11023;
+        public const ushort T2C_PlayerLeaveTown = 11024;
+        public const ushort C2T_PositionUpdate = 11025;
+        public const ushort T2C_PositionBroadcast = 11026;
+        public const ushort Room2C_BattleEnd = 11027;
+        public const ushort C2Room_BattleClear = 11028;
     }
 }

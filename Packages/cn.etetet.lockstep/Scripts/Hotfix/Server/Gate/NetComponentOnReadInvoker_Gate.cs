@@ -39,6 +39,18 @@ namespace ET.Server
                     root.GetComponent<MessageSender>().Send(roomActorId, actorRoom);
                     break;
                 }
+                case ITownMessage actorTown:   // 城镇消息：按 PlayerTownComponent 路由到 TownScene 纤程（03 文档 §1.2）
+                {
+                    Player player = session.GetComponent<SessionPlayerComponent>().Player;
+                    PlayerTownComponent townComponent = player.GetComponent<PlayerTownComponent>();
+                    if (townComponent == null)
+                    {
+                        throw new Exception($"player {player.Id} 不在城镇却发了城镇消息: {message.GetType().Name}");
+                    }
+                    actorTown.PlayerId = player.Id;
+                    root.GetComponent<MessageSender>().Send(townComponent.TownActorId, actorTown);
+                    break;
+                }
                 case ILocationMessage actorLocationMessage:
                 {
                     long unitId = session.GetComponent<SessionPlayerComponent>().Player.Id;

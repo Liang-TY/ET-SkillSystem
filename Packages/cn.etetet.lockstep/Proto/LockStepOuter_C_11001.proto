@@ -123,3 +123,72 @@ message M2C_TransferMap // ILocationResponse
 	int32 Error = 2;
 	string Message = 3;
 }
+
+// ---------- 城镇系统（03 文档 §2/§5）----------
+// 注意：opcode 按消息顺序分配，只能追加在文件末尾，不能在中间插入（11020 起）
+
+// ResponseType T2C_EnterTownConfirm
+message C2G_EnterTown // ISessionRequest
+{
+	int32 RpcId = 1;
+}
+
+message T2C_EnterTownConfirm // ISessionResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	/// 已在城镇的成员（远端角色渲染用，单人 demo 为空）
+	repeated TownPlayerInfo Members = 4;
+}
+
+/// 城镇成员信息
+message TownPlayerInfo
+{
+	int64 PlayerId = 1;
+	TrueSync.TSVector Position = 2;
+	int32 CharacterId = 3;
+}
+
+/// 有玩家进城镇（广播其他成员）
+message T2C_PlayerEnterTown // IMessage
+{
+	int64 PlayerId = 1;
+	TrueSync.TSVector Position = 2;
+	int32 CharacterId = 3;
+}
+
+/// 有玩家离开城镇（广播其他成员）
+message T2C_PlayerLeaveTown // IMessage
+{
+	int64 PlayerId = 1;
+}
+
+/// 城镇位置上报（客户端→TownScene 纯转发；同步开关默认关，03 文档 §2.2）
+message C2T_PositionUpdate // ITownMessage
+{
+	int64 PlayerId = 1;
+	TrueSync.TSVector Position = 2;
+	TrueSync.TSVector Forward = 3;
+	bool IsMoving = 4;
+}
+
+/// 城镇位置转发（TownScene→其他成员）
+message T2C_PositionBroadcast // IMessage
+{
+	int64 PlayerId = 1;
+	TrueSync.TSVector Position = 2;
+	TrueSync.TSVector Forward = 3;
+	bool IsMoving = 4;
+}
+
+/// 战斗结束（RoomRoot 广播；纤程等玩家走完才销毁，03 文档 §1.4）
+message Room2C_BattleEnd // IMessage
+{
+}
+
+/// 客户端上报怪物全灭（战斗结束触发）
+message C2Room_BattleClear // IRoomMessage
+{
+	int64 PlayerId = 1;
+}
