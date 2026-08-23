@@ -83,17 +83,10 @@ namespace ET
             // → 网格 col=0（左边缘）的世界 x = -gridWidth×CellSize/2
             collision.OriginX = -(FP)collision.GridWidth * collision.CellSize / 2;
 
-            // z 对齐：找可行走带的行范围中线 → 让 z=0 落在行走带中间（单位战斗的 z 活动区间）
-            int minRow = -1, maxRow = -1;
-            for (int row = 0; row < collision.GridHeight && minRow < 0; row++)
-                for (int col = 0; col < collision.GridWidth; col++)
-                    if (collision.PassGrid[row * collision.GridWidth + col] == 1) { minRow = row; break; }
-            for (int row = collision.GridHeight - 1; row >= 0 && maxRow < 0; row--)
-                for (int col = 0; col < collision.GridWidth; col++)
-                    if (collision.PassGrid[row * collision.GridWidth + col] == 1) { maxRow = row; break; }
-            int centerRow = minRow < 0 ? collision.GridHeight / 2 : (minRow + maxRow) / 2;
-            // row = (z - OriginZ) / CellSize → z=0 时 row=centerRow → OriginZ = -centerRow × CellSize
-            collision.OriginZ = -(FP)centerRow * collision.CellSize;
+            // z 对齐：游戏 z = 屏幕 Y（上下），贴图 row 0 = 顶部
+            // 贴图 Sprite 中心对齐世界原点 → row 0 在 z = +gridHeight/2 × CellSize（贴图顶部）
+            // row = (OriginZ - z) / CellSize → z=0 时 row = gridHeight/2（贴图中间）✓
+            collision.OriginZ = (FP)collision.GridHeight * collision.CellSize / 2;
 
             Log.Info($"[Room] 碰撞矩阵就绪：{collision.GridWidth}x{collision.GridHeight} 格，cell={collision.CellSize}，" +
                      $"origin=({collision.OriginX},{collision.OriginZ})，可行走行 {minRow}~{maxRow} 中线={centerRow}");

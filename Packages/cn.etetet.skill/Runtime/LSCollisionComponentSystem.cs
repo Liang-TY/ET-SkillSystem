@@ -25,20 +25,17 @@ namespace ET
         {
             if (self.PassGrid == null || self.GridWidth <= 0 || self.GridHeight <= 0) return false;
             if (self.CellSize <= FP.Zero) return false;
-            // X 轴：网格碰撞（左右边界精确到格子）
+            // X 轴：世界 x → 格子列（左右边界）
             int col = (int)TSMath.Floor((position.x - self.OriginX) / self.CellSize);
             if (col < 0 || col >= self.GridWidth) return true;
 
-            // Z 轴：取可行走带中线的格子做 X 碰撞查询（行固定，不做逐行映射——
-            // 贴图纵向 ≠ 世界纵深，摄像机透视使两者的映射非线性，逐行映射对不齐）
-            int centerRow = self.GridHeight / 2;
-            // 检查该列在中心行是否可走（X 方向的墙检测）
-            if (self.PassGrid[centerRow * self.GridWidth + col] == 0) return true;
+            // Z 轴（= 屏幕 Y，上下移动）：反转行映射
+            // 游戏 z 就是屏幕竖直方向（W=z+往上，S=z-往下），贴图 row 0=顶部
+            // → z 越大（往上）row 越小（靠近顶部墙），z 越小（往下）row 越大（靠近底部地板）
+            int row = (int)TSMath.Floor((self.OriginZ - position.z) / self.CellSize);
+            if (row < 0 || row >= self.GridHeight) return true;
 
-            // Z 轴：固定范围钳制（可行走带的 z 世界范围，不查网格）
-            FP zMin = self.OriginZ;                                        // 近端（最靠近摄像机）
-            FP zMax = self.OriginZ + (FP)self.GridHeight * self.CellSize;  // 远端（最远）
-            return position.z < zMin || position.z > zMax;
+            return self.PassGrid[row * self.GridWidth + col] == 0;
         }
 
         /// <summary>
