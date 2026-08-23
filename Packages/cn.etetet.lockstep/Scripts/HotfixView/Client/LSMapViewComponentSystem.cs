@@ -11,11 +11,15 @@ namespace ET.Client
     /// </summary>
     [EntitySystemOf(typeof(LSMapViewComponent))]
     [FriendOf(typeof(LSMapViewComponent))]
+    [FriendOf(typeof(LSCollisionComponent))]   // 调试叠图读 PassGrid/CellSize/Origin（ET0002）
     public static partial class LSMapViewComponentSystem
     {
         private const int TileColumns = 14;   // DNF .til 固定 14 列
         private const int TileRows = 30;      // DNF .til 固定 30 行
         private const int CellSizePx = 80;    // DNF [img pos] 每格像素
+
+        /// <summary>碰撞调试叠图开关（03 文档 §9）——碰撞对齐调通后置 false 即摘掉</summary>
+        private const bool EnableCollisionDebugOverlay = true;
 
         [EntitySystem]
         private static void Awake(this LSMapViewComponent self)
@@ -27,9 +31,18 @@ namespace ET.Client
         {
             if (self.Ground != null)
             {
+                // 运行时创建的 Sprite/Texture 是独立 UnityEngine.Object，GO 销毁不带走（顺手补：此前每进图泄漏 896x560 纹理）
+                SpriteRenderer groundRenderer = self.Ground.GetComponent<SpriteRenderer>();
+                Sprite groundSprite = groundRenderer != null ? groundRenderer.sprite : null;
                 UnityEngine.Object.Destroy(self.Ground);
+                if (groundSprite != null)
+                {
+                    UnityEngine.Object.Destroy(groundSprite.texture);
+                    UnityEngine.Object.Destroy(groundSprite);
+                }
                 self.Ground = null;
             }
+            DestroyCollisionDebugOverlay(self);
         }
 
         public static async ETTask InitAsync(this LSMapViewComponent self)
@@ -193,6 +206,81 @@ namespace ET.Client
             ground.transform.localPosition = new Vector3(0f, 0f, 0f);
             self.Ground = ground;
             Log.Info($"[LSMapView] 地面就绪：{width}x{height}px，{layout.tiles.Length} 瓦片，碰撞 {layout.gridWidth}x{layout.gridHeight} 格");
+        }
+
+        /// <summary>
+        /// 碰撞调试叠图（03 文档 §9）：1px=1 格（绿=可走 红=阻挡，半透明），数据取运行时
+        /// LSCollisionComponent.PassGrid——IsBlocked 实查的那份（源自战斗地图 .til 通行配置），非 json 原始数据。
+        /// 摆放/尺寸按碰撞系统自身映射（Origin/CellSize）而非贴图矩形：碰撞与贴图没对齐时
+        /// 叠图不盖满/偏移会直接显形——这正是本工具的诊断价值。
+        /// 须在 room.Init（InitCollision）之后调用（LSSceneInitFinish 钩子）——BuildTileTexture 时碰撞组件还没建。
+        /// </summary>
+        public static void BuildCollisionDebugOverlay(this LSMapViewComponent self)
+        {
+            if (!EnableCollisionDebugOverlay) return;
+
+            DestroyCollisionDebugOverlay(self);   // 幂等：二次调用先清旧的（public 扩展方法防未来加调用点）
+
+            LSCollisionComponent collision = self.GetParent<Room>().LSWorld?.GetComponent<LSCollisionComponent>();
+            if (collision?.PassGrid == null || collision.GridWidth <= 0 || collision.GridHeight <= 0
+                || collision.CellSize <= FP.Zero) return;
+
+            int w = collision.GridWidth, h = collision.GridHeight;
+
+            // 1px = 1 格。Y 翻转：网格 row 0 在世界顶部（OriginZ 侧），Unity 纹理 y=0 在底部
+            Texture2D texture = new(w, h, TextureFormat.RGBA32, false);
+            texture.filterMode = FilterMode.Point;   // Point 采样防绿红渗色
+            texture.wrapMode = TextureWrapMode.Clamp;
+            Color32 walk = new(0, 255, 0, 128);
+            Color32 block = new(255, 0, 0, 128);
+            Color32[] buf = new Color32[w * h];
+            int walkable = 0;
+            for (int row = 0; row < h; row++)
+            for (int col = 0; col < w; col++)
+            {
+                bool pass = collision.PassGrid[row * w + col] == 1;
+                if (pass) walkable++;
+                buf[(h - 1 - row) * w + col] = pass ? walk : block;
+            }
+            texture.SetPixels32(buf);
+            texture.Apply(false, makeNoLongerReadable: true);
+
+            // 世界矩形 = 碰撞自己的 [OriginX, OriginX+w*CellSize] × [OriginZ-h*CellSize, OriginZ]
+            // pixelsPerUnit = 1/CellSize → w px 恰好铺成 w*CellSize 世界宽，与 IsBlocked 的格子映射逐格对应
+            FP worldW = (FP)w * collision.CellSize;
+            FP worldH = (FP)h * collision.CellSize;
+            GameObject overlay = new("CollisionDebugOverlay");
+            GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
+            overlay.transform.SetParent(globalComponent.Unit, false);
+            SpriteRenderer renderer = overlay.AddComponent<SpriteRenderer>();
+            renderer.sortingOrder = -999;   // 地面(-1000)之上、单位(10+)之下
+            renderer.sprite = Sprite.Create(texture, new Rect(0, 0, w, h),
+                new Vector2(0.5f, 0.5f), 1f / (float)collision.CellSize);
+            overlay.transform.localPosition = new Vector3(
+                (float)(collision.OriginX + worldW / 2), (float)(collision.OriginZ - worldH / 2), 0f);
+
+            self.CollisionDebugOverlay = overlay;
+            self.CollisionDebugTexture = texture;
+            Log.Info($"[LSMapView] 碰撞调试叠图：{w}x{h} 格，世界 {worldW}x{worldH}，cell={collision.CellSize}，" +
+                     $"origin=({collision.OriginX},{collision.OriginZ})，可走 {walkable}/{w * h}");
+        }
+
+        /// <summary>销毁叠图三件套（GO + 运行时 Sprite + 纹理——三者都是独立 UnityEngine.Object，互不连带）</summary>
+        private static void DestroyCollisionDebugOverlay(LSMapViewComponent self)
+        {
+            if (self.CollisionDebugOverlay != null)
+            {
+                SpriteRenderer renderer = self.CollisionDebugOverlay.GetComponent<SpriteRenderer>();
+                Sprite sprite = renderer != null ? renderer.sprite : null;
+                UnityEngine.Object.Destroy(self.CollisionDebugOverlay);
+                if (sprite != null) UnityEngine.Object.Destroy(sprite);
+                self.CollisionDebugOverlay = null;
+            }
+            if (self.CollisionDebugTexture != null)
+            {
+                UnityEngine.Object.Destroy(self.CollisionDebugTexture);
+                self.CollisionDebugTexture = null;
+            }
         }
     }
 }

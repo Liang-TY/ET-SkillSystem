@@ -8,6 +8,9 @@ namespace ET.Client
             Room room = clientScene.GetComponent<Room>();
             
             await room.AddComponent<LSUnitViewComponent>().InitAsync();
+
+            // 碰撞调试叠图（须在 room.Init 建好 LSCollisionComponent 之后——本事件恰在其后，03 文档 §9）
+            room.GetComponent<LSMapViewComponent>()?.BuildCollisionDebugOverlay();
             
             room.AddComponent<LSCameraComponent>();
 

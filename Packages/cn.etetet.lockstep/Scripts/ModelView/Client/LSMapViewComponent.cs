@@ -13,5 +13,11 @@ namespace ET.Client
     {
         /// <summary>地面渲染 GO（Destroy 时销毁——Room 销毁连根拔，03 文档 §1.7）</summary>
         public GameObject Ground;
+
+        /// <summary>碰撞调试叠图 GO（03 文档 §9 调试工具，Destroy 时销毁）</summary>
+        public GameObject CollisionDebugOverlay;
+
+        /// <summary>碰撞调试叠图纹理（运行时创建须显式销毁——GO 销毁不带走纹理）</summary>
+        public Texture2D CollisionDebugTexture;
     }
 }
