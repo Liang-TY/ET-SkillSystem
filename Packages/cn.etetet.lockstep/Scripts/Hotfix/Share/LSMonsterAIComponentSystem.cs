@@ -32,6 +32,17 @@ namespace ET
             if (def == null) return;
 
             LSUnit unit = self.GetParent<LSUnit>();
+
+            // 死亡判定：HP≤0 → 移除（此前掉血无人判死=血量负数不死的根修；
+            // 子弹同款"自身系统内 Dispose"模式。DNF 死亡动画后消失——demo 直接移除，动画后续接）
+            LSNumericComponent monsterNum = unit.GetComponent<LSNumericComponent>();
+            if (monsterNum != null && monsterNum.Get(NumericType.Hp) <= FP.Zero)
+            {
+                Log.Info($"[Monster] unit{unit.Id} 死亡");
+                unit.Dispose();
+                return;
+            }
+
             LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
 
             // 0) 硬直/倒地中 → 受击系统接管（=行为机"打断"），AI 完全静默

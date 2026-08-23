@@ -11,6 +11,16 @@ namespace ET.Server
         {
             Player player = session.GetComponent<SessionPlayerComponent>().Player;
 
+            // 战斗→城镇的路由切换（03 文档 §1.4）：通知 RoomRoot 移除成员（全员走完纤程自毁）→ 摘 PlayerRoomComponent
+            PlayerRoomComponent roomComponent = player.GetComponent<PlayerRoomComponent>();
+            if (roomComponent != null)
+            {
+                G2Room_LeavePlayer g2RoomLeave = G2Room_LeavePlayer.Create();
+                g2RoomLeave.PlayerId = player.Id;
+                session.Root().GetComponent<MessageSender>().Send(roomComponent.RoomActorId, g2RoomLeave);   // Send 是 void（投递即返回）
+                player.RemoveComponent<PlayerRoomComponent>();
+            }
+
             PlayerTownComponent townComponent = player.GetComponent<PlayerTownComponent>();
             if (townComponent == null)
             {

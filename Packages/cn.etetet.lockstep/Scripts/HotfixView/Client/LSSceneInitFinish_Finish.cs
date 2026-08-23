@@ -17,6 +17,7 @@ namespace ET.Client
             if (!room.IsReplay)
             {
                 room.AddComponent<LSOperaComponent>();
+                room.AddComponent<LSBattleWatcherComponent>();   // 怪物全灭监测（阶段C：上报 BattleClear）
             }
 
             await UIHelper.Remove(clientScene, UIType.UILSLobby);

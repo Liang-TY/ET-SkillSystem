@@ -17,6 +17,10 @@ namespace ET.Server
         private static void Update(this LSServerUpdater self)
         {
             Room room = self.GetParent<Room>();
+
+            // 战斗结束（怪物全灭广播 BattleEnd 后）：停止帧收集/广播——客户端收场动画期间静止（03 文档 §1.4）
+            if (room.BattleEnded) return;
+
             long timeNow = TimeInfo.Instance.ServerFrameTime();
 
 

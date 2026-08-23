@@ -50,7 +50,10 @@ namespace ET
         }
 
         public bool IsReplay { get; set; }
-        
+
         public int SpeedMultiply { get; set; }
+
+        // 战斗已结束（怪物全灭）：LSServerUpdater 据此停止帧收集/广播；RoomRoot 纤程保留等玩家走完（03 文档 §1.4）
+        public bool BattleEnded { get; set; }
     }
 }

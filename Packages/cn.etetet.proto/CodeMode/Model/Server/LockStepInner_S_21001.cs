@@ -389,6 +389,34 @@ namespace ET
         }
     }
 
+    /// <summary>
+    /// 玩家离开战斗房间（回城镇时 Gate 通知）：移除房间成员；全员走完 RoomRoot 纤程自毁（03 文档 §1.4）
+    /// </summary>
+    [MemoryPackable]
+    [Message(LockStepInner.G2Room_LeavePlayer)]
+    public partial class G2Room_LeavePlayer : MessageObject, IMessage
+    {
+        public static G2Room_LeavePlayer Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<G2Room_LeavePlayer>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public long PlayerId { get; set; }
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.PlayerId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static class LockStepInner
     {
         public const ushort G2Match_Match = 21002;
@@ -402,5 +430,6 @@ namespace ET
         public const ushort G2Town_EnterPlayer = 21010;
         public const ushort Town2G_EnterPlayer = 21011;
         public const ushort G2Town_LeavePlayer = 21012;
+        public const ushort G2Room_LeavePlayer = 21013;
     }
 }

@@ -94,3 +94,9 @@ message G2Town_LeavePlayer // IMessage
 {
 	int64 PlayerId = 1;
 }
+
+/// 玩家离开战斗房间（回城镇时 Gate 通知）：移除房间成员；全员走完 RoomRoot 纤程自毁（03 文档 §1.4）
+message G2Room_LeavePlayer // IMessage
+{
+	int64 PlayerId = 1;
+}
