@@ -1,3 +1,4 @@
+using TrueSync;
 using UnityEngine;
 
 namespace ET.Client
@@ -100,6 +101,13 @@ namespace ET.Client
         {
             AnimClipData clip = AnimConfigRegistry.Get(self.AnimId);
             if (clip?.frames == null || clip.frames.Length == 0) return;
+
+            // 动画切换（Idle↔Walk）帧数不同——归零防越界（崩溃点：旧 FrameIndex 超新 clip 长度）
+            if (self.AnimId != self.LastAnimId)
+            {
+                self.FrameIndex = 0;
+                self.Timer = 0;
+            }
 
             self.Timer += dt;
             bool frameChanged = false;

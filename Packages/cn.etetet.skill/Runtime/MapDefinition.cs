@@ -68,6 +68,14 @@ namespace ET
         /// <summary>瓦片贴图条目（按水平拼接顺序）</summary>
         public TileLayoutTile[] tiles;
 
+        /// <summary>扩展瓦片条目（城镇专属 .map [extended tile]：与 tiles 一一对应，拼在主瓦片下方；
+        /// 10 行×14 列 pass 矩阵。demo 阶段仅参与渲染不进碰撞。战斗 json 无此段 = null）</summary>
+        public TileLayoutTile[] extendedTiles;
+
+        /// <summary>覆盖层瓦片（城镇专属：[animation] 的整列贴图带直译，当前=wall00 墙带 hmwall.img——
+        /// 与主瓦片同帧域(480)、叠画在主瓦片之上填 y206-340 缺口。纯装饰无 pass，不进碰撞）</summary>
+        public TileLayoutTile[] overlayTiles;
+
         /// <summary>总网格宽（格）= tiles.Length × 14</summary>
         public int gridWidth;
 

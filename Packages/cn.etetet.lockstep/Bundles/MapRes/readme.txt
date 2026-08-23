@@ -13,3 +13,8 @@ tile_layout.json 字段约定（运行时消费方 LSMapViewComponentSystem / Ro
   passTypes              压平 pass type 串（gridWidth*gridHeight 个字符，行优先自上而下；'2'=可走 '0'=阻挡）
   tiles[]                { imgName（同目录图集名，不含 .img.bytes）、frame（帧号）、x/y（大图 Blit 左上角 px）}
   像素坐标 = 大图坐标，网格原点 (0,0) = 大图左上角；1px 深度 = 0.01 单位（DNF y ↔ 世界 z）
+
+hendonmyre_town/ = 赫顿玛尔城镇（demo 5 切片，03 文档 §2.3/§2.5）
+  extendedTiles[]        城镇专属：.map [extended tile] 直译（与 tiles 一一对应，拼在主瓦片下方
+                         ——下方车道层；pass 10 行 x 14 列）。demo 阶段仅渲染不进碰撞。
+                         战斗 json 无此段（null）。前 2 列 brtile03.img 帧 0/1，其余 hmtileex.img 帧 0。

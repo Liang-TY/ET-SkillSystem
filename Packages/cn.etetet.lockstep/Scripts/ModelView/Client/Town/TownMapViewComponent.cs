@@ -16,5 +16,11 @@ namespace ET.Client
         public GameObject CollisionDebugOverlay;
 
         public Texture2D CollisionDebugTexture;
+
+        /// <summary>主瓦片区像素高（=碰撞网格覆盖区；480）——BuildTileTexture 填、BuildCollision/叠图用</summary>
+        public int BaseFrameHeight;
+
+        /// <summary>含扩展条的总像素高（480+120=600）——画布高、OriginZ 基准</summary>
+        public int TotalFrameHeight;
     }
 }

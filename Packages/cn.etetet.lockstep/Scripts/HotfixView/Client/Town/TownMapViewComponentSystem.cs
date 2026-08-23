@@ -75,7 +75,8 @@ namespace ET.Client
             if (layout == null) return;
 
             await BuildTileTexture(self, resLoader, layout);
-            BuildCollision(room, layout);
+            if (self.BaseFrameHeight <= 0) return;   // 贴图全空（BuildTileTexture 早退）——不建碰撞
+            BuildCollision(room, layout, self);
             BuildCollisionDebugOverlay(self, room.GetComponent<TownCollisionComponent>());
         }
 
@@ -99,38 +100,70 @@ namespace ET.Client
             return layout;
         }
 
-        /// <summary>瓦片帧 Blit 到一张大 Texture2D → SpriteRenderer 铺地面（同战斗 BuildTileTexture）</summary>
+        /// <summary>瓦片帧 Blit 到一张大 Texture2D → SpriteRenderer 铺地面（战斗管线 + 城镇扩展条）</summary>
         private static async ETTask BuildTileTexture(
             TownMapViewComponent self, ResourcesLoaderComponent resLoader, TileLayoutData layout)
         {
             string dir = Path.GetDirectoryName(TileLayoutPath)?.Replace('\\', '/');
 
+            // 主瓦片 + 扩展瓦片的图集都进同一字典
             Dictionary<string, NpkSprite[]> atlases = new(System.StringComparer.OrdinalIgnoreCase);
-            foreach (TileLayoutTile tile in layout.tiles)
+            async ETTask LoadAtlas(string imgPathRaw)
             {
-                if (tile?.imgPath == null) continue;
-                string imgName = (tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
-                    ? tile.imgPath[..^4] : tile.imgPath).ToLowerInvariant();
-                if (atlases.ContainsKey(imgName)) continue;
+                if (imgPathRaw == null) return;
+                string imgName = (imgPathRaw.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
+                    ? imgPathRaw[..^4] : imgPathRaw).ToLowerInvariant();
+                if (atlases.ContainsKey(imgName)) return;
                 TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>($"{dir}/{imgName}.img.bytes");
                 atlases[imgName] = imgAsset != null ? NpkImgParser.Parse(imgAsset.bytes) : null;
                 if (imgAsset == null) Log.Warning($"[TownMapView] 瓦片图集不存在：{imgName}.img.bytes");
             }
-
-            int width = 0, height = 0;
-            foreach (KeyValuePair<string, NpkSprite[]> kv in atlases)
+            foreach (TileLayoutTile tile in layout.tiles) await LoadAtlas(tile?.imgPath);
+            if (layout.extendedTiles != null)
             {
-                if (kv.Value == null || kv.Value.Length == 0) continue;
-                NpkSprite s = kv.Value[0];
-                width = System.Math.Max(width, s.FrameWidth);
-                height = System.Math.Max(height, s.FrameHeight);
+                foreach (TileLayoutTile tile in layout.extendedTiles) await LoadAtlas(tile?.imgPath);
             }
-            if (width <= 0 || height <= 0)
+            if (layout.overlayTiles != null)
+            {
+                foreach (TileLayoutTile tile in layout.overlayTiles) await LoadAtlas(tile?.imgPath);
+            }
+
+            NpkSprite FrameOf(TileLayoutTile tile)
+            {
+                if (tile?.imgPath == null) return null;
+                string imgName = (tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
+                    ? tile.imgPath[..^4] : tile.imgPath).ToLowerInvariant();
+                if (!atlases.TryGetValue(imgName, out NpkSprite[] frames) || frames == null) return null;
+                if (tile.imgFrame < 0 || tile.imgFrame >= frames.Length) return null;
+                return frames[tile.imgFrame];
+            }
+
+            int width = 0, baseHeight = 0, extHeight = 0;
+            foreach (TileLayoutTile tile in layout.tiles)
+            {
+                NpkSprite s = FrameOf(tile);
+                if (s == null) continue;
+                width = System.Math.Max(width, s.FrameWidth);
+                baseHeight = System.Math.Max(baseHeight, s.FrameHeight);
+            }
+            if (layout.extendedTiles != null)
+            {
+                foreach (TileLayoutTile tile in layout.extendedTiles)
+                {
+                    NpkSprite s = FrameOf(tile);
+                    if (s == null) continue;
+                    extHeight = System.Math.Max(extHeight, s.FrameHeight);
+                }
+            }
+            if (width <= 0 || baseHeight <= 0)
             {
                 Log.Warning("[TownMapView] 瓦片帧全空——不铺地面");
                 return;
             }
             width *= layout.tiles.Length;
+            int height = baseHeight + extHeight;   // 扩展条拼在主瓦片下方（.map [extended tile]）
+            self.BaseFrameHeight = baseHeight;
+            self.TotalFrameHeight = height;
 
             Texture2D texture = new(width, height, TextureFormat.RGBA32, false);
             texture.filterMode = FilterMode.Point;
@@ -139,30 +172,37 @@ namespace ET.Client
             for (int i = 0; i < buf.Length; i++) buf[i] = new Color32(0, 0, 0, 0);
 
             int tileWidth = width / layout.tiles.Length;
-            for (int t = 0; t < layout.tiles.Length; t++)
+            void Blit(TileLayoutTile tile, int t, int baseTop)
             {
-                TileLayoutTile tile = layout.tiles[t];
-                if (tile?.imgPath == null) continue;
-                string imgName = (tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
-                    ? tile.imgPath[..^4] : tile.imgPath).ToLowerInvariant();
-                if (!atlases.TryGetValue(imgName, out NpkSprite[] frames) || frames == null) continue;
-                if (tile.imgFrame < 0 || tile.imgFrame >= frames.Length) continue;
-                NpkSprite s = frames[tile.imgFrame];
-                if (s.ArgbData == null) continue;
-
+                NpkSprite s = FrameOf(tile);
+                if (s?.ArgbData == null) return;
                 int offsetX = t * tileWidth;
                 for (int y = 0; y < s.Height; y++)
                 for (int x = 0; x < s.Width; x++)
                 {
-                    int px = offsetX + x;
+                    // 帧域偏移（城镇 hmtile 是部分帧：图像 224x138 画在 224x480 帧域 pos(0,342)）；
+                    // baseTop = 该瓦片区在画布顶起算的起始 y（主=0，扩展=baseHeight）
+                    int px = offsetX + s.X + x;
                     if (px >= width) continue;
                     int argb = s.ArgbData[y * s.Width + x];
-                    int dstY = height - 1 - y;   // Y 翻转（同战斗）
+                    int dstY = height - 1 - (baseTop + s.Y + y);   // 画布内偏移后整体 Y 翻转
                     if (dstY < 0 || dstY >= height) continue;
                     buf[dstY * width + px] = new Color32(
                         (byte)((argb >> 16) & 0xFF), (byte)((argb >> 8) & 0xFF),
                         (byte)(argb & 0xFF), (byte)((argb >> 24) & 0xFF));
                 }
+            }
+            for (int t = 0; t < layout.tiles.Length; t++) Blit(layout.tiles[t], t, 0);
+            // 覆盖层（墙带）：与主瓦片同帧域，叠画在主区上方（hmwall f0 内容 y206-340 填石砖路上方缺口）
+            if (layout.overlayTiles != null)
+            {
+                for (int t = 0; t < layout.overlayTiles.Length && t < layout.tiles.Length; t++)
+                    Blit(layout.overlayTiles[t], t, 0);
+            }
+            if (layout.extendedTiles != null)
+            {
+                for (int t = 0; t < layout.extendedTiles.Length && t < layout.tiles.Length; t++)
+                    Blit(layout.extendedTiles[t], t, baseHeight);
             }
             texture.SetPixels32(buf);
             texture.Apply(false, makeNoLongerReadable: true);
@@ -177,12 +217,13 @@ namespace ET.Client
             self.Ground = ground;
 
             layout.visualWidth = (FP)width / 100;
-            layout.visualHeight = (FP)height / 100;
-            Log.Info($"[TownMapView] 城镇地面就绪：{width}x{height}px，{layout.tiles.Length} 瓦片，网格 {layout.gridWidth}x{layout.gridHeight}");
+            layout.visualHeight = (FP)baseHeight / 100;   // 碰撞参考高=主瓦片区（扩展条不进碰撞）
+            Log.Info($"[TownMapView] 城镇地面就绪：{width}x{height}px（主 {baseHeight}+扩 {extHeight}），" +
+                     $"{layout.tiles.Length} 瓦片，网格 {layout.gridWidth}x{layout.gridHeight}");
         }
 
-        /// <summary>建 TownCollisionComponent（同战斗 InitCollision 数学：X/Z 各对齐贴图宽/高）</summary>
-        private static void BuildCollision(Room room, TileLayoutData layout)
+        /// <summary>建 TownCollisionComponent（X 对齐总宽、Z 对齐主瓦片高；OriginZ = 总高/2 = 画布顶）</summary>
+        private static void BuildCollision(Room room, TileLayoutData layout, TownMapViewComponent mapView)
         {
             TownCollisionComponent collision = room.AddComponent<TownCollisionComponent>();
             collision.GridWidth = layout.gridWidth;
@@ -190,7 +231,8 @@ namespace ET.Client
             collision.CellSize = layout.visualWidth / collision.GridWidth;
             collision.CellSizeZ = layout.visualHeight / collision.GridHeight;
             collision.OriginX = -(FP)collision.GridWidth * collision.CellSize / 2;
-            collision.OriginZ = (FP)collision.GridHeight * collision.CellSizeZ / 2;
+            // 画布（含扩展条）中心对齐世界原点 → row0（画布顶）的世界 z = 总高/2
+            collision.OriginZ = (FP)mapView.TotalFrameHeight / 100 / 2;
 
             collision.PassGrid = new byte[layout.gridWidth * layout.gridHeight];
             for (int t = 0; t < layout.tiles.Length; t++)
