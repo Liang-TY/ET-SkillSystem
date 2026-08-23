@@ -5,6 +5,7 @@ namespace ET.Server
     /// 客户端同步开关默认关，单人 demo 无包；多人打开即用。
     /// </summary>
     [MessageHandler(SceneType.Town)]
+    [FriendOf(typeof(TownComponent))]
     public class C2T_PositionUpdateHandler: MessageHandler<Scene, C2T_PositionUpdate>
     {
         protected override async ETTask Run(Scene root, C2T_PositionUpdate message)

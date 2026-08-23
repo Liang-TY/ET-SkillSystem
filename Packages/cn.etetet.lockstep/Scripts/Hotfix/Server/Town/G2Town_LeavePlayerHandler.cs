@@ -2,6 +2,7 @@ namespace ET.Server
 {
     /// <summary>玩家离开城镇（匹配进战斗时 Gate 通知）：移除成员 → 广播 LeaveTown 给剩余成员</summary>
     [MessageHandler(SceneType.Town)]
+    [FriendOf(typeof(TownComponent))]
     public class G2Town_LeavePlayerHandler: MessageHandler<Scene, G2Town_LeavePlayer>
     {
         protected override async ETTask Run(Scene root, G2Town_LeavePlayer message)

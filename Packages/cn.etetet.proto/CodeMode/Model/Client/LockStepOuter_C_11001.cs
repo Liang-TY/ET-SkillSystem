@@ -653,6 +653,9 @@ namespace ET
         [MemoryPackOrder(2)]
         public int CharacterId { get; set; }
 
+        [MemoryPackOrder(3)]
+        public TrueSync.TSVector Forward { get; set; }
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -663,6 +666,7 @@ namespace ET
             this.PlayerId = default;
             this.Position = default;
             this.CharacterId = default;
+            this.Forward = default;
 
             ObjectPool.Recycle(this);
         }

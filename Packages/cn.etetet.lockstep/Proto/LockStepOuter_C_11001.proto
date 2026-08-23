@@ -148,6 +148,7 @@ message TownPlayerInfo
 	int64 PlayerId = 1;
 	TrueSync.TSVector Position = 2;
 	int32 CharacterId = 3;
+	TrueSync.TSVector Forward = 4;
 }
 
 /// 有玩家进城镇（广播其他成员）
