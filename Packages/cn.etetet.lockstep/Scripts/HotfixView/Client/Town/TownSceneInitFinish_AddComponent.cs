@@ -16,7 +16,9 @@ namespace ET.Client
             {
                 foreach (TownPlayerInfo member in TownMemory.PendingMembers)
                 {
-                    remote.CreateRemote(member.PlayerId, member.Position);
+                    UnityEngine.Vector3 display = new(
+                        (float)member.Position.x, (float)(member.Position.z + member.Position.y), 0f);
+                    remote.CreateRemote(member.PlayerId, display);
                 }
                 TownMemory.PendingMembers = null;
             }

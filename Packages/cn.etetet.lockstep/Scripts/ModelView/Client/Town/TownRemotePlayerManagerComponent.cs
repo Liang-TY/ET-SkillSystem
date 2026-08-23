@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using TrueSync;
 using UnityEngine;
 
 namespace ET.Client
@@ -7,20 +5,21 @@ namespace ET.Client
     /// <summary>
     /// 城镇多人组件（阶段D，03 文档 §2.1/§2.2）：本地位置上报 + 远端角色渲染，一体。
     /// 同步开关在 System 的 const（默认关——单人 demo 零发包零开销；打开后多人互见）。
+    /// 注意：实体字段全用 Unity 类型（ModelView 程序集不引 TrueSync）——TSVector 转换在边界做。
     /// </summary>
     [ComponentOf(typeof (Room))]
     public class TownRemotePlayerManagerComponent: Entity, IAwake, IUpdate, IDestroy
     {
         /// <summary>本地：上次已上报位置/朝向（位置没变跳过）</summary>
-        public TSVector LastSentPos;
+        public Vector3 LastSentPos;
 
-        public TSVector LastSentForward;
+        public Vector3 LastSentForward;
 
         /// <summary>本地：下次上报时刻（ClientNow；移动中 200ms / 静止 1000ms）</summary>
         public long NextSendTime;
 
         /// <summary>本地：上一帧位置（判移动中）</summary>
-        public TSVector LastFramePos;
+        public Vector3 LastFramePos;
 
         /// <summary>本地：上一帧是否在报"移动中"（停止瞬间发终包）</summary>
         public bool LastMoving;
@@ -49,9 +48,9 @@ namespace ET.Client
         public int LastFrameIndex = -1;
 
         // ---- 插值状态（03 文档 §2.2：收包后 ~200ms 平滑走完；IsMoving 沿 Forward 外推）----
-        public TSVector TargetPos;
+        public Vector3 TargetPos;
 
-        public TSVector TargetForward;
+        public Vector3 TargetForward;
 
         public bool IsMoving;
 

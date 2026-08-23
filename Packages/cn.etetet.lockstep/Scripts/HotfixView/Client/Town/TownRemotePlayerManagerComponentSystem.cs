@@ -6,6 +6,7 @@ namespace ET.Client
     /// <summary>
     /// 城镇多人系统（阶段D）：本地上报（移动中 200ms/静止 1000ms，位置没变跳过，停止发终包）
     /// + 远端插值渲染（~200ms 平滑 + IsMoving 沿 Forward 外推）。开关默认关——单人为零开销。
+    /// 实体字段是 Unity 类型（ModelView 无 TrueSync）；TSVector 转换集中在本文件（HotfixView 有 TrueSync）。
     /// </summary>
     [EntitySystemOf(typeof(TownRemotePlayerManagerComponent))]
     [FriendOf(typeof(TownRemotePlayerManagerComponent))]
@@ -42,9 +43,15 @@ namespace ET.Client
             TownPlayerComponent player = room.GetComponent<TownPlayerComponent>();
             if (player == null) return;
 
+            // 逻辑坐标 → 显示坐标（屏幕映射 (x, z+y, 0)——与本地玩家视图同款）
+            TSVector p = player.Position;
+            TSVector f = player.Forward;
+            Vector3 display = new((float)p.x, (float)(p.z + p.y), 0f);
+            Vector3 forward = new((float)f.x, 0f, 0f);
+
             long now = TimeInfo.Instance.ClientNow();
-            bool moving = player.Position != self.LastFramePos;
-            self.LastFramePos = player.Position;
+            bool moving = display != self.LastFramePos;
+            self.LastFramePos = display;
 
             // ---- 本地上报（开关关=完全跳过）----
             if (EnableTownSync)
@@ -52,15 +59,15 @@ namespace ET.Client
                 ClientSenderComponent sender = self.Root().GetComponent<ClientSenderComponent>();
                 bool needFinal = self.LastMoving && !moving;   // 停止移动瞬间发终包
                 if ((moving || needFinal) && now >= self.NextSendTime
-                    && (needFinal || player.Position != self.LastSentPos || player.Forward != self.LastSentForward))
+                    && (needFinal || display != self.LastSentPos || forward != self.LastSentForward))
                 {
                     C2T_PositionUpdate update = C2T_PositionUpdate.Create();
-                    update.Position = player.Position;
-                    update.Forward = player.Forward;
+                    update.Position = p;
+                    update.Forward = f;
                     update.IsMoving = moving;
                     sender.Send(update);
-                    self.LastSentPos = player.Position;
-                    self.LastSentForward = player.Forward;
+                    self.LastSentPos = display;
+                    self.LastSentForward = forward;
                     self.NextSendTime = now + (moving ? MovingSendIntervalMs : IdleSendIntervalMs);
                 }
                 else if (now >= self.NextSendTime)
@@ -77,16 +84,12 @@ namespace ET.Client
                 if (kv.Value is not TownRemotePlayerView view || view.Root == null) continue;
 
                 // 目标点 = 最新收包位置 + 移动中沿 Forward 外推 0.5 秒提前量
-                TSVector t = view.TargetPos;
-                Vector3 target = new((float)t.x, (float)(t.z + t.y), 0f);
-                if (view.IsMoving)
-                {
-                    target.x += (float)(view.TargetForward.x * 3);   // 6 单位/s × 0.5s
-                }
+                Vector3 target = view.TargetPos;
+                if (view.IsMoving) target.x += view.TargetForward.x * 3f;   // 6 单位/s × 0.5s
                 view.DisplayPos = Vector3.Lerp(view.DisplayPos, target, Mathf.Min(1f, dt * InterpolateFactor));
                 view.Root.transform.position = view.DisplayPos;
 
-                bool faceRight = view.TargetForward.x >= FP.Zero;
+                bool faceRight = view.TargetForward.x >= 0f;
                 if (faceRight != view.FaceRight)
                 {
                     view.FaceRight = faceRight;
@@ -98,8 +101,8 @@ namespace ET.Client
             }
         }
 
-        /// <summary>创建远端角色视图（收到 EnterTown / 进城成员列表）</summary>
-        public static void CreateRemote(this TownRemotePlayerManagerComponent self, long playerId, TSVector position)
+        /// <summary>创建远端角色视图（收到 EnterTown / 进城成员列表；display=屏幕坐标）</summary>
+        public static void CreateRemote(this TownRemotePlayerManagerComponent self, long playerId, Vector3 display)
         {
             if (self.GetChild<TownRemotePlayerView>(playerId) != null) return;
 
@@ -109,18 +112,16 @@ namespace ET.Client
             if (prefab == null) return;   // 本地玩家视图没建好（下次再建）
 
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
-
             GameObject go = UnityEngine.Object.Instantiate(prefab, globalComponent.Unit, true);
             go.name = $"TownRemote_{playerId}";
 
             TownRemotePlayerView view = self.AddChildWithId<TownRemotePlayerView>(playerId);
             view.PlayerId = playerId;
             view.Root = go;
-            view.TargetPos = position;
-            view.TargetForward = new TSVector(1, 0, 0);
-            TSVector p = position;
-            view.DisplayPos = new Vector3((float)p.x, (float)(p.z + p.y), 0f);
-            go.transform.position = view.DisplayPos;
+            view.TargetPos = display;
+            view.TargetForward = Vector3.right;
+            view.DisplayPos = display;
+            go.transform.position = display;
 
             // 鬼剑士 3 层渲染（同本地玩家/战斗——demo 无选角，全员同款）
             view.RenderConfig = new UnitRenderConfig();
@@ -140,7 +141,7 @@ namespace ET.Client
             }
 
             view.AnimId = AnimId.SwordmanIdle;
-            Log.Info($"[Town] 远端玩家{playerId}进入视野 @{position}");
+            Log.Info($"[Town] 远端玩家{playerId}进入视野 @({display.x:F2},{display.y:F2})");
         }
 
         /// <summary>移除远端角色（收到 LeaveTown）</summary>
@@ -152,17 +153,17 @@ namespace ET.Client
             Log.Info($"[Town] 远端玩家{playerId}离开视野");
         }
 
-        /// <summary>更新远端目标（收到 PositionBroadcast）</summary>
+        /// <summary>更新远端目标（收到 PositionBroadcast；display=屏幕坐标）</summary>
         public static void UpdateRemote(this TownRemotePlayerManagerComponent self, long playerId,
-            TSVector position, TSVector forward, bool isMoving)
+            Vector3 display, Vector3 forward, bool isMoving)
         {
             TownRemotePlayerView view = self.GetChild<TownRemotePlayerView>(playerId);
             if (view == null)
             {
-                self.CreateRemote(playerId, position);   // 广播先于 Enter 到达——补建
+                self.CreateRemote(playerId, display);   // 广播先于 Enter 到达——补建
                 return;
             }
-            view.TargetPos = position;
+            view.TargetPos = display;
             view.TargetForward = forward;
             view.IsMoving = isMoving;
         }
