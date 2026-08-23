@@ -79,9 +79,12 @@ namespace ET.Client
                 LSBullet bullet = bulletComponent.GetChild<LSBullet>(kv.Key);
                 if (bullet == null) continue;
                 BulletViewInfo info = kv.Value;
-                // 根 GO 锚 = 弹正下方的地面点（DNF 投射物锚语义，imagePos 摆位才与单位同公式）；
-                // 碰撞盒中心的 y（HalfExtents.y）只用于逻辑，视觉贴地
-                info.Go.transform.position = new Vector3((float)bullet.Position.x, info.ViewGrounded ? 0f : (float)bullet.Position.y, (float)bullet.Position.z);
+                // 屏幕映射与单位同款（z→屏幕Y、深度 0，03 文档 §9 第6轮定稿）：
+                // ViewGrounded=贴地弹 Y=z；否则 Y=z+高度 y。碰撞盒中心的 y 只用于逻辑，视觉贴地
+                info.Go.transform.position = new Vector3(
+                    (float)bullet.Position.x,
+                    info.ViewGrounded ? (float)bullet.Position.z : (float)(bullet.Position.z + bullet.Position.y),
+                    0f);
                 AdvanceFrame(info, res, Time.deltaTime);
                 // .als 叠加子层自推（门控用弹主层帧号）
                 LSAnimOverlayUtil.AdvanceOverlays(info.Overlays, info.FrameIndex, res, Time.deltaTime);

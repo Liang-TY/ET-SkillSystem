@@ -69,9 +69,11 @@ namespace ET
             LSCollisionComponent collision = lsWorld.AddComponent<LSCollisionComponent>();
             collision.GridWidth = layout.gridWidth;
             collision.GridHeight = layout.gridHeight;
-            // CellSize 对齐贴图实际世界尺寸（不是 DNF 逻辑 80px——贴图分辨率 ≠ 网格逻辑像素）
+            // CellSize 对齐贴图实际世界尺寸（不是 DNF 逻辑 80px——贴图分辨率 ≠ 网格逻辑像素）。
+            // X/Z 各自对齐宽/高：源美术格子非正方形（训练场 16px×18.67px），单一尺寸纵向盖不满贴图（4.8 vs 5.6）
             collision.CellSize = layout.visualWidth / collision.GridWidth;
-            Log.Info($"[Collision] visualWidth={layout.visualWidth} visualHeight={layout.visualHeight} → CellSize={collision.CellSize}");
+            collision.CellSizeZ = layout.visualHeight / collision.GridHeight;
+            Log.Info($"[Collision] visualWidth={layout.visualWidth} visualHeight={layout.visualHeight} → cell=({collision.CellSize},{collision.CellSizeZ})");
             collision.PassGrid = new byte[layout.gridWidth * layout.gridHeight];
             for (int i = 0; i < collision.PassGrid.Length; i++)
             {
@@ -84,11 +86,11 @@ namespace ET
             collision.OriginX = -(FP)collision.GridWidth * collision.CellSize / 2;
 
             // z 对齐：游戏 z = 屏幕 Y（上下），贴图 row 0 = 顶部
-            // 贴图 Sprite 中心对齐世界原点 → row 0 在 z = +gridHeight/2 × CellSize（贴图顶部）
-            // row = (OriginZ - z) / CellSize → z=0 时 row = gridHeight/2（贴图中间）✓
-            collision.OriginZ = (FP)collision.GridHeight * collision.CellSize / 2;
+            // 贴图 Sprite 中心对齐世界原点 → row 0 在 z = +gridHeight/2 × CellSizeZ（贴图顶部）
+            // row = (OriginZ - z) / CellSizeZ → z=0 时 row = gridHeight/2（贴图中间）✓
+            collision.OriginZ = (FP)collision.GridHeight * collision.CellSizeZ / 2;
 
-            Log.Info($"[Room] 碰撞矩阵就绪：{collision.GridWidth}x{collision.GridHeight} 格，cell={collision.CellSize}，" +
+            Log.Info($"[Room] 碰撞矩阵就绪：{collision.GridWidth}x{collision.GridHeight} 格，cell=({collision.CellSize},{collision.CellSizeZ})，" +
                      $"origin=({collision.OriginX},{collision.OriginZ})");
         }
 

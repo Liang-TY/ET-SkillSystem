@@ -24,7 +24,7 @@ namespace ET
         public static bool IsBlocked(this LSCollisionComponent self, TSVector position)
         {
             if (self.PassGrid == null || self.GridWidth <= 0 || self.GridHeight <= 0) return false;
-            if (self.CellSize <= FP.Zero) return false;
+            if (self.CellSize <= FP.Zero || self.CellSizeZ <= FP.Zero) return false;
             // X 轴：世界 x → 格子列（左右边界）
             int col = (int)TSMath.Floor((position.x - self.OriginX) / self.CellSize);
             if (col < 0 || col >= self.GridWidth) return true;
@@ -32,7 +32,7 @@ namespace ET
             // Z 轴（= 屏幕 Y，上下移动）：反转行映射
             // 游戏 z 就是屏幕竖直方向（W=z+往上，S=z-往下），贴图 row 0=顶部
             // → z 越大（往上）row 越小（靠近顶部墙），z 越小（往下）row 越大（靠近底部地板）
-            int row = (int)TSMath.Floor((self.OriginZ - position.z) / self.CellSize);
+            int row = (int)TSMath.Floor((self.OriginZ - position.z) / self.CellSizeZ);
             if (row < 0 || row >= self.GridHeight) return true;
 
             return self.PassGrid[row * self.GridWidth + col] == 0;
@@ -45,15 +45,15 @@ namespace ET
         public static void TryMove(this LSCollisionComponent self, LSUnit unit, TSVector delta)
         {
             TSVector oldPos = unit.Position;
-            // 诊断（按一次 WASD 后看第一行）
+            // 诊断（按一次 WASD 后看第一行）——公式与 IsBlocked 完全一致（此前漏了 z 翻转，打印过假 row=-29）
             {
                 int dCol = (int)TSMath.Floor((oldPos.x - self.OriginX) / self.CellSize);
-                int dRow = (int)TSMath.Floor((oldPos.z - self.OriginZ) / self.CellSize);
+                int dRow = (int)TSMath.Floor((self.OriginZ - oldPos.z) / self.CellSizeZ);
                 bool ok = dCol >= 0 && dCol < self.GridWidth && dRow >= 0 && dRow < self.GridHeight;
                 byte val = ok ? self.PassGrid[dRow * self.GridWidth + dCol] : (byte)255;
                 int walkable = 0; foreach (byte b in self.PassGrid) if (b == 1) walkable++;
                 Log.Info($"[Collision_diag] pos=({oldPos.x:F2},{oldPos.z:F2}) → cell=({dCol},{dRow}) ok={ok} val={val} " +
-                         $"walkable={walkable}/{self.PassGrid.Length} cellSize={self.CellSize} origin=({self.OriginX},{self.OriginZ})");
+                         $"walkable={walkable}/{self.PassGrid.Length} cell=({self.CellSize},{self.CellSizeZ}) origin=({self.OriginX},{self.OriginZ})");
             }
             if (!self.IsBlocked(oldPos + delta))
             {

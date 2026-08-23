@@ -92,8 +92,9 @@ namespace ET.Client
                 LSArea area = areaComponent.GetChild<LSArea>(kv.Key);
                 AreaViewInfo info = kv.Value;
 
+                // 屏幕映射与单位同款（z→屏幕Y、深度 0；区域贴地无高度，03 文档 §9 第6轮定稿）
                 if (area != null)
-                    info.Go.transform.position = new Vector3((float)area.Position.x, 0f, (float)area.Position.z);
+                    info.Go.transform.position = new Vector3((float)area.Position.x, (float)area.Position.z, 0f);
 
                 if (info.ViewDone) continue;   // 已播完隐藏，等逻辑 Dispose 走 RemoveView
 

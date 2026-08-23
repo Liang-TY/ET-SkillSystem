@@ -36,7 +36,9 @@ namespace ET.Client
                 LSUnit lsUnit = (LSUnit)kv.Value;
 
                 GameObject unitGo = UnityEngine.Object.Instantiate(prefab, globalComponent.Unit, true);
-                unitGo.transform.position = lsUnit.Position.ToVector();
+                // 出生摆位用与 LSUnitViewSystem 相同的屏幕映射（z→Y），避免首帧从错误位置 Lerp 飞入
+                unitGo.transform.position = new Vector3(
+                    (float)lsUnit.Position.x, (float)(lsUnit.Position.z + lsUnit.Position.y), 0f);
 
                 LSUnitView lsUnitView = self.AddChildWithId<LSUnitView, GameObject>(lsUnit.Id, unitGo);
 

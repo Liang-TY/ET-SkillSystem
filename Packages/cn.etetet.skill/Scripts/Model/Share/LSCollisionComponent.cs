@@ -13,7 +13,7 @@ namespace ET
     [MemoryPackable]
     public partial class LSCollisionComponent : LSEntity, IAwake, ISerializeToEntity
     {
-        /// <summary>压平碰撞矩阵（gridWidth*gridHeight）：0=阻挡 1=可走；行优先自上而下（行 0 = 世界 z=0）</summary>
+        /// <summary>压平碰撞矩阵（gridWidth*gridHeight）：0=阻挡 1=可走；行优先自上而下（行 0 = 贴图顶部 z=+OriginZ，行增大向屏幕下方）</summary>
         [MemoryPackOrder(0)]
         public byte[] PassGrid;
 
@@ -23,15 +23,20 @@ namespace ET
         [MemoryPackOrder(2)]
         public int GridHeight;
 
-        /// <summary>每格大小（单位）。DNF 80px/格 → 0.8（1 单位=100px）</summary>
+        /// <summary>X 轴每格宽（单位）= 贴图世界宽/GridWidth（训练场 0.16 = 16px@100PPU）</summary>
         [MemoryPackOrder(3)]
         public FP CellSize;
+
+        /// <summary>Z 轴每格高（单位）= 贴图世界高/GridHeight（训练场 ≈0.1867 = 18.67px）。
+        /// 源美术格子非正方形（16×18.67px），X/Z 拆两轴网格才能精确铺满贴图（03 文档 §9 第 6 轮）</summary>
+        [MemoryPackOrder(6)]
+        public FP CellSizeZ;
 
         /// <summary>网格 col=0 的世界 x（瓦片贴图左边缘 = -gridWidth×CellSize/2）</summary>
         [MemoryPackOrder(4)]
         public FP OriginX;
 
-        /// <summary>网格 row=0 的世界 z（对齐可行走带中线：z=0 ≈ 行走带中间行）</summary>
+        /// <summary>网格 row=0 的世界 z = 贴图顶边（gridHeight×CellSizeZ/2，贴图中心对齐世界原点）；z=0 对应中间行</summary>
         [MemoryPackOrder(5)]
         public FP OriginZ;
     }

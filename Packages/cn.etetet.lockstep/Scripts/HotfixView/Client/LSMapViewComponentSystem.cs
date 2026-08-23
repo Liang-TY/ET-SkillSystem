@@ -223,7 +223,7 @@ namespace ET.Client
 
             LSCollisionComponent collision = self.GetParent<Room>().LSWorld?.GetComponent<LSCollisionComponent>();
             if (collision?.PassGrid == null || collision.GridWidth <= 0 || collision.GridHeight <= 0
-                || collision.CellSize <= FP.Zero) return;
+                || collision.CellSize <= FP.Zero || collision.CellSizeZ <= FP.Zero) return;
 
             int w = collision.GridWidth, h = collision.GridHeight;
 
@@ -245,10 +245,10 @@ namespace ET.Client
             texture.SetPixels32(buf);
             texture.Apply(false, makeNoLongerReadable: true);
 
-            // 世界矩形 = 碰撞自己的 [OriginX, OriginX+w*CellSize] × [OriginZ-h*CellSize, OriginZ]
-            // pixelsPerUnit = 1/CellSize → w px 恰好铺成 w*CellSize 世界宽，与 IsBlocked 的格子映射逐格对应
+            // 世界矩形 = 碰撞自己的 [OriginX, OriginX+w*CellSize] × [OriginZ-h*CellSizeZ, OriginZ]
+            // ppu 按 X 轴（1/CellSize → w px 恰好 = w*CellSize 世界宽）；格子非正方形 → Y 轴 localScale 补齐
             FP worldW = (FP)w * collision.CellSize;
-            FP worldH = (FP)h * collision.CellSize;
+            FP worldH = (FP)h * collision.CellSizeZ;
             GameObject overlay = new("CollisionDebugOverlay");
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
             overlay.transform.SetParent(globalComponent.Unit, false);
@@ -258,10 +258,11 @@ namespace ET.Client
                 new Vector2(0.5f, 0.5f), 1f / (float)collision.CellSize);
             overlay.transform.localPosition = new Vector3(
                 (float)(collision.OriginX + worldW / 2), (float)(collision.OriginZ - worldH / 2), 0f);
+            overlay.transform.localScale = new Vector3(1f, (float)(collision.CellSizeZ / collision.CellSize), 1f);
 
             self.CollisionDebugOverlay = overlay;
             self.CollisionDebugTexture = texture;
-            Log.Info($"[LSMapView] 碰撞调试叠图：{w}x{h} 格，世界 {worldW}x{worldH}，cell={collision.CellSize}，" +
+            Log.Info($"[LSMapView] 碰撞调试叠图：{w}x{h} 格，世界 {worldW}x{worldH}，cell=({collision.CellSize},{collision.CellSizeZ})，" +
                      $"origin=({collision.OriginX},{collision.OriginZ})，可走 {walkable}/{w * h}");
         }
 

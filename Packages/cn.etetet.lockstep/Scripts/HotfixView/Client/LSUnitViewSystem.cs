@@ -34,7 +34,9 @@ namespace ET.Client
 
             // 3D 逻辑坐标转 2D 屏幕坐标
             Vector3 logicPos = unit.Position.ToVector();
-            const float depthRatio = 0.6f; // 纵深转屏幕纵向的比例，越大越有纵深感
+            // 屏幕 Y = 逻辑 z × 1 + 跳跃高度 y：地图美术原生分辨率直铺（已含透视），网格行也按 z×1 映射，
+            // 单位必须 1:1 贴在自己的碰撞格行上（0.6 时代垂直被压 40%，逻辑在 row28 屏幕却在 row22——03 文档 §9 第 6 轮）
+            const float depthRatio = 1f;
             Vector3 screenPos = new Vector3(
                 logicPos.x,
                 logicPos.z * depthRatio + logicPos.y,
