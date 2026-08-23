@@ -72,9 +72,9 @@ namespace ET
         /// 10 行×14 列 pass 矩阵。demo 阶段仅参与渲染不进碰撞。战斗 json 无此段 = null）</summary>
         public TileLayoutTile[] extendedTiles;
 
-        /// <summary>覆盖层瓦片（城镇专属：[animation] 的整列贴图带直译，当前=wall00 墙带 hmwall.img——
-        /// 与主瓦片同帧域(480)、叠画在主瓦片之上填 y206-340 缺口。纯装饰无 pass，不进碰撞）</summary>
-        public TileLayoutTile[] overlayTiles;
+        /// <summary>装饰条目（城镇专属 .map [animation]/[background animation] 直译：.ani 首帧图+合成坐标；
+        /// layer 决定烘焙次序。战斗 json 无此段 = null）</summary>
+        public TileDecoration[] decorations;
 
         /// <summary>总网格宽（格）= tiles.Length × 14</summary>
         public int gridWidth;
@@ -110,6 +110,25 @@ namespace ET
 
         /// <summary>该瓦片的碰撞矩阵压平（行优先 30 行×14 列=420 个 int；DNF 原值 0=阻挡 2=可走）</summary>
         public int[] passTypes;
+    }
+
+    /// <summary>
+    /// 装饰条目（.map [animation] / [background animation] 直译）：取 .ani 首帧的 img+帧号，
+    /// 坐标 = .map 摆放坐标 + .ani [IMAGE POS]（帧左上，画布顶起算）。纯视觉不进碰撞。
+    /// </summary>
+    [Serializable]
+    public class TileDecoration
+    {
+        public string imgPath;
+
+        public int imgFrame;
+
+        public int x;
+
+        public int y;
+
+        /// <summary>DNF 图层：distantback/middleback（背景，横向平铺）→ closeback → 瓦片 → bottom → normal</summary>
+        public string layer;
     }
 
     /// <summary>

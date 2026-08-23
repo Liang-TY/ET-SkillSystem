@@ -123,25 +123,25 @@ namespace ET.Client
             {
                 foreach (TileLayoutTile tile in layout.extendedTiles) await LoadAtlas(tile?.imgPath);
             }
-            if (layout.overlayTiles != null)
+            if (layout.decorations != null)
             {
-                foreach (TileLayoutTile tile in layout.overlayTiles) await LoadAtlas(tile?.imgPath);
+                foreach (TileDecoration deco in layout.decorations) await LoadAtlas(deco?.imgPath);
             }
 
-            NpkSprite? FrameOf(TileLayoutTile tile)
+            NpkSprite? FrameOf(string imgPathRaw, int frameIdx)
             {
-                if (tile?.imgPath == null) return null;
-                string imgName = (tile.imgPath.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
-                    ? tile.imgPath[..^4] : tile.imgPath).ToLowerInvariant();
+                if (imgPathRaw == null) return null;
+                string imgName = (imgPathRaw.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
+                    ? imgPathRaw[..^4] : imgPathRaw).ToLowerInvariant();
                 if (!atlases.TryGetValue(imgName, out NpkSprite[] frames) || frames == null) return null;
-                if (tile.imgFrame < 0 || tile.imgFrame >= frames.Length) return null;
-                return frames[tile.imgFrame];
+                if (frameIdx < 0 || frameIdx >= frames.Length) return null;
+                return frames[frameIdx];
             }
 
             int width = 0, baseHeight = 0, extHeight = 0;
             foreach (TileLayoutTile tile in layout.tiles)
             {
-                NpkSprite? s = FrameOf(tile);
+                NpkSprite? s = FrameOf(tile?.imgPath, tile?.imgFrame ?? 0);
                 if (s == null) continue;
                 width = System.Math.Max(width, s.Value.FrameWidth);
                 baseHeight = System.Math.Max(baseHeight, s.Value.FrameHeight);
@@ -150,7 +150,7 @@ namespace ET.Client
             {
                 foreach (TileLayoutTile tile in layout.extendedTiles)
                 {
-                    NpkSprite? s = FrameOf(tile);
+                    NpkSprite? s = FrameOf(tile?.imgPath, tile?.imgFrame ?? 0);
                     if (s == null) continue;
                     extHeight = System.Math.Max(extHeight, s.Value.FrameHeight);
                 }
@@ -174,7 +174,7 @@ namespace ET.Client
             int tileWidth = width / layout.tiles.Length;
             void Blit(TileLayoutTile tile, int t, int baseTop)
             {
-                NpkSprite? got = FrameOf(tile);
+                NpkSprite? got = FrameOf(tile?.imgPath, tile?.imgFrame ?? 0);
                 if (got?.ArgbData == null) return;
                 NpkSprite s = got.Value;
                 int offsetX = t * tileWidth;
@@ -193,18 +193,60 @@ namespace ET.Client
                         (byte)(argb & 0xFF), (byte)((argb >> 24) & 0xFF));
                 }
             }
-            for (int t = 0; t < layout.tiles.Length; t++) Blit(layout.tiles[t], t, 0);
-            // 覆盖层（墙带）：与主瓦片同帧域，叠画在主区上方（hmwall f0 内容 y206-340 填石砖路上方缺口）
-            if (layout.overlayTiles != null)
+
+            // 装饰 Blit：绝对坐标（.map 摆放坐标 + .ani IMAGE POS 已合成进 json）；透明像素跳过（不凿穿上层）
+            void DecoBlit(string imgPath, int frameIdx, int x, int y)
             {
-                for (int t = 0; t < layout.overlayTiles.Length && t < layout.tiles.Length; t++)
-                    Blit(layout.overlayTiles[t], t, 0);
+                NpkSprite? got = FrameOf(imgPath, frameIdx);
+                if (got?.ArgbData == null) return;
+                NpkSprite s = got.Value;
+                for (int yy = 0; yy < s.Height; yy++)
+                for (int xx = 0; xx < s.Width; xx++)
+                {
+                    int argb = s.ArgbData[yy * s.Width + xx];
+                    if ((argb >> 24 & 0xFF) == 0) continue;   // 透明跳过——装饰叠画不覆盖下层
+                    int px = x + s.X + xx;
+                    if (px < 0 || px >= width) continue;
+                    int dstY = height - 1 - (y + s.Y + yy);
+                    if (dstY < 0 || dstY >= height) continue;
+                    buf[dstY * width + px] = new Color32(
+                        (byte)((argb >> 16) & 0xFF), (byte)((argb >> 8) & 0xFF),
+                        (byte)(argb & 0xFF), (byte)((argb >> 24) & 0xFF));
+                }
             }
+
+            void BlitDecorations(string layer, bool tileX)
+            {
+                if (layout.decorations == null) return;
+                foreach (TileDecoration deco in layout.decorations)
+                {
+                    if (deco?.imgPath == null || deco.layer != layer) continue;
+                    if (tileX)
+                    {
+                        NpkSprite? f = FrameOf(deco.imgPath, deco.imgFrame);
+                        int fw = f?.FrameWidth ?? 0;
+                        if (fw <= 0) continue;
+                        for (int bx = 0; bx < width; bx += fw) DecoBlit(deco.imgPath, deco.imgFrame, bx, deco.y);
+                    }
+                    else
+                    {
+                        DecoBlit(deco.imgPath, deco.imgFrame, deco.x, deco.y);
+                    }
+                }
+            }
+
+            // 烘焙次序（DNF 图层序）：远/中景背景（平铺）→ closeback 装饰 → 主瓦片 → 扩展瓦片 → bottom/normal 装饰
+            BlitDecorations("distantback", true);
+            BlitDecorations("middleback", true);
+            BlitDecorations("closeback", false);
+            for (int t = 0; t < layout.tiles.Length; t++) Blit(layout.tiles[t], t, 0);
             if (layout.extendedTiles != null)
             {
                 for (int t = 0; t < layout.extendedTiles.Length && t < layout.tiles.Length; t++)
                     Blit(layout.extendedTiles[t], t, baseHeight);
             }
+            BlitDecorations("bottom", false);
+            BlitDecorations("normal", false);
             texture.SetPixels32(buf);
             texture.Apply(false, makeNoLongerReadable: true);
 
