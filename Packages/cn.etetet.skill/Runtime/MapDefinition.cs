@@ -129,6 +129,9 @@ namespace ET
 
         /// <summary>DNF 图层：distantback/middleback（背景，横向平铺）→ closeback → 瓦片 → bottom → normal</summary>
         public string layer;
+
+        /// <summary>横向平铺铺满全街（路面砖 hmbrLtile01：.map 只登记一条，224=一列宽按列重复）</summary>
+        public bool tileX;
     }
 
     /// <summary>

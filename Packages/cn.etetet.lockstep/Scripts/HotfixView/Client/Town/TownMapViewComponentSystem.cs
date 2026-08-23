@@ -221,7 +221,7 @@ namespace ET.Client
                 foreach (TileDecoration deco in layout.decorations)
                 {
                     if (deco?.imgPath == null || deco.layer != layer) continue;
-                    if (tileX)
+                    if (tileX || deco.tileX)
                     {
                         NpkSprite? f = FrameOf(deco.imgPath, deco.imgFrame);
                         int fw = f?.FrameWidth ?? 0;

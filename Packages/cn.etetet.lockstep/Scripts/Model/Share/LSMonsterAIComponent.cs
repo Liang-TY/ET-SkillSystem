@@ -30,5 +30,9 @@ namespace ET
         // 出手间隔节流（AttackIntervalMs 倒数）
         [MemoryPackOrder(4)]
         public int AttackTimerMs;
+
+        // 死亡倒计时（>0=正在播死亡动画，到 0 才 Dispose；BattleWatcher 按 AI 组件消失判活=自动等动画播完）
+        [MemoryPackOrder(5)]
+        public int DyingTimerMs;
     }
 }

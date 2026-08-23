@@ -9169,7 +9169,7 @@
    "imgPath": "hmmid01.img",
    "imgFrame": 0,
    "x": 0,
-   "y": 30,
+   "y": -50,
    "layer": "middleback"
   },
   {
@@ -9310,7 +9310,8 @@
    "imgFrame": 0,
    "x": 0,
    "y": 222,
-   "layer": "bottom"
+   "layer": "bottom",
+   "tileX": false
   },
   {
    "imgPath": "hmwall02.img",
@@ -9542,6 +9543,14 @@
    "x": 2987,
    "y": 103,
    "layer": "closeback"
+  },
+  {
+   "imgPath": "brtile01.img",
+   "imgFrame": 0,
+   "x": 0,
+   "y": 0,
+   "layer": "bottom",
+   "tileX": true
   }
  ]
 }

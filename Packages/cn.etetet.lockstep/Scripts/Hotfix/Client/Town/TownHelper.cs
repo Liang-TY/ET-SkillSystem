@@ -18,6 +18,7 @@ namespace ET.Client
                 return;
             }
 
+            TownMemory.PendingMembers = response.Members;   // 已有成员（阶段D 远端渲染，进城完成后清）
             await TownSceneChangeHelper.SceneChangeToTown(root, spawnPosition);
         }
     }

@@ -33,13 +33,31 @@ namespace ET
 
             LSUnit unit = self.GetParent<LSUnit>();
 
-            // 死亡判定：HP≤0 → 移除（此前掉血无人判死=血量负数不死的根修；
-            // 子弹同款"自身系统内 Dispose"模式。DNF 死亡动画后消失——demo 直接移除，动画后续接）
+            // 死亡流程：HP≤0 → 播倒地动画（MonsterDown）→ 动画时长倒计时 → 到点移除
+            // （BattleWatcher 按 AI 组件消失判活——胜利 3 秒自动等死亡动画播完才起算）
             LSNumericComponent monsterNum = unit.GetComponent<LSNumericComponent>();
+            if (self.DyingTimerMs > 0)
+            {
+                self.DyingTimerMs -= LSConstValue.UpdateInterval;
+                if (self.DyingTimerMs <= 0)
+                {
+                    Log.Info($"[Monster] unit{unit.Id} 死亡移除");
+                    unit.Dispose();
+                }
+                return;
+            }
             if (monsterNum != null && monsterNum.Get(NumericType.Hp) <= FP.Zero)
             {
-                Log.Info($"[Monster] unit{unit.Id} 死亡");
-                unit.Dispose();
+                LSCombatComponent dyingCombat = unit.GetComponent<LSCombatComponent>();
+                int downMs = 600;
+                if (dyingCombat != null && dyingCombat.DownAnimId != 0)
+                {
+                    unit.GetComponent<LSAnimComponent>()?.Play(dyingCombat.DownAnimId);
+                    AnimClipData downClip = AnimConfigRegistry.Get(dyingCombat.DownAnimId);
+                    downMs = downClip?.totalDuration ?? 600;
+                }
+                self.DyingTimerMs = downMs;
+                Log.Info($"[Monster] unit{unit.Id} HP 耗尽，播倒地动画 {downMs}ms");
                 return;
             }
 

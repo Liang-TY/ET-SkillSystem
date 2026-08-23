@@ -39,6 +39,7 @@ namespace ET.Client
 
             GameObject prefab = await room.GetComponent<ResourcesLoaderComponent>()
                 .LoadAssetAsync<GameObject>("Packages/cn.etetet.lockstep/Bundles/Unit/Unit2D.prefab");
+            self.UnitPrefab = prefab;   // 缓存给远端玩家视图复用
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
             GameObject go = UnityEngine.Object.Instantiate(prefab, globalComponent.Unit, true);
             go.name = "TownPlayer";

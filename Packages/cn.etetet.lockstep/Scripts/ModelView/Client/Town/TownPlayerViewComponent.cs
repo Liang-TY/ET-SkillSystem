@@ -11,6 +11,9 @@ namespace ET.Client
     {
         public GameObject Root;
 
+        /// <summary>Unit2D 预制体缓存（InitAsync 载入；远端玩家视图复用）</summary>
+        public GameObject UnitPrefab;
+
         public UnitRenderConfig RenderConfig;
 
         /// <summary>当前动画（AnimId.SwordmanIdle / SwordmanWalk，移动方切换）</summary>
