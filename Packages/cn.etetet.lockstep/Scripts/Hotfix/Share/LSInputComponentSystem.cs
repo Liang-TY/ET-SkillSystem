@@ -61,9 +61,12 @@ namespace ET
             FP vy = input.VY * 6 * 50 / 1000;
             bool hasMovement = v2.LengthSquared() > FP.Zero || vy != FP.Zero;
             if (!hasMovement) return;
+
             // 网格碰撞：被挡轴回退（贴墙滑动）；空地图无 LSCollisionComponent 直落
-            TSVector delta = new(v2.x, vy, v2.y);
             LSCollisionComponent collision = unit.LSWorld().GetComponent<LSCollisionComponent>();
+            // DNF 手感：地面平面格子等速——纵向格子更高（18.67px vs 16px），z 分量乘格尺寸比例，
+            // 两轴与斜向全部同格/秒（屏幕上 W/S 比 A/D 快 ~17%，纵深感烘在美术的非正方形格里；03 文档 §9）
+            TSVector delta = new(v2.x, vy, v2.y * (collision?.ZCellRatio() ?? FP.One));
             if (collision != null)
             {
                 collision.TryMove(unit, delta);

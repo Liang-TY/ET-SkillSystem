@@ -39,6 +39,17 @@ namespace ET
         }
 
         /// <summary>
+        /// Z 轴格尺寸补偿比例（CellSizeZ/CellSize，训练场 ≈1.167）。移动端用：纵向分量乘它实现
+        /// 地面平面"格子等速"（DNF 同款——纵深感烘在美术非正方形格里，屏幕上 W/S 比 A/D 快 ~17%）。
+        /// 无网格/尺寸非法返回 1（空地图退化为屏幕等速）。
+        /// </summary>
+        public static FP ZCellRatio(this LSCollisionComponent self)
+        {
+            if (self.CellSize <= FP.Zero || self.CellSizeZ <= FP.Zero) return FP.One;
+            return self.CellSizeZ / self.CellSize;
+        }
+
+        /// <summary>
         /// 移动滑动辅助：先试整 delta，被挡则 X/Y/Z 各轴分别尝试（被挡的轴回退）——贴墙滑行。
         /// Y（高度）不进网格恒通过（跳跃/浮空不受地面网格管），保留逐轴结构以后立体碰撞直接用。
         /// </summary>
