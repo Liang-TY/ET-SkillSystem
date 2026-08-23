@@ -7,7 +7,7 @@ namespace ET.Client
     /// 城镇无逻辑实体——AnimId/FrameIndex 视图层自推（子弹视图同款模式），移动由 TownOpera 写 TownPlayerComponent。
     /// </summary>
     [ComponentOf(typeof (Room))]
-    public class TownPlayerViewComponent: Entity, IAwake, IDestroy
+    public class TownPlayerViewComponent: Entity, IAwake, IUpdate, IDestroy
     {
         public GameObject Root;
 
