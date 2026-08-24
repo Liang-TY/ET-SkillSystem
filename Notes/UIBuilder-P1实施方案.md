@@ -278,7 +278,7 @@ BuildResult JSON：
 | S1 ✅ | uibuilder 包骨架 + SpecModel/SpecLoader（含全部 lint 规则 3.8.1-5） | 坏 spec 返回完整错误清单 |
 | S2 ✅ | PanelAssembler + ControlFactory + LayoutApplier + PropConfigurator | 示例 3.7 构建出正确 GameObject 树（场景内人工验证） |
 | S3 ✅ | CDEBinder + CodeGenTrigger（迁移 ubridge 逻辑） | 构建后 YIUIGen 文件生成、C/E 表正确（SkillPanel 实测：6 C 表 + 1 E 表 + 面板选项全部精确映射） |
-| S4 | PreviewRenderer | 任意 prefab 出 PNG |
+| S4 ✅ | PreviewRenderer | 任意 prefab 出 PNG（SkillPanel 实测：布局/中文/按钮全部正确，视觉闭环建成） |
 | S5 | CliCommand + ubridge 薄壳 + Menu 三入口 | `unity command yiui_build_panel` 跑通；ubridge 文件桥同样跑通 |
 | S6 | Unity 机环境（CLI/pipeline/-automated/watcher/从AI配置） | 一条 Ping 任务全链路回环 |
 | S7 | 验收（见 §6） | 全部通过 |
