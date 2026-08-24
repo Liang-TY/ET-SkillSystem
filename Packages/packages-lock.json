@@ -216,6 +216,14 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "cn.etetet.uibuilder": {
+      "version": "file:cn.etetet.uibuilder",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.yiuiframework": "3.1.4"
+      }
+    },
     "cn.etetet.watcher": {
       "version": "file:cn.etetet.watcher",
       "depth": 0,
