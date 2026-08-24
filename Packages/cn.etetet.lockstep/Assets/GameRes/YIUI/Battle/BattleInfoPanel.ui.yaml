@@ -1,0 +1,28 @@
+panel:
+  name: BattleInfoPanel
+  pkg: Battle
+  layer: Scene
+  blockBg: false
+
+nodes:
+  - name: u_ComTextPlayerName
+    type: text
+    place: { anchor: top_left, offset: [120, -36], size: [200, 36] }
+    props: { text: 角色, fontSize: 24, alignment: UpperLeft }
+
+  - name: u_ComImgPlayerHp
+    type: image
+    place: { anchor: top_left, offset: [220, -62], size: [400, 16] }
+    props: { color: "#50C350FF", imageType: Filled, fillMethod: Horizontal, fillAmount: 1 }
+
+  - name: u_ComTextMonsterName
+    type: text
+    place: { anchor: top_left, offset: [120, -96], size: [200, 36] }
+    props: { text: "", fontSize: 24, alignment: UpperLeft }
+
+  - name: u_ComImgMonsterHp
+    type: image
+    place: { anchor: top_left, offset: [220, -122], size: [400, 16] }
+    props: { color: "#D04040FF", imageType: Filled, fillMethod: Horizontal, fillAmount: 1 }
+
+events: []

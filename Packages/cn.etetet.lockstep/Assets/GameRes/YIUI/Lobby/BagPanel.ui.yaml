@@ -1,0 +1,23 @@
+panel:
+  name: BagPanel
+  pkg: Lobby
+  layer: Popup
+
+nodes:
+  - name: Title
+    type: text
+    place: { anchor: top, offset: [0, -50], size: [500, 60] }
+    props: { text: 背包, fontSize: 34 }
+
+  - name: u_ComGridRoot
+    type: node
+    place: { anchor: center, offset: [0, -10], size: [1000, 700] }
+    layout: { type: grid, cellSize: [110, 110], spacing: 10, padding: [10, 10, 10, 10] }
+
+  - name: u_ComBtnClose
+    type: button
+    place: { anchor: top_right, offset: [-24, -24], size: [48, 48] }
+    props: { text: X }
+
+events:
+  - { name: u_EventClose, target: u_ComBtnClose, trigger: Click }

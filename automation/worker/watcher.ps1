@@ -68,7 +68,7 @@ while ($true) {
                 $proc = Start-Process -FilePath $ClaudeExe `
                     -ArgumentList @(
                         "-p",
-                        "按 ui-worker skill 处理 origin/automation 总线上的待办任务：$ids。先 git fetch origin automation，任务内容用 git show origin/automation:automation/tasks/<id>.yaml 读取。",
+                        "处理 origin/automation 总线上的待办任务：$ids。先 git fetch origin automation，任务内容用 git show origin/automation:automation/tasks/<id>.yaml 读取；执行规范以仓库当前版本的 automation/worker/ui-worker.SKILL.md 为准（直接读取该文件，勿依赖本地副本）。",
                         "--model", $Model) `
                     -WorkingDirectory $ProjectRoot `
                     -PassThru -WindowStyle Hidden

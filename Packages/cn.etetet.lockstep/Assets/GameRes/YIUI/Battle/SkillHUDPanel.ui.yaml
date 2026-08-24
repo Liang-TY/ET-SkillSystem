@@ -1,0 +1,22 @@
+panel:
+  name: SkillHUDPanel
+  pkg: Battle
+  layer: Scene
+  blockBg: false
+
+nodes:
+  - name: u_ComSkillRoot
+    type: node
+    place: { anchor: bottom_right, offset: [-168, 58], size: [296, 64] }
+    layout: { type: horizontal, spacing: 10, padding: [4, 4, 4, 4], childAlignment: MiddleCenter }
+    children:
+      - { name: u_ComBtnSkill1, type: button, props: { text: 技能1 } }
+      - { name: u_ComBtnSkill2, type: button, props: { text: 技能2 } }
+      - { name: u_ComBtnSkill3, type: button, props: { text: 技能3 } }
+      - { name: u_ComBtnSkill4, type: button, props: { text: 技能4 } }
+
+events:
+  - { name: u_EventSkill1, target: u_ComBtnSkill1, trigger: Click }
+  - { name: u_EventSkill2, target: u_ComBtnSkill2, trigger: Click }
+  - { name: u_EventSkill3, target: u_ComBtnSkill3, trigger: Click }
+  - { name: u_EventSkill4, target: u_ComBtnSkill4, trigger: Click }
