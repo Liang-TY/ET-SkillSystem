@@ -82,7 +82,7 @@ nodes:
 | text | YIUI 模板 YIUIText_NoRaycast | Text | text(""), fontSize(24), color(#FFFFFFFF), alignment(UpperLeft..LowerRight, MiddleCenter), raycast(false), bestFit(false) |
 | tmp | YIUI 模板 YIUIText (TMP) | TextMeshProUGUI | text(""), fontSize(24), color, alignment |
 | image | YIUI 模板 YIUIImage_NoRaycast | Image | color(#FFFFFFFF), imageType(Simple), raycast(false), preserveAspect(false), fillAmount(1), fillMethod(Horizontal) |
-| button | YIUIButton_NoText 模板 + Builder 自建 legacy Text 标签（YIUIButton 自带 TMP 标签为 LiberationSans SDF，无中文字形会渲染成 □；CJK TMP 字体待字体方案确定后接入） | Button | text(""), fontSize(24), interactable(true), color |
+| button | YIUIButton_NoText 模板 + Builder 补齐 Button(targetGraphic+ColorTint) + 自建 legacy Text 标签（模板本身无 Button——YIUI 走 EventBind 体系；TMP 标签为 LiberationSans SDF 无中文字形，CJK TMP 字体待字体方案确定后接入） | Button | text(""), fontSize(24), interactable(true), color |
 | input | DefaultControls.InputField | InputField | text(""), placeholder("请输入..."), contentType(Standard), lineType(SingleLine) |
 | toggle | DefaultControls.Toggle | Toggle | isOn(false), label("Toggle") |
 | slider | DefaultControls.Slider | Slider | value(0), minValue(0), maxValue(1) |

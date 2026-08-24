@@ -68,13 +68,27 @@ namespace ET.UIBuilder
         }
 
         /// <summary>
-        /// 按钮 = YIUIButton_NoText 模板 + 自建 legacy Text 标签。
+        /// 按钮 = YIUIButton_NoText 模板 + 补齐 Button + 自建 legacy Text 标签。
+        /// 注意：YIUI 按钮模板本身没有 Button 组件（Image + YIUIClickEffect，YIUI 走自己的
+        /// EventBind 事件体系）。本构建器 button 类型的契约 = Image + Button + Text 子节点：
+        /// Button 由 Builder 补齐并接 targetGraphic/ColorTint，供 interactable 与点击过渡色。
         /// 不用 YIUIButton 模板自带的 TMP 标签：其 LiberationSans SDF 无中文字形（会渲染成 □），
         /// CJK 的 TMP 字体资产待字体方案确定后接入（届时可切回 TMP 标签）。
         /// </summary>
         private static GameObject CreateButton()
         {
             GameObject go = InstantiateTemplate("YIUIButton_NoText");
+
+            if (go.GetComponent<Button>() == null)
+            {
+                Button button = go.AddComponent<Button>();
+                Image image = go.GetComponent<Image>();
+                if (image != null)
+                {
+                    button.targetGraphic = image;
+                    button.transition = Selectable.Transition.ColorTint;
+                }
+            }
 
             var labelGo = new GameObject("Text");
             RectTransform labelRect = labelGo.AddComponent<RectTransform>();
