@@ -1,0 +1,17 @@
+# automation/results/0003.result.yaml
+id: 0003
+status: done
+message: |
+  无任务单的编译验证上浮（人在场裁决直接提交，同 0001/0002 先例）。
+  验证：unity command recompile + recompile_status → {"status":"up_to_date","failed":false,"errors":[]}。
+  结论：当前磁盘状态（@ de190ea71）编译通过，0002 的 8 条 S4 错误全部清零。
+  49a0c199e 的修复完整（using UnityEditor.SceneManagement + Scene 别名三行均在）。
+  遗留事项（非编译错误）：
+  1. Packages/cn.etetet.uibuilder/Editor/Preview.meta（文件夹 meta）未入库，
+     工作区 guid=86a23df96d7f98c45a9fb886477d6089，主 AI 侧需补提交，避免两台机器 guid 不一致。
+  2. 本机 3 个 Unity 实例并存（pipeline 1 + GUI 2），共享 Editor.log，
+     日志中的旧错误轮次是中间态产物；GUI 编辑器控制台可能显示陈旧错误，Refresh/重启即清。
+build:
+  errors: []
+log_tail:
+  - 'recompile_status: {"status":"up_to_date","failed":false,"errors":[]}'
