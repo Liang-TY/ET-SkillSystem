@@ -39,7 +39,7 @@
 
 | # | 改动 | 状态 |
 |---|---|---|
-| L1 | `AppStartInitFinish_CreateUILSLogin` 改开 YIUI LoginPanel（旧 UILSLogin 退役） | ⬜ |
+| L1 | `AppStartInitFinish_CreateUILSLogin` 改开 YIUI LoginPanel（旧 UILSLogin 退役） | ✅ 无需改动——入口本就指向 YIUI LoginPanel（open/close 均已接线，仅引用类型名，同名重建后自动生效） |
 | L2 | 登录成功 → LoadingPanel → RoleSelectPanel（demo 恒有占位角色，RoleCreate 暂不入流程） | ⬜ |
 | L3 | RoleSelect 进入城镇 → 关流程面板 → 开 MainHUDPanel（+批② SkillHUD） | ⬜ |
 | L4 | 选图按钮 → MapSelect 弹窗 → 点地图 → LoadingPanel → 进战斗（与按 N 并存） | ⬜ |
@@ -51,6 +51,7 @@
 ## 进度记录
 
 - **08-25 03:1x** 文档创建；批次① 7 个 spec 已写、随 build_all 单 0010 下发。
+- **08-25 03:2x** 排雷：旧试验版 LoginPanel（prefab+代码）已清除（防字段名冲突编译错）；发现登录入口已指向 YIUI，L1 免做。
 - **08-25 03:1x** TestBroken spec（0009 验收用）使命完成，已删除，避免污染 build_all。
 
 ## 问题 / 待办
