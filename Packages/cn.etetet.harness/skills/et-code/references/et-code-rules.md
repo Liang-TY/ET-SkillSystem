@@ -96,7 +96,17 @@ ET 是数据驱动 ECS：Entity 纯数据容器，行为全在 System。分析�
 
 在 `ET.xxx` 子命名空间写代码时，C# 会先在父命名空间 `ET` 里解析类型。ET.Core 定义了 `Object`、`Entity` 等与 UnityEngine 同名/近名类型——**裸写 `Object` 会绑到 `ET.Object` 而非 `UnityEngine.Object`**（编译报 CS0029/CS0030，且不易看出原因）。
 
-规则：ET 子命名空间内引用 UnityEngine 的 Object 必须**全限定 `UnityEngine.Object`**；同理警惕 `Random`、`Debug` 等潜在同名类型。
+规则：ET 子命名空间内引用 UnityEngine 的 Object 必须**全限定 `UnityEngine.Object`**；同理警惕 `Scene`、`Random`、`Debug` 等潜在同名类型（`Scene` 已实际踩坑）。
+
+若某类型（如 `Scene`）在文件里高频出现想用别名：**文件级 `using X = ...` 别名会输给父命名空间成员（ET.Scene 优先）**，别名必须声明在 `namespace ET.Xxx { }` **体内**才生效：
+
+```csharp
+namespace ET.UIBuilder
+{
+    using Scene = UnityEngine.SceneManagement.Scene; // 体内别名胜出
+    ...
+}
+```
 
 ## 写码自检顺序
 

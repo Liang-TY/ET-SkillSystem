@@ -7,11 +7,13 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-// ET 子命名空间陷阱：裸写 Scene 解析到 ET.Scene（同 ET.Object），用别名强制覆盖
-using Scene = UnityEngine.SceneManagement.Scene;
 
 namespace ET.UIBuilder
 {
+    // ET 子命名空间陷阱：裸写 Scene 会解析到 ET.Scene（父命名空间成员优先于文件级 using 别名），
+    // 别名必须声明在命名空间体内才能胜出（同 ET.Object，见 et-code skill）
+    using Scene = UnityEngine.SceneManagement.Scene;
+
     /// <summary>
     /// 预览渲染：prefab → PNG 截图（方案 §4.4）。
     /// 不依赖 GameView 状态：Additive 临时场景 + WorldSpace Canvas（与 YIUIRoot 同为 1920×1080 比例）
