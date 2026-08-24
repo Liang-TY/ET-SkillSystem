@@ -127,7 +127,7 @@ build（spec→prefab+YIUIGen→等编译→收集错误）→ preview（截图�
 
 ## 9. 唤醒机制（Unity 机）
 
-`automation/worker/watcher.ps1`（PowerShell 7）每 15 秒扫描：`tasks/` 中存在无对应 result 的任务 → 锁检查（无 worker 进程在跑）→ 触发 `claude -p "按 ui-worker skill 处理任务" --model haiku`（无头，跑完即退）。正常路径零 AI 常驻；命令非零退出/超时由从 AI 会话内的异常规范处理。安装与配置见 `automation/worker/README.md`。
+`automation/worker/watcher.ps1` **v2**（PowerShell 7）每 15 秒：`git fetch origin automation` → 用 `git ls-tree` 对比远端 `tasks/*.yaml` 与 `results/*.result.yaml` 找待办（**总线在分支上，本地工作区不含 tasks，全程不触碰工作区**）→ 锁检查（无 worker 进程）→ 冷却检查（两次唤醒间隔 ≥90 秒，防 claude 秒退风暴）→ 触发 `claude -p "按 ui-worker skill 处理任务" --model haiku`（无头，跑完即退；模型不可用时重启 watcher 传 `-Model sonnet` 等）。安装与配置见 `automation/worker/README.md`。
 
 ## 10. 安全
 

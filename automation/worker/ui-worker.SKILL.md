@@ -11,17 +11,29 @@ description: Unity 机从 AI 执行器。只消费 automation/tasks/ 任务单�
 2. **`tasks/` 只读，`results/` 是唯一可写区**，产物只 commit 到 `automation/wip-{id}` 分支。禁止触碰任何功能分支、`Scripts/`、spec 文件。
 3. **任何不确定 → `needs_main`**。写明原因与现场信息（命令、退出码、日志末尾、截图），停下，不猜。
 
-## 标准循环
+## 标准循环（v2：总线在 origin/automation 分支上，本地工作区是 dev 分支不含 tasks，全程用 git 命令读写总线）
 
 ```
-1. git pull --rebase（失败重试2次，再失败写 result: failed: git_conflict 后退出）
-2. 取最老的无 result 任务（tasks/*.yaml 按 id 排序）
-3. 基于 task.ref（缺省 automation 集成分支）切出 automation/wip-{id}
-4. 按 type 执行（见下表）
-5. 写 automation/results/{id}.result.yaml（+ 截图/产物）
-6. commit：results 走 automation 分支，产物走 wip-{id} 分支；message 见提交格式
-7. 两个分支都 pull --rebase 后 push
-8. 若还有待办 → 回到 2；没有 → 结束退出
+0. 若任务带 ref 且与当前分支同名 → git pull --rebase（拿到最新 spec/代码）
+1. git fetch origin automation；待办 = origin/automation 上 tasks/*.yaml 无对应 results/*.result.yaml
+   （watcher 唤醒消息里已给出 id 列表）
+2. 取最老待办，读任务：git show origin/automation:automation/tasks/<id>.yaml
+3. 按 type 执行（见下表）；产物（prefab/gen 代码）落在当前工作区
+   build 类任务的产物提交（wip 分支舞步，主工作区内）：
+   a. git checkout -b automation/wip-<id>
+   b. git add <产物路径>；git commit -m "[task:<id>][build] ..."
+   c. git push origin automation/wip-<id>
+   d. git checkout <原分支>（回到 ref 所指分支）
+4. 结果回传（用临时 worktree，不动当前工作分支）：
+   a. git worktree add "<工程根>\..\bus-<id>" origin/automation -b bus/<id>
+   b. 把 automation/results/<id>.result.yaml 写入 worktree；
+      build 任务另把 PreviewPath 的 PNG 拷贝为 automation/results/<id>.png
+   c. git -C "<工程根>\..\bus-<id>" add -A
+      git -C "<工程根>\..\bus-<id>" commit -m "[task:<id>][result] ..."
+      git -C "<工程根>\..\bus-<id>" push origin HEAD:automation
+      被拒则 fetch + rebase origin/automation 后重试 2 次 → failed: git_conflict
+   d. git worktree remove --force "<工程根>\..\bus-<id>"
+5. 回到 1 处理下一个待办；没有 → 结束退出
 ```
 
 ## 任务执行表
