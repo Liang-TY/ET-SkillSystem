@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using YIUIFramework;
 
 namespace ET.UIBuilder
 {
@@ -97,7 +98,8 @@ namespace ET.UIBuilder
             if (source == null)
                 throw new InvalidOperationException($"prefab 类型节点 '{node.Name}' 的 path 无法加载: {path}");
 
-            Object instance = PrefabUtility.InstantiatePrefab(source);
+            // 注意：本命名空间在 ET 下，裸写 Object 会解析到 ET.Object，必须全限定
+            UnityEngine.Object instance = PrefabUtility.InstantiatePrefab(source);
             return instance != null ? (GameObject)instance : UnityEngine.Object.Instantiate(source);
         }
 

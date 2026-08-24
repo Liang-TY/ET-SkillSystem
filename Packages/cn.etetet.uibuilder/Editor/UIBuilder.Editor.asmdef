@@ -16,7 +16,10 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "YamlDotNet.dll"
+        "YamlDotNet.dll",
+        "Sirenix.Serialization.dll",
+        "Sirenix.Utilities.dll",
+        "Sirenix.OdinInspector.Attributes.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [],

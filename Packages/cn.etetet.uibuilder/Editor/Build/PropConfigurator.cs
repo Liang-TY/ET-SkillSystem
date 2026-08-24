@@ -90,7 +90,7 @@ namespace ET.UIBuilder
             text.color = ParseColor(p, "color", text.color);
             if (p.ContainsKey("alignment")) text.alignment = ParseEnum<TextAnchor>(GetStr(p, "alignment"), text.alignment);
             text.raycastTarget = GetBool(p, "raycast", text.raycastTarget);
-            text.resizeToBestFit = GetBool(p, "bestfit", false);
+            text.resizeTextForBestFit = GetBool(p, "bestfit", false);
         }
 
         private static void ConfigureTmp(TextMeshProUGUI text, Dictionary<string, object> p)
@@ -193,7 +193,7 @@ namespace ET.UIBuilder
 
         // ---------------- 属性取值 ----------------
 
-        private static string GetStr(Dictionary<string, object> p, string key, string fallback)
+        private static string GetStr(Dictionary<string, object> p, string key, string fallback = "")
         {
             return p.ContainsKey(key) ? p[key]?.ToString() ?? fallback : fallback;
         }
