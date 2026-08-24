@@ -10,6 +10,14 @@
 
 ## 1. 安装 Unity CLI（beta 通道）
 
+一条命令（封装好的脚本，重复运行安全）：
+
+```powershell
+pwsh -File automation/worker/setup-unity-cli.ps1
+```
+
+或手动执行官方安装命令：
+
 ```powershell
 $env:UNITY_CLI_CHANNEL='beta'; irm https://public-cdn.cloud.unity3d.com/hub/prod/cli/install.ps1 | iex
 unity --version
@@ -17,9 +25,11 @@ unity --version
 
 ## 2. 项目内启用 pipeline
 
+`com.unity.pipeline` 已写入 `Packages/manifest.json`（0.5.0-exp.1，Unity 6.0 LTS+ 可用），**仓库拉取后打开工程即自动安装**。验证：
+
 ```powershell
 cd <项目根>
-unity pipeline install        # 安装 com.unity.pipeline（Unity 6.0 LTS+）
+unity pipeline list     # 应显示本项目已启用
 ```
 
 之后编辑器用 `-automated` 参数启动（自动处理弹窗）：

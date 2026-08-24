@@ -88,7 +88,7 @@ nodes:
 | slider | DefaultControls.Slider | Slider | value(0), minValue(0), maxValue(1) |
 | dropdown | DefaultControls.Dropdown | Dropdown | options([字符串数组]) |
 | scroll_view | DefaultControls.ScrollView | ScrollRect | horizontal(true), vertical(true), movementType(Elastic) |
-| loop_scroll_v | 模板 LoopScrollVertical | LoopVerticalScrollRect | **item(必填，item prefab 项目内路径)**, padding(0), spacing(0), reverse(false) |
+| loop_scroll_v | 模板 LoopScrollVertical | LoopVerticalScrollRect | **item(必填)**, reverse(false)。item 仅校验/文档用——YIUI 体系下列表项由手写 System 经 typeof(ItemComponent) 运行时绑定，prefab 无序列化槽位；间距由 item 尺寸/运行时决定 |
 | loop_scroll_h | 模板 LoopScrollHorizontal | LoopHorizontalScrollRect | 同上 |
 | prefab | 实例化指定 prefab | （按 bind.component 指定） | **path(必填，项目内路径)** |
 | block | UIBlock 组件节点 | 无 | color |

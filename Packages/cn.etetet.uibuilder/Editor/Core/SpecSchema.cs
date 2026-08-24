@@ -97,11 +97,9 @@ namespace ET.UIBuilder
                 P("horizontal", EPropKind.Bool), P("vertical", EPropKind.Bool),
                 P("movementtype", EPropKind.Enum, MovementTypes)) },
             { "loop_scroll_v", Defs(
-                P("item", EPropKind.String, null, true), P("padding", EPropKind.Number),
-                P("spacing", EPropKind.Number), P("reverse", EPropKind.Bool)) },
+                P("item", EPropKind.String, null, true), P("reverse", EPropKind.Bool)) },
             { "loop_scroll_h", Defs(
-                P("item", EPropKind.String, null, true), P("padding", EPropKind.Number),
-                P("spacing", EPropKind.Number), P("reverse", EPropKind.Bool)) },
+                P("item", EPropKind.String, null, true), P("reverse", EPropKind.Bool)) },
             { "prefab", Defs(P("path", EPropKind.String, null, true)) },
             { "block", Defs(P("color", EPropKind.Color)) },
         };
