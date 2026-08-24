@@ -9,9 +9,21 @@ namespace ET.UIBuilder
     /// </summary>
     public static class LayoutApplier
     {
+        private enum AxisMode
+        {
+            Center,     // 点锚居中：offset 定中心，size 定宽高
+            Stretch,    // 拉伸：两侧 margin 内缩
+            EdgeLeft,   // 贴左边：MarginLeft 内缩 + 厚度(宽)=size
+            EdgeRight,  // 贴右边：MarginRight 内缩 + 厚度(宽)=size
+            EdgeTop,    // 贴顶边：MarginTop 内缩 + 厚度(高)=size
+            EdgeBottom, // 贴底边：MarginBottom 内缩 + 厚度(高)=size
+        }
+
         public static void ApplyPlace(RectTransform rect, PlaceSpec place, float defaultWidth, float defaultHeight)
         {
-            GetAnchors(place.Anchor, out Vector2 anchorMin, out Vector2 anchorMax, out bool stretchX, out bool stretchY);
+            GetAnchors(place.Anchor,
+                out Vector2 anchorMin, out Vector2 anchorMax,
+                out AxisMode xMode, out AxisMode yMode);
             rect.anchorMin = anchorMin;
             rect.anchorMax = anchorMax;
             rect.pivot = new Vector2(place.PivotX, place.PivotY);
@@ -20,27 +32,45 @@ namespace ET.UIBuilder
             float height = place.Height >= 0 ? place.Height : defaultHeight;
 
             float minX, maxX;
-            if (stretchX)
+            switch (xMode)
             {
-                minX = place.MarginLeft;
-                maxX = -place.MarginRight;
-            }
-            else
-            {
-                minX = place.OffsetX - width / 2f;
-                maxX = place.OffsetX + width / 2f;
+                case AxisMode.Stretch:
+                    minX = place.MarginLeft;
+                    maxX = -place.MarginRight;
+                    break;
+                case AxisMode.EdgeLeft:
+                    minX = place.MarginLeft;
+                    maxX = place.MarginLeft + width;
+                    break;
+                case AxisMode.EdgeRight:
+                    maxX = -place.MarginRight;
+                    minX = maxX - width;
+                    break;
+                default: // Center
+                    minX = place.OffsetX - width / 2f;
+                    maxX = place.OffsetX + width / 2f;
+                    break;
             }
 
             float minY, maxY;
-            if (stretchY)
+            switch (yMode)
             {
-                minY = place.MarginBottom;
-                maxY = -place.MarginTop;
-            }
-            else
-            {
-                minY = place.OffsetY - height / 2f;
-                maxY = place.OffsetY + height / 2f;
+                case AxisMode.Stretch:
+                    minY = place.MarginBottom;
+                    maxY = -place.MarginTop;
+                    break;
+                case AxisMode.EdgeTop:
+                    maxY = -place.MarginTop;
+                    minY = maxY - height;
+                    break;
+                case AxisMode.EdgeBottom:
+                    minY = place.MarginBottom;
+                    maxY = minY + height;
+                    break;
+                default: // Center
+                    minY = place.OffsetY - height / 2f;
+                    maxY = place.OffsetY + height / 2f;
+                    break;
             }
 
             rect.offsetMin = new Vector2(minX, minY);
@@ -105,11 +135,14 @@ namespace ET.UIBuilder
                 : GridLayoutGroup.Constraint.Flexible;
         }
 
-        /// <summary>锚点预设 → anchors + 拉伸轴标记。预设词集合与 SpecSchema.Anchors 一致（lint 已拦截非法值）。</summary>
+        /// <summary>
+        /// 锚点预设 → anchors + 各轴模式。预设词集合与 SpecSchema.Anchors 一致（lint 已拦截非法值）。
+        /// 部分拉伸预设 = 贴边定厚条：点轴以对应 margin 内缩、按 size(或类型默认)确定厚度，该轴忽略 offset。
+        /// </summary>
         private static void GetAnchors(string anchor, out Vector2 anchorMin, out Vector2 anchorMax,
-            out bool stretchX, out bool stretchY)
+            out AxisMode xMode, out AxisMode yMode)
         {
-            stretchX = stretchY = false;
+            xMode = yMode = AxisMode.Center;
             switch (anchor)
             {
                 case "top":
@@ -140,27 +173,31 @@ namespace ET.UIBuilder
                 case "full":
                     anchorMin = Vector2.zero;
                     anchorMax = Vector2.one;
-                    stretchX = stretchY = true;
+                    xMode = yMode = AxisMode.Stretch;
                     break;
                 case "top_stretch":
                     anchorMin = new Vector2(0f, 1f);
                     anchorMax = new Vector2(1f, 1f);
-                    stretchX = true;
+                    xMode = AxisMode.Stretch;
+                    yMode = AxisMode.EdgeTop;
                     break;
                 case "bottom_stretch":
                     anchorMin = new Vector2(0f, 0f);
                     anchorMax = new Vector2(1f, 0f);
-                    stretchX = true;
+                    xMode = AxisMode.Stretch;
+                    yMode = AxisMode.EdgeBottom;
                     break;
                 case "left_stretch":
                     anchorMin = new Vector2(0f, 0f);
                     anchorMax = new Vector2(0f, 1f);
-                    stretchY = true;
+                    xMode = AxisMode.EdgeLeft;
+                    yMode = AxisMode.Stretch;
                     break;
                 case "right_stretch":
                     anchorMin = new Vector2(1f, 0f);
                     anchorMax = new Vector2(1f, 1f);
-                    stretchY = true;
+                    xMode = AxisMode.EdgeRight;
+                    yMode = AxisMode.Stretch;
                     break;
                 default: // center 及一切未匹配值
                     anchorMin = anchorMax = new Vector2(0.5f, 0.5f);

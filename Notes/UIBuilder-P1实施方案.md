@@ -82,7 +82,7 @@ nodes:
 | text | YIUI 模板 YIUIText_NoRaycast | Text | text(""), fontSize(24), color(#FFFFFFFF), alignment(UpperLeft..LowerRight, MiddleCenter), raycast(false), bestFit(false) |
 | tmp | YIUI 模板 YIUIText (TMP) | TextMeshProUGUI | text(""), fontSize(24), color, alignment |
 | image | YIUI 模板 YIUIImage_NoRaycast | Image | color(#FFFFFFFF), imageType(Simple), raycast(false), preserveAspect(false), fillAmount(1), fillMethod(Horizontal) |
-| button | YIUI 模板 YIUIButton | Button | text(""), fontSize(24), interactable(true), color |
+| button | YIUIButton_NoText 模板 + Builder 自建 legacy Text 标签（YIUIButton 自带 TMP 标签为 LiberationSans SDF，无中文字形会渲染成 □；CJK TMP 字体待字体方案确定后接入） | Button | text(""), fontSize(24), interactable(true), color |
 | input | DefaultControls.InputField | InputField | text(""), placeholder("请输入..."), contentType(Standard), lineType(SingleLine) |
 | toggle | DefaultControls.Toggle | Toggle | isOn(false), label("Toggle") |
 | slider | DefaultControls.Slider | Slider | value(0), minValue(0), maxValue(1) |
@@ -102,8 +102,8 @@ nodes:
 | 字段 | 默认 | 说明 |
 |---|---|---|
 | anchor | center | 预设词：center / top / bottom / left / right / top_left / top_right / bottom_left / bottom_right / stretch(=full) / top_stretch / bottom_stretch / left_stretch / right_stretch |
-| offset | [0,0] | 非 stretch 系：相对锚点位置 |
-| margins | [0,0,0,0] | stretch 系：[左,上,右,下] 边距 |
+| offset | [0,0] | 九宫格点锚：相对锚点位置（部分拉伸预设的点轴忽略 offset） |
+| margins | [0,0,0,0] | [左,上,右,下]：stretch 轴取对应两边内缩；部分拉伸预设的贴边轴取对应一边作内缩 |
 | size | 按类型默认 | 显式尺寸；button 默认 [160,48]，text 默认 [200,40]，其余默认 [100,100] |
 | pivot | [0.5,0.5] | |
 | rotation | 0 | z 轴角度 |
@@ -156,7 +156,7 @@ nodes:
 
   - name: u_ComBtnRoot
     type: node
-    place: { anchor: left_stretch, margins: [20, 20, 200, 20] }
+    place: { anchor: stretch, margins: [20, 20, 200, 20] }
     layout: { type: vertical, spacing: 12, padding: [10, 10, 10, 10] }
     children:
       - { name: u_ComBtnSkill1, type: button, props: { text: 上挑 } }

@@ -13,7 +13,7 @@ nodes:
 
   - name: u_ComBtnRoot
     type: node
-    place: { anchor: left_stretch, margins: [20, 20, 200, 20] }
+    place: { anchor: stretch, margins: [20, 20, 200, 20] }  # 左20/上20/右200/下20 的区域
     layout: { type: vertical, spacing: 12, padding: [10, 10, 10, 10] }
     children:
       - { name: u_ComBtnSkill1, type: button, props: { text: 上挑 } }

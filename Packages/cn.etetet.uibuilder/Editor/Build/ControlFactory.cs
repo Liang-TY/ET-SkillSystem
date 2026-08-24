@@ -30,7 +30,7 @@ namespace ET.UIBuilder
                 { "text", _ => InstantiateTemplate("YIUIText_NoRaycast") },
                 { "tmp", _ => InstantiateTemplate("YIUIText (TMP)") },
                 { "image", _ => InstantiateTemplate("YIUIImage_NoRaycast") },
-                { "button", _ => InstantiateTemplate("YIUIButton") },
+                { "button", _ => CreateButton() },
                 { "input", _ => FixupFonts(DefaultControls.CreateInputField(StdRes())) },
                 { "toggle", _ => FixupFonts(DefaultControls.CreateToggle(StdRes())) },
                 { "slider", _ => FixupFonts(DefaultControls.CreateSlider(StdRes())) },
@@ -64,6 +64,32 @@ namespace ET.UIBuilder
             var go = new GameObject("node");
             go.AddComponent<RectTransform>();
             go.AddComponent<CanvasRenderer>();
+            return go;
+        }
+
+        /// <summary>
+        /// 按钮 = YIUIButton_NoText 模板 + 自建 legacy Text 标签。
+        /// 不用 YIUIButton 模板自带的 TMP 标签：其 LiberationSans SDF 无中文字形（会渲染成 □），
+        /// CJK 的 TMP 字体资产待字体方案确定后接入（届时可切回 TMP 标签）。
+        /// </summary>
+        private static GameObject CreateButton()
+        {
+            GameObject go = InstantiateTemplate("YIUIButton_NoText");
+
+            var labelGo = new GameObject("Text");
+            RectTransform labelRect = labelGo.AddComponent<RectTransform>();
+            Text label = labelGo.AddComponent<Text>();
+            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            label.fontSize = 24;
+            label.alignment = TextAnchor.MiddleCenter;
+            label.color = new Color(0.13f, 0.13f, 0.13f, 1f);
+            label.raycastTarget = false;
+            labelRect.SetParent(go.transform, false);
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = Vector2.zero;
+            labelRect.offsetMax = Vector2.zero;
+
             return go;
         }
 
