@@ -1,0 +1,50 @@
+# S7 量产指标测试面板：11 节点 + 2 事件，验证自动触发与端到端耗时
+panel:
+  name: TestManyPanel
+  pkg: TestMany
+  layer: Popup
+  cacheSeconds: 5
+
+nodes:
+  - name: Title
+    type: text
+    place: { anchor: top, offset: [0, -30], size: [500, 50] }
+    props: { text: 量产测试面板, fontSize: 32 }
+
+  - name: u_ComBtnRow
+    type: node
+    place: { anchor: top_stretch, size: [0, 60], margins: [10, 10, 10, 0] }
+    layout: { type: horizontal, spacing: 10, padding: [10, 10, 10, 10] }
+    children:
+      - { name: u_ComBtnA, type: button, props: { text: 按钮1 } }
+      - { name: u_ComBtnB, type: button, props: { text: 按钮2 } }
+      - { name: u_ComBtnC, type: button, props: { text: 按钮3 } }
+
+  - name: u_ComGrid
+    type: node
+    place: { anchor: stretch, margins: [20, 90, 20, 80] }
+    layout: { type: grid, cellSize: [120, 90], spacing: 8, padding: [8, 8, 8, 8] }
+    children:
+      - { name: u_ComItem1, type: button, props: { text: 格1 } }
+      - { name: u_ComItem2, type: button, props: { text: 格2 } }
+      - { name: u_ComItem3, type: button, props: { text: 格3 } }
+      - { name: u_ComItem4, type: button, props: { text: 格4 } }
+
+  - name: u_ComInputName
+    type: input
+    place: { anchor: bottom, offset: [-150, 30], size: [300, 40] }
+    props: { placeholder: 输入名字 }
+
+  - name: u_ComToggleAgree
+    type: toggle
+    place: { anchor: bottom, offset: [80, 30], size: [200, 30] }
+    props: { label: 同意协议 }
+
+  - name: u_ComBtnClose
+    type: button
+    place: { anchor: top_right, offset: [-30, -30], size: [48, 48] }
+    props: { text: X }
+
+events:
+  - { name: u_EventClose, target: u_ComBtnClose, trigger: Click }
+  - { name: u_EventSubmit, target: u_ComBtnC, trigger: Click, params: [String] }

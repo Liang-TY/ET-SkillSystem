@@ -58,7 +58,7 @@ Unity 机项目目录 `.claude/settings.local.json`（不进 git，本机生效�
       "Bash(git *)",
       "Bash(unity *)",
       "Bash(pwsh *)",
-      "Write(automation/results/**)",
+      "Edit(automation/results/**)",
       "Read(**)",
       "Glob(**)",
       "Grep(**)"

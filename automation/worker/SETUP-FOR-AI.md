@@ -72,7 +72,7 @@ Get-ScheduledTaskInfo -TaskName "UIWorkerWatcher"    # LastTaskResult 应为 0 �
       "Bash(git *)",
       "Bash(unity *)",
       "Bash(pwsh *)",
-      "Write(automation/results/**)",
+      "Edit(automation/results/**)",
       "Read(**)",
       "Glob(**)",
       "Grep(**)"
@@ -81,7 +81,7 @@ Get-ScheduledTaskInfo -TaskName "UIWorkerWatcher"    # LastTaskResult 应为 0 �
 }
 ```
 
-用 pwsh 写（Set-Content），**不要用你自己的 Write 工具**（写完白名单后 Write 只放行 automation/results，本文件不在其内）。
+用 pwsh 写（Set-Content），**不要用你自己的 Write 工具**（写完白名单后 Edit 只放行 automation/results，本文件不在其内）。
 
 注意：无头模式（`claude -p`）下白名单外一律拒绝。之后想在 Unity 机开正常开发会话，人工临时改此文件即可。
 
