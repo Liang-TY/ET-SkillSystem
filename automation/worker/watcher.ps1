@@ -13,7 +13,9 @@ param(
     # 两次唤醒的最小间隔（秒）：claude 启动即退（模型不可用/网络断）时不至于风暴
     [int]$CooldownSec = 90,
     # 从 AI 模型（任务确定性高，用低配模型省成本；不可用时换 sonnet 等）
-    [string]$Model = "haiku"
+    [string]$Model = "haiku",
+    # worker 可执行入口：npm 安装的 Windows 机器上是 claude.cmd（裸 "claude" 可能解析到 .ps1 shim 被记事本打开）
+    [string]$ClaudeExe = "claude.cmd"
 )
 
 $lockFile  = Join-Path $ProjectRoot "automation\worker\.worker.lock"
@@ -63,7 +65,7 @@ while ($true) {
             if ($pending.Count -gt 0) {
                 $ids = ($pending | ForEach-Object { $_ -replace '\.yaml$', '' }) -join ", "
                 Write-Host ("[watcher] {0} 待办: {1} → 唤醒 worker (model={2})" -f (Get-Date -Format HH:mm:ss), $ids, $Model)
-                $proc = Start-Process -FilePath "claude" `
+                $proc = Start-Process -FilePath $ClaudeExe `
                     -ArgumentList @(
                         "-p",
                         "按 ui-worker skill 处理 origin/automation 总线上的待办任务：$ids。先 git fetch origin automation，任务内容用 git show origin/automation:automation/tasks/<id>.yaml 读取。",

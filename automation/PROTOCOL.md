@@ -8,7 +8,7 @@
 | 角色 | 运行位置 | 可写范围 | 说明 |
 |---|---|---|---|
 | 主 AI | 开发机（无 Unity） | 功能分支、`automation/tasks/` | 设计、写代码/spec、下单、审结果、merge |
-| 从 AI | Unity 机（无头为主） | `automation/results/`、`automation/wip-{id}` 分支 | 执行任务单、回传结果，**禁碰功能分支** |
+| 从 AI | Unity 机（无头为主） | `automation/results/`、 `wip-{id}` 分支 | 执行任务单、回传结果，**禁碰功能分支** |
 | 人 | 任意 | 全部 | 仲裁 needs_main、3 轮保险丝触发后的最终裁决 |
 
 - 两个 AI 互不认识、无需在线对齐，git 是唯一协调介质。
@@ -52,7 +52,7 @@ timeout_sec: 300
 # automation/results/0007.result.yaml
 id: 0007
 status: done              # done / failed / needs_main / skipped
-branch: automation/wip-0007   # 产物所在分支（有产物时）
+branch: wip-0007   # 产物所在分支（有产物时；无 automation/ 前缀，与总线分支 refs 冲突）
 build:                        # build 类型时
   prefab: Packages/.../SkillPanel.prefab
   gen_files: [ ... ]

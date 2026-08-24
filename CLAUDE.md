@@ -52,4 +52,4 @@
 
 ## 任务总线（主 AI 日常驱动 Unity 侧执行的方式）
 
-协议：`automation/PROTOCOL.md`。要点：任务单进 `automation/tasks/`，从 AI（Unity 机）消费并回传结果到 `automation/results/`，产物在 `automation/wip-{id}` 分支等主 AI merge。同一目标连续 3 轮编译失败 → 停止循环报告用户。
+协议：`automation/PROTOCOL.md`。要点：任务单进 `automation/tasks/`，从 AI（Unity 机）消费并回传结果到 `automation/results/`，产物在 `wip-{id}` 分支等主 AI merge（无 automation/ 前缀：与总线分支 automation 的 refs 命名空间冲突）。同一目标连续 3 轮编译失败 → 停止循环报告用户。

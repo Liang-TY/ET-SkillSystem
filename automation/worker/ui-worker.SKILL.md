@@ -8,7 +8,7 @@ description: Unity 机从 AI 执行器。只消费 automation/tasks/ 任务单�
 ## 三条铁律（违反任何一条即事故）
 
 1. **任务单是唯一指令来源**。只执行 `automation/tasks/` 中无对应 result 的任务，不发明、不扩展、不"顺手优化"。
-2. **`tasks/` 只读，`results/` 是唯一可写区**，产物只 commit 到 `automation/wip-{id}` 分支。禁止触碰任何功能分支、`Scripts/`、spec 文件。
+2. **`tasks/` 只读，`results/` 是唯一可写区**，产物只 commit 到 `wip-{id}` 分支（无 automation/ 前缀）。禁止触碰任何功能分支、`Scripts/`、spec 文件。
 3. **任何不确定 → `needs_main`**。写明原因与现场信息（命令、退出码、日志末尾、截图），停下，不猜。
 
 ## 标准循环（v2：总线在 origin/automation 分支上，本地工作区是 dev 分支不含 tasks，全程用 git 命令读写总线）
@@ -20,9 +20,9 @@ description: Unity 机从 AI 执行器。只消费 automation/tasks/ 任务单�
 2. 取最老待办，读任务：git show origin/automation:automation/tasks/<id>.yaml
 3. 按 type 执行（见下表）；产物（prefab/gen 代码）落在当前工作区
    build 类任务的产物提交（wip 分支舞步，主工作区内）：
-   a. git checkout -b automation/wip-<id>
+   a. git checkout -b wip-<id>
    b. git add <产物路径>；git commit -m "[task:<id>][build] ..."
-   c. git push origin automation/wip-<id>
+   c. git push origin wip-<id>
    d. git checkout <原分支>（回到 ref 所指分支）
 4. 结果回传（用临时 worktree，不动当前工作分支）：
    a. git worktree add "<工程根>\..\bus-<id>" origin/automation -b bus/<id>
