@@ -11,6 +11,7 @@ namespace ET.UIBuilder
         public bool Ok;
         public string SpecPath;
         public string PrefabPath;
+        public string PreviewPath;
         public readonly List<string> GeneratedFiles = new List<string>();
         public readonly List<string> Warnings = new List<string>();
         public readonly List<string> Errors = new List<string>();

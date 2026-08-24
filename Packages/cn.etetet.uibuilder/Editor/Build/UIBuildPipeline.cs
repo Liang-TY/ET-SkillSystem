@@ -16,7 +16,7 @@ namespace ET.UIBuilder
         /// <summary>YIUI 资源根约束（与 ubridge CreatePanel 一致）</summary>
         private const string YIUIResPath = "Assets/GameRes/YIUI";
 
-        public static BuildResult Build(string specPath)
+        public static BuildResult Build(string specPath, bool runPreview = true)
         {
             var result = new BuildResult { SpecPath = specPath };
 
@@ -80,6 +80,24 @@ namespace ET.UIBuilder
 
             // ⑤ YIUI 代码生成（基于资产态 prefab；codePackage 空 = 按 prefab 位置自动推导）
             result.GeneratedFiles.AddRange(CodeGenTrigger.Run(prefabPath, spec.Panel.CodePackage, result));
+            if (result.Errors.Count > 0)
+            {
+                result.Ok = false;
+                return result;
+            }
+
+            // ⑥ 预览截图（失败只警告，不阻断构建）
+            if (runPreview)
+            {
+                try
+                {
+                    result.PreviewPath = PreviewRenderer.Capture(prefabPath);
+                }
+                catch (Exception ex)
+                {
+                    result.Warnings.Add($"预览截图失败: {ex.Message}");
+                }
+            }
 
             result.Ok = result.Errors.Count == 0;
             return result;

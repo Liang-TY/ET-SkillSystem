@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -111,12 +113,62 @@ namespace ET.UIBuilder
                 string files = result.GeneratedFiles.Count > 0
                     ? "\n  " + string.Join("\n  ", result.GeneratedFiles.ToArray())
                     : "\n  （无新文件，partial 已存在）";
-                Debug.Log($"[UIBuilder] 构建成功: {result.PrefabPath}\n生成/更新文件:{files}\n" +
+                string preview = string.IsNullOrEmpty(result.PreviewPath)
+                    ? "\n预览: 失败（见 warnings）"
+                    : $"\n预览: {result.PreviewPath}";
+                Debug.Log($"[UIBuilder] 构建成功: {result.PrefabPath}\n生成/更新文件:{files}{preview}\n" +
                           "提示：可编辑 partial（YIUIComponent/YIUISystem 下）已存在则未覆盖；新 .cs 触发编译，错误看 Console。");
+                if (!string.IsNullOrEmpty(result.PreviewPath) && File.Exists(result.PreviewPath))
+                    EditorUtility.RevealInFinder(result.PreviewPath);
             }
             else
             {
                 Debug.LogError($"[UIBuilder] 构建失败:\n{string.Join("\n", result.Errors.ToArray())}");
+            }
+        }
+
+        /// <summary>S4：预览截图（选中 .prefab 直接截；选中 .ui.yaml 则截其对应 prefab，需先 Build）。</summary>
+        [MenuItem("Tools/YIUI Builder/Preview Prefab (选中 .prefab 或 .ui.yaml)")]
+        public static void PreviewPrefab()
+        {
+            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            if (string.IsNullOrEmpty(path))
+            {
+                Debug.LogWarning("[UIBuilder] 请先选中 .prefab 或 .ui.yaml");
+                return;
+            }
+
+            string prefabPath;
+            if (path.EndsWith(".prefab"))
+            {
+                prefabPath = path;
+            }
+            else if (path.EndsWith(".ui.yaml"))
+            {
+                string dir = Path.GetDirectoryName(path)?.Replace('\\', "/");
+                string name = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(path)); // 去掉 .ui
+                prefabPath = $"{dir}/Prefabs/{name}.prefab";
+                if (!File.Exists(Path.Combine(SpecLoader.ProjectRoot, prefabPath)))
+                {
+                    Debug.LogWarning($"[UIBuilder] 对应 prefab 不存在（先跑 Build Spec To Prefab）: {prefabPath}");
+                    return;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[UIBuilder] 请选中 .prefab 或 .ui.yaml");
+                return;
+            }
+
+            try
+            {
+                string png = PreviewRenderer.Capture(prefabPath);
+                Debug.Log($"[UIBuilder] 预览完成: {png}");
+                EditorUtility.RevealInFinder(png);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[UIBuilder] 预览失败: {ex.Message}\n{ex.StackTrace}");
             }
         }
 
