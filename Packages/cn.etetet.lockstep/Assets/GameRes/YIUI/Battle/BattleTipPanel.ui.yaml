@@ -8,4 +8,4 @@ nodes:
   - name: u_ComTextTip
     type: text
     place: { anchor: top, offset: [0, -110], size: [1000, 50] }
-    props: { text: "", fontSize: 30, color: "#FFFFCC44" }
+    props: { text: "", fontSize: 30, color: "#FFCC44FF" }

@@ -7,7 +7,7 @@ nodes:
   - name: BlackBg
     type: image
     place: { anchor: stretch }
-    props: { color: "#E6000000" }
+    props: { color: "#000000E6" }
 
   - name: Title
     type: text

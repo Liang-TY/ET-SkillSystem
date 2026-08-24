@@ -7,7 +7,7 @@ nodes:
   - name: BlackBg
     type: image
     place: { anchor: stretch }
-    props: { color: "#F2000000" }
+    props: { color: "#000000F2" }
 
   - name: u_ComTextMain
     type: text
@@ -17,4 +17,4 @@ nodes:
   - name: u_ComTextSub
     type: text
     place: { anchor: center, offset: [0, -20], size: [700, 40] }
-    props: { text: "", fontSize: 24, color: "#FFAAAAAA" }
+    props: { text: "", fontSize: 24, color: "#AAAAAAFF" }

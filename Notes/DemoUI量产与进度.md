@@ -23,7 +23,7 @@
 | 批次 | 面板 | pkg | 层级 | blockBg | 内容要点 | 状态 |
 |---|---|---|---|---|---|---|
 | ① | LoginPanel | Login | Panel | ✓ | 账号/密码输入+登录按钮，黑底图 | ✅* |
-| ① | LoadingPanel | Loading | Top | ✓ | 全屏黑图 #E6000000 + "加载中…"+副文本 | ✅* |
+| ① | LoadingPanel | Loading | Top | ✓ | 全屏黑图 #000000F2 + "加载中…"+副文本 | ✅* |
 | ① | RoleCreatePanel | Role | Panel | ✓ | 名字输入+创建按钮（v1 极简） | ✅ |
 | ① | RoleSelectPanel | Role | Panel | ✓ | 角色大卡片+进入城镇按钮 | ✅ |
 | ① | MainHUDPanel | Lobby | Scene | ✗ | 左上角色名；底部中间 6 按钮横排 | ✅ |
