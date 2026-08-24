@@ -1,0 +1,16 @@
+id: "0009"
+status: failed: spec_invalid
+message: "build 失败：yiui_build_panel 的 BuildResult.Ok=false，spec 校验未通过（BrokenOnPurpose.ui.yaml 故意构造非法，5 errors/1 warning）。按铁律不修代码、不重试，errors 清单原样回传。无产物（PrefabPath/PreviewPath=null，GeneratedFiles=[]），故无 wip 分支、无 PNG。"
+build:
+  prefab: null
+  gen_files: []
+  warnings:
+    - "[WARN][SPEC_EVENT_NAMING] events[0].name: 事件名建议以 'u_Event' 开头（当前 'badEvent'）"
+  errors:
+    - "spec 校验未通过: spec: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestBroken/BrokenOnPurpose.ui.yaml => INVALID (5 errors, 1 warnings)"
+    - "[ERROR][SPEC_NAME_PREFIX] nodes[0].name: 节点名 'u_BadNode'：u_ 前缀保留给 u_Com（C 表绑定节点）"
+    - "[ERROR][SPEC_TYPE_UNKNOWN] nodes[0].type: 未知控件类型 'buttton'（合法: node/text/tmp/image/button/input/toggle/slider/dropdown/scroll_view/loop_scroll_v/loop_scroll_h/prefab/block）"
+    - "[ERROR][SPEC_PROP_UNKNOWN] nodes[1].props.padding: type='loop_scroll_v' 不存在属性 'padding'（合法: item/reverse）"
+    - "[ERROR][SPEC_PROP_REQUIRED] nodes[1].props.item: type='loop_scroll_v' 的必填属性 'item' 缺失"
+    - "[ERROR][SPEC_EVENT_TARGET_MISSING] events: 事件 'badEvent' 的 target 'NotExists' 不存在于节点树"
+log_tail: []
