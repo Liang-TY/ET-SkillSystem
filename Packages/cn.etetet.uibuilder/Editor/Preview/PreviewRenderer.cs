@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+// ET 子命名空间陷阱：裸写 Scene 解析到 ET.Scene（同 ET.Object），用别名强制覆盖
+using Scene = UnityEngine.SceneManagement.Scene;
 
 namespace ET.UIBuilder
 {

@@ -145,7 +145,7 @@ namespace ET.UIBuilder
             }
             else if (path.EndsWith(".ui.yaml"))
             {
-                string dir = Path.GetDirectoryName(path)?.Replace('\\', "/");
+                string dir = Path.GetDirectoryName(path)?.Replace('\\', '/');
                 string name = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(path)); // 去掉 .ui
                 prefabPath = $"{dir}/Prefabs/{name}.prefab";
                 if (!File.Exists(Path.Combine(SpecLoader.ProjectRoot, prefabPath)))
