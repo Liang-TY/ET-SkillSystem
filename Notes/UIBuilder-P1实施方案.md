@@ -52,6 +52,7 @@ prefab 默认输出：`<spec目录>/Prefabs/<Panel>.prefab`（可用 `panel.pref
 | stackOption | enum | VisibleTween | EPanelStackOption |
 | priority | int | 0 | |
 | prefabPath | string | 按默认规则推导 | 覆盖输出路径 |
+| codePackage | string | 空 | 代码生成的目标 UPM 包名（cn.etetet.\<x\> 的 x）。**空 = YIUI 按 prefab 所在位置自动推导（推荐）**。注意与 pkg（YIUI 资源包名）是两个概念，传错会把生成代码写进无关包 |
 
 ### 3.2 nodes 段（节点树）
 

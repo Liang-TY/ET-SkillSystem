@@ -148,7 +148,7 @@ namespace ET.UIBuilder
             foreach (string k in dict.Keys)
             {
                 if (k != "name" && k != "pkg" && k != "layer" && k != "cacheseconds" && k != "blockbg"
-                    && k != "stackoption" && k != "priority" && k != "prefabpath")
+                    && k != "stackoption" && k != "priority" && k != "prefabpath" && k != "codepackage")
                     result.Error("SPEC_FIELD_UNKNOWN", $"panel.{k}", $"panel 段未知字段 '{k}'");
             }
 
@@ -160,6 +160,16 @@ namespace ET.UIBuilder
             spec.Panel.StackOption = GetEnum(dict, "stackoption", "panel.stackOption", SpecSchema.StackOptions, result, "VisibleTween");
             spec.Panel.Priority = GetInt(dict, "priority", "panel.priority", result, 0);
             spec.Panel.PrefabPath = GetString(dict, "prefabpath", "panel.prefabPath", result);
+
+            // codePackage：显式指定代码目标包（空 = 按 prefab 位置自动推导，推荐）
+            spec.Panel.CodePackage = GetString(dict, "codepackage", "panel.codePackage", result);
+            if (!string.IsNullOrEmpty(spec.Panel.CodePackage)
+                && !Directory.Exists(Path.Combine(ProjectRoot, "Packages", $"cn.etetet.{spec.Panel.CodePackage.ToLowerInvariant()}"))
+                && !Directory.Exists(Path.Combine(ProjectRoot, "Packages", $"cn.etetet.{spec.Panel.CodePackage}")))
+            {
+                result.Error("SPEC_CODEPACKAGE_NOT_FOUND", "panel.codePackage",
+                    $"代码目标包不存在: Packages/cn.etetet.{spec.Panel.CodePackage}（注意这是 UPM 包名，不是 YIUI 资源包名 pkg）");
+            }
         }
 
         private static NodeSpec BindNode(object obj, string path, SpecValidationResult result)

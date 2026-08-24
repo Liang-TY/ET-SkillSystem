@@ -78,8 +78,8 @@ namespace ET.UIBuilder
             AssetDatabase.Refresh();
             result.PrefabPath = prefabPath;
 
-            // ⑤ YIUI 代码生成（基于资产态 prefab）
-            result.GeneratedFiles.AddRange(CodeGenTrigger.Run(prefabPath, spec.Panel.Pkg, result));
+            // ⑤ YIUI 代码生成（基于资产态 prefab；codePackage 空 = 按 prefab 位置自动推导）
+            result.GeneratedFiles.AddRange(CodeGenTrigger.Run(prefabPath, spec.Panel.CodePackage, result));
 
             result.Ok = result.Errors.Count == 0;
             return result;

@@ -27,5 +27,12 @@ namespace ET.UIBuilder
 
         /// <summary>输出 prefab 路径；空 = &lt;spec目录&gt;/Prefabs/&lt;Name&gt;.prefab</summary>
         public string PrefabPath;
+
+        /// <summary>
+        /// 代码生成的目标 UPM 包（cn.etetet.&lt;x&gt; 的 x）。
+        /// 空 = 由 YIUI 按 prefab 所在位置自动推导（推荐）。
+        /// 注意：这是 UPM 包名，与 Pkg（YIUI 资源包名）是两个概念——传错会把生成代码写进无关包。
+        /// </summary>
+        public string CodePackage;
     }
 }

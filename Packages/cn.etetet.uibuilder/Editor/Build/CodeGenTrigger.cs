@@ -10,14 +10,16 @@ namespace ET.UIBuilder
 {
     /// <summary>
     /// 触发 YIUI 代码生成（迁移自 ubridge UBridgeYIUIGenerateCodeHandler）：
-    /// 反射调用 UICreateModule.CreatePackages(cde, true, false, pkg)。
+    /// 反射调用 UICreateModule.CreatePackages(cde, true, false, codePackage)。
+    /// codePackage 是目标 UPM 包名（cn.etetet.&lt;x&gt; 的 x），与 YIUI 资源包名(pkg)是两个概念；
+    /// 留空 = YIUI 按 prefab 所在位置自动推导（推荐——传错会把代码写进无关包）。
     /// 必须传"资产态"prefab 的 CDE 表（AssetDatabase 加载，非 LoadPrefabContents），
     /// 因为 UICreateModule 会检查 IsPartOfPrefabAsset。
     /// 产出：YIUIGen 生成代码 + 首次生成时的可编辑 partial 模板（已存在则不覆盖）。
     /// </summary>
     public static class CodeGenTrigger
     {
-        public static List<string> Run(string prefabPath, string pkg, BuildResult result)
+        public static List<string> Run(string prefabPath, string codePackage, BuildResult result)
         {
             GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (prefabAsset == null)
@@ -47,7 +49,7 @@ namespace ET.UIBuilder
                     return new List<string>();
                 }
 
-                method.Invoke(null, new object[] { cde, true, false, pkg });
+                method.Invoke(null, new object[] { cde, true, false, codePackage ?? "" });
             }
             catch (System.Reflection.TargetInvocationException ex)
             {
