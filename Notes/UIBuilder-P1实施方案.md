@@ -281,7 +281,7 @@ BuildResult JSON：
 | S3 ✅ | CDEBinder + CodeGenTrigger（迁移 ubridge 逻辑） | 构建后 YIUIGen 文件生成、C/E 表正确（SkillPanel 实测：6 C 表 + 1 E 表 + 面板选项全部精确映射） |
 | S4 ✅ | PreviewRenderer | 任意 prefab 出 PNG（SkillPanel 实测：布局/中文/按钮全部正确，视觉闭环建成） |
 | S5 ✅ | CliCommand + ubridge 薄壳 + Menu 三入口 | `unity command yiui_build_panel` 实测通过（Ok:true JSON，产物齐全）；ubridge 薄壳已注册，回退验证并入 S6 |
-| S6 | Unity 机环境（CLI/pipeline/-automated/watcher/从AI配置） | 一条 Ping 任务全链路回环 |
+| S6 ✅ | Unity 机环境（CLI/pipeline/-automated/watcher/从AI配置） | 0004 env_check 全链路回环（watcher v2 + 从AI 部署完成，手动首跑验证通过；自动触发由 0006 build 单自然验证） |
 | S7 | 验收（见 §6） | 全部通过 |
 
 S1-S5 在 Unity 机开发（Builder 是 Editor 代码），开发机可并行写 lint CLI、协议文件、skills（本次已交付）。
