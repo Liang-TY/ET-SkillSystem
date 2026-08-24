@@ -213,6 +213,9 @@ namespace ET
                     payloadJson = $"{{\"_t\":\"ET.YIUIAddControlRequest\",\"RpcId\":1,\"ParentId\":{parentId},\"Name\":\"{name}\",\"Type\":\"{type}\"}}";
                     break;
                 // YIUI
+                case "YIUIBuildPanel":
+                    payloadJson = $"{{\"_t\":\"ET.YIUIBuildPanelRequest\",\"RpcId\":1,\"Path\":\"{path}\"}}";
+                    break;
                 case "YIUICreatePanel":
                     payloadJson = $"{{\"_t\":\"ET.YIUICreatePanelRequest\",\"RpcId\":1,\"Path\":\"{path}\",\"Name\":\"{name}\"}}";
                     break;

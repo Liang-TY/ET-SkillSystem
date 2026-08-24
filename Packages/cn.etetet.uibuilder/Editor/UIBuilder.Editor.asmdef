@@ -7,7 +7,8 @@
         "ET.YIUIFramework",
         "ET.YIUIFramework.Editor",
         "UnityEngine.UI",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Unity.Pipeline"
     ],
     "includePlatforms": [
         "Editor"

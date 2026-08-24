@@ -242,12 +242,13 @@ public static BuildResult Build(string specPath, bool runCodeGen = true, bool ru
 
 | 命令 | 参数 | 行为 |
 |---|---|---|
-| `yiui_build_panel` | --spec \<path\> --json | 全量构建，返回 BuildResult JSON |
+| `yiui_build_panel` | --spec \<path\> \[--preview false\] | 全量构建，返回 BuildResult |
 | `yiui_build_all` | --dir \<specDir\> | 批量构建目录下全部 spec（量产用） |
 | `yiui_preview_panel` | --prefab \<path\> --width 1920 --height 1080 --out \<dir\> | 预览截图，返回 PNG 路径 |
-| `yiui_compile_check` | --timeout 300 | Refresh → 轮询 isCompiling → 返回 CompilerMessage[]（file/line/message/type） |
-| `yiui_list_types` | | 输出全部 type + props 封闭集合 JSON（AI 自查用） |
+| ~~yiui_compile_check~~ | — | **不自研**：编译验证走 pipeline 内建 `recompile` + `recompile_status`（从机 0003 单已验证可用） |
+| `yiui_list_types` | | 输出全部 type + props 封闭集合（AI 自查用） |
 | `yiui_export_spec` | --prefab \<path\> | **v2**：prefab → spec 反向导出 |
+| ubridge 薄壳 | `YIUIBuildPanel --path` | 回退通道，反射注册，无编译期依赖 |
 
 BuildResult JSON：
 
