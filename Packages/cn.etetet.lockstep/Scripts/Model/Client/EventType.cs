@@ -36,4 +36,11 @@
     public struct TownSceneInitFinish
     {
     }
+
+    // ---------- DemoUI 流程（战斗 UI）----------
+
+    /// <summary>怪物全灭（3 秒收场倒计时开始；View 层订阅显示 BattleTip）</summary>
+    public struct MonsterAllDead
+    {
+    }
 }

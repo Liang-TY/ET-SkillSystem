@@ -36,6 +36,7 @@ namespace ET.Client
             if (self.ReportAtTime == 0)
             {
                 self.ReportAtTime = now + ClearDelayMs;
+                EventSystem.Instance.Publish(self.Root(), new MonsterAllDead());
                 Log.Info($"[Battle] 怪物全灭，{ClearDelayMs}ms 后上报 BattleClear（战斗继续）");
                 return;
             }

@@ -35,7 +35,13 @@ namespace ET.Client
         [YIUIInvoke(LoginPanelComponent.OnEventLoginInvoke)]
         private static async ETTask OnEventLoginInvoke(this LoginPanelComponent self)
         {
-            
+            // DemoUI：账号密码登录（走现有 login 流程；LoginFinish 事件负责关面板开选角）
+            GlobalComponent global = self.Root().GetComponent<GlobalComponent>();
+            LoginHelper.Login(
+                self.Root(),
+                global.GlobalConfig.Address,
+                self.u_ComInputAccount.text,
+                self.u_ComInputPassword.text).NoContext();
             await ETTask.CompletedTask;
         }
         #endregion YIUIEvent结束
