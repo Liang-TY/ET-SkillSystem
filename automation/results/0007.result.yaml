@@ -1,0 +1,14 @@
+id: 0007
+status: done
+branch: wip-0007
+build:
+  prefab: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestMany/Prefabs/TestManyPanel.prefab
+  gen_files:
+    - Packages/cn.etetet.lockstep/Scripts/ModelView/Client/YIUIGen/TestMany/TestManyPanelComponentGen.cs
+    - Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUIGen/TestMany/TestManyPanelComponentSystemGen.cs
+    - Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/TestMany/TestManyPanelComponentSystem.cs
+  warnings: []
+  errors: []
+preview: automation/results/0007.png
+message: "rebuild 成功，编译零错误。幂等性现场：YIUIGen/System 三个生成文件与上版字节一致；prefab 重新生成，diff 为 451+/451-（含行尾归一与 fileID 重排，如 2298995187477963793→2253974820096188163）。"
+log_tail: []
