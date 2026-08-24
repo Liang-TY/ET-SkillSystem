@@ -94,6 +94,32 @@ namespace ET.UIBuilder
                       $"（{NodeTreeBuilder.CountNodes(spec.Nodes)} 个节点，S2 预览模式：不落盘不生成代码）");
         }
 
+        /// <summary>S3：完整构建——prefab 落盘 + YIUIGen 代码生成（首次含可编辑 partial 模板）。</summary>
+        [MenuItem("Tools/YIUI Builder/Build Spec To Prefab (选中 .ui.yaml)")]
+        public static void BuildToPrefab()
+        {
+            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            if (string.IsNullOrEmpty(path) || !path.EndsWith(".ui.yaml"))
+            {
+                Debug.LogWarning("[UIBuilder] 请先在 Project 窗口选中一个 .ui.yaml 文件");
+                return;
+            }
+
+            BuildResult result = UIBuildPipeline.Build(path);
+            if (result.Ok)
+            {
+                string files = result.GeneratedFiles.Count > 0
+                    ? "\n  " + string.Join("\n  ", result.GeneratedFiles.ToArray())
+                    : "\n  （无新文件，partial 已存在）";
+                Debug.Log($"[UIBuilder] 构建成功: {result.PrefabPath}\n生成/更新文件:{files}\n" +
+                          "提示：可编辑 partial（YIUIComponent/YIUISystem 下）已存在则未覆盖；新 .cs 触发编译，错误看 Console。");
+            }
+            else
+            {
+                Debug.LogError($"[UIBuilder] 构建失败:\n{string.Join("\n", result.Errors.ToArray())}");
+            }
+        }
+
         /// <summary>校验单个 spec 并输出；返回是否通过</summary>
         private static bool ReportOne(string path)
         {
