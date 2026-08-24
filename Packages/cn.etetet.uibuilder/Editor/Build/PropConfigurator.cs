@@ -125,11 +125,21 @@ namespace ET.UIBuilder
             Image image = go.GetComponent<Image>();
             if (image != null) image.color = ParseColor(p, "color", image.color);
 
+            // YIUIButton 模板的标签是 TMP；DefaultControls 系为 legacy Text —— 两者都兼容
             Text label = go.GetComponentInChildren<Text>(true);
             if (label != null)
             {
                 label.text = GetStr(p, "text", "");
                 label.fontSize = (int)GetNum(p, "fontsize", label.fontSize);
+            }
+            else
+            {
+                TextMeshProUGUI tmpLabel = go.GetComponentInChildren<TextMeshProUGUI>(true);
+                if (tmpLabel != null)
+                {
+                    tmpLabel.text = GetStr(p, "text", "");
+                    tmpLabel.fontSize = GetNum(p, "fontsize", tmpLabel.fontSize);
+                }
             }
         }
 

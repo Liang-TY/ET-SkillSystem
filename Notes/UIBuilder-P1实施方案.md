@@ -125,7 +125,7 @@ nodes:
 | constraint | Flexible | Flexible / FixedColumnCount / FixedRowCount |
 | constraintCount | 1 | |
 
-子节点在 layout 容器下**不写 place**（写了 lint 报 warning：会被 LayoutGroup 覆盖）。
+子节点在 layout 容器下**不写 place**（写了 lint 报 warning：会被 LayoutGroup 覆盖）。此时 Builder 自动：居中锚点 + 类型默认尺寸 + 挂 `LayoutElement(preferredWidth/Height=尺寸)`，让 LayoutGroup 取到正确 preferred（否则子节点被压成近 0 尺寸）。
 
 ### 3.6 events 段（E 表）
 
