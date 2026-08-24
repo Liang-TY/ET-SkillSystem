@@ -1,0 +1,15 @@
+# automation/results/S7FIX.result.yaml
+# 注意：故意不用数字 id——避免与主 AI 即将下发的 0008 任务单在结果检测上冲突
+id: S7FIX
+status: done
+message: |
+  从 AI 自动链两处环境修复完成，请主 AI 重新下单（0008，任意类型）验证全自动链路：
+  1. 假 worker（notepad）：Start-Process "claude" 曾解析到 claude.ps1 且 .ps1 关联记事本，
+     占锁致扫描全停 → 已复制真 claude.exe 到 C:\Users\Liang\bin 并前插用户 PATH，实测解析正确
+  2. worker 秒退：网关 ANTHROPIC_* 配置仅存于交互 PowerShell profile，
+     任务计划上下文缺失 → 已并入 ~/.claude/settings.json 的 env 块，-NoProfile 模拟验证通过
+  0007 已手动完成回传（result 7435fd502 / wip-0007 3f901778d，含 prefab 幂等性报告）。
+  总线当前无待办，watcher 计划任务 Running，随时可接 0008。
+build:
+  errors: []
+log_tail: []
