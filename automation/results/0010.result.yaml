@@ -1,0 +1,19 @@
+id: "0010"
+status: done
+branch: wip-0010
+build_all:
+  dir: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI
+  total: 9
+  failed: 0
+  results:
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/BattleTipPanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/MapSelectPanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Loading/LoadingPanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Lobby/MainHUDPanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Login/LoginPanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Role/RoleCreatePanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Role/RoleSelectPanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Skill/SkillPanel.ui.yaml
+    - OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestMany/TestManyPanel.ui.yaml
+  errors: []
+message: ""
