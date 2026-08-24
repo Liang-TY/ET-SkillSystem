@@ -40,6 +40,9 @@ namespace ET.UIBuilder
             else
             {
                 outPath = Path.IsPathRooted(outPath) ? outPath : Path.Combine(SpecLoader.ProjectRoot, outPath);
+                // 兼容目录形式：无扩展名视为目录，自动补 <名>_<宽>x<高>.png
+                if (string.IsNullOrEmpty(Path.GetExtension(outPath)))
+                    outPath = Path.Combine(outPath, $"{prefabAsset.name}_{width}x{height}.png");
                 string dir = Path.GetDirectoryName(outPath);
                 if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
             }
