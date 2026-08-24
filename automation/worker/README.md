@@ -100,3 +100,10 @@ Register-ScheduledTask -TaskName "UIWorkerWatcher" -Action $action -Trigger $tri
 2. Unity 机 watcher 15 秒内唤醒从 AI。
 3. 开发机 pull `automation/results/0001.result.yaml`，应看到 `status: done` 及编辑器/pipeline 状态。
 4. 若失败，按 result 的 message 排查（常见：编辑器未开、pipeline 未装、权限白名单路径不对）。
+
+## 已知坑（排障记录）
+
+| 症状 | 根因 | 修复 |
+|---|---|---|
+| watcher 唤醒后 .worker.lock 长期占着、无 result | `Start-Process "claude"` 解析到 npm shim 的 claude.ps1，.ps1 关联记事本 → 假进程永不退出 | 真 claude.exe 前插 PATH；仓库侧 watcher 已参数化 `$ClaudeExe`（默认 claude.cmd） |
+| worker 被拉起但秒退、无任何输出 | 网关 `ANTHROPIC_*` 环境变量只在交互 profile，**计划任务上下文没有** | env 并入 `~/.claude/settings.json` 的 env 块（上下文无关）；用 `pwsh -NoProfile` 模拟验证 |
