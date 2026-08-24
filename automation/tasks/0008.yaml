@@ -1,0 +1,6 @@
+id: "0008"
+type: preview
+ref: et9lockStepYIUISeqFrameAniTestDev
+prefab: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestMany/Prefabs/TestManyPanel.prefab
+created: 2026-08-25T02:51:00+08:00
+timeout_sec: 120
