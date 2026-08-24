@@ -92,6 +92,12 @@ ET 是数据驱动 ECS：Entity 纯数据容器，行为全在 System。分析�
 | ETEntitySerializeFormatterGenerator | 为 Entity 生成 MemoryPack 序列化代码（类型 Hash 多态分发） |
 | ETGetComponentGenerator | 为每个 `[ComponentOf]` 生成 `GetXxxComponent()` 扩展 |
 
+## 命名空间陷阱：ET 子命名空间下的类型解析
+
+在 `ET.xxx` 子命名空间写代码时，C# 会先在父命名空间 `ET` 里解析类型。ET.Core 定义了 `Object`、`Entity` 等与 UnityEngine 同名/近名类型——**裸写 `Object` 会绑到 `ET.Object` 而非 `UnityEngine.Object`**（编译报 CS0029/CS0030，且不易看出原因）。
+
+规则：ET 子命名空间内引用 UnityEngine 的 Object 必须**全限定 `UnityEngine.Object`**；同理警惕 `Random`、`Debug` 等潜在同名类型。
+
 ## 写码自检顺序
 
 1. 这个类是什么？（Entity/System/Handler/工具类）→ 决定放哪层
