@@ -1,0 +1,15 @@
+id: 0006
+status: done
+branch: wip-0006
+build:
+  prefab: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestMany/Prefabs/TestManyPanel.prefab
+  gen_files:
+    - Packages/cn.etetet.lockstep/Scripts/ModelView/Client/YIUIGen/TestMany/TestManyPanelComponentGen.cs
+    - Packages/cn.etetet.lockstep/Scripts/ModelView/Client/YIUIComponent/TestMany/TestManyPanelComponent.cs
+    - Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUIGen/TestMany/TestManyPanelComponentSystemGen.cs
+    - Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/TestMany/TestManyPanelComponentSystem.cs
+  warnings: []
+  errors: []
+preview: automation/results/0006.png
+message: "产物分支实际命名 wip-0006：远端已存在 automation 总线分支，refs/heads/automation 与 automation/wip-* 目录/文件命名空间冲突（git push 报 directory file conflict），automation/wip-{id} 无法推送；改用协议 wip-{id} 形态（主 AI runbook 收尾验证 Select-String wip-0006 可匹配）。"
+log_tail: []
