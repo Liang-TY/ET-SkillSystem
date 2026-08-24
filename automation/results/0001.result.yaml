@@ -1,0 +1,26 @@
+# automation/results/0001.result.yaml
+id: 0001
+status: needs_main
+message: |
+  无任务单的编译失败上浮（人在场裁决直接提交，无对应 tasks/0001.yaml）。
+  现场：功能分支 et9lockStepYIUISeqFrameAniTestDev @ f300dbbe2（新增S2面板树构建，
+  接入com.unity.pipeline与unity-cli安装脚本）git pull 后 Unity 编译失败。
+  判读：12 条错误全在 f300dbbe2 新增手写文件 cn.etetet.uibuilder/Editor/Build/*.cs
+  = 纯代码 bug（含 asmdef 引用缺失），非 spec 脱节。
+  环境：unity-cli 1.0.0-beta.6 已装，pipeline 0.5.0-exp.1 已连接编辑器（端口 7800 可达），
+  修复后可下 compile_check 单验证。
+build:
+  errors:
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs, line: 91, type: CS7036, message: "GetStr 调用少传必填参数 fallback"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs, line: 93, type: CS1061, message: "Text 无 resizeToBestFit（uGUI 只有 resizeTextForBestFit 属性）"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs, line: 112, type: CS7036, message: "GetStr 调用少传必填参数 fallback"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs, line: 117, type: CS7036, message: "GetStr 调用少传必填参数 fallback"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs, line: 141, type: CS7036, message: "GetStr 调用少传必填参数 fallback"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs, line: 143, type: CS7036, message: "GetStr 调用少传必填参数 fallback"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs, line: 185, type: CS7036, message: "GetStr 调用少传必填参数 fallback"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/ControlFactory.cs, line: 74, type: CS0246, message: "UIBlock 类型找不到（缺 using 或 asmdef 引用）"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/ControlFactory.cs, line: 100, type: CS0029, message: "UnityEngine.Object 不能隐式转 ET.Object"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/ControlFactory.cs, line: 101, type: CS0030, message: "ET.Object 不能转 UnityEngine.GameObject"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PanelAssembler.cs, line: 24, type: CS0311, message: "UIBindCDETable 不是 Component 子类，不能 AddComponent<T>()"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Build/PanelAssembler.cs, line: 24, type: CS0012, message: "缺 Sirenix.Serialization 程序集引用（UIBuilder.Editor.asmdef 未引 Odin）"}
+log_tail: []
