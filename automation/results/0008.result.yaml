@@ -1,0 +1,5 @@
+id: "0008"
+status: done
+preview: automation/results/0008.png
+message: "按 skill 预览行传 --out automation/results（目录）失败：实现把 --out 当 PNG 文件路径，File.WriteAllBytes(目录路径) 报 Access denied；改用文件路径 --out automation/results/0008.png 成功，生成 1920x1080 有效 PNG（55702 字节）。建议主 AI 修订 ui-worker.SKILL.md 预览行为 --out automation/results/<id>.png。"
+log_tail: []
