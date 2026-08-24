@@ -1,6 +1,0 @@
-id: "0009"
-type: build
-ref: et9lockStepYIUISeqFrameAniTestDev
-spec: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestBroken/BrokenOnPurpose.ui.yaml
-created: 2026-08-25T02:58:00+08:00
-timeout_sec: 300
