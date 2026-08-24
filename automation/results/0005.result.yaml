@@ -1,0 +1,21 @@
+# automation/results/0005.result.yaml
+id: 0005
+status: done
+message: |
+  无任务单的部署状态上浮（人在场裁决直接提交，同 0001-0004 先例）。
+  内容：S6→S7 从 AI 常驻体系部署完成报告。
+  - watcher v2 已部署：et9lockStepYIUISeqFrameAniTestDev @ e3e988b67
+  - UIWorkerWatcher 计划任务：Running，唯一实例（短路径 pwsh + -Model haiku），登录自启，
+    每 15s 扫 origin/automation 总线；可见调试窗口已按人要求移除
+  - 0004 首跑验证：done，全链路通（读单→env_check→写结果→worktree 推送 a0813998f）
+  - 环境：unity-cli 1.0.0-beta.6；编辑器 6000.0.25f1；pipeline 0.5.0-exp.1 端口 7800 可达；
+    worker 侧 unity 不在 PATH，已用全路径 C:\Users\Liang\AppData\Local\Unity\bin\unity.exe 调通
+  - 修正：settings.local.json 白名单 Write(automation/results/**)→Edit(automation/results/**)
+    （Claude Code 提示 Write 规则形式不参与文件权限匹配）
+  提醒主 AI：
+  1. 本机模型经中转实际落到 deepseek-v4-flash，--model haiku 冒烟可返回但 Claude Code
+     报 unrecognized_model（deepseek-v4-flash）；下单如需指定模型，watcher 的 -Model 参数会透传。
+  2. 0004 单内 ref 为 et9lockStepYIUISeqFrameAniTestDev，worker 已在同名分支验证过 pull --rebase 无更新。
+build:
+  errors: []
+log_tail: []
