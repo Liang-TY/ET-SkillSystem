@@ -1,0 +1,6 @@
+id: "0006"
+type: build
+ref: et9lockStepYIUISeqFrameAniTestDev
+spec: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestMany/TestManyPanel.ui.yaml
+created: 2026-08-25T01:57:00+08:00
+timeout_sec: 300
