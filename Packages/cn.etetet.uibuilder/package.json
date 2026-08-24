@@ -1,0 +1,14 @@
+{
+  "name": "cn.etetet.uibuilder",
+  "displayName": "ET.UIBuilder",
+  "version": "0.1.0",
+  "unity": "6000.0",
+  "description": "YIUI spec 驱动的 UI 构建器：.ui.yaml -> prefab + YIUIGen 代码 + 预览截图。方案见 Notes/UIBuilder-P1实施方案.md。",
+  "author": {
+    "name": "LTY",
+    "email": "345014522@qq.com"
+  },
+  "dependencies": {
+    "cn.etetet.yiuiframework": "3.1.4"
+  }
+}

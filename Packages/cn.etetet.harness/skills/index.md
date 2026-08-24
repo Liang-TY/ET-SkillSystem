@@ -17,10 +17,22 @@
 
 ### 核心开发
 
-- `et-code` — 待迁移
+- `et-code`
+  - 场景：写/改任何 C#（Entity/System 分层、包结构、分析器红线）、创建新包、asmdef/asmref
+  - 补读：`skills/et-code/SKILL.md`，细节 `skills/et-code/references/et-code-rules.md`
 - `et-async`
   - 场景：`async` / `await` / `ETTask`、`EntityRef` await 安全、并发等待
   - 补读：`skills/et-async/SKILL.md`
+- `et-yiui`
+  - 场景：UI 面板（YIUI 体系、u_Com/u_Event 绑定、循环列表、.ui.yaml spec 编写）
+  - 补读：`skills/et-yiui/SKILL.md`，拼 UI 方案 `Notes/UIBuilder-P1实施方案.md`
+
+### 远程执行（开发机无 Unity）
+
+- `automation` 任务总线
+  - 场景：编译、构建、截图、任何需要 Unity 的操作
+  - 协议：`automation/PROTOCOL.md`（任务单/结果/提交规范/失败流程/保险丝）
+  - 从 AI（Unity 机）配置模板：`automation/worker/`
 
 ### Unity 编辑器操作
 
@@ -49,7 +61,8 @@
 ## 组合场景
 
 - 改 ET 代码：`et-code` → 涉及异步叠加 `et-async` → `et-build`
-- Unity 编辑器操作：`et-unitybridge` → 确认就绪后执行
+- 做 UI：`et-yiui` → 写 spec → lint → `automation` 下单 build → 看截图迭代
+- Unity 编辑器操作：`et-unitybridge`（回退通道）→ 确认就绪后执行
 - 读写 Excel：`et-excel`（xlsx skill）
 - 准备提交：`et-git`
 

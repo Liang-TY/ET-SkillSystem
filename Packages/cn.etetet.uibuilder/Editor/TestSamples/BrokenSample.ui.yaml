@@ -1,0 +1,33 @@
+# 故意全错的样例：用于验收 S1「坏 spec 返回完整错误清单」。
+# 覆盖：未知顶层字段 / 缺必填 / 枚举非法 / 未知属性 / 属性类型错 / 颜色格式错 /
+#       节点重名 / u_ 前缀违规 / 事件 target 不存在 / 必填属性缺失 / 资源不存在 / grid 缺 cellSize
+whatever: 1
+
+panel:
+  name: BrokenPanel
+  # pkg 缺失
+  layer: Middle
+  cacheSeconds: 3.5
+
+nodes:
+  - name: Dup
+    type: text
+    unknowField: true
+    props: { textx: 1, fontSize: big, color: red, alignment: Center }
+
+  - name: Dup
+    type: button
+
+  - name: u_WrongPrefix
+    type: image
+
+  - name: u_ComScroll
+    type: loop_scroll_v
+    props: { padding: 5 }
+
+  - name: u_ComGrid
+    type: node
+    layout: { type: grid, constraint: FixedDiagonal }
+
+events:
+  - { name: badName, target: NotExistsNode }

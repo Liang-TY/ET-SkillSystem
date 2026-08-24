@@ -22,7 +22,8 @@ description: ET git workflow for preparing commits and reviewing changes.
 3. 如果本次任务需要提交 `.meta`、导出结果或生成代码，则保留对应文件
 4. 准备提交前，再看 `git diff` 与 `git diff --staged`，确认没有混入无关改动
 5. 提交信息统一使用中文，格式：`动作 + 对象 + 影响范围/原因`
-6. 风险操作（拆分提交、回滚、`cherry-pick`、`rebase`）先说明影响再执行
+6. 提交信息**一行简短**，不写正文清单；**禁止附加任何自动签名**（如 Co-Authored-By 等 trailer）
+7. 风险操作（拆分提交、回滚、`cherry-pick`、`rebase`）先说明影响再执行
 
 ## 优先入口
 

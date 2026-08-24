@@ -1,0 +1,35 @@
+# 合法样例：应 0 error 通过（对照 Notes/UIBuilder-P1实施方案.md §3.7）
+panel:
+  name: SkillPanel
+  pkg: Skill
+  layer: Panel
+  cacheSeconds: 10
+
+nodes:
+  - name: Title
+    type: text
+    place: { anchor: top, offset: [0, -40], size: [400, 60] }
+    props: { text: 技能, fontSize: 36 }
+
+  - name: u_ComBtnRoot
+    type: node
+    place: { anchor: left_stretch, margins: [20, 20, 200, 20] }
+    layout: { type: vertical, spacing: 12, padding: [10, 10, 10, 10] }
+    children:
+      - { name: u_ComBtnSkill1, type: button, props: { text: 上挑 } }
+      - { name: u_ComBtnSkill2, type: button, props: { text: 三段斩 } }
+      - { name: u_ComBtnSkill3, type: button, props: { text: 裂波斩 } }
+
+  - name: u_ComLoopSkillList
+    type: loop_scroll_v
+    place: { anchor: stretch, margins: [220, 80, 20, 80] }
+    props:
+      item: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/ScrollTest/TestScrollItem.prefab
+
+  - name: u_ComBtnClose
+    type: button
+    place: { anchor: top_right, offset: [-40, -40], size: [64, 64] }
+    props: { text: X, color: "#FFFFFFFF" }
+
+events:
+  - { name: u_EventClose, target: u_ComBtnClose, trigger: Click }

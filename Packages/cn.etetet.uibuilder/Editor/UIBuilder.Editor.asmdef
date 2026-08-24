@@ -1,0 +1,23 @@
+{
+    "name": "ET.UIBuilder.Editor",
+    "rootNamespace": "ET.UIBuilder",
+    "references": [
+        "ET.Core",
+        "ET.Core.Editor",
+        "ET.YIUIFramework",
+        "ET.YIUIFramework.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "YamlDotNet.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
