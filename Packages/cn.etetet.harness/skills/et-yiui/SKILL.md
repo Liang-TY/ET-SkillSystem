@@ -68,5 +68,16 @@ self.Loop.SetDataRefresh(list, defaultIndex).NoContext();
 ## 红线
 
 - YIUIGen 生成文件禁改；prefab 由 Builder 从 spec 生成，禁手工改（人工调整走 v2 ExportSpec 导回）
+- **`#region YIUIEvent开始/结束` 标记禁删**（YIUI 区域合并依赖它；删了代码生成报错）
 - 帧同步相关数值/逻辑不进 UI 层；UI 只做展示与表现
 - ET 原生 UI（UIComponent/AUIEvent/UILSxxx）不再扩展
+
+## rebuild 安全性边界（改 spec 重建对手写代码的影响）
+
+| 文件 | rebuild 行为 |
+|---|---|
+| YIUIGen/*（Gen） | 全量重写（禁手改，无损失） |
+| YIUIComponent/*（partial） | 已存在则跳过（ExistSkip），永不覆盖 |
+| YIUISystem/*（partial） | 区域增量合并：YIUIEvent region 内已有事件 stub 保留（内写逻辑安全）、新事件追加 region 尾；**region 外代码永不触碰** |
+
+依据：`TemplateEngine.RegionCheckReplace`（默认 cover=false 只增不删）。
