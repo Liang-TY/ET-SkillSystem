@@ -282,7 +282,7 @@ BuildResult JSON：
 | S4 ✅ | PreviewRenderer | 任意 prefab 出 PNG（SkillPanel 实测：布局/中文/按钮全部正确，视觉闭环建成） |
 | S5 ✅ | CliCommand + ubridge 薄壳 + Menu 三入口 | `unity command yiui_build_panel` 实测通过（Ok:true JSON，产物齐全）；ubridge 薄壳已注册，回退验证并入 S6 |
 | S6 ✅ | Unity 机环境（CLI/pipeline/-automated/watcher/从AI配置） | 0004 env_check 全链路回环（watcher v2 + 从AI 部署完成，手动首跑验证通过；自动触发由 0006 build 单自然验证） |
-| S7 | 验收（见 §6） | 全部通过 |
+| S7 ✅ | 验收（见 §6） | 0006 量产（3 分钟实跑）/ 0007 rebuild 幂等（Gen 字节一致）/ **0008 全自动链（3 分钟无人干预）**/ 0009 失败路径（5 错结构化回传、无产物、原 prefab 零改动）。遗留：ubridge 回退通道未实测（pipeline 主通道稳定，暂缓）；LtyTestPanel 等价性以 SkillPanel/TestManyPanel 新面板代验 |
 
 S1-S5 在 Unity 机开发（Builder 是 Editor 代码），开发机可并行写 lint CLI、协议文件、skills（本次已交付）。
 
