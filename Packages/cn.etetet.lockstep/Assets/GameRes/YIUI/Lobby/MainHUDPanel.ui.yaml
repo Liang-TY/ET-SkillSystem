@@ -1,0 +1,31 @@
+panel:
+  name: MainHUDPanel
+  pkg: Lobby
+  layer: Scene
+  blockBg: false
+
+nodes:
+  - name: u_ComTextRoleName
+    type: text
+    place: { anchor: top_left, offset: [180, -40], size: [320, 40] }
+    props: { text: 角色名, fontSize: 26, alignment: UpperLeft }
+
+  - name: u_ComBtnRoot
+    type: node
+    place: { anchor: bottom, offset: [0, 58], size: [1100, 56] }
+    layout: { type: horizontal, spacing: 12, padding: [8, 8, 4, 4], childAlignment: MiddleCenter }
+    children:
+      - { name: u_ComBtnSettings, type: button, props: { text: 设置 } }
+      - { name: u_ComBtnBag, type: button, props: { text: 背包 } }
+      - { name: u_ComBtnRoleInfo, type: button, props: { text: 角色 } }
+      - { name: u_ComBtnShop, type: button, props: { text: 商城 } }
+      - { name: u_ComBtnMap, type: button, props: { text: 选图 } }
+      - { name: u_ComBtnActivity, type: button, props: { text: 活动 } }
+
+events:
+  - { name: u_EventSettings, target: u_ComBtnSettings, trigger: Click }
+  - { name: u_EventBag, target: u_ComBtnBag, trigger: Click }
+  - { name: u_EventRoleInfo, target: u_ComBtnRoleInfo, trigger: Click }
+  - { name: u_EventShop, target: u_ComBtnShop, trigger: Click }
+  - { name: u_EventMap, target: u_ComBtnMap, trigger: Click }
+  - { name: u_EventActivity, target: u_ComBtnActivity, trigger: Click }

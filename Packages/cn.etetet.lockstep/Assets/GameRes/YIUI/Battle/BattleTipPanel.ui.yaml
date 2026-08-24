@@ -1,0 +1,11 @@
+panel:
+  name: BattleTipPanel
+  pkg: Battle
+  layer: Tips
+  blockBg: false
+
+nodes:
+  - name: u_ComTextTip
+    type: text
+    place: { anchor: top, offset: [0, -110], size: [1000, 50] }
+    props: { text: "", fontSize: 30, color: "#FFFFCC44" }

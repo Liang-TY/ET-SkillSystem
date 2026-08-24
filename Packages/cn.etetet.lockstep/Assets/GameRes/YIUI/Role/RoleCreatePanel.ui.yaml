@@ -1,0 +1,23 @@
+panel:
+  name: RoleCreatePanel
+  pkg: Role
+  layer: Panel
+
+nodes:
+  - name: Title
+    type: text
+    place: { anchor: top, offset: [0, -100], size: [500, 60] }
+    props: { text: 创建角色, fontSize: 36 }
+
+  - name: u_ComInputName
+    type: input
+    place: { anchor: center, offset: [0, 40], size: [360, 48] }
+    props: { placeholder: 角色名 }
+
+  - name: u_ComBtnCreate
+    type: button
+    place: { anchor: center, offset: [0, -60], size: [240, 56] }
+    props: { text: 创建 }
+
+events:
+  - { name: u_EventCreate, target: u_ComBtnCreate, trigger: Click }

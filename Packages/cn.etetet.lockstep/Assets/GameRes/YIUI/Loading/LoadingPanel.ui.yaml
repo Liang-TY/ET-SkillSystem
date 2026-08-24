@@ -1,0 +1,20 @@
+panel:
+  name: LoadingPanel
+  pkg: Loading
+  layer: Top
+
+nodes:
+  - name: BlackBg
+    type: image
+    place: { anchor: stretch }
+    props: { color: "#F2000000" }
+
+  - name: u_ComTextMain
+    type: text
+    place: { anchor: center, offset: [0, 40], size: [500, 60] }
+    props: { text: 加载中…, fontSize: 40 }
+
+  - name: u_ComTextSub
+    type: text
+    place: { anchor: center, offset: [0, -20], size: [700, 40] }
+    props: { text: "", fontSize: 24, color: "#FFAAAAAA" }

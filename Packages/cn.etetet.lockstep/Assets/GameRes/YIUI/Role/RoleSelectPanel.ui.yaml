@@ -1,0 +1,24 @@
+panel:
+  name: RoleSelectPanel
+  pkg: Role
+  layer: Panel
+
+nodes:
+  - name: Title
+    type: text
+    place: { anchor: top, offset: [0, -80], size: [500, 60] }
+    props: { text: 选择角色, fontSize: 36 }
+
+  - name: u_ComBtnRole
+    type: button
+    place: { anchor: center, offset: [0, 40], size: [480, 300] }
+    props: { text: 角色1 }
+
+  - name: u_ComBtnEnter
+    type: button
+    place: { anchor: bottom, offset: [0, 40], size: [320, 64] }
+    props: { text: 进入城镇 }
+
+events:
+  - { name: u_EventSelectRole, target: u_ComBtnRole, trigger: Click }
+  - { name: u_EventEnterTown, target: u_ComBtnEnter, trigger: Click }

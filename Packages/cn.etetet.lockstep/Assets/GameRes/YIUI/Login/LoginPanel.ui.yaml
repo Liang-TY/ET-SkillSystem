@@ -1,0 +1,33 @@
+panel:
+  name: LoginPanel
+  pkg: Login
+  layer: Panel
+
+nodes:
+  - name: BlackBg
+    type: image
+    place: { anchor: stretch }
+    props: { color: "#E6000000" }
+
+  - name: Title
+    type: text
+    place: { anchor: top, offset: [0, -120], size: [500, 60] }
+    props: { text: 账号登录, fontSize: 36 }
+
+  - name: u_ComInputAccount
+    type: input
+    place: { anchor: center, offset: [0, 60], size: [400, 48] }
+    props: { placeholder: 账号 }
+
+  - name: u_ComInputPassword
+    type: input
+    place: { anchor: center, offset: [0, 0], size: [400, 48] }
+    props: { placeholder: 密码, contentType: Password }
+
+  - name: u_ComBtnLogin
+    type: button
+    place: { anchor: center, offset: [0, -80], size: [220, 56] }
+    props: { text: 登录 }
+
+events:
+  - { name: u_EventLogin, target: u_ComBtnLogin, trigger: Click }

@@ -1,0 +1,28 @@
+panel:
+  name: MapSelectPanel
+  pkg: Battle
+  layer: Popup
+
+nodes:
+  - name: Title
+    type: text
+    place: { anchor: top, offset: [0, -50], size: [600, 60] }
+    props: { text: 选择战斗地图, fontSize: 34 }
+
+  - name: u_ComMapList
+    type: node
+    place: { anchor: center, offset: [0, -20], size: [420, 420] }
+    layout: { type: vertical, spacing: 14, padding: [12, 12, 12, 12], childAlignment: UpperCenter }
+    children:
+      - { name: u_ComBtnMap1, type: button, props: { text: 地图一 } }
+      - { name: u_ComBtnMap2, type: button, props: { text: 地图二 } }
+
+  - name: u_ComBtnClose
+    type: button
+    place: { anchor: top_right, offset: [-48, -48], size: [48, 48] }
+    props: { text: X }
+
+events:
+  - { name: u_EventMap1, target: u_ComBtnMap1, trigger: Click }
+  - { name: u_EventMap2, target: u_ComBtnMap2, trigger: Click }
+  - { name: u_EventClose, target: u_ComBtnClose, trigger: Click }
