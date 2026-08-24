@@ -22,15 +22,14 @@
 
 | 批次 | 面板 | pkg | 层级 | blockBg | 内容要点 | 状态 |
 |---|---|---|---|---|---|---|
-| ① | LoginPanel | Login | Panel | ✓ | 账号/密码输入+登录按钮，黑底图 | ✅* |
-| ① | LoadingPanel | Loading | Top | ✓ | 全屏黑图 #000000F2 + "加载中…"+副文本 | ✅* |
+| ① | LoginPanel | Login | Panel | ✓ | 账号/密码输入+登录按钮，黑底图 | ✅ |
+| ① | LoadingPanel | Loading | Top | ✓ | 全屏黑图 #000000F2 + "加载中…"+副文本 | ✅ |
 | ① | RoleCreatePanel | Role | Panel | ✓ | 名字输入+创建按钮（v1 极简） | ✅ |
 | ① | RoleSelectPanel | Role | Panel | ✓ | 角色大卡片+进入城镇按钮 | ✅ |
 | ① | MainHUDPanel | Lobby | Scene | ✗ | 左上角色名；底部中间 6 按钮横排 | ✅ |
 | ① | MapSelectPanel | Battle | Popup | ✓ | 地图竖排按钮列表（占位 2 个）+关闭 | ✅ |
-| ① | BattleTipPanel | Battle | Tips | ✗ | 顶部提示文本（战斗结束倒计时） | ✅* |
+| ① | BattleTipPanel | Battle | Tips | ✗ | 顶部提示文本（战斗结束倒计时） | ✅ |
 
-> \* 结构验收通过（prefab/生成代码与 spec 逐项核对一致），但带 8 位色值（#AARRGGBB）的节点颜色被 builder 解析错位（见问题区 P1），等修复后重建即可闭环。
 | ② | SkillHUDPanel | Battle | Scene | ✗ | 底部右边技能按钮组（占位 4） | ⬜ |
 | ② | BattleInfoPanel | Battle | Scene | ✗ | 顶部左：角色血条(常驻)+怪物血条(默认隐藏) | ⬜ |
 | ② | BagPanel | Lobby | Popup | ✓ | grid 容器，运行时填 20 假 item | ⬜ |
@@ -52,6 +51,7 @@
 
 ## 进度记录
 
+- **08-25 05:3x** 0011 验收合并：颜色修复方案②（spec 改 #RRGGBBAA 序，4 处）后 build_all 重建，结果 done（9/9 OK，0 失败）。wip-0011 快进并入 dev（49e3b30e8，8 prefab，1097/1097 行）。静态验收：8 个变更 prefab 做 fileID 归一化语义 diff，除 4 个颜色节点外全部 0 差异（其余为 builder 重建 fileID 重生成，节点多重集/锚点/位置/尺寸与 0010 版一致）。4 节点颜色逐项确认修复：Login BlackBg (0,0,0,α=0.902) 黑不透明、Loading BlackBg (0,0,0,α=0.949)、Loading 副文本 (0.667,0.667,0.667,α=1) 浅灰、BattleTip 文本 (1,0.8,0.267,α=1) 清晰黄。布局要点复核：MainHUD 按钮根底部中间 1100×56+6 按钮、角色名左上；RoleSelect 大卡片 u_ComBtnRole+进入按钮底部中间；MapSelect 右上 X(48×48)+2 地图钮竖列。**PNG 未回传**（见问题区 P3），本单为静态验收，批次① 颜色缺陷闭环。
 - **08-25 05:1x** 0010 验收合并：wip-0010 干净并入 dev（4f3f3a093，108 文件）。build_all 结果 done（9/9 OK，无编译错误）；无 PNG 回传（build_all 单本身不含 preview 步骤，本轮未补单）。改为静态验收：7 面板 prefab 节点/组件/锚点/位置/尺寸与 spec 逐项核对全部一致；Login 密码框 m_ContentType=7=Password（Unity6 uGUI 枚举序已核实）；MainHUD 横排/MapSelect 竖排布局组件在位。发现 builder 颜色解析缺陷见问题区 P1。
 - **08-25 03:1x** 文档创建；批次① 7 个 spec 已写、随 build_all 单 0010 下发。
 - **08-25 03:2x** 排雷：旧试验版 LoginPanel（prefab+代码）已清除（防字段名冲突编译错）；发现登录入口已指向 YIUI，L1 免做。
@@ -59,6 +59,7 @@
 
 ## 问题 / 待办
 
-- **P1 builder 颜色字节序 bug（影响批次①3 面板 4 节点）**：spec 约定 8 位色 #AARRGGBB，而 `PropConfigurator.ParseColor` 直接交给 `ColorUtility.TryParseHtmlString`（Unity 8 位格式为 #RRGGBBAA，alpha 在末尾），通道错位。实测：Login BlackBg `#E6000000`→(0.90,0,0,a=0) 完全透明且染暗红（应为 90% 不透明黑）；Loading BlackBg `#F2000000`→(0.95,0,0,a=0) 同病；Loading 副文本 `#FFAAAAAA`→(1,.67,.67,a=.67) 半透明粉（应为不透明浅灰）；BattleTip 文本 `#FFFFCC44`→(1,1,.8,a=.27) 淡黄 27%（应为不透明黄，倒计时不醒目）。6 位色不受影响。修复建议（二选一，待主会话定）：①改 `Packages/cn.etetet.uibuilder/Editor/Build/PropConfigurator.cs` ParseColor，9 长度串 AA 前置重排为 RRGGBBAA 再解析（推荐，spec 约定不动），随后无需改 spec 直接再下 build_all 重建即闭环；②spec 约定改为 #RRGGBBAA 并重写现有 4 处色值。spec 侧无需改动。
-- **P2 文档/spec 不一致（小）**：面板总表 Loading 黑底写 `#E6000000`，spec 实为 `#F2000000`；P1 修复时顺手统一。
-- 0010 无预览截图回传：build_all 任务类型不含 preview 步骤。后续如需视觉验收，单独立 preview 单或在 build_all 后补标准链第二步。
+- **P3 从机未按新规则回传 PNG（0011 实证）**：`automation/worker/ui-worker.SKILL.md` 的 build_all 补 PNG 回传规则已随 5d3363b77 更新进仓库（origin/automation），但 Unity 机 watcher 执行 0011 时未产出 `automation/results/0011-*.png`——疑从机本地 skill 副本未同步仓库更新。0011 验收改走静态核验（结果见进度区），视觉验收欠账。需主会话处理：同步从机本地 skill 或确认 watcher 读取路径。
+- **P1 builder 颜色字节序 bug —— 已解决（方案②，5d3363b77 + 0011 重建验证）**：spec 8 位色约定由 #AARRGGBB 改为 #RRGGBBAA（Unity `ColorUtility` 原生序），4 处色值重写；0011 重建后 4 节点颜色实测正确（0,0,0,0.902 / 0,0,0,0.949 / 0.667 灰 α=1 / 黄 α=1）。builder `PropConfigurator.ParseColor` 代码未动，如后续再写 #AARRGGBB 仍会错位——spec 侧务必按 #RRGGBBAA 书写。
+- **P2 文档/spec 不一致 —— 已解决**：面板总表 Loading 黑底已随 5d3363b77 统一为 `#000000F2`（RRGGBBAA 序）。
+- 0010 无预览截图回传：build_all 任务类型不含 preview 步骤。后续如需视觉验收，单独立 preview 单或在 build_all 后补标准链第二步（0011 已补 skill 规则但未生效，见 P3）。
