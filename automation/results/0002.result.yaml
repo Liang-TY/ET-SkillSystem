@@ -1,0 +1,26 @@
+# automation/results/0002.result.yaml
+id: 0002
+status: needs_main
+message: |
+  无任务单的编译失败上浮（人在场裁决直接提交，同 0001 先例，无对应 tasks/0002.yaml）。
+  现场：功能分支 et9lockStepYIUISeqFrameAniTestDev @ fdf4863b3（新增S4预览渲染）。
+  采集：unity command recompile + recompile_status（failed:true），权威当前错误集。
+  进展：0001 上报的 Build/ 12 条错误本轮已消失（主 AI 已修复）；
+  本轮 8 条全部在 S4 新增代码（fdf4863b3），为第 1 轮。
+  判读（供参考，非事实）：
+  - PreviewRenderer.cs：Scene 与 ET.Scene 命名冲突（需 using UnityEngine.SceneManagement 或全限定名）；
+    缺 using UnityEditor.SceneManagement（EditorSceneManager/NewSceneSetup/NewSceneMode 所在命名空间）。
+  - UIBuilderMenu.cs(148)：string 传给 char 参数（疑 Split 传参）。
+  提醒：Preview/PreviewRenderer.cs.meta 未入库（工作区 untracked），主 AI 补提交 meta。
+build:
+  errors:
+    - {file: Packages/cn.etetet.uibuilder/Editor/Preview/PreviewRenderer.cs, line: 42, type: CS0029, message: "UnityEngine.SceneManagement.Scene 不能隐式转 ET.Scene（Scene 命名冲突）"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Preview/PreviewRenderer.cs, line: 43, type: CS0103, message: "EditorSceneManager 不存在（缺 using UnityEditor.SceneManagement）"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Preview/PreviewRenderer.cs, line: 43, type: CS0103, message: "NewSceneSetup 不存在（缺 using UnityEditor.SceneManagement）"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Preview/PreviewRenderer.cs, line: 43, type: CS0103, message: "NewSceneMode 不存在（缺 using UnityEditor.SceneManagement）"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Preview/PreviewRenderer.cs, line: 44, type: CS1503, message: "ET.Scene 不能转 UnityEngine.SceneManagement.Scene"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Preview/PreviewRenderer.cs, line: 103, type: CS1503, message: "ET.Scene 不能转 UnityEngine.SceneManagement.Scene"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Preview/PreviewRenderer.cs, line: 104, type: CS0103, message: "EditorSceneManager 不存在"}
+    - {file: Packages/cn.etetet.uibuilder/Editor/Menu/UIBuilderMenu.cs, line: 148, type: CS1503, message: "string 不能转 char"}
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":true}'
