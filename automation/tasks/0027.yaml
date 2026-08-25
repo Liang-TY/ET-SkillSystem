@@ -1,0 +1,6 @@
+id: "0027"
+type: build_all
+ref: et9lockStepYIUISeqFrameAniTestDev
+dir: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI
+created: 2026-08-25T18:30:00+08:00
+timeout_sec: 600
