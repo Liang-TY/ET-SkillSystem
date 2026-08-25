@@ -1,0 +1,22 @@
+# automation/results/0031.result.yaml
+id: "0031"
+status: done
+base: 5d3100bed
+created: 2026-08-25T21:40:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 5d3100bed（已自检核对）。
+  产物已提交 wip-0031（23 文件：11 prefab + 4 ModelView Gen + 4 Hotfix Gen + 4 YIUISystem）+ 推送。
+  注意①：build region 在 4 面板 YIUISystem 各追加了第二个签名不同的空 stub
+  （void OnEventWindowDragInvoke(object p1)），与主AI已填实现（无参 async 版）构成重载并存；
+  主AI实现未被覆盖。u_EventWindowDrag 为 P0 事件，此 stub 签名疑似 region 生成器 P1 模板误配，
+  建议主AI验收时删除或改回。
+  注意②：本基点代码树编译不通过（BattleHudUnitComponentSystem.cs:182 Object.Destroy），
+  详见 0032 result —— 与本次 build 产物无关，来自 5d3100bed 提交。
+build:
+  total: 16
+  failed: 0
+  changed_files: 23
+wip_branch: wip-0031
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
