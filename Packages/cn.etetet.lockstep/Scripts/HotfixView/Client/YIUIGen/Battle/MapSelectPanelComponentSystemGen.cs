@@ -36,6 +36,7 @@ namespace ET.Client
             self.UIPanel.StackOption = EPanelStackOption.VisibleTween;
             self.UIPanel.Priority = 0;
 
+            self.u_ComImgBg = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Image>("u_ComImgBg");
             self.u_ComMapList = self.UIBase.ComponentTable.FindComponent<UnityEngine.RectTransform>("u_ComMapList");
             self.u_ComBtnMap1 = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnMap1");
             self.u_ComBtnMap2 = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnMap2");
