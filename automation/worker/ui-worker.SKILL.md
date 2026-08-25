@@ -46,7 +46,7 @@ description: Unity 机从 AI 执行器。只消费 automation/tasks/ 任务单�
 | build | `unity command yiui_build_panel --spec <task.spec> --json`；BuildResult 原样写入 result；编译失败=failed: compile_error + errors 清单（**不修代码**） | 5min |
 | build_all | 同上，`unity command yiui_build_all --dir <task.spec>` | 10min |
 | preview | `unity command yiui_preview_panel --prefab <task.prefab> --out automation/results/<id>.png` | 2min |
-| compile_check | 内建命令组合：`unity command recompile` → 轮询 `unity command recompile_status`（无自研命令）；错误清单写入 result | task 指定 |
+| compile_check | 内建命令组合：`unity command refresh`（先触发资产刷新）→ `unity command recompile` → 轮询 `unity command recompile_status`。**警惕假阴性**：若 status=up_to_date 而 ref 上确有 .cs 变更，说明未触发编译——重跑 refresh+recompile 再取结果；错误清单写入 result | task 指定 |
 | eval | 只执行 `unity command eval_file <task.eval_file>`（片段由主 AI 拟好），返回值原样转述进 result，**不解读、不改动片段** | 1min |
 
 ## 异常处理
