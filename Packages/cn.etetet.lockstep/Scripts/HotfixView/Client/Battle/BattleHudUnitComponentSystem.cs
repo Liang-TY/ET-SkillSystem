@@ -15,11 +15,14 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this BattleHudUnitComponent self)
         {
+            DamageFloatHelper.Clear();
         }
 
         [EntitySystem]
         private static void Update(this BattleHudUnitComponent self)
         {
+            DamageFloatHelper.Tick();   // 飘字驱动（挂本组件帧循环）
+
             BattleInfoPanelComponent panel = self.Panel;
             if (panel == null) return;
 

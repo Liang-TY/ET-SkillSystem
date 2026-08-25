@@ -11,6 +11,8 @@ namespace ET.Client
     /// Desc
     /// </summary>
     [FriendOf(typeof(MapSelectPanelComponent))]
+    [FriendOf(typeof(TownPlayerComponent))]
+    [FriendOf(typeof(LoadingPanelComponent))]
     public static partial class MapSelectPanelComponentSystem
     {
         [EntitySystem]
