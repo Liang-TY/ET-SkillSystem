@@ -1,0 +1,15 @@
+# automation/results/0034.result.yaml
+id: "0034"
+status: done
+base: 424dcf6ea
+created: 2026-08-25T23:40:00+08:00
+message: |
+  compile_check 通过：0 错误。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 424dcf6ea（已自检核对，拖动重复注册修复已并入）。
+  验证真实性：recompile 真实触发（compiling → completed, failed:false），Editor.log 增长（17693078→17713769）。
+  交叉验证：get_console_logs total=2 全 Log、0 Error。
+build:
+  errors: []
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":false,"errors":[]}'
+  - 'get_console_logs: total=2, Error: 0'
