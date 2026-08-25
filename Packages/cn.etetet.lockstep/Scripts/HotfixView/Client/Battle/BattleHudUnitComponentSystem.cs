@@ -179,7 +179,7 @@ namespace ET.Client
 
                 if (elapsed >= FloatDuration)
                 {
-                    Object.Destroy(text.gameObject);
+                    UnityEngine.Object.Destroy(text.gameObject);
                     RemoveAt(self, i);
                 }
             }
