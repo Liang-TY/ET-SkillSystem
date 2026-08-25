@@ -1,6 +1,7 @@
 using System;
 using TrueSync;
 using UnityEngine;
+using UnityEngine.UI;
 using YIUIFramework;
 using System.Collections.Generic;
 
@@ -17,7 +18,13 @@ namespace ET.Client
         [EntitySystem]
         private static void YIUIInitialize(this BattleInfoPanelComponent self)
         {
-            self.HideMonster();   // 决策：不打怪就隐藏
+            self.HideMonster();
+
+            // 保险：确保两条血条 Image 为 Filled 类型（fillAmount 只在 Filled 下有视觉效果）
+            self.u_ComImgPlayerHp.type = Image.Type.Filled;
+            self.u_ComImgPlayerHp.fillMethod = Image.FillMethod.Horizontal;
+            self.u_ComImgMonsterHp.type = Image.Type.Filled;
+            self.u_ComImgMonsterHp.fillMethod = Image.FillMethod.Horizontal;
         }
 
         [EntitySystem]
@@ -43,7 +50,13 @@ namespace ET.Client
             self.u_ComImgMonsterHp.gameObject.SetActive(true);
         }
 
-        /// <summary>设置怪物血条比例（0~1，供平滑缓动）</summary>
+        /// <summary>设置玩家血条比例（0~1）</summary>
+        public static void SetPlayerHpRatio(this BattleInfoPanelComponent self, float ratio)
+        {
+            self.u_ComImgPlayerHp.fillAmount = Mathf.Clamp01(ratio);
+        }
+
+        /// <summary>设置怪物血条比例（0~1，供平滑缓动）</summary
         public static void SetMonsterHpRatio(this BattleInfoPanelComponent self, float ratio)
         {
             self.u_ComImgMonsterHp.fillAmount = Mathf.Clamp01(ratio);

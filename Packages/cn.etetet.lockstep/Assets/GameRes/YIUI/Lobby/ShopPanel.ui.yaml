@@ -4,6 +4,7 @@ panel:
   layer: Popup
 
 nodes:
+  - { name: u_ComImgBg, type: image, place: { anchor: stretch }, props: { color: "#3C3F41FF" } }
   - name: Title
     type: text
     place: { anchor: top, offset: [0, -50], size: [500, 60] }

@@ -50,6 +50,17 @@ namespace ET.Client
             float hpFloat = numeric != null ? numeric.Get(NumericType.Hp).AsFloat() : 0f;
             float maxFloat = numeric != null ? numeric.Get(NumericType.MaxHp).AsFloat() : 0f;
 
+            // 玩家血条（即时更新，不平滑）
+            LSUnit playerUnit = unitComponent != null ? FindPlayer(unitComponent) : null;
+            LSNumericComponent playerNumeric = playerUnit?.GetComponent<LSNumericComponent>();
+            if (playerNumeric != null)
+            {
+                float pHp = playerNumeric.Get(NumericType.Hp).AsFloat();
+                float pMax = playerNumeric.Get(NumericType.MaxHp).AsFloat();
+                self.PlayerHpRatio = pMax > 0f ? Mathf.Clamp01(pHp / pMax) : 0f;
+                panel.SetPlayerHpRatio(self.PlayerHpRatio);
+            }
+
             if (monster != null && numeric != null)
             {
                 self.TargetHpRatio = maxFloat > 0f ? Mathf.Clamp01(hpFloat / maxFloat) : 0f;
@@ -95,6 +106,17 @@ namespace ET.Client
                     self.MonsterShown = false;
                 }
             }
+        }
+
+        private static LSUnit FindPlayer(LSUnitComponent unitComponent)
+        {
+            foreach (var kv in unitComponent.Children)
+            {
+                if (kv.Value is LSUnit unit && unit.GetComponent<LSMonsterAIComponent>() == null)
+                    return unit;
+            }
+
+            return null;
         }
 
         private static LSUnit FindFirstMonster(LSUnitComponent unitComponent)

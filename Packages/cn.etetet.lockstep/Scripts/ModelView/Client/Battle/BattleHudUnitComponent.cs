@@ -20,6 +20,9 @@ namespace ET.Client
         public bool MonsterShown;
 
         // 平滑血条（用户决策：死亡时血条缓减到 0 再隐藏）
+        // 玩家血条（逐帧直读，不需要平滑——自己血条变化即时反馈）
+        public float PlayerHpRatio;
+
         public float TargetHpRatio;
         public float DisplayHpRatio;
         public Vector3 LastMonsterWorldPos;
