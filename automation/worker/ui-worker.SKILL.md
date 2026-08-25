@@ -26,7 +26,8 @@ description: Unity 机从 AI 执行器。只消费 automation/tasks/ 任务单�
    d. git checkout <原分支>（回到 ref 所指分支）
 4. 结果回传（用临时 worktree，不动当前工作分支）：
    a. git worktree add "<工程根>\..\bus-<id>" origin/automation -b bus/<id>
-   b. 把 automation/results/<id>.result.yaml 写入 worktree；
+   b. 把 automation/results/<id>.result.yaml 写入 worktree（**必含 base: <wip基点的 git 短哈希>**——
+      取法：git rev-parse --short origin/<ref>，主 AI 验收将核对此基点包含任务所需最新提交）；
       build_all 任务把 Library/UIPreview 下各面板 PNG 拷贝为 automation/results/<id>-<面板名>.png
       （build 单同旧规：automation/results/<id>.png）
    c. git -C "<工程根>\..\bus-<id>" add -A
