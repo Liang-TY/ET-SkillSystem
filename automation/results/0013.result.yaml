@@ -1,0 +1,14 @@
+id: "0013"
+status: failed
+reason: compile_error
+errors:
+  - file: Packages/cn.etetet.lockstep/Scripts/ModelView/Client/Battle/BattleHudUnitComponent.cs
+    line: 1
+    message: "error CS0246: The type or namespace name 'TrueSync' could not be found (are you missing a using directive or an assembly reference?)"
+  - file: Packages/cn.etetet.lockstep/Scripts/ModelView/Client/Battle/BattleHudUnitComponent.cs
+    line: 16
+    message: "error CS0246: The type or namespace name 'FP' could not be found (are you missing a using directive or an assembly reference?)"
+message: "compile_check failed: recompile 后 recompile_status failed=true，2 处错误均在 BattleHudUnitComponent.cs（TrueSync/FP 命名空间缺失）"
+log_tail:
+  - "recompile: {\"status\":\"compiling\",\"message\":\"Recompilation started.\"}"
+  - "recompile_status: {\"status\":\"completed\",\"failed\":true,\"errors\":[\"Packages\\cn.etetet.lockstep\\Scripts\\ModelView\\Client\\Battle\\BattleHudUnitComponent.cs(1,7): error CS0246: The type or namespace name 'TrueSync' could not be found (are you missing a using directive or an assembly reference?)\",\"Packages\\cn.etetet.lockstep\\Scripts\\ModelView\\Client\\Battle\\BattleHudUnitComponent.cs(16,16): error CS0246: The type or namespace name 'FP' could not be found (are you missing a using directive or an assembly reference?)\"]}"
