@@ -1,0 +1,16 @@
+# automation/results/0025.result.yaml
+id: "0025"
+status: done
+branch: wip-0025
+base: 3795f42d6
+message: |
+  build_all 完成：16/16（Failed 0）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 3795f42d6（已自检核对）。
+  产物：16 面板全部重建；其中 8 个 prefab 有实质内容变化（已提交 wip-0025 @ fb0f6035），
+  另 8 个重建后内容与 HEAD 一致（无 diff，未入库）。无新面板生成文件。
+build:
+  total: 16
+  failed: 0
+  changed_prefabs: [MapSelectPanel, SkillHUDPanel, LoadingPanel, MainHUDPanel, LoginPanel,
+                   RoleSelectPanel, SkillPanel, TestManyPanel]
+log_tail: []
