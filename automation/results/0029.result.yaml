@@ -1,0 +1,13 @@
+# automation/results/0029.result.yaml
+id: "0029"
+status: done
+base: cf568b0f5
+created: 2026-08-25T20:20:00+08:00
+message: |
+  compile_check 通过：0 错误。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ cf568b0f5（已自检核对，4面板拖动实现已并入）。
+  验证真实性：recompile 后 Editor.log 增长（9290835→9315009）+ 轮询到 completed 且 failed:false。
+build:
+  errors: []
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":false,"errors":[]}'
