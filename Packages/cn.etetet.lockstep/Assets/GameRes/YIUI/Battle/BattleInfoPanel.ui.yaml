@@ -10,19 +10,23 @@ nodes:
     place: { anchor: top_left, offset: [120, -36], size: [200, 36] }
     props: { text: 角色, fontSize: 24, alignment: UpperLeft }
 
-  - name: u_ComImgPlayerHp
-    type: image
-    place: { anchor: top_left, offset: [220, -62], size: [400, 16] }
-    props: { color: "#50C350FF", imageType: Filled, fillMethod: Horizontal, fillAmount: 1 }
+  - name: u_ComPlayerHpBar
+    type: node
+    place: { anchor: top_left, offset: [420, -62], size: [400, 16] }
+    children:
+      - { name: u_ComImgPlayerHpBg, type: image, place: { anchor: stretch }, props: { color: "#1A331AFF" } }
+      - { name: u_ComImgPlayerHp, type: image, place: { anchor: stretch }, props: { color: "#50E050FF" } }
 
   - name: u_ComTextMonsterName
     type: text
     place: { anchor: top_left, offset: [120, -96], size: [200, 36] }
     props: { text: "", fontSize: 24, alignment: UpperLeft }
 
-  - name: u_ComImgMonsterHp
-    type: image
-    place: { anchor: top_left, offset: [220, -122], size: [400, 16] }
-    props: { color: "#D04040FF", imageType: Filled, fillMethod: Horizontal, fillAmount: 1 }
+  - name: u_ComMonsterHpBar
+    type: node
+    place: { anchor: top_left, offset: [420, -122], size: [400, 16] }
+    children:
+      - { name: u_ComImgMonsterHpBg, type: image, place: { anchor: stretch }, props: { color: "#3A0A0AFF" } }
+      - { name: u_ComImgMonsterHp, type: image, place: { anchor: stretch }, props: { color: "#FF4040FF" } }
 
 events: []
