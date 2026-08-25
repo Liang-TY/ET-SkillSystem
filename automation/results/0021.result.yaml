@@ -1,0 +1,16 @@
+# automation/results/0021.result.yaml
+id: "0021"
+status: failed
+base: 32aa6279e
+message: |
+  compile_check 失败：1 条错误。
+  Scripts/ModelView/Client/Battle/BattleHudUnitComponent.cs(2,7) CS0246：TrueSync 命名空间
+  找不到（缺 using 或程序集引用）。
+  进展：0020 的 5 条 ET0004/ET0005 错误已清零（DamageFloatHelper 已删除并入 HudUnitSystem）。
+  验证真实性：recompile 后 Editor.log 增长、轮询到 completed（非 up_to_date 假阴性），
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 32aa6279e（已自检核对）。未修代码。
+build:
+  errors:
+    - {file: Packages/cn.etetet.lockstep/Scripts/ModelView/Client/Battle/BattleHudUnitComponent.cs, line: 2, type: CS0246, message: "TrueSync 命名空间找不到（缺 using 或程序集引用）"}
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":true}'
