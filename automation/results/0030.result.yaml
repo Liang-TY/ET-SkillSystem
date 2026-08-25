@@ -1,0 +1,18 @@
+# automation/results/0030.result.yaml
+id: "0030"
+status: done
+base: 5222c5d34
+created: 2026-08-25T21:10:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 5222c5d34（已自检核对）。
+  CDEBinder Sync 修复生效：11 个 prefab E 表重建，7 文件实质变更（1158+/1158-），
+  无 Gen .cs 变更（本次改动纯编辑器侧 CDEBinder）。
+  产物已提交 wip-0030（7 文件）+ 推送。
+build:
+  total: 16
+  failed: 0
+  changed_files: 7
+wip_branch: wip-0030
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
