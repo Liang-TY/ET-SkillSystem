@@ -5,26 +5,28 @@ panel:
   blockBg: false
 
 nodes:
+  # 玩家行：名字（左）+ 血条（右，紧挨名字）
   - name: u_ComTextPlayerName
     type: text
-    place: { anchor: top_left, offset: [120, -36], size: [200, 36] }
-    props: { text: 角色, fontSize: 24, alignment: UpperLeft }
+    place: { anchor: top_left, offset: [90, -30], size: [120, 30] }
+    props: { text: 角色, fontSize: 22, alignment: UpperLeft }
 
   - name: u_ComPlayerHpBar
     type: node
-    place: { anchor: top_left, offset: [420, -62], size: [400, 16] }
+    place: { anchor: top_left, offset: [260, -30], size: [320, 16] }
     children:
       - { name: u_ComImgPlayerHpBg, type: image, place: { anchor: stretch }, props: { color: "#1A331AFF" } }
       - { name: u_ComImgPlayerHp, type: image, place: { anchor: stretch }, props: { color: "#50E050FF" } }
 
+  # 怪物行
   - name: u_ComTextMonsterName
     type: text
-    place: { anchor: top_left, offset: [120, -96], size: [200, 36] }
-    props: { text: "", fontSize: 24, alignment: UpperLeft }
+    place: { anchor: top_left, offset: [90, -60], size: [120, 30] }
+    props: { text: "", fontSize: 22, alignment: UpperLeft }
 
   - name: u_ComMonsterHpBar
     type: node
-    place: { anchor: top_left, offset: [420, -122], size: [400, 16] }
+    place: { anchor: top_left, offset: [260, -60], size: [320, 16] }
     children:
       - { name: u_ComImgMonsterHpBg, type: image, place: { anchor: stretch }, props: { color: "#3A0A0AFF" } }
       - { name: u_ComImgMonsterHp, type: image, place: { anchor: stretch }, props: { color: "#FF4040FF" } }

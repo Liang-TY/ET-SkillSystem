@@ -8,7 +8,7 @@ nodes:
     type: node
     place: { anchor: center, size: [1080, 820] }
     children:
-      - { name: u_ComImgBg, type: image, place: { anchor: stretch }, props: { color: "#3C3F41FF" } }
+      - { name: u_ComImgBg, type: image, place: { anchor: stretch }, props: { color: "#E0E0E0FF" } }
       - name: Title
         type: text
         place: { anchor: top, offset: [0, -40], size: [500, 60] }
