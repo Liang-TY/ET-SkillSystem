@@ -14,13 +14,13 @@ description: Unity 机从 AI 执行器。只消费 automation/tasks/ 任务单�
 ## 标准循环（v2：总线在 origin/automation 分支上，本地工作区是 dev 分支不含 tasks，全程用 git 命令读写总线）
 
 ```
-0. 若任务带 ref 且与当前分支同名 → git pull --rebase（拿到最新 spec/代码）
+0. git fetch origin <ref>（**无条件强制**，勿依赖本地分支位置——曾因本地 dev 落后导致基点竞态）
 1. git fetch origin automation；待办 = origin/automation 上 tasks/*.yaml 无对应 results/*.result.yaml
    （watcher 唤醒消息里已给出 id 列表）
 2. 取最老待办，读任务：git show origin/automation:automation/tasks/<id>.yaml
 3. 按 type 执行（见下表）；产物（prefab/gen 代码）落在当前工作区
    build 类任务的产物提交（wip 分支舞步，主工作区内）：
-   a. git checkout -b wip-<id>
+   a. git checkout -b wip-<id> origin/<ref>   # 基于远端 ref，不用本地分支
    b. git add <产物路径>；git commit -m "[task:<id>][build] ..."
    c. git push origin wip-<id>
    d. git checkout <原分支>（回到 ref 所指分支）
