@@ -59,15 +59,19 @@ namespace ET.Client
         /// </summary>
         private static async ETTask EnterBattleAsync(this MapSelectPanelComponent self)
         {
-            TownPlayerComponent player = self.Root().GetComponent<Room>()?.GetComponent<TownPlayerComponent>();
+            // 先捕获 root：ClosePanelAsync 会销毁 self（非缓存面板），
+            // 之后任何 self.Root() 都会因实体已 Dispose（IScene==null）抛 NRE
+            Scene root = self.Root();
+
+            TownPlayerComponent player = root.GetComponent<Room>()?.GetComponent<TownPlayerComponent>();
             if (player != null) TownMemory.LastTownPosition = player.Position;
 
-            await self.Root().YIUIMgr().ClosePanelAsync<MapSelectPanelComponent>();
+            await root.YIUIMgr().ClosePanelAsync<MapSelectPanelComponent>();
 
-            LoadingPanelComponent loading = await self.Root().YIUIRoot().OpenPanelAsync<LoadingPanelComponent>();
+            LoadingPanelComponent loading = await root.YIUIRoot().OpenPanelAsync<LoadingPanelComponent>();
             if (loading != null) loading.u_ComTextSub.text = "正在进入战斗…";
 
-            EnterMapHelper.Match(self.Root().Fiber()).NoContext();
+            EnterMapHelper.Match(root.Fiber()).NoContext();
         }
     }
 }

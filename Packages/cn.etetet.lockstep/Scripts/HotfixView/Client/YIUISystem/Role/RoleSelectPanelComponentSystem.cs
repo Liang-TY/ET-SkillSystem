@@ -43,8 +43,10 @@ namespace ET.Client
             if (!self.RoleSelected) return;   // 未选中不给进（按钮已禁用，双保险）
 
             // DemoUI：确认选角 → 进城镇（出生点=街道中段，03 文档 §1.1）
-            await self.Root().YIUIMgr().ClosePanelAsync<RoleSelectPanelComponent>();
-            await TownHelper.EnterTown(self.Root(), new TSVector(0, 0, 0));
+            // 先捕获 root：关闭自身后 self 已销毁，不可再用 self.Root()
+            Scene root = self.Root();
+            await root.YIUIMgr().ClosePanelAsync<RoleSelectPanelComponent>();
+            await TownHelper.EnterTown(root, new TSVector(0, 0, 0));
         }
         
         [YIUIInvoke(RoleSelectPanelComponent.OnEventSelectRoleInvoke)]
