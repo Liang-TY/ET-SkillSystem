@@ -11,6 +11,7 @@ namespace ET.Client
         protected override async ETTask Run(Scene root, Room2C_BattleEnd message)
         {
             Log.Info("[Battle] 收到 BattleEnd，回城镇");
+            EventSystem.Instance.Publish(root, new ReturnTown());
             await TownHelper.EnterTown(root, TownMemory.LastTownPosition);
         }
     }

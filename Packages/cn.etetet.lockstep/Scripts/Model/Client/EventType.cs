@@ -43,4 +43,9 @@
     public struct MonsterAllDead
     {
     }
+
+    /// <summary>战斗结束返回城镇（View 层显示回城 Loading）</summary>
+    public struct ReturnTown
+    {
+    }
 }
