@@ -1,0 +1,20 @@
+# automation/results/0020.result.yaml
+id: "0020"
+status: failed
+base: 852e6e126
+message: |
+  compile_check 失败：5 条 ET 分析器红线错误，全在新增文件
+  Scripts/HotfixView/Client/Battle/DamageFloatHelper.cs。
+  验证真实性：触发 recompile 后 Editor.log 增长且轮询到 completed（非 up_to_date 假阴性），
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 852e6e126（已自检核对）。
+  判读：ET0005/ET0004 = Hotfix 层声明了非静态类 FloatItem 及其非 const 实例字段
+  （Text/Rect/Elapsed/Items），纯代码违规，修复权在主 AI。未修代码。
+build:
+  errors:
+    - {file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/Battle/DamageFloatHelper.cs, line: 14, type: ET0005, message: "Hotfix程序集只允许声明含EnableClassAttribute子类特性的类或静态类（类 FloatItem）"}
+    - {file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/Battle/DamageFloatHelper.cs, line: 16, type: ET0004, message: "Hotfix程序集不允许声明非Const字段（字段 Text）"}
+    - {file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/Battle/DamageFloatHelper.cs, line: 17, type: ET0004, message: "Hotfix程序集不允许声明非Const字段（字段 Rect）"}
+    - {file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/Battle/DamageFloatHelper.cs, line: 18, type: ET0004, message: "Hotfix程序集不允许声明非Const字段（字段 Elapsed）"}
+    - {file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/Battle/DamageFloatHelper.cs, line: 22, type: ET0004, message: "Hotfix程序集不允许声明非Const字段（字段 Items）"}
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":true}'
