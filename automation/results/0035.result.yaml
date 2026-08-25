@@ -1,0 +1,18 @@
+# automation/results/0035.result.yaml
+id: "0035"
+status: done
+base: 23f3b50f8
+created: 2026-08-26T00:20:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 23f3b50f8（已自检核对，拖动回0参已并入）。
+  产物已提交 wip-0035（19 文件：11 prefab + 4 ModelView Gen + 4 Hotfix Gen）+ 推送。
+  关键点：本轮 region 未再改 YIUISystem —— 主AI 0参 sync handler 与 region 生成器输出一致，
+  拖动签名三阶段（P0 const → P1 stub 误配 → 回0参）收敛完毕。
+build:
+  total: 16
+  failed: 0
+  changed_files: 19
+wip_branch: wip-0035
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
