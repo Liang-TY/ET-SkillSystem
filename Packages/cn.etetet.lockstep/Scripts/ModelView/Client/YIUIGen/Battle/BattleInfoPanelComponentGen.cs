@@ -23,8 +23,12 @@ namespace ET.Client
         public EntityRef<YIUIPanelComponent> u_UIPanel;
         public YIUIPanelComponent UIPanel => u_UIPanel;
         public UnityEngine.UI.Text u_ComTextPlayerName;
+        public UnityEngine.RectTransform u_ComPlayerHpBar;
+        public UnityEngine.UI.Image u_ComImgPlayerHpBg;
         public UnityEngine.UI.Image u_ComImgPlayerHp;
         public UnityEngine.UI.Text u_ComTextMonsterName;
+        public UnityEngine.RectTransform u_ComMonsterHpBar;
+        public UnityEngine.UI.Image u_ComImgMonsterHpBg;
         public UnityEngine.UI.Image u_ComImgMonsterHp;
 
     }

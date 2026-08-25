@@ -37,8 +37,12 @@ namespace ET.Client
             self.UIPanel.Priority = 0;
 
             self.u_ComTextPlayerName = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Text>("u_ComTextPlayerName");
+            self.u_ComPlayerHpBar = self.UIBase.ComponentTable.FindComponent<UnityEngine.RectTransform>("u_ComPlayerHpBar");
+            self.u_ComImgPlayerHpBg = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Image>("u_ComImgPlayerHpBg");
             self.u_ComImgPlayerHp = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Image>("u_ComImgPlayerHp");
             self.u_ComTextMonsterName = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Text>("u_ComTextMonsterName");
+            self.u_ComMonsterHpBar = self.UIBase.ComponentTable.FindComponent<UnityEngine.RectTransform>("u_ComMonsterHpBar");
+            self.u_ComImgMonsterHpBg = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Image>("u_ComImgMonsterHpBg");
             self.u_ComImgMonsterHp = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Image>("u_ComImgMonsterHp");
 
         }
