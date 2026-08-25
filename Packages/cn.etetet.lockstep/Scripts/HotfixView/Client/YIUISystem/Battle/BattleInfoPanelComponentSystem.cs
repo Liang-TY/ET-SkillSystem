@@ -35,14 +35,18 @@ namespace ET.Client
         #region YIUIEvent开始
         #endregion YIUIEvent结束
 
-        /// <summary>更新怪物血条（含显示）</summary>
-        public static void UpdateMonster(this BattleInfoPanelComponent self, string name, FP hp, FP maxHp)
+        /// <summary>显示怪物信息（名字+血条框架）</summary>
+        public static void ShowMonster(this BattleInfoPanelComponent self, string name)
         {
             self.u_ComTextMonsterName.text = name;
             self.u_ComTextMonsterName.gameObject.SetActive(true);
             self.u_ComImgMonsterHp.gameObject.SetActive(true);
-            float ratio = maxHp > FP.Zero ? (hp / maxHp).AsFloat() : 0f;
-            self.u_ComImgMonsterHp.fillAmount = ratio;
+        }
+
+        /// <summary>设置怪物血条比例（0~1，供平滑缓动）</summary>
+        public static void SetMonsterHpRatio(this BattleInfoPanelComponent self, float ratio)
+        {
+            self.u_ComImgMonsterHp.fillAmount = Mathf.Clamp01(ratio);
         }
 
         /// <summary>隐藏怪物血条（面板打开默认）</summary>

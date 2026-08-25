@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace ET.Client
 {
     /// <summary>
-    /// 战斗 HUD：怪物血条轮询 + 伤害飘字（手动帧驱动，无 DOTween 依赖）。
+    /// 战斗 HUD：怪物血条轮询（平滑缓动）+ 伤害飘字（怪物世界坐标投影）。
     /// 飘字状态在 BattleHudUnitComponent 实体上（Hotfix 无状态红线）。
     /// </summary>
     [EntitySystemOf(typeof(BattleHudUnitComponent))]
@@ -15,6 +15,7 @@ namespace ET.Client
         private const float FloatDuration = 0.8f;
         private const float FloatFadeStart = 0.2f;
         private const float FloatSpeed = 120f;
+        private const float HpLerpSpeed = 10f;
 
         [EntitySystem]
         private static void Awake(this BattleHudUnitComponent self, BattleInfoPanelComponent panel)
@@ -25,13 +26,11 @@ namespace ET.Client
         [EntitySystem]
         private static void Destroy(this BattleHudUnitComponent self)
         {
-            // 残留文本随面板 Canvas 销毁，只清登记
             self.FloatTexts.Clear();
             self.FloatRects.Clear();
             self.FloatElapsed.Clear();
 
-            // 只隐藏血条元素，不关面板（用户决策：面板由 TownSceneInitFinish 统一收口，
-            // Room 销毁时只做元素级清场——竞态安全兜底）
+            // 只隐藏血条元素，不关面板（用户决策：面板由 TownSceneInitFinish 统一收口）
             self.Panel?.HideMonster();
         }
 
@@ -45,33 +44,57 @@ namespace ET.Client
 
             Room room = self.GetParent<Room>();
             LSUnitComponent unitComponent = room.LSWorld?.GetComponent<LSUnitComponent>();
-            if (unitComponent == null) return;
 
-            LSUnit monster = FindFirstMonster(unitComponent);
-            if (monster == null) return;   // 全灭后不再更新，血条留最后状态
+            LSUnit monster = unitComponent != null ? FindFirstMonster(unitComponent) : null;
+            LSNumericComponent numeric = monster?.GetComponent<LSNumericComponent>();
+            float hpFloat = numeric != null ? numeric.Get(NumericType.Hp).AsFloat() : 0f;
+            float maxFloat = numeric != null ? numeric.Get(NumericType.MaxHp).AsFloat() : 0f;
 
-            LSNumericComponent numeric = monster.GetComponent<LSNumericComponent>();
-            if (numeric == null) return;
-            FP hp = numeric.Get(NumericType.Hp);
-            FP maxHp = numeric.Get(NumericType.MaxHp);
-            float hpFloat = hp.AsFloat();
-
-            if (monster.Id != self.LastMonsterId)
+            if (monster != null && numeric != null)
             {
-                self.LastMonsterId = monster.Id;
-                self.LastMonsterHp = hpFloat;
-                self.MonsterShown = false;
+                self.TargetHpRatio = maxFloat > 0f ? Mathf.Clamp01(hpFloat / maxFloat) : 0f;
+                self.LastMonsterWorldPos = new Vector3(
+                    monster.Position.x.AsFloat(),
+                    monster.Position.y.AsFloat(),
+                    monster.Position.z.AsFloat());
+
+                if (monster.Id != self.LastMonsterId)
+                {
+                    self.LastMonsterId = monster.Id;
+                    self.LastMonsterHp = hpFloat;
+                    self.MonsterShown = false;
+                    self.DisplayHpRatio = self.TargetHpRatio;
+                    panel.ShowMonster("怪物");
+                }
+            }
+            else if (self.MonsterShown)
+            {
+                self.TargetHpRatio = 0f;
             }
 
-            if (hpFloat < self.LastMonsterHp)
+            if (monster != null && hpFloat < self.LastMonsterHp)
             {
-                SpawnFloat(self, panel.GetFloatRoot(), self.LastMonsterHp - hpFloat);
-                self.MonsterShown = true;   // 受过伤才显示（不打怪就隐藏——用户决策）
+                SpawnFloatAtMonster(self, panel, self.LastMonsterHp - hpFloat);
+                self.MonsterShown = true;
             }
             self.LastMonsterHp = hpFloat;
 
+            self.DisplayHpRatio = Mathf.Lerp(
+                self.DisplayHpRatio, self.TargetHpRatio,
+                Mathf.Clamp01(Time.deltaTime * HpLerpSpeed));
+            if (Mathf.Abs(self.DisplayHpRatio - self.TargetHpRatio) < 0.005f)
+                self.DisplayHpRatio = self.TargetHpRatio;
+
             if (self.MonsterShown)
-                panel.UpdateMonster("怪物", hp, maxHp);
+            {
+                panel.SetMonsterHpRatio(self.DisplayHpRatio);
+
+                if (self.DisplayHpRatio <= 0.01f && monster == null)
+                {
+                    panel.HideMonster();
+                    self.MonsterShown = false;
+                }
+            }
         }
 
         private static LSUnit FindFirstMonster(LSUnitComponent unitComponent)
@@ -85,15 +108,32 @@ namespace ET.Client
             return null;
         }
 
-        /// <summary>生成飘字（上飘 120px/s，0.2s 起渐隐，0.8s 自毁）</summary>
-        private static void SpawnFloat(this BattleHudUnitComponent self, Transform parent, float damage)
+        private static Vector2 MonsterToCanvasPos(this BattleHudUnitComponent self, Canvas canvas)
         {
+            Camera cam = Camera.main;
+            if (cam == null || canvas == null) return new Vector2(0f, 260f);
+
+            Vector3 screenPos = cam.WorldToScreenPoint(self.LastMonsterWorldPos);
+            RectTransform canvasRect = canvas.transform as RectTransform;
+            if (canvasRect == null) return new Vector2(0f, 260f);
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect, screenPos, canvas.worldCamera, out Vector2 localPos);
+            return localPos;
+        }
+
+        private static void SpawnFloatAtMonster(this BattleHudUnitComponent self, BattleInfoPanelComponent panel, float damage)
+        {
+            Transform parent = panel.GetFloatRoot();
             if (parent == null || damage <= 0f) return;
+
+            Canvas canvas = parent.GetComponentInParent<Canvas>();
+            Vector2 spawnPos = self.MonsterToCanvasPos(canvas);
 
             var go = new GameObject("DamageFloat");
             RectTransform rect = go.AddComponent<RectTransform>();
             rect.SetParent(parent, false);
-            rect.anchoredPosition = new Vector2(UnityEngine.Random.Range(-80f, 80f), 260f);
+            rect.anchoredPosition = new Vector2(spawnPos.x + Random.Range(-30f, 30f), spawnPos.y + 40f);
             rect.sizeDelta = new Vector2(160f, 50f);
 
             Text text = go.AddComponent<Text>();
@@ -118,7 +158,7 @@ namespace ET.Client
             for (int i = self.FloatTexts.Count - 1; i >= 0; i--)
             {
                 Text text = self.FloatTexts[i];
-                if (text == null)   // 面板关闭时随之销毁
+                if (text == null)
                 {
                     RemoveAt(self, i);
                     continue;
@@ -139,7 +179,7 @@ namespace ET.Client
 
                 if (elapsed >= FloatDuration)
                 {
-                    UnityEngine.Object.Destroy(text.gameObject);
+                    Object.Destroy(text.gameObject);
                     RemoveAt(self, i);
                 }
             }
