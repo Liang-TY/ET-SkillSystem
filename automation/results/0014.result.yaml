@@ -1,0 +1,63 @@
+id: "0014"
+status: failed
+reason: compile_error
+message: >
+  RoleInfoPanelComponentSystem.cs:33-37 跨行插值字符串用了 $" 而非 $"@（C# 普通字符串不能跨行），
+  全角中文标点（：、（））被解析为非法字符，字符串未闭合，共 13 条错误（CS1039/CS1002/CS1056/CS1010）。
+  根因疑为多行文本想用 verbatim 插值字符串但漏了 @。按协议不修代码，错误清单原样回传。
+build:
+  errors:
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 33
+      type: CS1039
+      message: "Unterminated string literal"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 33
+      type: CS1002
+      message: "; expected"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 34
+      type: CS1002
+      message: "; expected"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 34
+      type: CS1056
+      message: "Unexpected character '：'"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 34
+      type: CS1002
+      message: "; expected"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 35
+      type: CS1002
+      message: "; expected"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 35
+      type: CS1056
+      message: "Unexpected character '：'"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 35
+      type: CS1002
+      message: "; expected"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 37
+      type: CS1056
+      message: "Unexpected character '（'"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 37
+      type: CS1002
+      message: "; expected"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 37
+      type: CS1056
+      message: "Unexpected character '）'"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 37
+      type: CS1010
+      message: "Newline in constant"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/YIUISystem/Lobby/RoleInfoPanelComponentSystem.cs
+      line: 37
+      type: CS1002
+      message: "; expected"
+log_tail:
+  - 'recompile_status true {"status":"completed","failed":true,"errors":["Packages\\cn.etetet.lockstep\\Scripts\\HotfixView\\Client\\YIUISystem\\Lobby\\RoleInfoPanelComponentSystem.cs(33,36): error CS1039: Unterminated string literal","...CS1002/CS1056/CS1010 共13条，详见 build.errors"]}'
