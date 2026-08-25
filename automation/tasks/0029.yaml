@@ -1,0 +1,5 @@
+id: "0029"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-25T20:10:00+08:00
+timeout_sec: 600
