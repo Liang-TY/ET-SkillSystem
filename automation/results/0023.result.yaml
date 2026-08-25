@@ -1,0 +1,13 @@
+# automation/results/0023.result.yaml
+id: "0023"
+status: done
+base: 3795f42d6
+message: |
+  compile_check 通过：0 错误 0 警告。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 3795f42d6（已自检核对）。
+  验证真实性：recompile 后 Editor.log 增长、轮询到 completed 且 failed:false。
+  注：0023 与 0024 同基点（分支两单之间无新提交），共用同一次编译证据。
+build:
+  errors: []
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":false,"errors":[]}'
