@@ -1,0 +1,7 @@
+id: "0030"
+type: build_all
+ref: et9lockStepYIUISeqFrameAniTestDev
+dir: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI
+created: 2026-08-25T21:00:00+08:00
+timeout_sec: 600
+note: CDEBinder Sync修复需重建4弹窗E表
