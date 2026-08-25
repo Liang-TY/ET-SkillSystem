@@ -28,8 +28,8 @@ namespace ET.Client
         public UITaskEventP0 u_EventClose;
         public UITaskEventHandleP0 u_EventCloseHandle;
         public const string OnEventCloseInvoke = "BagPanelComponent.OnEventCloseInvoke";
-        public UIEventP1<object> u_EventWindowDrag;
-        public UIEventHandleP1<object> u_EventWindowDragHandle;
+        public UIEventP0 u_EventWindowDrag;
+        public UIEventHandleP0 u_EventWindowDragHandle;
         public const string OnEventWindowDragInvoke = "BagPanelComponent.OnEventWindowDragInvoke";
 
     }

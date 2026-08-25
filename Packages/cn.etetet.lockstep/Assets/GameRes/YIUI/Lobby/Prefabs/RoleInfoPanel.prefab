@@ -559,7 +559,7 @@ MonoBehaviour:
       Data: u_EventWindowDrag
     - Name: m_UIEvent
       Entry: 7
-      Data: 0|YIUIFramework.UIEventP1`1[[System.Object, mscorlib]], ET.YIUIFramework
+      Data: 0|YIUIFramework.UIEventP0, ET.YIUIFramework
     - Name: m_EventName
       Entry: 1
       Data: u_EventWindowDrag
@@ -569,10 +569,7 @@ MonoBehaviour:
         ET.YIUIFramework]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 3
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
@@ -1086,7 +1083,7 @@ MonoBehaviour:
       Data: u_EventWindowDrag
     - Name: $v
       Entry: 7
-      Data: 10|YIUIFramework.UIEventP1`1[[System.Object, mscorlib]], ET.YIUIFramework
+      Data: 10|YIUIFramework.UIEventP0, ET.YIUIFramework
     - Name: m_EventName
       Entry: 1
       Data: u_EventWindowDrag
@@ -1096,10 +1093,7 @@ MonoBehaviour:
         ET.YIUIFramework]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 3
-      Data: 1
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
