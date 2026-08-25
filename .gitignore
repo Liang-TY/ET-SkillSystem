@@ -57,3 +57,8 @@ Unity.sln.DotSettings.user
 
 Assets/Plugins/Sirenix/Assemblies/AOT/*.dll*
 Assets/HybridCLR*
+# automation bus local artifacts
+automation/worker/.last-spawn
+automation/worker/.worker.lock
+# Unity 机本地 AI 配置（skill 副本/settings）
+.claude/
