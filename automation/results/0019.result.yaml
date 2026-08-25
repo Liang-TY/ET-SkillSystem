@@ -1,0 +1,5 @@
+# automation/results/0019.result.yaml
+id: "0019"
+status: skipped
+message: "被 0020-0022 编译验证链实质取代（同 ref 后代，0022 全绿）"
+base: 9c55a2059
