@@ -1,0 +1,21 @@
+# automation/results/0028.result.yaml
+id: "0028"
+status: done
+base: ca9ed82f5
+created: 2026-08-25T19:40:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600 生效，未再假超时）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ ca9ed82f5（已自检核对）。
+  产物已提交 wip-0028（6aaa26803，23 文件）+ 推送：
+  - 16 面板 prefab 全量重建
+  - 4 面板（Bag/RoleInfo/Settings/Activity）ModelView Gen 补齐 OnEventWindowDragInvoke const + u_EventWindowDrag
+  - 4 面板 Hotfix Gen 补齐 u_EventWindowDrag 绑定
+  - 4 面板手写 YIUISystem region 自动补空拖动 stub（[YIUIInvoke] OnEventWindowDragInvoke，await ETTask.CompletedTask，待主AI填实现）
+  注：0027 那次"超时"实际在编辑器后台完成了全部构建（本单脏工作区即其产物），本单重跑收敛为同一结果。
+build:
+  total: 16
+  failed: 0
+  changed_files: 23
+wip_branch: wip-0028
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
