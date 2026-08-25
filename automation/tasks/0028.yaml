@@ -1,0 +1,7 @@
+id: "0028"
+type: build_all
+ref: et9lockStepYIUISeqFrameAniTestDev
+dir: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI
+created: 2026-08-25T19:20:00+08:00
+timeout_sec: 600
+note: 0027死锁破除后重下；成功后region合并自动补拖动stub
