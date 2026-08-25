@@ -1,0 +1,17 @@
+# automation/results/0018.result.yaml
+id: "0018"
+status: done
+branch: wip-0018
+base: dc6537eed
+message: |
+  build_all 完成：16/16（Failed 0），含 SettingsPanel / ShopPanel / ActivityPanel。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ dc6537eed（已自检核对）。
+  产物：7 个已有面板 prefab 重建 + 3 个新面板（Settings/Shop/Activity）全套
+  （prefab+meta、spec meta、YIUIGen/YIUISystem/YIUIComponent 四类生成文件）。
+build:
+  total: 16
+  failed: 0
+  panels: [BattleInfoPanel, BattleTipPanel, MapSelectPanel, SkillHUDPanel, LoadingPanel,
+           ActivityPanel, BagPanel, MainHUDPanel, RoleInfoPanel, SettingsPanel,
+           ShopPanel, LoginPanel, RoleCreatePanel, RoleSelectPanel, SkillPanel, TestManyPanel]
+log_tail: []
