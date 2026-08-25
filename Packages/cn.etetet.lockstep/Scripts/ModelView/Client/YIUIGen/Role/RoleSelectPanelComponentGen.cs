@@ -22,6 +22,7 @@ namespace ET.Client
         public YIUIWindowComponent UIWindow => u_UIWindow;
         public EntityRef<YIUIPanelComponent> u_UIPanel;
         public YIUIPanelComponent UIPanel => u_UIPanel;
+        public UnityEngine.UI.Image u_ComImgBg;
         public UnityEngine.UI.Button u_ComBtnRole;
         public UnityEngine.UI.Button u_ComBtnEnter;
         public UITaskEventP0 u_EventSelectRole;

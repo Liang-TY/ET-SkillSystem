@@ -36,6 +36,7 @@ namespace ET.Client
             self.UIPanel.StackOption = EPanelStackOption.VisibleTween;
             self.UIPanel.Priority = 0;
 
+            self.u_ComImgBg = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Image>("u_ComImgBg");
             self.u_ComBtnRole = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnRole");
             self.u_ComBtnEnter = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnEnter");
             self.u_EventSelectRole = self.UIBase.EventTable.FindEvent<UITaskEventP0>("u_EventSelectRole");
