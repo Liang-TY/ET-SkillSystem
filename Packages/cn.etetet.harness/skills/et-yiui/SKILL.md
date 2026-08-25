@@ -65,6 +65,10 @@ self.Loop.SetDataRefresh(list, defaultIndex).NoContext();
 
 面板间/模块间调用走 yiuiinvoke（`YIUIInvoke` 特性 + handler），不互相引用面板类型，保持解耦。
 
+## 面板 handler 通用坑
+
+- **关闭自身后禁用 self**：非缓存面板 `ClosePanelAsync<T>()` = 销毁实体；handler 里 await 跨帧后 `self.Root()` 会因 `IScene==null` 抛 NRE。模式：**进 handler 先 `Scene root = self.Root();`，关闭自身后一切走局部 root**。
+
 ## 红线
 
 - YIUIGen 生成文件禁改；prefab 由 Builder 从 spec 生成，禁手工改（人工调整走 v2 ExportSpec 导回）
