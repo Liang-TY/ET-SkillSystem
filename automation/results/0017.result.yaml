@@ -1,0 +1,34 @@
+id: "0017"
+status: done
+branch: wip-0017
+build:
+  total: 13
+  failed: 0
+  results:
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/BattleInfoPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/BattleTipPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/MapSelectPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/SkillHUDPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Loading/LoadingPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Lobby/BagPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Lobby/MainHUDPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Lobby/RoleInfoPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Login/LoginPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Role/RoleCreatePanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Role/RoleSelectPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Skill/SkillPanel.ui.yaml"
+    - "OK Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestMany/TestManyPanel.ui.yaml"
+  prefabs_updated:
+    - Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/Prefabs/MapSelectPanel.prefab
+    - Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Battle/Prefabs/SkillHUDPanel.prefab
+    - Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Lobby/Prefabs/MainHUDPanel.prefab
+    - Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Login/Prefabs/LoginPanel.prefab
+    - Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Role/Prefabs/RoleSelectPanel.prefab
+    - Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/Skill/Prefabs/SkillPanel.prefab
+    - Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/TestMany/Prefabs/TestManyPanel.prefab
+  warnings: []
+  errors: []
+message: ""
+log_tail:
+  - "首跑 unity command yiui_build_all 命中默认 30s pipeline 超时；改用 --timeout 600 后成功：Total 13 Failed 0"
+  - "产物：7 个 prefab 重新生成并提交 wip-0017（其余 6 面板 prefab/gen 已与库内一致无 diff）"
