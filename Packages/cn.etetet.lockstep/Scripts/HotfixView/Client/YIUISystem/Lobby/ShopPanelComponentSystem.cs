@@ -35,8 +35,7 @@ namespace ET.Client
         [YIUIInvoke(ShopPanelComponent.OnEventCloseInvoke)]
         private static async ETTask OnEventCloseInvoke(this ShopPanelComponent self)
         {
-            
-            await ETTask.CompletedTask;
+            await self.Root().YIUIMgr().ClosePanelAsync<ShopPanelComponent>();
         }
         #endregion YIUIEvent结束
     }

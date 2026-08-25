@@ -35,8 +35,7 @@ namespace ET.Client
         [YIUIInvoke(SettingsPanelComponent.OnEventCloseInvoke)]
         private static async ETTask OnEventCloseInvoke(this SettingsPanelComponent self)
         {
-            
-            await ETTask.CompletedTask;
+            await self.Root().YIUIMgr().ClosePanelAsync<SettingsPanelComponent>();
         }
         #endregion YIUIEvent结束
     }
