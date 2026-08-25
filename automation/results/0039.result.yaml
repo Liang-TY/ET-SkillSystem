@@ -1,0 +1,17 @@
+# automation/results/0039.result.yaml
+id: "0039"
+status: done
+base: 31dd9cac3
+created: 2026-08-26T02:40:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 31dd9cac3（已自检核对，文字深色+选角背景已并入）。
+  产物已提交 wip-0039（16 文件：14 prefab + RoleCreate/RoleSelect ModelView/Hotfix Gen ×4）+ 推送。
+  文字#333333 与选角/创建角色背景已随 prefab 落盘；战斗 UI 旧 ET 层移除为代码侧变更，无 gen 影响。
+build:
+  total: 16
+  failed: 0
+  changed_files: 16
+wip_branch: wip-0039
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
