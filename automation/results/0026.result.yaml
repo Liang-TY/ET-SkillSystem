@@ -1,0 +1,33 @@
+# automation/results/0026.result.yaml
+id: "0026"
+status: failed
+reason: compile_error
+base: 843466dbe
+created: 2026-08-25T18:40:00+08:00
+message: |
+  compile_check 失败：8 个同类 CS0117 错误（4 面板 × 手写 System + 生成 InvokeSystems.g.cs）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 843466dbe（已 pull --rebase 自检）。
+  验证真实性：recompile 后 Editor.log 增长（8419325→8497723）+ 轮询到 completed 且 failed:true。
+
+  根因诊断（现场取证，未改动任何代码）：
+  4 面板（BagPanel/RoleInfoPanel/SettingsPanel/ActivityPanel）的 .ui.yaml spec 均已声明
+  `u_EventWindowDrag`（BagPanel.ui.yaml:28 等，target: Title, trigger: ClickDown），
+  但对应 ModelView YIUIGen（*ComponentGen.cs）只生成 `OnEventCloseInvoke` const，
+  没有 `OnEventWindowDragInvoke` —— Gen 代码未随 spec 更新（stale）。
+  手写 YIUISystem 的 `[YIUIInvoke(BagPanelComponent.OnEventWindowDragInvoke)]` 引用的
+  const 不存在 → CS0117；YIUIInvokeSourceGenerator 生成的 g.cs 引用同一 const → 同错。
+
+  修复建议（主 AI 决定）：对 4 面板跑 UIBuilder 重生成（yiui_build_panel ×4 或 build_all），
+  Gen 补齐 OnEventWindowDragInvoke 后编译即过；或删除这 4 个手写 WindowDrag handler。
+build:
+  errors:
+    - "Packages\\cn.etetet.lockstep\\Scripts\\HotfixView\\Client\\YIUISystem\\Lobby\\BagPanelComponentSystem.cs(59,39): error CS0117: 'BagPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+    - "Packages\\cn.etetet.lockstep\\Scripts\\HotfixView\\Client\\YIUISystem\\Lobby\\RoleInfoPanelComponentSystem.cs(47,44): error CS0117: 'RoleInfoPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+    - "YIUI.InvokeSourceGenerator\\YIUI.YIUIInvokeSystemGenerator\\ET.Client.BagPanelComponentSystem.YIUIInvokeSystems.g.cs(14,45): error CS0117: 'BagPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+    - "YIUI.InvokeSourceGenerator\\YIUI.YIUIInvokeSystemGenerator\\ET.Client.RoleInfoPanelComponentSystem.YIUIInvokeSystems.g.cs(14,50): error CS0117: 'RoleInfoPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+    - "Packages\\cn.etetet.lockstep\\Scripts\\HotfixView\\Client\\YIUISystem\\Lobby\\SettingsPanelComponentSystem.cs(41,44): error CS0117: 'SettingsPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+    - "YIUI.InvokeSourceGenerator\\YIUI.YIUIInvokeSystemGenerator\\ET.Client.SettingsPanelComponentSystem.YIUIInvokeSystems.g.cs(14,50): error CS0117: 'SettingsPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+    - "Packages\\cn.etetet.lockstep\\Scripts\\HotfixView\\Client\\YIUISystem\\Lobby\\ActivityPanelComponentSystem.cs(41,44): error CS0117: 'ActivityPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+    - "YIUI.InvokeSourceGenerator\\YIUI.YIUIInvokeSystemGenerator\\ET.Client.ActivityPanelComponentSystem.YIUIInvokeSystems.g.cs(14,50): error CS0117: 'ActivityPanelComponent' does not contain a definition for 'OnEventWindowDragInvoke'"
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":true,"errors":[8 条 CS0117，见上]}'

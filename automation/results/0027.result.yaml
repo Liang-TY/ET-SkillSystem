@@ -1,0 +1,23 @@
+# automation/results/0027.result.yaml
+id: "0027"
+status: failed
+reason: timeout
+base: 843466dbe
+created: 2026-08-25T18:42:00+08:00
+message: |
+  build_all 失败：yiui_build_all 连续 2 次 Pipeline 30s 超时（未做任何产物变更，wip-0027 无提交）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 843466dbe。
+  已确认非编辑器卡死：同一 pipeline `unity command` 列表、recompile_status 均即时响应，
+  Editor.log 无异常堆栈，仅 yiui_build_all 超时。
+
+  根因推断：与 0026 同一根因链 —— 当前编译被 8 个 CS0117 卡死（4 面板 Gen stale），
+  yiui_build_all 内部需等编译通过才能返回 → 永久等待 → 30s pipeline 超时。
+  0025 同命令成功过（当时编译全绿），支持此推断。
+
+  修复建议（主 AI 决定）：先解决 0026 的 Gen stale 问题（UIBuilder 重生成 4 面板
+  或删除手写 handler），编译恢复绿色后再重下 build_all 单。
+build:
+  errors: []
+log_tail:
+  - 'Error: Pipeline command yiui_build_all timed out after 30000ms (×2)'
+  - 'pipeline 其余命令（command 列表 / recompile_status）响应正常'
