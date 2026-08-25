@@ -30,11 +30,7 @@ namespace ET.Client
             UnitConfig config = UnitConfigCategory.Instance.GetOne();
             self.u_ComTextInfo.text = config == null
                 ? "（无角色配置）"
-                : $"名字：{config.Name}
-类型：{config.Type}
-身高：{config.Height}
-
-（战斗数值待接入）";
+                : "名字：" + config.Name + "\n类型：" + config.Type + "\n身高：" + config.Height + "\n\n（战斗数值待接入）";
 
             await ETTask.CompletedTask;
             return true;
