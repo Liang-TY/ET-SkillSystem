@@ -30,7 +30,7 @@ namespace ET.Client
             }
 
             // 屏幕像素 → 画布单位换算（ScaleWithScreenSize 下两坐标系不同）
-            Canvas canvas = self.DraggingWindow.canvas;
+            Canvas canvas = self.DraggingWindow.GetComponentInParent<Canvas>();
             float scale = canvas != null ? canvas.scaleFactor : 1f;
             if (scale <= 0f) scale = 1f;
 
@@ -39,6 +39,7 @@ namespace ET.Client
         }
     }
 
+    [FriendOf(typeof(WindowDragComponent))]
     public static class WindowDragHelper
     {
         /// <summary>开始拖动指定窗口（挂在 root scene 的 WindowDragComponent 上，按需创建）</summary>
