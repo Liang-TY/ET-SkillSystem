@@ -1,0 +1,7 @@
+id: "0018"
+type: build_all
+ref: et9lockStepYIUISeqFrameAniTestDev
+dir: Packages/cn.etetet.lockstep/Assets/GameRes/YIUI
+created: 2026-08-25T12:30:00+08:00
+timeout_sec: 600
+note: 前两单基点竞态，本单result必含base哈希且须为16/16
