@@ -3,6 +3,35 @@
 > git 分支即消息队列：开发机主 AI 写任务，Unity 机从 AI 消费执行，产物经 `wip-{id}` 分支回流。
 > 本协议是主从双方共同遵守的契约。改动协议走正常代码评审流程。
 
+## 快速上手（新会话必读）
+
+### 当前模式
+
+watcher 已停用，**人工触发**——用户对 Unity 机从 AI 说"处理 origin/automation 待办"。
+
+### 主 AI（开发机）下单一单的标准动作
+
+```
+1. 写好代码/spec → git push dev
+2. git checkout -B automation origin/automation
+3. 写 automation/tasks/<id>.yaml（格式见下方 §3）→ commit → push → git checkout 回 dev
+4. 告诉用户："对 Unity 机从 AI 说：处理 origin/automation 待办 <id>，基点应为 <commit短哈希>"
+5. 等结果回传 → git fetch origin automation → 读 results/<id>.result.yaml 验收
+   （核对 base 字段是否包含任务所需最新提交 → 竞态检测）
+```
+
+**注意**：先推代码再下编译单（顺序反了会跑在旧代码上白验）；下 build_all 单前确认代码能编译（编译带错会死锁 pipeline）。
+
+### 从 AI（Unity 机）执行一单的标准命令
+
+**必读 `automation/worker/ui-worker.SKILL.md`**（执行命令、异常处理、提交规范全在里面）。
+
+关键命令速查：
+- build：`unity command yiui_build_panel --spec <路径> --timeout 600`（默认 30s 必超时）
+- 批量：`unity command yiui_build_all --dir <目录> --timeout 600`
+- 编译验证：`unity command refresh` → `unity command recompile` → 轮询 `unity command recompile_status`
+- result 必含 `base: <wip基点短哈希>`（主 AI 验收核对竞态）
+
 ## 1. 角色与权限
 
 | 角色 | 运行位置 | 可写范围 | 说明 |
