@@ -38,6 +38,13 @@ namespace ET.Client
             await self.Root().YIUIMgr().ClosePanelAsync<SettingsPanelComponent>();
         }
 
+        
+        [YIUIInvoke(SettingsPanelComponent.OnEventWindowDragInvoke)]
+        private static async ETTask OnEventWindowDragInvoke(this SettingsPanelComponent self)
+        {
+            
+            await ETTask.CompletedTask;
+        }
         #endregion YIUIEvent结束
     }
 }

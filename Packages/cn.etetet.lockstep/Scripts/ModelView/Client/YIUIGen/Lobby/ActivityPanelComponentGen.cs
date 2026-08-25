@@ -22,11 +22,15 @@ namespace ET.Client
         public YIUIWindowComponent UIWindow => u_UIWindow;
         public EntityRef<YIUIPanelComponent> u_UIPanel;
         public YIUIPanelComponent UIPanel => u_UIPanel;
+        public UnityEngine.RectTransform u_ComWindow;
         public UnityEngine.UI.Text u_ComTextTip;
         public UnityEngine.UI.Button u_ComBtnClose;
         public UITaskEventP0 u_EventClose;
         public UITaskEventHandleP0 u_EventCloseHandle;
         public const string OnEventCloseInvoke = "ActivityPanelComponent.OnEventCloseInvoke";
+        public UITaskEventP0 u_EventWindowDrag;
+        public UITaskEventHandleP0 u_EventWindowDragHandle;
+        public const string OnEventWindowDragInvoke = "ActivityPanelComponent.OnEventWindowDragInvoke";
 
     }
 }

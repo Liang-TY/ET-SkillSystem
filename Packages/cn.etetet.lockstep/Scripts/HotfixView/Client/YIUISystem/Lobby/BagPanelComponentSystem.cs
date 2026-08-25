@@ -56,6 +56,13 @@ namespace ET.Client
             await self.Root().YIUIMgr().ClosePanelAsync<BagPanelComponent>();
         }
 
+        
+        [YIUIInvoke(BagPanelComponent.OnEventWindowDragInvoke)]
+        private static async ETTask OnEventWindowDragInvoke(this BagPanelComponent self)
+        {
+            
+            await ETTask.CompletedTask;
+        }
         #endregion YIUIEvent结束
     }
 }

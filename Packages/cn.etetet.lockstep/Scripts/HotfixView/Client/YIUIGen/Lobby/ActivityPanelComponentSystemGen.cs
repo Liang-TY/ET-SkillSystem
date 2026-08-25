@@ -36,10 +36,13 @@ namespace ET.Client
             self.UIPanel.StackOption = EPanelStackOption.VisibleTween;
             self.UIPanel.Priority = 0;
 
+            self.u_ComWindow = self.UIBase.ComponentTable.FindComponent<UnityEngine.RectTransform>("u_ComWindow");
             self.u_ComTextTip = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Text>("u_ComTextTip");
             self.u_ComBtnClose = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnClose");
             self.u_EventClose = self.UIBase.EventTable.FindEvent<UITaskEventP0>("u_EventClose");
             self.u_EventCloseHandle = self.u_EventClose.Add(self,ActivityPanelComponent.OnEventCloseInvoke);
+            self.u_EventWindowDrag = self.UIBase.EventTable.FindEvent<UITaskEventP0>("u_EventWindowDrag");
+            self.u_EventWindowDragHandle = self.u_EventWindowDrag.Add(self,ActivityPanelComponent.OnEventWindowDragInvoke);
 
         }
     }
