@@ -41,9 +41,10 @@ namespace ET.Client
         
         
         [YIUIInvoke(SettingsPanelComponent.OnEventWindowDragInvoke)]
-        private static void OnEventWindowDragInvoke(this SettingsPanelComponent self, object p1)
+        private static void OnEventWindowDragInvoke(this SettingsPanelComponent self)
         {
             // 拖动窗口（按下标题区）：WindowDragComponent 逐帧移动，松手结束
+            // 注意：UIEventBindClickDown 框架硬编码调 0 参 invoke，E 表必须 0 参
             WindowDragHelper.Begin(self.Root(), self.u_ComWindow);
         }
         #endregion YIUIEvent结束

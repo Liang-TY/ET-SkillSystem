@@ -25,4 +25,4 @@ nodes:
 
 events:
   - { name: u_EventClose, target: u_ComBtnClose, trigger: Click }
-  - { name: u_EventWindowDrag, target: Title, trigger: ClickDown, params: [Object] }
+  - { name: u_EventWindowDrag, target: Title, trigger: ClickDown }
