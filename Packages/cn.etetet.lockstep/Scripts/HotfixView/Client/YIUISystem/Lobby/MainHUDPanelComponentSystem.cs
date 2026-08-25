@@ -35,42 +35,39 @@ namespace ET.Client
         [YIUIInvoke(MainHUDPanelComponent.OnEventActivityInvoke)]
         private static async ETTask OnEventActivityInvoke(this MainHUDPanelComponent self)
         {
-            
+            Log.Info("[DemoUI] 活动：功能开发中（批次③）");
             await ETTask.CompletedTask;
         }
         
         [YIUIInvoke(MainHUDPanelComponent.OnEventMapInvoke)]
         private static async ETTask OnEventMapInvoke(this MainHUDPanelComponent self)
         {
-            
-            await ETTask.CompletedTask;
+            await self.Root().YIUIRoot().OpenPanelAsync<MapSelectPanelComponent>();
         }
         
         [YIUIInvoke(MainHUDPanelComponent.OnEventShopInvoke)]
         private static async ETTask OnEventShopInvoke(this MainHUDPanelComponent self)
         {
-            
+            Log.Info("[DemoUI] 商城：功能开发中（批次③）");
             await ETTask.CompletedTask;
         }
         
         [YIUIInvoke(MainHUDPanelComponent.OnEventRoleInfoInvoke)]
         private static async ETTask OnEventRoleInfoInvoke(this MainHUDPanelComponent self)
         {
-            
-            await ETTask.CompletedTask;
+            await self.Root().YIUIRoot().OpenPanelAsync<RoleInfoPanelComponent>();
         }
         
         [YIUIInvoke(MainHUDPanelComponent.OnEventBagInvoke)]
         private static async ETTask OnEventBagInvoke(this MainHUDPanelComponent self)
         {
-            
-            await ETTask.CompletedTask;
+            await self.Root().YIUIRoot().OpenPanelAsync<BagPanelComponent>();
         }
         
         [YIUIInvoke(MainHUDPanelComponent.OnEventSettingsInvoke)]
         private static async ETTask OnEventSettingsInvoke(this MainHUDPanelComponent self)
         {
-            
+            Log.Info("[DemoUI] 设置：功能开发中（批次③）");
             await ETTask.CompletedTask;
         }
         #endregion YIUIEvent结束

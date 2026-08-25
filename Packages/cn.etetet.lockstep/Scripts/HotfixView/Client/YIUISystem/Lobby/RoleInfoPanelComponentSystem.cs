@@ -26,6 +26,16 @@ namespace ET.Client
         [EntitySystem]
         private static async ETTask<bool> YIUIOpen(this RoleInfoPanelComponent self)
         {
+            // DemoUI：v1 展示 UnitConfig 基础字段（战斗数值 LSNumeric 待接入）
+            UnitConfig config = UnitConfigCategory.Instance.GetOne();
+            self.u_ComTextInfo.text = config == null
+                ? "（无角色配置）"
+                : $"名字：{config.Name}
+类型：{config.Type}
+身高：{config.Height}
+
+（战斗数值待接入）";
+
             await ETTask.CompletedTask;
             return true;
         }

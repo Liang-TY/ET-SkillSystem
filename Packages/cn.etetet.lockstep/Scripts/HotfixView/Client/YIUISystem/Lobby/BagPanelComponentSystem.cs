@@ -26,6 +26,24 @@ namespace ET.Client
         [EntitySystem]
         private static async ETTask<bool> YIUIOpen(this BagPanelComponent self)
         {
+            // DemoUI：清旧格 → 20 个假 item 占位（TestScrollItem prefab，正式物品系统后续接）
+            for (int i = self.u_ComGridRoot.childCount - 1; i >= 0; i--)
+                UnityEngine.Object.Destroy(self.u_ComGridRoot.GetChild(i).gameObject);
+
+            GameObject prefab = await self.Root().GetComponent<ResourcesLoaderComponent>()
+                .LoadAssetAsync<GameObject>("Packages/cn.etetet.lockstep/Assets/GameRes/YIUI/ScrollTest/TestScrollItem.prefab");
+            if (prefab == null)
+            {
+                Log.Error("[DemoUI] BagPanel 找不到 TestScrollItem.prefab");
+                return false;
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                GameObject item = UnityEngine.Object.Instantiate(prefab, self.u_ComGridRoot);
+                item.name = $"Item_{i}";
+            }
+
             await ETTask.CompletedTask;
             return true;
         }
