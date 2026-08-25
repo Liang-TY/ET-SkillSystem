@@ -271,7 +271,26 @@ bool IsLoaded(string virtualPath)
 
 - **08-26** 方案讨论完成（收集规则/作用域体系/NPK 挂载/生命周期），文档创建。
 - **08-26** 修正 NPK 存放方式为 .npk.bytes（Unity 兼容）。原始 NPK 源目录确认（18 个文件）。
+- **08-26** 步骤A+B 完成：NpkArchive（lazy 挂载+按需提取）与 NpkMountManager（多归档统一管理）写好推送。
+- **08-26** 18 个 NPK 已复制为 .npk.bytes 并提交。Python 验证通过：魔数/索引/XOR解密/提取均正常。
+- **08-26** 交叉对照：AnimRes JSON 引用 23 个 IMG，其中 19 个在 NPK 中找到，4 个缺失（见问题区）。
 
 ## 10. 问题 / 待办
 
-- （暂无）
+### 缺失的 IMG（需要用户补充对应 NPK 或替代方案）
+
+| IMG 名 | 引用来源 | 说明 |
+|---|---|---|
+| at_up | JSON 动画配置 | 可能在其他 NPK 中，需确认 |
+| katana_blade | C# 代码直接加载 | 武器刀身，应在 katana NPK 中 |
+| katana_handle | C# 代码直接加载 | 武器刀柄，应在 katana NPK 中 |
+| releasewave3 | JSON 动画配置 | 波动爆发特效之一，可能在其他 NPK 中 |
+
+**NPK 中已确认找到的 19 个 IMG 的虚拟路径映射（自动生成）：**
+- bantuamazones -> sprite/monster/bantu/bantuamazones.img
+- blackdust -> sprite/character/priest/effect/devilspincutter/blackdust.img
+- bloodboom_* (4个) -> sprite/character/swordman/effect/bloodboom/*.img
+- circle -> sprite/common/commoneffect/glow/circle.img
+- explosionelectric02 -> sprite/character/priest/effect/atblessofangel/explosionelectric02.img
+- icebreath* (2个) -> sprite/monster/bantu/icebreath*.img
+- 等等（完整映射见交叉对照脚本输出）
