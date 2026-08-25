@@ -17,7 +17,7 @@ nodes:
       - name: u_ComTextInfo
         type: text
         place: { anchor: center, offset: [0, -20], size: [640, 620] }
-        props: { text: （角色数值待接入）, fontSize: 26, alignment: UpperLeft, color: "#DDDDDDFF" }
+        props: { text: （角色数值待接入）, fontSize: 26, alignment: UpperLeft, color: "#333333FF" }
 
       - name: u_ComBtnClose
         type: button

@@ -9,6 +9,10 @@ namespace ET.Client
     {
         protected override async ETTask Run(Scene scene, LSSceneInitFinish args)
         {
+            // 移除旧 ET UI（如果匹配/进战斗流程还会弹出 UILSLobby/UILSRoom）
+            await UIHelper.Remove(scene, UIType.UILSLobby);
+            await UIHelper.Remove(scene, UIType.UILSRoom);
+
             await scene.YIUIMgr().ClosePanelAsync<LoadingPanelComponent>();
 
             BattleInfoPanelComponent panel = await scene.YIUIRoot().OpenPanelAsync<BattleInfoPanelComponent>();

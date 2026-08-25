@@ -13,7 +13,7 @@ nodes:
   - name: u_ComTextTip
     type: text
     place: { anchor: center, offset: [0, -10], size: [600, 60] }
-    props: { text: （功能开发中）, fontSize: 26, color: "#999999FF" }
+    props: { text: （功能开发中）, fontSize: 26, color: "#333333FF" }
 
   - name: u_ComBtnClose
     type: button

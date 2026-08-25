@@ -4,6 +4,7 @@ panel:
   layer: Panel
 
 nodes:
+  - { name: u_ComImgBg, type: image, place: { anchor: stretch }, props: { color: "#E0E0E0FF" } }
   - name: Title
     type: text
     place: { anchor: top, offset: [0, -100], size: [500, 60] }
