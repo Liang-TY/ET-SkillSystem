@@ -34,20 +34,21 @@ namespace ET.Client
             if (numeric == null) return;
             FP hp = numeric.Get(NumericType.Hp);
             FP maxHp = numeric.Get(NumericType.MaxHp);
+            float hpFloat = hp.AsFloat();
 
             if (monster.Id != self.LastMonsterId)
             {
                 self.LastMonsterId = monster.Id;
-                self.LastMonsterHp = hp;
+                self.LastMonsterHp = hpFloat;
                 self.MonsterShown = false;
             }
 
-            if (hp < self.LastMonsterHp)
+            if (hpFloat < self.LastMonsterHp)
             {
-                DamageFloatHelper.Show(panel.GetFloatRoot(), (self.LastMonsterHp - hp).AsFloat());
+                DamageFloatHelper.Show(panel.GetFloatRoot(), self.LastMonsterHp - hpFloat);
                 self.MonsterShown = true;   // 受过伤才显示（不打怪就隐藏——用户决策）
             }
-            self.LastMonsterHp = hp;
+            self.LastMonsterHp = hpFloat;
 
             if (self.MonsterShown)
                 panel.UpdateMonster("怪物", hp, maxHp);
