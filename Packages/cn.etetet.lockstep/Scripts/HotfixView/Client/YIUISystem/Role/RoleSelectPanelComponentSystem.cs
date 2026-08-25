@@ -12,6 +12,7 @@ namespace ET.Client
     /// Desc
     /// </summary>
     [FriendOf(typeof(RoleSelectPanelComponent))]
+    [FriendOf(typeof(LoadingPanelComponent))]
     public static partial class RoleSelectPanelComponentSystem
     {
         [EntitySystem]
@@ -46,6 +47,10 @@ namespace ET.Client
             // 先捕获 root：关闭自身后 self 已销毁，不可再用 self.Root()
             Scene root = self.Root();
             await root.YIUIMgr().ClosePanelAsync<RoleSelectPanelComponent>();
+
+            LoadingPanelComponent loading = await root.YIUIRoot().OpenPanelAsync<LoadingPanelComponent>();
+            if (loading != null) loading.u_ComTextSub.text = "正在进入城镇…";
+
             await TownHelper.EnterTown(root, new TSVector(0, 0, 0));
         }
         

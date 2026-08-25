@@ -37,6 +37,14 @@ namespace ET.Client
         {
             await self.Root().YIUIMgr().ClosePanelAsync<ActivityPanelComponent>();
         }
+
+        [YIUIInvoke(ActivityPanelComponent.OnEventWindowDragInvoke)]
+        private static async ETTask OnEventWindowDragInvoke(this ActivityPanelComponent self)
+        {
+            // 拖动窗口（按下标题区）：WindowDragComponent 逐帧移动，松手结束
+            WindowDragHelper.Begin(self.Root(), self.u_ComWindow);
+            await ETTask.CompletedTask;
+        }
         #endregion YIUIEvent结束
     }
 }

@@ -151,6 +151,7 @@ namespace ET.UIBuilder
             if (triggerType == "ClickUp")
                 return typeof(UIEventBindClickUp);
 
+
             bool hasParams = paramTypes != null && paramTypes.Count > 0;
             EUIEventParamType firstParam = hasParams ? paramTypes[0] : EUIEventParamType.Bool; // Bool 作为"无参"哨兵
 
