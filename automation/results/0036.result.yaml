@@ -1,0 +1,18 @@
+# automation/results/0036.result.yaml
+id: "0036"
+status: done
+base: 48166df23
+created: 2026-08-26T01:10:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 48166df23（已自检核对，血条轮询/纯色背景已并入）。
+  产物已提交 wip-0036（22 文件：12 prefab + 5 ModelView Gen + 5 Hotfix Gen）+ 推送。
+  变化点：ShopPanel 本轮也进入 Gen 变更集（spec 新增 WindowDrag 事件），与 4 面板同套拖动 gen；
+  纯色背景#3C3F41 已随 12 个弹窗 prefab 落盘。
+build:
+  total: 16
+  failed: 0
+  changed_files: 22
+wip_branch: wip-0036
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
