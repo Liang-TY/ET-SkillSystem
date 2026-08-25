@@ -1,0 +1,26 @@
+# automation/results/0032.result.yaml
+id: "0032"
+status: failed
+reason: compile_error
+base: 5d3100bed
+created: 2026-08-25T22:40:00+08:00
+message: |
+  compile_check 失败：1 个编译错误（CS0117），来自基点 5d3100bed 的新提交代码，与 build 产物无关。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 5d3100bed（已自检核对）。
+
+  Packages\cn.etetet.lockstep\Scripts\HotfixView\Client\Battle\BattleHudUnitComponentSystem.cs(182,28):
+    error CS0117: 'Object' does not contain a definition for 'Destroy'
+  现场：第 182 行 `Object.Destroy(text.gameObject);` —— Hotfix 程序集内 Object 解析为
+  ET 框架类型（无 Destroy 静态方法），应改为 UnityEngine.Object.Destroy(...) 或 ET 对应销毁 API。
+  该行位于飘字生命周期结束分支（elapsed >= FloatDuration），本次新增功能代码。
+
+  证据说明（重要，供 skill 参考）：recompile 返回 up_to_date（假阴性）—— build_all 写 .cs 后
+  编辑器自动编译失败，但 CLI recompile_status 未反映该失败。权威证据为 get_console_logs
+  （total=601，Error 2 条：本条 CS0117 + 一次无效 refresh 命令）。
+  ET 编译管线在自动编译失败后，CLI recompile 不再触发真实编译，需主AI修复后重下 compile_check 验证。
+build:
+  errors:
+    - "Packages\\cn.etetet.lockstep\\Scripts\\HotfixView\\Client\\Battle\\BattleHudUnitComponentSystem.cs(182,28): error CS0117: 'Object' does not contain a definition for 'Destroy'"
+log_tail:
+  - 'get_console_logs: {"total":601, Error#1: 本条CS0117, Error#2: 无效refresh命令}'
+  - 'recompile_status: {"status":"up_to_date","failed":false} ← 假阴性，以 console 为准'
