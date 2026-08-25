@@ -1,0 +1,18 @@
+# automation/results/0037.result.yaml
+id: "0037"
+status: done
+base: 984c13ced
+created: 2026-08-26T01:40:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 984c13ced（已自检核对，锚点拉伸法已并入）。
+  产物已提交 wip-0037（10 文件：8 prefab + BattleInfoPanel ModelView/Hotfix Gen ×2）+ 推送。
+  BattleInfoPanel Gen 新增 u_ComMonsterHpBar 容器引用字段+绑定（血条重构目标面板）。
+  注：另有 5 个 prefab 重建后仅 CRLF 差异，add 归一无实质变更，未入提交。
+build:
+  total: 16
+  failed: 0
+  changed_files: 10
+wip_branch: wip-0037
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
