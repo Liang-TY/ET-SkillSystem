@@ -46,6 +46,12 @@ namespace ET.Client
             WindowDragHelper.Begin(self.Root(), self.u_ComWindow);
             await ETTask.CompletedTask;
         }
+        
+        [YIUIInvoke(SettingsPanelComponent.OnEventWindowDragInvoke)]
+        private static void OnEventWindowDragInvoke(this SettingsPanelComponent self, object p1)
+        {
+
+        }
         #endregion YIUIEvent结束
     }
 }

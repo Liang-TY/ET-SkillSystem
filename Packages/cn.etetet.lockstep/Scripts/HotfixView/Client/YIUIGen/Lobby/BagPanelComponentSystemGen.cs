@@ -41,7 +41,7 @@ namespace ET.Client
             self.u_ComBtnClose = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnClose");
             self.u_EventClose = self.UIBase.EventTable.FindEvent<UITaskEventP0>("u_EventClose");
             self.u_EventCloseHandle = self.u_EventClose.Add(self,BagPanelComponent.OnEventCloseInvoke);
-            self.u_EventWindowDrag = self.UIBase.EventTable.FindEvent<UITaskEventP0>("u_EventWindowDrag");
+            self.u_EventWindowDrag = self.UIBase.EventTable.FindEvent<UIEventP1<object>>("u_EventWindowDrag");
             self.u_EventWindowDragHandle = self.u_EventWindowDrag.Add(self,BagPanelComponent.OnEventWindowDragInvoke);
 
         }
