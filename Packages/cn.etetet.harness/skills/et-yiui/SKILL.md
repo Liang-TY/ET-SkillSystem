@@ -67,6 +67,7 @@ self.Loop.SetDataRefresh(list, defaultIndex).NoContext();
 
 ## 面板 handler 通用坑
 
+- **ClickDown/ClickUp 硬编码 0 参**：`UIEventBindClickDown.OnUIEvent` 丢弃 PointerEventData 调 `m_UIEvent.Invoke()`（0 参）——E 表和 handler **必须 Sync + 0 参**，加任何 params 都会参数不匹配报错。
 - **关闭自身后禁用 self**：非缓存面板 `ClosePanelAsync<T>()` = 销毁实体；handler 里 await 跨帧后 `self.Root()` 会因 `IScene==null` 抛 NRE。模式：**进 handler 先 `Scene root = self.Root();`，关闭自身后一切走局部 root**。
 
 ## 红线
