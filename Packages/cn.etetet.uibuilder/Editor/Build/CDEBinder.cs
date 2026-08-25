@@ -94,7 +94,9 @@ namespace ET.UIBuilder
                         paramTypes.Add(parsed);
                 }
 
-                var eventType = evt.Sync
+                // ClickDown/ClickUp 只有 Sync 组件（无 Task 变体），强制走 Sync 通道
+            bool forceSync = evt.Trigger == "ClickDown" || evt.Trigger == "ClickUp";
+            var eventType = (evt.Sync || forceSync)
                     ? UIBindEventTable.EUITaskEventType.Sync
                     : UIBindEventTable.EUITaskEventType.Async;
 

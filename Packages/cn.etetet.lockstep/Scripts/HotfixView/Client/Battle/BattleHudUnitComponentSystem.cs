@@ -30,8 +30,9 @@ namespace ET.Client
             self.FloatRects.Clear();
             self.FloatElapsed.Clear();
 
-            // Room 销毁时主动关面板（不依赖 TownSceneInitFinish 事件时序——竞态安全兜底）
-            self.Panel?.Root()?.YIUIMgr()?.ClosePanelAsync<BattleInfoPanelComponent>().NoContext();
+            // 只隐藏血条元素，不关面板（用户决策：面板由 TownSceneInitFinish 统一收口，
+            // Room 销毁时只做元素级清场——竞态安全兜底）
+            self.Panel?.HideMonster();
         }
 
         [EntitySystem]
