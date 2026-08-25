@@ -1,0 +1,13 @@
+# automation/results/0022.result.yaml
+id: "0022"
+status: done
+base: b3f8267e8
+message: |
+  compile_check 通过：0 错误 0 警告。
+  0021 的 TrueSync CS0246 已清零（删多余 using TrueSync 的修复生效）。
+  验证真实性：recompile 后 Editor.log 增长、轮询到 completed 且 failed:false
+  （非 up_to_date 假阴性）。基点 origin/et9lockStepYIUISeqFrameAniTestDev @ b3f8267e8（已自检核对）。
+build:
+  errors: []
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":false,"errors":[]}'
