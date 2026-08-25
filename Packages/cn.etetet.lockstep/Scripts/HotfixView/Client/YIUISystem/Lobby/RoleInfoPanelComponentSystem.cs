@@ -44,13 +44,6 @@ namespace ET.Client
             await self.Root().YIUIMgr().ClosePanelAsync<RoleInfoPanelComponent>();
         }
 
-        [YIUIInvoke(RoleInfoPanelComponent.OnEventWindowDragInvoke)]
-        private static async ETTask OnEventWindowDragInvoke(this RoleInfoPanelComponent self)
-        {
-            // 拖动窗口（按下标题区）：WindowDragComponent 逐帧移动，松手结束
-            WindowDragHelper.Begin(self.Root(), self.u_ComWindow);
-            await ETTask.CompletedTask;
-        }
         #endregion YIUIEvent结束
     }
 }
