@@ -1,0 +1,17 @@
+# automation/results/0038.result.yaml
+id: "0038"
+status: done
+base: 615ee4591
+created: 2026-08-26T02:10:00+08:00
+message: |
+  build_all 16/16 全绿（--timeout 600）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 615ee4591（已自检核对，Login背景浅灰已并入）。
+  产物已提交 wip-0038（15 文件：13 prefab + MapSelectPanel ModelView/Hotfix Gen ×2）+ 推送。
+  LoginPanel prefab 背景已落 #E0E0E0；MapSelectPanel gen 本轮有实质变更（布局重排相关）。
+build:
+  total: 16
+  failed: 0
+  changed_files: 15
+wip_branch: wip-0038
+log_tail:
+  - 'yiui_build_all: {"Total":16,"Failed":0,"Results":["OK"×16]}'
