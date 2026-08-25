@@ -35,7 +35,7 @@ namespace ET.Client
         [YIUIInvoke(MainHUDPanelComponent.OnEventActivityInvoke)]
         private static async ETTask OnEventActivityInvoke(this MainHUDPanelComponent self)
         {
-            Log.Info("[DemoUI] 活动：功能开发中（批次③）");
+            await self.Root().YIUIRoot().OpenPanelAsync<ActivityPanelComponent>();
             await ETTask.CompletedTask;
         }
         
@@ -48,7 +48,7 @@ namespace ET.Client
         [YIUIInvoke(MainHUDPanelComponent.OnEventShopInvoke)]
         private static async ETTask OnEventShopInvoke(this MainHUDPanelComponent self)
         {
-            Log.Info("[DemoUI] 商城：功能开发中（批次③）");
+            await self.Root().YIUIRoot().OpenPanelAsync<ShopPanelComponent>();
             await ETTask.CompletedTask;
         }
         
@@ -67,7 +67,7 @@ namespace ET.Client
         [YIUIInvoke(MainHUDPanelComponent.OnEventSettingsInvoke)]
         private static async ETTask OnEventSettingsInvoke(this MainHUDPanelComponent self)
         {
-            Log.Info("[DemoUI] 设置：功能开发中（批次③）");
+            await self.Root().YIUIRoot().OpenPanelAsync<SettingsPanelComponent>();
             await ETTask.CompletedTask;
         }
         #endregion YIUIEvent结束

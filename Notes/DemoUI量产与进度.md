@@ -34,7 +34,7 @@
 | ② | BattleInfoPanel | Battle | Scene | ✗ | 顶部左：角色血条(常驻)+怪物血条(默认隐藏) | ✅ |
 | ② | BagPanel | Lobby | Popup | ✓ | grid 容器，运行时填 20 假 item | ✅ |
 | ② | RoleInfoPanel | Lobby | Popup | ✓ | 文本行：unit 数值 | ✅ |
-| ③ | SettingsPanel / ShopPanel / ActivityPanel | Lobby | Popup | ✓ | 标题+"功能开发中" | ⬜ |
+| ③ | SettingsPanel / ShopPanel / ActivityPanel | Lobby | Popup | ✓ | 标题+"功能开发中" | ✅（0018） |
 
 ## 逻辑对接清单（面板落地后的代码层工作）
 
@@ -47,7 +47,8 @@
 | L5 | 战斗开始 → 开 BattleInfoPanel（角色条常驻；怪条隐藏） | ⬜ |
 | L6 | 命中怪 → 怪条显示+血量更新；伤害飘字（逻辑层创建） | ⬜ |
 | L7 | 怪死亡 → BattleTip 倒计时文本 → 3 秒回城镇 → 关 BattleInfo | ⬜ |
-| L8 | 背包假数据填充（20 随机 item，TestScrollItem 占位） | ⬜ |
+| L8 | 背包假数据填充（20 随机 item，TestScrollItem 占位） | ✅ |
+| L9 | MainHUD 设置/商城/活动三按钮接面板（批次③落地后） | ✅ |
 
 ## 进度记录
 
@@ -69,3 +70,5 @@
 - **P1 builder 颜色字节序 bug —— 已解决（方案②，5d3363b77 + 0011 重建验证）**：spec 8 位色约定由 #AARRGGBB 改为 #RRGGBBAA（Unity `ColorUtility` 原生序），4 处色值重写；0011 重建后 4 节点颜色实测正确（0,0,0,0.902 / 0,0,0,0.949 / 0.667 灰 α=1 / 黄 α=1）。builder `PropConfigurator.ParseColor` 代码未动，如后续再写 #AARRGGBB 仍会错位——spec 侧务必按 #RRGGBBAA 书写。
 - **P2 文档/spec 不一致 —— 已解决**：面板总表 Loading 黑底已随 5d3363b77 统一为 `#000000F2`（RRGGBBAA 序）。
 - 0010 无预览截图回传：build_all 任务类型不含 preview 步骤。后续如需视觉验收，单独立 preview 单或在 build_all 后补标准链第二步（0011 已补 skill 规则但未生效，见 P3）。
+
+- **08-25 12:4x** 0018 通过（16/16，base=dc6537eed 防呆核对✓）；MainHUD 三按钮接面板完成；DemoUI 全部面板与逻辑落地。
