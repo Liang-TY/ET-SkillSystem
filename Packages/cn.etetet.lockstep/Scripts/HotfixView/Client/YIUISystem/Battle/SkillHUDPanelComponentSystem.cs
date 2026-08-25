@@ -35,28 +35,28 @@ namespace ET.Client
         [YIUIInvoke(SkillHUDPanelComponent.OnEventSkill4Invoke)]
         private static async ETTask OnEventSkill4Invoke(this SkillHUDPanelComponent self)
         {
-            
+            Log.Info($"[DemoUI] 技能{n} 触发（接技能系统待后续）");
             await ETTask.CompletedTask;
         }
         
         [YIUIInvoke(SkillHUDPanelComponent.OnEventSkill3Invoke)]
         private static async ETTask OnEventSkill3Invoke(this SkillHUDPanelComponent self)
         {
-            
+            Log.Info($"[DemoUI] 技能{n} 触发（接技能系统待后续）");
             await ETTask.CompletedTask;
         }
         
         [YIUIInvoke(SkillHUDPanelComponent.OnEventSkill2Invoke)]
         private static async ETTask OnEventSkill2Invoke(this SkillHUDPanelComponent self)
         {
-            
+            Log.Info($"[DemoUI] 技能{n} 触发（接技能系统待后续）");
             await ETTask.CompletedTask;
         }
         
         [YIUIInvoke(SkillHUDPanelComponent.OnEventSkill1Invoke)]
         private static async ETTask OnEventSkill1Invoke(this SkillHUDPanelComponent self)
         {
-            
+            Log.Info($"[DemoUI] 技能{n} 触发（接技能系统待后续）");
             await ETTask.CompletedTask;
         }
         #endregion YIUIEvent结束
