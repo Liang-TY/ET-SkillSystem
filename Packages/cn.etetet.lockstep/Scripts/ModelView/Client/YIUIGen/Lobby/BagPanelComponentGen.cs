@@ -23,6 +23,7 @@ namespace ET.Client
         public EntityRef<YIUIPanelComponent> u_UIPanel;
         public YIUIPanelComponent UIPanel => u_UIPanel;
         public UnityEngine.RectTransform u_ComWindow;
+        public UnityEngine.UI.Image u_ComImgBg;
         public UnityEngine.RectTransform u_ComGridRoot;
         public UnityEngine.UI.Button u_ComBtnClose;
         public UITaskEventP0 u_EventClose;
