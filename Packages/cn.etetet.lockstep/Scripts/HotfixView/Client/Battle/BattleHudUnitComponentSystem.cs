@@ -29,6 +29,9 @@ namespace ET.Client
             self.FloatTexts.Clear();
             self.FloatRects.Clear();
             self.FloatElapsed.Clear();
+
+            // Room 销毁时主动关面板（不依赖 TownSceneInitFinish 事件时序——竞态安全兜底）
+            self.Panel?.Root()?.YIUIMgr()?.ClosePanelAsync<BattleInfoPanelComponent>().NoContext();
         }
 
         [EntitySystem]
