@@ -66,6 +66,9 @@
 
 ## 问题 / 待办
 
+- **TODO（用户决策）**：战斗结束服务端-客户端副本退出流程不完善——客户端本地副本已销毁，但服务端仍有消息回来（CheckHashFail 等找不到 Room 报 NRE）。需要完善：战斗结束→客户端通知服务端→服务端确认→消息排空→双方清理。涉及消息清单梳理。
+- **预期行为**：YooAsset 卸载最后一个场景的 Unity 限制警告——预期，不修（进城前先加载城镇场景再卸战斗场景是正确方向但非当前优先级）。
+
 - **P3 从机未按新规则回传 PNG（0011/0012 两轮实证，未解决）**：`automation/worker/ui-worker.SKILL.md` 的 build_all 补 PNG 回传规则（automation/results/<id>-<面板名>.png）已随 5d3363b77 进仓库；0012 前 watcher 已改为让从机直接读仓库版 skill（0c089ebdf，排除"本地副本未同步"假设），但 0012 执行后 automation 分支与 wip 分支仍均无 `0012-*.png`。两轮验收均改走静态核验（结果见进度区），视觉验收持续欠账。下一步需查从机执行侧实况：worker 会话日志、`unity command yiui_preview_panel`/Library/UIPreview 通道在 Unity 机是否可用、或 PNG 拷贝步骤被静默跳过的原因。
 - **P1 builder 颜色字节序 bug —— 已解决（方案②，5d3363b77 + 0011 重建验证）**：spec 8 位色约定由 #AARRGGBB 改为 #RRGGBBAA（Unity `ColorUtility` 原生序），4 处色值重写；0011 重建后 4 节点颜色实测正确（0,0,0,0.902 / 0,0,0,0.949 / 0.667 灰 α=1 / 黄 α=1）。builder `PropConfigurator.ParseColor` 代码未动，如后续再写 #AARRGGBB 仍会错位——spec 侧务必按 #RRGGBBAA 书写。
 - **P2 文档/spec 不一致 —— 已解决**：面板总表 Loading 黑底已随 5d3363b77 统一为 `#000000F2`（RRGGBBAA 序）。
