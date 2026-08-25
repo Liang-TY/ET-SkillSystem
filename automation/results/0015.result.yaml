@@ -1,0 +1,17 @@
+# automation/results/0015.result.yaml
+id: "0015"
+status: done
+message: |
+  compile_check 通过（跨行字符串修复复验）。编辑器 pipeline 侧无 yiui_compile_check 命令
+  （skill 文档任务表已过时，可用命令仅 yiui_build_panel/yiui_build_all/yiui_preview_panel/yiui_list_types），
+  按源码 Packages/cn.etetet.uibuilder/Editor/Commands/UIBuilderCliCommands.cs 注释与 0003 先例
+  走 pipeline 内建 recompile / recompile_status。结果：errors=[]，编译通过。
+  执行前已核对 ref 分支：本地 et9lockStepYIUISeqFrameAniTestDev == origin（9c195eef2），无 rebase 需求；
+  工作区存在既有未提交改动（2 个 Battle.meta / 1 个 LoginFinish_OpenRoleSelect.cs.meta 未跟踪 +
+  LoginFinish_EnterTown.cs.meta 删除），未触碰，编译状态含这些改动。
+  建议主 AI 更新 skill 文档 compile_check 行（yiui_compile_check → recompile/recompile_status）。
+build:
+  errors: []
+log_tail:
+  - 'recompile: {"status":"up_to_date","message":"No scripts needed recompilation."}'
+  - 'recompile_status: {"status":"up_to_date","failed":false,"errors":[]}'
