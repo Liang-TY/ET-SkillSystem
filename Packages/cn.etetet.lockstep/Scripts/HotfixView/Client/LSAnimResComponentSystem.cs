@@ -36,7 +36,7 @@ namespace ET.Client
             }
 
             // 依赖收集：从 AnimConfigRegistry 沿配置链收集所有 IMG 引用（替代硬编码列表）
-            HashSet<string> imgNames = ResourceDependencyCollector.CollectForAnimRes();
+            HashSet<string> imgNames = ResourceDependencyCollector.CollectForDungeon();
             Log.Info($"[LSAnimRes] 依赖收集: {imgNames.Count} 个 IMG — {string.Join(", ", imgNames)}");
 
             string animResDir = "Packages/cn.etetet.lockstep/Bundles/AnimRes";

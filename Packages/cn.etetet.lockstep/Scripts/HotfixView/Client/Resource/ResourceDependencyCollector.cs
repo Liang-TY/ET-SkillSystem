@@ -8,21 +8,15 @@ namespace ET.Client
     /// </summary>
     public static class ResourceDependencyCollector
     {
-        // ---- 玩家角色常驻 IMG（不走 JSON，由视图层直接引用）----
-        // TODO: 后续从角色配置驱动（classId → 身体/武器/时装 IMG 路径）
-        private static readonly string[] PlayerPermanent = new string[]
-        {
-            "sm_body0000.img",
-            "katana9200b.img",
-            "katana9200c.img",
-        };
-
         /// <summary>收集玩家角色常驻 IMG（body + weapon）</summary>
         public static HashSet<string> CollectCharacter()
         {
             var imgs = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
-            foreach (string s in PlayerPermanent)
-                imgs.Add(s);
+            // 玩家角色常驻 IMG（不走 JSON，由视图层直接引用）
+            // TODO: 后续从角色配置驱动（classId → 身体/武器/时装 IMG 路径）
+            imgs.Add("sm_body0000.img");
+            imgs.Add("katana9200b.img");
+            imgs.Add("katana9200c.img");
             return imgs;
         }
 
