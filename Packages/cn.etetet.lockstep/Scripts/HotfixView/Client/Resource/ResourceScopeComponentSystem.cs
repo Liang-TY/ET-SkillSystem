@@ -48,19 +48,17 @@ namespace ET.Client
             foreach (string atlasKey in imgNames)
             {
                 self.ScopePaths[scopeKey].Add(atlasKey);
+                self.ImgScopes.TryAdd(atlasKey, new HashSet<string>());
+                self.ImgScopes[atlasKey].Add(scopeKey);
+                self.LoadedAtlasKeys.TryAdd(atlasKey, atlasKey);
 
-                // 已加载 → 只追加作用域归属
-                if (self.LoadedImgs.TryGetValue(atlasKey, out LoadedImgInfo existing))
-                {
-                    existing.Scopes.Add(scopeKey);
-                    continue;
-                }
+                // 已在 LSAnimResComponent 中 → 跳过加载
+                if (animRes.Atlases.ContainsKey(atlasKey)) continue;
 
                 // 加载
                 byte[] imgBytes = npkLoader?.TryReadImg(atlasKey);
                 if (imgBytes == null)
                 {
-                    // fallback .img.bytes
                     TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>($"{animResDir}/{atlasKey}.bytes");
                     if (asset != null) imgBytes = asset.bytes;
                 }
@@ -72,18 +70,7 @@ namespace ET.Client
                 }
 
                 // 打图集
-                var (sprites, centers, texture) = BuildAtlas(imgBytes, atlasKey);
-                animRes.Atlases[atlasKey] = sprites;
-                animRes.AtlasCenters[atlasKey] = centers;
-
-                self.LoadedImgs[atlasKey] = new LoadedImgInfo
-                {
-                    AtlasKey = atlasKey,
-                    Scopes = { scopeKey },
-                    Texture = texture,
-                    Sprites = sprites,
-                    Centers = centers,
-                };
+                BuildAtlasInternal(animRes, atlasKey, imgBytes);
             }
 
             Log.Info($"[ResourceScope] {scopeKey} 加载完成: {self.ScopePaths[scopeKey].Count} 个 IMG");
@@ -101,20 +88,18 @@ namespace ET.Client
 
             foreach (string atlasKey in paths)
             {
-                if (!self.LoadedImgs.TryGetValue(atlasKey, out LoadedImgInfo info)) continue;
+                if (!self.ImgScopes.TryGetValue(atlasKey, out HashSet<string> scopes)) continue;
 
-                info.Scopes.Remove(scopeKey);
+                scopes.Remove(scopeKey);
 
-                if (info.Scopes.Count == 0)
+                if (scopes.Count == 0)
                 {
-                    // 没有其他作用域引用了 → 释放
+                    // 没有其他作用域引用了 → 释放图集
                     animRes?.Atlases.Remove(atlasKey);
                     animRes?.AtlasCenters.Remove(atlasKey);
 
-                    if (info.Texture != null)
-                        UnityEngine.Object.Destroy(info.Texture);
-
-                    self.LoadedImgs.Remove(atlasKey);
+                    self.ImgScopes.Remove(atlasKey);
+                    self.LoadedAtlasKeys.Remove(atlasKey);
                 }
             }
 
@@ -133,10 +118,11 @@ namespace ET.Client
             }
         }
 
-        /// <summary>打图集（复用 LSAnimResComponent 的图集构建逻辑）</summary>
-        private static (Dictionary<int, Sprite>, Dictionary<int, Vector2>, Texture2D) BuildAtlas(byte[] imgBytes, string atlasName)
+        /// <summary>打图集并注册到 LSAnimResComponent</summary>
+        private static void BuildAtlasInternal(LSAnimResComponent animRes, string atlasName, byte[] imgBytes)
         {
             NpkSprite[] npk = NpkImgParser.Parse(imgBytes);
+            Log.Info($"[ResourceScope] {atlasName}: 解析 {npk.Length} 帧");
 
             List<PackingRectangle> rectList = new();
             for (int i = 0; i < npk.Length; i++)
@@ -181,8 +167,9 @@ namespace ET.Client
                 centers[r.Id] = new Vector2(s.X + s.Width / 2f, s.Y + s.Height / 2f);
             }
 
+            animRes.Atlases[atlasName] = sprites;
+            animRes.AtlasCenters[atlasName] = centers;
             Log.Info($"[ResourceScope] {atlasName}: 图集 {atlasW}x{atlasH}，{rectArr.Length} 精灵");
-            return (sprites, centers, atlas);
         }
     }
 }
