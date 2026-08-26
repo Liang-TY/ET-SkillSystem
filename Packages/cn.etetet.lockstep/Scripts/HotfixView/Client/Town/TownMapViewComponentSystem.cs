@@ -107,6 +107,8 @@ namespace ET.Client
             string dir = Path.GetDirectoryName(TileLayoutPath)?.Replace('\\', '/');
 
             // 主瓦片 + 扩展瓦片的图集都进同一字典
+            // ★ NPK 优先：先从 NpkLoaderComponent 查，找不到再走 .img.bytes fallback
+            NpkLoaderComponent npkLoader = self.GetParent<Room>().GetComponent<NpkLoaderComponent>();
             Dictionary<string, NpkSprite[]> atlases = new(System.StringComparer.OrdinalIgnoreCase);
             async ETTask LoadAtlas(string imgPathRaw)
             {
@@ -114,9 +116,19 @@ namespace ET.Client
                 string imgName = (imgPathRaw.EndsWith(".img", System.StringComparison.OrdinalIgnoreCase)
                     ? imgPathRaw[..^4] : imgPathRaw).ToLowerInvariant();
                 if (atlases.ContainsKey(imgName)) return;
+
+                // ★ 优先从 NPK 提取
+                byte[] npkBytes = npkLoader?.TryReadImg(imgName + ".img");
+                if (npkBytes != null)
+                {
+                    atlases[imgName] = NpkImgParser.Parse(npkBytes);
+                    return;
+                }
+
+                // fallback：从 YooAsset 加载 .img.bytes
                 TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>($"{dir}/{imgName}.img.bytes");
                 atlases[imgName] = imgAsset != null ? NpkImgParser.Parse(imgAsset.bytes) : null;
-                if (imgAsset == null) Log.Warning($"[TownMapView] 瓦片图集不存在：{imgName}.img.bytes");
+                if (imgAsset == null) Log.Warning($"[TownMapView] 瓦片图集不存在：{imgName}.img.bytes（NPK 和 .img.bytes 均未找到）");
             }
             foreach (TileLayoutTile tile in layout.tiles) await LoadAtlas(tile?.imgPath);
             if (layout.extendedTiles != null)
