@@ -25,18 +25,28 @@ namespace ET.Client
                 await npkLoader.LoadAllNpks();
             }
 
-            // 作用域加载：角色常驻 + 城镇瓦片（不含怪物/副本特效）
+            // 作用域加载：角色常驻 + 城镇动画
             LSAnimResComponent animRes = room.GetComponent<LSAnimResComponent>();
             if (animRes == null)
                 animRes = room.AddComponent<LSAnimResComponent>();
+
+            // 加法混合材质
+            if (animRes.AdditiveMaterial == null)
+            {
+                Shader additiveShader = Shader.Find("ET/SpriteAdditive");
+                if (additiveShader != null)
+                    animRes.AdditiveMaterial = new Material(additiveShader);
+            }
+
             ResourceScopeComponent scope = room.GetComponent<ResourceScopeComponent>();
             if (scope == null)
                 scope = room.AddComponent<ResourceScopeComponent>();
 
-            // 先收集城镇瓦片（需要从 tile layout 读）
-            // TODO: 这里先加载角色+全量动画，城镇瓦片由 TownMapViewComponent 自己处理
-            // 后续 TownMapViewComponent 也改成走作用域
-            var townImgs = ResourceDependencyCollector.CollectForDungeon(); // 暂用全量（含怪物，城镇会多加载但不会崩）
+            // 先卸载副本作用域（从副本回城镇的情况）
+            scope.UnloadScope("anim", "dungeon");
+
+            // 城镇加载角色常驻 + 全量动画（暂不分城镇/副本）
+            var townImgs = ResourceDependencyCollector.CollectForDungeon();
             await scope.LoadScope("anim", "town", townImgs, animRes);
 
             // 瓦片地面 + 客户端权威碰撞

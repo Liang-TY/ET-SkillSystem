@@ -23,9 +23,43 @@ namespace ET.Client
         {
             Room room = self.Room();
 
-            // Initialize 2D animation resources
-            LSAnimResComponent animRes = room.AddComponent<LSAnimResComponent>();
-            await animRes.InitAsync();
+            // 2D 动画资源（作用域驱动：NPK 挂载 + 依赖收集 + 按场景加载）
+            LSAnimResComponent animRes = room.GetComponent<LSAnimResComponent>();
+            if (animRes == null)
+            {
+                animRes = room.AddComponent<LSAnimResComponent>();
+            }
+
+            // NPK 挂载（首次才挂载）
+            NpkLoaderComponent npkLoader = room.GetComponent<NpkLoaderComponent>();
+            if (npkLoader == null)
+            {
+                npkLoader = room.AddComponent<NpkLoaderComponent>();
+                await npkLoader.LoadAllNpks();
+            }
+
+            // 加法混合材质
+            if (animRes.AdditiveMaterial == null)
+            {
+                Shader additiveShader = Shader.Find("ET/SpriteAdditive");
+                if (additiveShader != null)
+                {
+                    animRes.AdditiveMaterial = new Material(additiveShader);
+                }
+            }
+
+            // 作用域加载：副本场景的全部动画 IMG
+            ResourceScopeComponent scope = room.GetComponent<ResourceScopeComponent>();
+            if (scope == null)
+            {
+                scope = room.AddComponent<ResourceScopeComponent>();
+            }
+
+            // 先卸载城镇作用域（如果存在——从城镇直接进战斗的情况）
+            scope.UnloadScope("anim", "town");
+
+            var dungeonImgs = ResourceDependencyCollector.CollectForDungeon();
+            await scope.LoadScope("anim", "dungeon", dungeonImgs, animRes);
 
             self.UnitPrefab = await room.GetComponent<ResourcesLoaderComponent>()
                 .LoadAssetAsync<GameObject>("Packages/cn.etetet.lockstep/Bundles/Unit/Unit2D.prefab");
