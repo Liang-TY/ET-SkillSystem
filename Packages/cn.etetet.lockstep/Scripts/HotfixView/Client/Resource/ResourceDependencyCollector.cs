@@ -27,7 +27,7 @@ namespace ET.Client
                 if (clip?.frames == null) continue;
                 foreach (var frame in clip.frames)
                 {
-                    string path = frame.image?.path;
+                    string path = frame.image.path;
                     if (!string.IsNullOrEmpty(path))
                         imgs.Add(path);
                 }
