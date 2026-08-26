@@ -5,6 +5,7 @@ namespace ET.Client
 {
     [EntitySystemOf(typeof(LSUnitViewComponent))]
     [FriendOf(typeof(LSUnitView))]
+    [FriendOf(typeof(LSAnimResComponent))]
     public static partial class LSUnitViewComponentSystem
     {
         [EntitySystem]

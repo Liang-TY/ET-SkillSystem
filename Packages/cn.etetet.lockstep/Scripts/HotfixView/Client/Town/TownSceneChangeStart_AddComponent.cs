@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace ET.Client
@@ -6,6 +7,7 @@ namespace ET.Client
     /// 城镇场景切换：加载场景 → 注册动画 clip → NPK挂载 → 作用域加载（角色+城镇瓦片）。
     /// </summary>
     [Event(SceneType.LockStep)]
+    [FriendOf(typeof(LSAnimResComponent))]
     public class TownSceneChangeStart_AddComponent: AEvent<Scene, TownSceneChangeStart>
     {
         protected override async ETTask Run(Scene clientScene, TownSceneChangeStart args)
