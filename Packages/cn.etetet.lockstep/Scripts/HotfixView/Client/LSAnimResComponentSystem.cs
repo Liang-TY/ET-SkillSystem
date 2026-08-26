@@ -28,33 +28,48 @@ namespace ET.Client
             Room room = self.Room();
             ResourcesLoaderComponent resLoader = room.GetComponent<ResourcesLoaderComponent>();
 
-            // 多图集：怪物 + 投射物 + 区域特效 + 鬼剑士分层（key = 文件名去 .bytes，忽略大小写）
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bantuamazones.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/NormalWave1.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/AT_Up.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/sm_body0000.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/katana_blade.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/katana_handle.img.bytes");
-            // 浴血之怒特效（施法叠加 2 张 + 爆炸 2 张）
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_casting.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_casting_back.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_boomfront.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/bloodboom_boomback.img.bytes");
-            // 波动爆发特效（mod NPK 4 张 + 官方/替代 7 张）
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_bodyglow.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_creature.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_speedline.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/rwi_wave.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/releasewave3.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/explosionelectric02.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/blackdust.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/circle.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/twister00.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/lightningfairy12.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/sphereexplosionnormal01.img.bytes");
-            // 班图女战士冰息弹（冰雾双层视觉）
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/icebreath1.img.bytes");
-            await BuildAtlas(self, resLoader, "Packages/cn.etetet.lockstep/Bundles/AnimRes/icebreath2.img.bytes");
+            // ★ NPK 挂载（新管线：优先从 NPK 提取，找不到走 .img.bytes fallback）
+            NpkLoaderComponent npkLoader = room.GetComponent<NpkLoaderComponent>();
+            if (npkLoader == null)
+            {
+                npkLoader = room.AddComponent<NpkLoaderComponent>();
+                await npkLoader.LoadAllNpks();
+            }
+
+            string animResDir = "Packages/cn.etetet.lockstep/Bundles/AnimRes";
+            string[] imgNames = new string[]
+            {
+                "bantuamazones.img.bytes", "NormalWave1.img.bytes", "AT_Up.img.bytes",
+                "sm_body0000.img.bytes", "katana_blade.img.bytes", "katana_handle.img.bytes",
+                "bloodboom_casting.img.bytes", "bloodboom_casting_back.img.bytes",
+                "bloodboom_boomfront.img.bytes", "bloodboom_boomback.img.bytes",
+                "rwi_bodyglow.img.bytes", "rwi_creature.img.bytes",
+                "rwi_speedline.img.bytes", "rwi_wave.img.bytes",
+                "releasewave3.img.bytes", "explosionelectric02.img.bytes",
+                "blackdust.img.bytes", "circle.img.bytes",
+                "twister00.img.bytes", "lightningfairy12.img.bytes",
+                "sphereexplosionnormal01.img.bytes",
+                "icebreath1.img.bytes", "icebreath2.img.bytes",
+            };
+
+            foreach (string imgName in imgNames)
+            {
+                // atlas key = 文件名去 .bytes（与 JSON 里的 image.path 形态一致）
+                string atlasKey = imgName[..^".bytes".Length];
+
+                // ★ 优先从 NPK 提取
+                byte[] imgBytes = npkLoader.TryReadImg(atlasKey);
+
+                if (imgBytes != null)
+                {
+                    BuildAtlasFromBytes(self, atlasKey, imgBytes);
+                }
+                else
+                {
+                    // fallback：从 YooAsset 加载 .img.bytes（旧管线，NPK 全就位后删除）
+                    await BuildAtlas(self, resLoader, $"{animResDir}/{imgName}");
+                }
+            }
 
             // LINEARDODGE 加法混合材质（共享，所有需要发光的帧用同一个实例）
             Shader additiveShader = Shader.Find("ET/SpriteAdditive");
@@ -69,6 +84,62 @@ namespace ET.Client
             }
 
             Log.Info($"[LSAnimRes] 图集构建完成：{self.Atlases.Count} 张（{string.Join(", ", self.Atlases.Keys)}）");
+        }
+
+        /// <summary>
+        /// 从原始 IMG 字节构建图集（NPK 管线：跳过 YooAsset，直接从 NpkArchive 提取的字节开始）。
+        /// 内部逻辑与 BuildAtlas 完全一致：NpkImgParser.Parse → RectpackSharp → Sprite + 帧偏移注册。
+        /// </summary>
+        private static void BuildAtlasFromBytes(LSAnimResComponent self, string atlasName, byte[] imgBytes)
+        {
+            NpkSprite[] npk = NpkImgParser.Parse(imgBytes);
+            Log.Info($"[LSAnimRes/NPK] {atlasName}: 解析 {npk.Length} 帧");
+
+            List<PackingRectangle> rectList = new();
+            for (int i = 0; i < npk.Length; i++)
+            {
+                if (npk[i].ArgbData == null) continue;
+                rectList.Add(new PackingRectangle(0, 0, (uint)(npk[i].Width + 1), (uint)(npk[i].Height + 1), i));
+            }
+
+            PackingRectangle[] rectArr = rectList.ToArray();
+            RectanglePacker.Pack(rectArr, out PackingRectangle bounds, PackingHints.FindBest, 1, 1, 2048, 2048);
+            int atlasW = (int)bounds.Width, atlasH = (int)bounds.Height;
+
+            Texture2D atlas = new(atlasW, atlasH, TextureFormat.RGBA32, false);
+            atlas.filterMode = FilterMode.Point;
+            atlas.wrapMode = TextureWrapMode.Clamp;
+            NativeArray<Color32> buf = atlas.GetRawTextureData<Color32>();
+
+            foreach (PackingRectangle r in rectArr)
+            {
+                NpkSprite s = npk[r.Id];
+                for (int y = 0; y < s.Height; y++)
+                for (int x = 0; x < s.Width; x++)
+                {
+                    int argb = s.ArgbData[y * s.Width + x];
+                    int dstY = atlasH - 1 - (int)r.Y - y;
+                    buf[dstY * atlasW + ((int)r.X + x)] = new Color32(
+                        (byte)((argb >> 16) & 0xFF),
+                        (byte)((argb >>  8) & 0xFF),
+                        (byte)((argb        ) & 0xFF),
+                        (byte)((argb >> 24) & 0xFF));
+                }
+            }
+            atlas.Apply(false, makeNoLongerReadable: true);
+
+            Dictionary<int, Sprite> sprites = new();
+            Dictionary<int, Vector2> centers = new();
+            foreach (PackingRectangle r in rectArr)
+            {
+                NpkSprite s = npk[r.Id];
+                Rect rect = new(r.X, atlasH - r.Y - s.Height, s.Width, s.Height);
+                sprites[r.Id] = Sprite.Create(atlas, rect, new Vector2(0.5f, 0.5f), 100f);
+                centers[r.Id] = new Vector2(s.X + s.Width / 2f, s.Y + s.Height / 2f);
+            }
+            self.Atlases[atlasName] = sprites;
+            self.AtlasCenters[atlasName] = centers;
+            Log.Info($"[LSAnimRes/NPK] {atlasName}: 图集 {atlasW}x{atlasH}，{rectArr.Length} 精灵");
         }
 
         /// <summary>加载一张 img.bytes → 解析 → RectpackSharp 打包成运行时图集 → Sprite + 帧偏移注册</summary>
