@@ -294,3 +294,16 @@ bool IsLoaded(string virtualPath)
 - explosionelectric02 -> sprite/character/priest/effect/atblessofangel/explosionelectric02.img
 - icebreath* (2个) -> sprite/monster/bantu/icebreath*.img
 - 等等（完整映射见交叉对照脚本输出）
+
+## 12. 短期/长期方案（路径策略）
+
+### 短期（当前实施）
+JSON 和 C# 继续用简单文件名（如 "bantuamazones.img"）。NpkMountManager 挂载时自动建文件名→虚拟路径反查表（ReadByFilename）。
+
+### 长期（正式产品化时改造）
+1. DnfConfigTranslation 的 AniParser 保留 .ani 原始路径（如 "Monster/Bantu/BantuAmazones.img"），拼上 sprite/ 前缀 + 小写化
+2. JSON 里的 image.path 改为完整虚拟路径（如 "sprite/monster/bantu/bantuamazones.img"）
+3. C# 硬编码的图集名同步改为完整路径
+4. 删除 NpkMountManager 的 ReadByFilename 方法，直接用 Read(完整路径)
+5. 删除 NpkLoaderComponentSystem 的 AtlasToVirtual 映射表（已删）
+6. katana_blade.img → katana9200b.img、katana_handle.img → katana9200c.img（用户确认的映射）

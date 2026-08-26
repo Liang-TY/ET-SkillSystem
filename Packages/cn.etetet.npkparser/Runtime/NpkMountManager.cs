@@ -15,6 +15,9 @@ namespace ET
         /// <summary>归档名 → 索引（用于按名卸载）</summary>
         private readonly Dictionary<string, NpkArchive> _archiveMap = new Dictionary<string, NpkArchive>(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>文件名（小写，如 "bantuamazones.img"）→ 完整虚拟路径（短期方案：JSON 用简单文件名，这里反查）</summary>
+        private readonly Dictionary<string, string> _filenameLookup = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         /// <summary>已挂载归档数</summary>
         public int Count => _archives.Count;
 
@@ -32,6 +35,16 @@ namespace ET
             NpkArchive archive = NpkArchive.Mount(name, npkBytes);
             _archives.Add(archive);
             _archiveMap[name] = archive;
+
+            // 构建文件名反查表（后挂载覆盖先挂载的同名文件，与 DNF mod 覆盖行为一致）
+            foreach (string virtualPath in archive.VirtualPaths)
+            {
+                string filename = System.IO.Path.GetFileName(virtualPath);
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    _filenameLookup[filename] = virtualPath;
+                }
+            }
         }
 
         /// <summary>卸载一个 NPK 归档（释放其字节流引用和索引）</summary>
@@ -54,6 +67,20 @@ namespace ET
             }
             _archives.Clear();
             _archiveMap.Clear();
+        }
+
+        /// <summary>
+        /// 按文件名（如 "bantuamazones.img"）反查并提取。
+        /// 短期方案：JSON 用简单文件名，这里通过文件名→虚拟路径反查表定位。
+        /// 长期方案：JSON 改用完整虚拟路径，此方法可废弃。
+        /// </summary>
+        public byte[] ReadByFilename(string filename)
+        {
+            if (_filenameLookup.TryGetValue(filename, out string virtualPath))
+            {
+                return Read(virtualPath);
+            }
+            return null;
         }
 
         /// <summary>
