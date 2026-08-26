@@ -471,3 +471,51 @@ LoadScope("dungeon", "15089")
 3. 改造 ResourceScopeComponentSystem.LoadScope 为配置驱动
 4. 角色配置表（classId → body/weapon/skills）
 5. 删除旧的 CollectForDungeon/CollectForTown 硬编码方法
+
+## 15. 实施进度（2026-08-27 最终更新）
+
+### 已完成
+
+| 步骤 | 内容 | 状态 |
+|---|---|---|
+| A | NpkArchive（lazy 挂载 + XOR 解密 + 按需提取） | ✅ |
+| B | NpkMountManager（多归档 + 文件名反查表） | ✅ |
+| C | ResourceScopeComponent（作用域管理器 + LoadScope/UnloadScope + 共享防误卸） | ✅ |
+| C+ | ResourceSourceTypes（11 种源类型 + 配置驱动收集） | ✅ |
+| C+ | resource_scope_rules.json（作用域规则配置文件） | ✅ |
+| C+ | ResourceDependencyCollector（CollectCharacter/CollectForTown/CollectForDungeon） | ✅ 已被配置驱动取代 |
+| D | NpkLoaderComponent + InitAsync 改造（NPK 优先 + .img.bytes fallback） | ✅ |
+| D | BuildAtlasFromBytes（从 NPK 字节直接打图集） | ✅ |
+| D | TownMapViewComponent.LoadAtlas 接 NPK 优先 | ✅ |
+| D | 城镇场景接入作用域（TownSceneChangeStart_AddComponent） | ✅ |
+| E | 副本场景接入作用域（LSUnitViewComponentSystem） | ✅ |
+| E | 生命周期挂接（进城镇/进副本/回城 的 LoadScope/UnloadScope） | ✅ |
+| 清理 | 删除波动爆发(Y键)技能及全部相关资源 | ✅ |
+
+### 当前作用域流转
+
+```
+进城镇: UnloadScope("dungeon") + LoadScope("town", "default")
+  town = character_body + character_weapon + anim_ids[10,11]
+
+进副本: UnloadScope("town") + LoadScope("dungeon", mapId)
+  dungeon = map_monsters + map_tiles + scope_ref(character)
+  character = character_body + character_weapon + character_skills
+
+回城镇: UnloadScope("dungeon") + LoadScope("town", "default")
+```
+
+### 待做（后续扩展时填）
+
+| 项 | 说明 |
+|---|---|
+| map_monsters 源类型精确化 | 当前走 anim_all 兜底，后续从 MapDefinition.MonsterAiIds 只收该地图怪物 |
+| map_tiles 源类型精确化 | 当前由 TownMapViewComponent 独立处理，后续并入作用域 |
+| character_body/weapon 从配置读 | 当前硬编码鬼剑士 3 个，后续从角色配置表读 |
+| character_skills 按职业过滤 | 当前收全部已注册动画，后续按职业过滤 |
+| JSON 配置文件加载 | 当前规则在代码里（GetDefaultRules），后续从 resource_scope_rules.json 读 |
+| override 配置 | 特殊场景的 extra/exclude，当前框架就位但无数据 |
+| AT_Up.img NPK 补充 | 火圈特效，当前走 .img.bytes fallback |
+| 删除全部 .img.bytes | 等 AT_Up 也进 NPK 后可删 |
+| NPK 启动时挂载一次 | 当前每次场景切换重新挂载，后续优化为启动时一次 |
+| 热更 DLL 重新编译 | 删除了 ReleaseWave 技能代码，需在 Unity 机重新编译 |
