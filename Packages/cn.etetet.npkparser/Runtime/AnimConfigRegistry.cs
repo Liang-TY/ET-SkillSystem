@@ -21,6 +21,13 @@ namespace ET
             return data;
         }
 
+        /// <summary>遍历所有已注册的 AnimClipData（供依赖收集器使用）</summary>
+        public static IEnumerable<(int animId, AnimClipData data)> GetAll()
+        {
+            foreach (var kv in configs)
+                yield return (kv.Key, kv.Value);
+        }
+
         /// <summary>注册 .als 特效叠加配置（animId = 挂接的父动画；entry.effectAnimId 需先解析好）</summary>
         public static void RegisterOverlay(int animId, AnimOverlayConfig config)
         {

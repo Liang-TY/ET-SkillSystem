@@ -20,7 +20,6 @@ namespace ET.Client
         {
             self.Atlases.Clear();
             self.AtlasCenters.Clear();
-            // Texture2D 运行时创建的图集不 Destroy（场景级共享，泄露量恒定可接受）
         }
 
         public static async ETTask InitAsync(this LSAnimResComponent self)
@@ -28,7 +27,7 @@ namespace ET.Client
             Room room = self.Room();
             ResourcesLoaderComponent resLoader = room.GetComponent<ResourcesLoaderComponent>();
 
-            // ★ NPK 挂载（新管线：优先从 NPK 提取，找不到走 .img.bytes fallback）
+            // NPK 挂载
             NpkLoaderComponent npkLoader = room.GetComponent<NpkLoaderComponent>();
             if (npkLoader == null)
             {
@@ -36,28 +35,14 @@ namespace ET.Client
                 await npkLoader.LoadAllNpks();
             }
 
+            // 依赖收集：从 AnimConfigRegistry 沿配置链收集所有 IMG 引用（替代硬编码列表）
+            HashSet<string> imgNames = ResourceDependencyCollector.CollectForAnimRes();
+            Log.Info($"[LSAnimRes] 依赖收集: {imgNames.Count} 个 IMG — {string.Join(", ", imgNames)}");
+
             string animResDir = "Packages/cn.etetet.lockstep/Bundles/AnimRes";
-            string[] imgNames = new string[]
-            {
-                "bantuamazones.img.bytes", "NormalWave1.img.bytes", "AT_Up.img.bytes",
-                "sm_body0000.img.bytes", "katana9200b.img.bytes", "katana9200c.img.bytes",
-                "bloodboom_casting.img.bytes", "bloodboom_casting_back.img.bytes",
-                "bloodboom_boomfront.img.bytes", "bloodboom_boomback.img.bytes",
-                "rwi_bodyglow.img.bytes", "rwi_creature.img.bytes",
-                "rwi_speedline.img.bytes", "rwi_wave.img.bytes",
-                "releasewave3.img.bytes", "explosionelectric02.img.bytes",
-                "blackdust.img.bytes", "circle.img.bytes",
-                "twister00.img.bytes", "lightningfairy12.img.bytes",
-                "sphereexplosionnormal01.img.bytes",
-                "icebreath1.img.bytes", "icebreath2.img.bytes",
-            };
 
-            foreach (string imgName in imgNames)
+            foreach (string atlasKey in imgNames)
             {
-                // atlas key = 文件名去 .bytes（与 JSON 里的 image.path 形态一致）
-                string atlasKey = imgName[..^".bytes".Length];
-
-                // ★ 优先从 NPK 提取
                 byte[] imgBytes = npkLoader.TryReadImg(atlasKey);
 
                 if (imgBytes != null)
@@ -66,12 +51,12 @@ namespace ET.Client
                 }
                 else
                 {
-                    // fallback：从 YooAsset 加载 .img.bytes（旧管线，NPK 全就位后删除）
-                    await BuildAtlas(self, resLoader, $"{animResDir}/{imgName}");
+                    Log.Warning($"[LSAnimRes] NPK 未找到 {atlasKey}，尝试 .img.bytes fallback");
+                    await BuildAtlas(self, resLoader, $"{animResDir}/{atlasKey}.bytes");
                 }
             }
 
-            // LINEARDODGE 加法混合材质（共享，所有需要发光的帧用同一个实例）
+            // LINEARDODGE 加法混合材质
             Shader additiveShader = Shader.Find("ET/SpriteAdditive");
             if (additiveShader != null)
             {
@@ -80,15 +65,14 @@ namespace ET.Client
             }
             else
             {
-                Log.Warning("[LSAnimRes] 找不到 ET/SpriteAdditive shader——加法混合帧会退化为普通渲染");
+                Log.Warning("[LSAnimRes] 找不到 ET/SpriteAdditive shader");
             }
 
             Log.Info($"[LSAnimRes] 图集构建完成：{self.Atlases.Count} 张（{string.Join(", ", self.Atlases.Keys)}）");
         }
 
         /// <summary>
-        /// 从原始 IMG 字节构建图集（NPK 管线：跳过 YooAsset，直接从 NpkArchive 提取的字节开始）。
-        /// 内部逻辑与 BuildAtlas 完全一致：NpkImgParser.Parse → RectpackSharp → Sprite + 帧偏移注册。
+        /// 从原始 IMG 字节构建图集（NPK 管线：直接从 NpkArchive 提取的字节开始）。
         /// </summary>
         private static void BuildAtlasFromBytes(LSAnimResComponent self, string atlasName, byte[] imgBytes)
         {
@@ -142,19 +126,21 @@ namespace ET.Client
             Log.Info($"[LSAnimRes/NPK] {atlasName}: 图集 {atlasW}x{atlasH}，{rectArr.Length} 精灵");
         }
 
-        /// <summary>加载一张 img.bytes → 解析 → RectpackSharp 打包成运行时图集 → Sprite + 帧偏移注册</summary>
+        /// <summary>加载一张 img.bytes（fallback 旧管线）</summary>
         private static async ETTask BuildAtlas(LSAnimResComponent self, ResourcesLoaderComponent resLoader, string assetPath)
         {
-            // key 取文件名并去掉 .bytes 后缀（= json 里 image.path 的文件名形态）
             string atlasName = System.IO.Path.GetFileName(assetPath);
             if (atlasName.EndsWith(".bytes")) atlasName = atlasName[..^".bytes".Length];
 
             TextAsset imgAsset = await resLoader.LoadAssetAsync<TextAsset>(assetPath);
+            if (imgAsset == null)
+            {
+                Log.Warning($"[LSAnimRes] fallback 也找不到: {assetPath}");
+                return;
+            }
             NpkSprite[] npk = NpkImgParser.Parse(imgAsset.bytes);
             Log.Info($"[LSAnimRes] {atlasName}: 解析 {npk.Length} 帧");
 
-            // 收集要打包的矩形（+1 padding 防渗色），Id = 数组下标（= json 的 image.index）
-            // 注意：用数组下标 i 作 key，不用 npk[i].Index（引用帧的 Index 字段会被拷贝成被引用者的值，不正确）
             List<PackingRectangle> rectList = new();
             for (int i = 0; i < npk.Length; i++)
             {
@@ -162,18 +148,15 @@ namespace ET.Client
                 rectList.Add(new PackingRectangle(0, 0, (uint)(npk[i].Width + 1), (uint)(npk[i].Height + 1), i));
             }
 
-            // 打包。2048=上限；bounds=实际用到的包围盒（按它建图集，不浪费内存）
             PackingRectangle[] rectArr = rectList.ToArray();
             RectanglePacker.Pack(rectArr, out PackingRectangle bounds, PackingHints.FindBest, 1, 1, 2048, 2048);
             int atlasW = (int)bounds.Width, atlasH = (int)bounds.Height;
 
-            // 建单张图集（RGBA32 必须匹配 Color32 内存布局），设 Point/Clamp
             Texture2D atlas = new(atlasW, atlasH, TextureFormat.RGBA32, false);
-            atlas.filterMode = FilterMode.Point;       // 像素图防糊
-            atlas.wrapMode = TextureWrapMode.Clamp;     // 图集防 UV 溢出渗色
+            atlas.filterMode = FilterMode.Point;
+            atlas.wrapMode = TextureWrapMode.Clamp;
             NativeArray<Color32> buf = atlas.GetRawTextureData<Color32>();
 
-            // 零拷贝填充：ARGB int → RGBA 字节；Y 翻转（packer top-left ↔ Unity bottom-left）
             foreach (PackingRectangle r in rectArr)
             {
                 NpkSprite s = npk[r.Id];
@@ -183,21 +166,20 @@ namespace ET.Client
                     int argb = s.ArgbData[y * s.Width + x];
                     int dstY = atlasH - 1 - (int)r.Y - y;
                     buf[dstY * atlasW + ((int)r.X + x)] = new Color32(
-                        (byte)((argb >> 16) & 0xFF),   // R
-                        (byte)((argb >>  8) & 0xFF),   // G
-                        (byte)((argb        ) & 0xFF), // B
-                        (byte)((argb >> 24) & 0xFF));  // A
+                        (byte)((argb >> 16) & 0xFF),
+                        (byte)((argb >>  8) & 0xFF),
+                        (byte)((argb        ) & 0xFF),
+                        (byte)((argb >> 24) & 0xFF));
                 }
             }
-            atlas.Apply(false, makeNoLongerReadable: true);   // 上传 GPU 后释放 CPU 副本
+            atlas.Apply(false, makeNoLongerReadable: true);
 
-            // Sprite（子区域，中心 pivot）+ 内容中心注册（绝对，摆位公式的原料）
             Dictionary<int, Sprite> sprites = new();
             Dictionary<int, Vector2> centers = new();
             foreach (PackingRectangle r in rectArr)
             {
                 NpkSprite s = npk[r.Id];
-                Rect rect = new(r.X, atlasH - r.Y - s.Height, s.Width, s.Height);  // Y 翻转
+                Rect rect = new(r.X, atlasH - r.Y - s.Height, s.Width, s.Height);
                 sprites[r.Id] = Sprite.Create(atlas, rect, new Vector2(0.5f, 0.5f), 100f);
                 centers[r.Id] = new Vector2(s.X + s.Width / 2f, s.Y + s.Height / 2f);
             }
@@ -208,11 +190,11 @@ namespace ET.Client
 
         public static Sprite GetSprite(this LSAnimResComponent self, string atlasName, int imgIndex)
         {
-            if (atlasName == null || atlasName.Length == 0) return null;   // 空路径帧（隐形占位）
+            if (atlasName == null || atlasName.Length == 0) return null;
             if (self.Atlases.TryGetValue(atlasName, out Dictionary<int, Sprite> sprites))
             {
                 if (!sprites.TryGetValue(imgIndex, out Sprite sprite))
-                    Log.Warning($"[LSAnimRes] {atlasName}[{imgIndex}] 越界（图集 {sprites.Count} 帧）——该帧渲染空白");
+                    Log.Warning($"[LSAnimRes] {atlasName}[{imgIndex}] 越界（图集 {sprites.Count} 帧）");
                 return sprite;
             }
             Log.Warning($"[LSAnimRes] 未注册图集 {atlasName}");
