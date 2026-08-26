@@ -15,7 +15,7 @@ namespace ET
             => animId == AnimId.Attack1
                || animId == AnimId.MonsterLowKick
                || animId == AnimId.MonsterHighKick
-               || animId == AnimId.SwordmanReleaseWaveDash;
+               
 
         [EntitySystem]
         private static void Awake(this LSHitboxComponent self)

@@ -19,7 +19,6 @@ namespace ET
         public const int WaveSword = 3;      // 地裂·波动剑（I 键，投射物）
         public const int FireCircle = 4;     // 火圈（O 键，区域效果）
         public const int BloodBoom = 5;      // 浴血之怒（U 键，自耗 HP 的自身中心血爆）
-        public const int ReleaseWave = 6;    // 波动爆发（Y 键，前冲+原地爆发击退，mod 技能）
 
         // 怪物技能段（班图女战士；无按键映射——由 AI/轮播驱动施放）
         public const int MonsterLowKick = 7;    // 下段踢（AI 距离 115px，普通硬直）
@@ -37,7 +36,6 @@ namespace ET
                 case 3: skillId = WaveSword; return true;
                 case 4: skillId = FireCircle; return true;
                 case 5: skillId = BloodBoom; return true;
-                case 6: skillId = ReleaseWave; return true;
                 default: skillId = 0; return false;
             }
         }

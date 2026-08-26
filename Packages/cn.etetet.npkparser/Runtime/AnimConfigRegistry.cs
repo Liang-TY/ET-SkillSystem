@@ -68,28 +68,6 @@ namespace ET
         public const int BloodboomBoomFront = 19;    // bloodboom_boomfront.json（爆炸正面，区域视图主层）
         public const int BloodboomBoomBack = 20;     // bloodboom_boomback.json（爆炸背面，区域视图背层）
 
-        // 波动爆发段（rw_dash_overlay.json / rw_burst_overlay.json 的别名 → AnimId 映射）
-        public const int SwordmanReleaseWaveDash = 21;  // swordman_releasewavedash.json（角色冲刺 3 帧 230ms）
-        public const int ReleaseWaveCreature = 22;      // rw_creature.json（冲刺幻影）
-        public const int ReleaseWaveCreature01 = 23;    // rw_creature_01.json（冲刺幻影拖尾）
-        public const int ReleaseWaveBodyGlow = 24;      // rw_bodyglow.json（体光）
-        public const int ReleaseWaveSpeedLine = 25;     // rw_speedline.json（速度线 ×4）
-        public const int ReleaseWaveSpeedLine01 = 26;
-        public const int ReleaseWaveSpeedLine01_01 = 27;
-        public const int ReleaseWaveSpeedLine01_02 = 28;
-        public const int ReleaseWaveCenter = 29;        // rw_center.json（中心电光，sphere 占位）
-        public const int ReleaseWaveCenter01 = 30;
-        public const int ReleaseWaveElec02 = 31;        // rw_elec02.json（爆发闪电信光 ×2）
-        public const int ReleaseWaveElec02_01 = 32;
-        public const int ReleaseWaveBackwind = 33;      // rw_backwind.json（蓄气主层，twister 占位+染蓝）
-        public const int ReleaseWaveCastLightning = 34; // rw_castlightning.json（蓄气闪电，lightningfairy12 占位）
-        public const int ReleaseWaveCircle = 35;        // rw_circle.json（地面光环，渐隐）
-        public const int ReleaseWaveSmoke = 36;         // rw_smoke.json（黑烟）
-        public const int ReleaseWaveGust = 37;          // rw_gust.json（蓄气波，rwi_wave）
-        public const int ReleaseWaveBurst1 = 38;        // rw_burst1.json（爆炸主层 5 帧 490ms）
-        public const int ReleaseWaveBurst2 = 39;        // rw_burst2.json（爆炸子层：冲击环）
-        public const int ReleaseWaveBurst3 = 40;        // rw_burst3.json（爆炸子层：蓄风）
-        public const int ReleaseWaveBurst4 = 41;        // rw_burst4.json（爆炸子层：终结爆炸）
 
         // 班图女战士（BantuAmazones）怪物段（BantuAmazones.img 54 帧已在库）
         public const int MonsterLowKick = 42;       // monster_lowkick.json（下段踢 7 帧，判定帧 3-5）

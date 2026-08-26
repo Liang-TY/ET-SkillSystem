@@ -46,8 +46,7 @@ namespace ET
                 && (anim.AnimId == AnimId.Attack1
                     || anim.AnimId == AnimId.SwordmanAttack1
                     || anim.AnimId == AnimId.SwordmanAttack2
-                    || anim.AnimId == AnimId.SwordmanAttack3
-                    || anim.AnimId == AnimId.SwordmanReleaseWaveDash);
+                    || anim.AnimId == AnimId.SwordmanAttack3);
 
             // 攻击输入：写缓冲（能否起手由 LSSkillComponentSystem.TryCast 决定——三重门禁；取消窗口由技能 OnUpdate 消费）
             if (pressed)
