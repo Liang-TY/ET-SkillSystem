@@ -116,9 +116,8 @@ namespace ET.Client
                 }
             }
 
-            // 应用 exclude（override 场景）
-            if (source_exclude.TryGetValue(scopeType, out var excludes))
-                foreach (string ex in excludes) result.Remove(ex);
+            // 应用 exclude（override 场景，当前无 override = 空）
+            // TODO: 从配置读 exclude 列表
 
             return result;
         }
@@ -166,7 +165,7 @@ namespace ET.Client
             return rules;
         }
 
-        private static readonly Dictionary<string, List<string>> source_exclude = new();
+        // exclude 不需要静态字段——直接在 CollectFromConfig 里局部处理
 
         /// <summary>卸载作用域：释放仅属于该作用域的图集。</summary>
         public static void UnloadScope(this ResourceScopeComponent self, string scopeType, string scopeId)
