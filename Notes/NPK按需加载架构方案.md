@@ -344,3 +344,130 @@ JSON 和 C# 继续用简单文件名（如 "bantuamazones.img"）。NpkMountMana
 - AT_Up.img 在当前 NPK 中找不到（火圈特效，走 fallback）
 - 城镇瓦片 NPK 加载有调试日志待确认（用户未反馈日志输出）
 - 热更 DLL 需重新编译（删除了 ReleaseWave 技能代码）
+
+## 14. 作用域规则配置化设计（2026-08-27）
+
+### 设计原则
+
+收集模式（每种作用域从哪些源收集）也配置化，不锁死在代码里。
+代码只定义**源类型**（可复用的收集原语），配置文件定义**作用域规则**（哪些源类型组合）。
+
+### 源类型（代码定义，一次性，所有作用域复用）
+
+| 源类型 | 输入参数 | 输出 | 说明 |
+|---|---|---|---|
+| `static_list` | 固定列表 | IMG 名字集合 | UI 框架贴图等极少变的 |
+| `anim_ids` | AnimId 列表 | IMG 名字集合 | 指定动画引用的 IMG |
+| `anim_all` | 无 | 全部已注册动画的 IMG | 全量收集 |
+| `character_body` | classId | 身体 IMG | 从角色配置读 |
+| `character_weapon` | classId | 武器 IMG | 从角色配置读 |
+| `character_skills` | classId | 该职业全部技能动画 IMG | 包括技能特效 |
+| `map_monsters` | mapId | 该地图怪物的全部动画 IMG | 从 MapDefinition.MonsterAiIds |
+| `map_tiles` | mapId | 地图瓦片 IMG | 从 tile layout |
+| `tile_layout` | townId | 城镇瓦片 IMG | 从城镇 tile layout |
+| `event_resources` | eventId | 活动声明的资源 IMG | 从活动配置 |
+| `scope_ref` | scope 名 | 引用另一个作用域的结果 | 依赖关系 |
+
+加新源类型 = 加一个函数，不改配置格式。
+
+### 作用域规则（配置文件 resource_scope_rules.json）
+
+```json
+{
+  "base": {
+    "sources": [
+      { "type": "static_list", "list": ["ui_button.img", "ui_panel.img"] },
+      { "type": "anim_ids", "ids": [4] }
+    ]
+  },
+  "character": {
+    "sources": [
+      { "type": "character_body" },
+      { "type": "character_weapon" },
+      { "type": "character_skills" }
+    ]
+  },
+  "town": {
+    "sources": [
+      { "type": "tile_layout" },
+      { "type": "anim_ids", "ids": [10, 11] },
+      { "type": "scope_ref", "scope": "character" }
+    ]
+  },
+  "dungeon": {
+    "sources": [
+      { "type": "map_monsters" },
+      { "type": "map_tiles" },
+      { "type": "scope_ref", "scope": "character" }
+    ]
+  },
+  "event": {
+    "sources": [
+      { "type": "event_resources" }
+    ]
+  }
+}
+```
+
+### override（特殊场景覆盖标准模式）
+
+```json
+{
+  "dungeon:15090": {
+    "sources": [
+      { "type": "map_monsters" },
+      { "type": "map_tiles" },
+      { "type": "static_list", "list": ["cutscene_boss.img"] },
+      { "type": "scope_ref", "scope": "character" }
+    ],
+    "exclude": ["normalwave1.img"]
+  }
+}
+```
+
+普通地图走 `dungeon` 模板，特殊地图走 `dungeon:15090` 覆盖。
+
+### 运行时流程
+
+```
+LoadScope("dungeon", "15089")
+  │
+  ├── 读 resource_scope_rules.json["dungeon"]
+  │     sources = [map_monsters, map_tiles, scope_ref:character]
+  │
+  ├── 逐个执行源类型：
+  │     map_monsters(mapId=15089) → MapDefinition.MonsterAiIds → 动画 → IMG
+  │     map_tiles(mapId=15089) → tile layout → IMG
+  │     scope_ref("character") → 递归读 character 规则 → body+weapon+skills → IMG
+  │
+  ├── 合并 → 去重 → 应用 exclude
+  │
+  └── 逐个 IMG：NPK 提取 → 打图集 → 注册（已加载的跳过）
+```
+
+### 参数解析
+
+作用域 ID 就是参数源：
+- LoadScope("dungeon", "15089") → mapId=15089
+- LoadScope("character", "swordman") → classId=swordman
+- LoadScope("event", "spring_2026") → eventId=spring_2026
+
+源类型从当前作用域的上下文取参数。
+
+### 与之前方案的差异
+
+| | 之前（代码模式） | 现在（配置模式） |
+|---|---|---|
+| 收集模式 | C# 方法硬编码（CollectForDungeon 固定收怪物+技能+地图） | 配置文件定义（改 JSON 调策略） |
+| 加新作用域类型 | 加 C# 方法 | 加配置条目 |
+| 调整某作用域收集策略 | 改代码重新编译 | 改 JSON |
+| 特殊场景覆盖 | C# if/else | override 配置 |
+| 游戏设计师调整 | 找程序员 | 自己改 JSON |
+
+### 实施步骤
+
+1. 定义源类型接口 + 实现各源类型函数
+2. 写 resource_scope_rules.json 配置文件
+3. 改造 ResourceScopeComponentSystem.LoadScope 为配置驱动
+4. 角色配置表（classId → body/weapon/skills）
+5. 删除旧的 CollectForDungeon/CollectForTown 硬编码方法
