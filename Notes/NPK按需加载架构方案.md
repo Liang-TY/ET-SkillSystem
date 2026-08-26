@@ -307,3 +307,40 @@ JSON 和 C# 继续用简单文件名（如 "bantuamazones.img"）。NpkMountMana
 4. 删除 NpkMountManager 的 ReadByFilename 方法，直接用 Read(完整路径)
 5. 删除 NpkLoaderComponentSystem 的 AtlasToVirtual 映射表（已删）
 6. katana_blade.img → katana9200b.img、katana_handle.img → katana9200c.img（用户确认的映射）
+
+## 13. 实施进度（2026-08-26 更新）
+
+### 已完成
+
+| 步骤 | 内容 | 状态 |
+|---|---|---|
+| A | NpkArchive（lazy 挂载 + XOR 解密 + 按需提取） | ✅ |
+| B | NpkMountManager（多归档 + 文件名反查） | ✅ |
+| D-部分 | NpkLoaderComponent + InitAsync 改造（NPK 优先 + .img.bytes fallback） | ✅ |
+| D-部分 | BuildAtlasFromBytes（从 NPK 字节直接打图集） | ✅ |
+| D-部分 | TownMapViewComponent.LoadAtlas 接 NPK 优先 | ✅ |
+| 收集器 | ResourceDependencyCollector.CollectForAnimRes（全量收集，不分场景） | ✅ |
+| 清理 | 删除波动爆发(Y键)技能及全部相关资源 | ✅ |
+
+### 当前实际行为（与方案目标差距）
+
+- 依赖收集：收集所有已注册动画的 IMG，**不分城镇/副本**
+- 加载：每次场景切换全量重新加载（挂载NPK+收集+打图集）
+- 卸载：靠 Room 销毁隐式释放全部，**无显式作用域卸载**
+- 常驻：玩家角色 IMG 每次场景切换重新加载，**无跨场景常驻**
+
+### 待做（步骤 C-E）
+
+| 步骤 | 内容 |
+|---|---|
+| C | 实现 ResourceScopeComponent（作用域管理器：LoadScope/UnloadScope + 共享防误卸） |
+| C+ | 拆分依赖收集器：CollectForTown（角色+城镇瓦片）/ CollectForDungeon(mapId)（角色+该地图怪物+技能特效） |
+| D | 改造 InitAsync 为作用域驱动（不再全量收集+加载） |
+| E | 生命周期挂接：进城镇/进副本/回城 的 LoadScope/UnloadScope + NPK 启动时挂载一次 |
+| F | 删除全部 .img.bytes fallback（AT_Up.img 待补充 NPK 后可删） |
+
+### 待解决问题
+
+- AT_Up.img 在当前 NPK 中找不到（火圈特效，走 fallback）
+- 城镇瓦片 NPK 加载有调试日志待确认（用户未反馈日志输出）
+- 热更 DLL 需重新编译（删除了 ReleaseWave 技能代码）
