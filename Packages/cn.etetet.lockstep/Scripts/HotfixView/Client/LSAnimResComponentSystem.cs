@@ -40,7 +40,7 @@ namespace ET.Client
             string[] imgNames = new string[]
             {
                 "bantuamazones.img.bytes", "NormalWave1.img.bytes", "AT_Up.img.bytes",
-                "sm_body0000.img.bytes", "katana_blade.img.bytes", "katana_handle.img.bytes",
+                "sm_body0000.img.bytes", "katana9200b.img", "katana9200c.img",
                 "bloodboom_casting.img.bytes", "bloodboom_casting_back.img.bytes",
                 "bloodboom_boomfront.img.bytes", "bloodboom_boomback.img.bytes",
                 "rwi_bodyglow.img.bytes", "rwi_creature.img.bytes",

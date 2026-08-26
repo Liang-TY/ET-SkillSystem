@@ -47,8 +47,8 @@ namespace ET.Client
             // 玩家 3 层渲染配置（同战斗 LSUnitViewComponentSystem：鬼剑士+太刀）
             self.RenderConfig = new UnitRenderConfig();
             self.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "sm_body0000.img", SortingOrder = 10 });
-            self.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana_blade.img", SortingOrder = 16 });
-            self.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana_handle.img", SortingOrder = 17 });
+            self.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana9200b.img", SortingOrder = 16 });
+            self.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana9200c.img", SortingOrder = 17 });
 
             SpriteRenderer[] allRenderers = go.GetComponentsInChildren<SpriteRenderer>(true);
             foreach (RenderLayer layer in self.RenderConfig.Layers)

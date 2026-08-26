@@ -97,8 +97,8 @@ namespace ET.Client
                 // 玩家（鬼剑士 + 太刀）
                 lsUnitView.RenderConfig = new UnitRenderConfig();
                 lsUnitView.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "sm_body0000.img", SortingOrder = 10 });
-                lsUnitView.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana_blade.img", SortingOrder = 16 });
-                lsUnitView.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana_handle.img", SortingOrder = 17 });
+                lsUnitView.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana9200b.img", SortingOrder = 16 });
+                lsUnitView.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana9200c.img", SortingOrder = 17 });
             }
             else
             {

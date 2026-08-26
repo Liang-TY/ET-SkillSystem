@@ -126,8 +126,8 @@ namespace ET.Client
             // 鬼剑士 3 层渲染（同本地玩家/战斗——demo 无选角，全员同款）
             view.RenderConfig = new UnitRenderConfig();
             view.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "sm_body0000.img", SortingOrder = 10 });
-            view.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana_blade.img", SortingOrder = 16 });
-            view.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana_handle.img", SortingOrder = 17 });
+            view.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana9200b.img", SortingOrder = 16 });
+            view.RenderConfig.Layers.Add(new RenderLayer { AtlasName = "katana9200c.img", SortingOrder = 17 });
             SpriteRenderer[] allRenderers = go.GetComponentsInChildren<SpriteRenderer>(true);
             foreach (RenderLayer layer in view.RenderConfig.Layers)
             {
