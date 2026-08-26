@@ -14,8 +14,7 @@ namespace ET
         private static bool IsAttackDrivenAnim(int animId)
             => animId == AnimId.Attack1
                || animId == AnimId.MonsterLowKick
-               || animId == AnimId.MonsterHighKick
-               
+               || animId == AnimId.MonsterHighKick;
 
         [EntitySystem]
         private static void Awake(this LSHitboxComponent self)
