@@ -5,23 +5,53 @@ namespace ET.Client
     /// <summary>
     /// 资源依赖收集器：沿配置链收集 IMG 文件名集合（方案文档 §5）。
     /// 纯内存查找，不碰 IO——数据来自已加载的 AnimConfigRegistry + 视图配置。
-    ///
-    /// 三条收集链：
-    ///   动画链：AnimConfigRegistry.GetAll() → 每个 AnimClipData.frames[].image.path
-    ///   角色链：视图层 RenderConfig.Layers[].AtlasName（身体/武器，不走 JSON）
-    ///   地图链：TileLayoutData.tiles[].imgPath + decorations[].imgPath
     /// </summary>
     public static class ResourceDependencyCollector
     {
-        /// <summary>
-        /// 收集所有已注册动画引用的 IMG 文件名 + 玩家角色常驻 IMG。
-        /// 在 LSAnimResComponent.InitAsync 中调用（替代硬编码列表）。
-        /// </summary>
-        public static HashSet<string> CollectForAnimRes()
+        // ---- 玩家角色常驻 IMG（不走 JSON，由视图层直接引用）----
+        // TODO: 后续从角色配置驱动（classId → 身体/武器/时装 IMG 路径）
+        private static readonly string[] PlayerPermanent = new string[]
+        {
+            "sm_body0000.img",
+            "katana9200b.img",
+            "katana9200c.img",
+        };
+
+        /// <summary>收集玩家角色常驻 IMG（body + weapon）</summary>
+        public static HashSet<string> CollectCharacter()
         {
             var imgs = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+            foreach (string s in PlayerPermanent)
+                imgs.Add(s);
+            return imgs;
+        }
 
-            // ① 动画链：遍历所有已注册 AnimClipData，提取 image.path
+        /// <summary>
+        /// 收集城镇场景所需的全部 IMG：角色常驻 + 城镇瓦片。
+        /// 不含怪物/副本特效。
+        /// </summary>
+        public static HashSet<string> CollectForTown(TileLayoutData tileLayout = null)
+        {
+            var imgs = CollectCharacter();
+
+            if (tileLayout != null)
+                imgs.UnionWith(CollectFromTileLayout(tileLayout));
+
+            return imgs;
+        }
+
+        /// <summary>
+        /// 收集副本场景所需的全部 IMG：角色常驻 + 角色全部技能特效 + 怪物动画。
+        /// 不含城镇瓦片。
+        /// </summary>
+        public static HashSet<string> CollectForDungeon()
+        {
+            var imgs = CollectCharacter();
+
+            // 城镇不需要的动画：怪物段（MonsterLowKick=42 到 IceBreathBullet2=48）
+            // + 玩家技能特效（从 AnimClipData 收集）
+            // 当前简单做法：收集所有已注册动画的 IMG（除了城镇瓦片）
+            // 后续精确化：只收集 MapDefinition.MonsterAiIds 对应的怪物 + 该职业的技能
             foreach (var (_, clip) in AnimConfigRegistry.GetAll())
             {
                 if (clip?.frames == null) continue;
@@ -33,19 +63,10 @@ namespace ET.Client
                 }
             }
 
-            // ② 角色链：玩家身体+武器不走 JSON，由视图层直接引用——当前鬼剑士固定三件
-            // TODO: 后续从角色配置驱动（classId → 身体/武器/时装 IMG 路径）
-            imgs.Add("sm_body0000.img");
-            imgs.Add("katana9200b.img");
-            imgs.Add("katana9200c.img");
-
             return imgs;
         }
 
-        /// <summary>
-        /// 收集城镇瓦片引用的 IMG 文件名（从 TileLayoutData 提取）。
-        /// 在 TownMapViewComponent.BuildTileTexture 中调用。
-        /// </summary>
+        /// <summary>从瓦片布局收集 IMG 文件名</summary>
         public static HashSet<string> CollectFromTileLayout(TileLayoutData layout)
         {
             var imgs = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
@@ -70,7 +91,7 @@ namespace ET.Client
             return imgs;
         }
 
-        /// <summary>"Aganzo.img" → "aganzo.img"（去后缀再统一格式 + 小写）</summary>
+        /// <summary>"Aganzo.img" → "aganzo.img"</summary>
         private static string NormalizeImgName(string imgPath)
         {
             string name = imgPath;
