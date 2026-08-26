@@ -59,8 +59,7 @@ namespace ET.Client
             // 先卸载城镇作用域（如果存在——从城镇直接进战斗的情况）
             scope.UnloadScope("anim", "town");
 
-            var dungeonImgs = ResourceDependencyCollector.CollectForDungeon();
-            await scope.LoadScope("anim", "dungeon", dungeonImgs, animRes);
+            await scope.LoadScope("dungeon", room.MapId.ToString(), animRes);
 
             self.UnitPrefab = await room.GetComponent<ResourcesLoaderComponent>()
                 .LoadAssetAsync<GameObject>("Packages/cn.etetet.lockstep/Bundles/Unit/Unit2D.prefab");

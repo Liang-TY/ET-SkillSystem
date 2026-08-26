@@ -48,8 +48,7 @@ namespace ET.Client
             scope.UnloadScope("anim", "dungeon");
 
             // 城镇加载角色常驻 + 全量动画（暂不分城镇/副本）
-            var townImgs = ResourceDependencyCollector.CollectForDungeon();
-            await scope.LoadScope("anim", "town", townImgs, animRes);
+            await scope.LoadScope("town", "default", animRes);
 
             // 瓦片地面 + 客户端权威碰撞
             await room.AddComponent<TownMapViewComponent>().InitAsync();

@@ -7,8 +7,8 @@ using UnityEngine;
 namespace ET.Client
 {
     /// <summary>
-    /// 作用域管理系统：按场景类型加载/卸载 IMG 图集。
-    /// 共享资源防误卸：卸载作用域时只释放仅属于该作用域的 IMG。
+    /// 作用域管理系统：按配置驱动加载/卸载 IMG 图集（方案文档 §14）。
+    /// 读 resource_scope_rules.json → 执行源类型 → 收集 IMG → NPK 提取 → 打图集。
     /// </summary>
     [EntitySystemOf(typeof(ResourceScopeComponent))]
     [FriendOf(typeof(ResourceScopeComponent))]
@@ -27,13 +27,13 @@ namespace ET.Client
         }
 
         /// <summary>
-        /// 加载作用域：收集 IMG 路径 → 逐个从 NPK 提取 → 打图集 → 注册到 LSAnimResComponent。
+        /// 加载作用域：读配置 → 执行源类型 → 收集 IMG → 从 NPK 提取 → 打图集。
         /// 已加载的 IMG 只追加作用域归属，不重复加载。
+        /// scope_ref 递归加载依赖作用域。
         /// </summary>
         public static async ETTask LoadScope(
             this ResourceScopeComponent self,
             string scopeType, string scopeId,
-            HashSet<string> imgNames,
             LSAnimResComponent animRes)
         {
             if (animRes == null) return;
@@ -41,21 +41,27 @@ namespace ET.Client
             string scopeKey = $"{scopeType}:{scopeId}";
             self.ScopePaths.TryAdd(scopeKey, new HashSet<string>());
 
-            NpkLoaderComponent npkLoader = self.GetParent<Room>().GetComponent<NpkLoaderComponent>();
-            ResourcesLoaderComponent resLoader = self.GetParent<Room>().GetComponent<ResourcesLoaderComponent>();
+            Room room = self.GetParent<Room>();
+            NpkLoaderComponent npkLoader = room.GetComponent<NpkLoaderComponent>();
+            ResourcesLoaderComponent resLoader = room.GetComponent<ResourcesLoaderComponent>();
             string animResDir = "Packages/cn.etetet.lockstep/Bundles/AnimRes";
+
+            // 收集 IMG 名字（执行所有源类型）
+            var ctx = new ResourceSourceTypes.ScopeContext { ScopeType = scopeType, ScopeId = scopeId };
+            HashSet<string> imgNames = CollectFromConfig(scopeType, scopeId, ctx, room);
+
+            Log.Info($"[ResourceScope] {scopeKey} 收集: {imgNames.Count} 个 IMG");
 
             foreach (string atlasKey in imgNames)
             {
                 self.ScopePaths[scopeKey].Add(atlasKey);
                 self.ImgScopes.TryAdd(atlasKey, new HashSet<string>());
                 self.ImgScopes[atlasKey].Add(scopeKey);
-                self.LoadedAtlasKeys.TryAdd(atlasKey, atlasKey);
 
                 // 已在 LSAnimResComponent 中 → 跳过加载
                 if (animRes.Atlases.ContainsKey(atlasKey)) continue;
 
-                // 加载
+                // 加载：NPK 优先 + .img.bytes fallback
                 byte[] imgBytes = npkLoader?.TryReadImg(atlasKey);
                 if (imgBytes == null)
                 {
@@ -69,16 +75,100 @@ namespace ET.Client
                     continue;
                 }
 
-                // 打图集
                 BuildAtlasInternal(animRes, atlasKey, imgBytes);
             }
 
-            Log.Info($"[ResourceScope] {scopeKey} 加载完成: {self.ScopePaths[scopeKey].Count} 个 IMG");
+            Log.Info($"[ResourceScope] {scopeKey} 加载完成");
         }
 
-        /// <summary>
-        /// 卸载作用域：释放仅属于该作用域的图集（共享的不释放）。
-        /// </summary>
+        /// <summary>读配置 → 执行源类型 → 返回 IMG 集合</summary>
+        private static HashSet<string> CollectFromConfig(string scopeType, string scopeId,
+            ResourceSourceTypes.ScopeContext ctx, Room room)
+        {
+            var result = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+
+            // 读配置文件（当前硬编码配置，后续改为 JSON 加载）
+            // TODO: 从 resource_scope_rules.json 读取
+            var rules = GetDefaultRules();
+
+            if (!rules.TryGetValue(scopeType, out var sources))
+            {
+                Log.Warning($"[ResourceScope] 未知作用域类型: {scopeType}");
+                return result;
+            }
+
+            foreach (var source in sources)
+            {
+                if (source.type == "scope_ref")
+                {
+                    // 递归收集依赖作用域
+                    string refScope = source.scope ?? "character";
+                    if (!rules.TryGetValue(refScope, out var refSources)) continue;
+                    var refCtx = new ResourceSourceTypes.ScopeContext { ScopeType = refScope, ScopeId = scopeId };
+                    var refResult = CollectFromConfig(refScope, scopeId, refCtx, room);
+                    result.UnionWith(refResult);
+                }
+                else
+                {
+                    object param = source.list ?? (object)(source.ids ?? null);
+                    var collected = ResourceSourceTypes.Collect(source.type, param, ctx, room);
+                    result.UnionWith(collected);
+                }
+            }
+
+            // 应用 exclude（override 场景）
+            if (source_exclude.TryGetValue(scopeType, out var excludes))
+                foreach (string ex in excludes) result.Remove(ex);
+
+            return result;
+        }
+
+        // ---- 默认配置（后续改为 JSON 文件加载）----
+
+        private struct SourceRule
+        {
+            public string type;
+            public List<string> list;
+            public List<int> ids;
+            public string scope;
+        }
+
+        private static Dictionary<string, List<SourceRule>> GetDefaultRules()
+        {
+            var rules = new Dictionary<string, List<SourceRule>>();
+
+            rules["character"] = new List<SourceRule>
+            {
+                new() { type = "character_body" },
+                new() { type = "character_weapon" },
+                new() { type = "character_skills" },
+            };
+
+            rules["town"] = new List<SourceRule>
+            {
+                new() { type = "character_body" },
+                new() { type = "character_weapon" },
+                new() { type = "anim_ids", ids = new List<int> { 10, 11 } },
+            };
+
+            rules["dungeon"] = new List<SourceRule>
+            {
+                new() { type = "map_monsters" },
+                new() { type = "map_tiles" },
+                new() { type = "scope_ref", scope = "character" },
+            };
+
+            rules["event"] = new List<SourceRule>
+            {
+                new() { type = "event_resources" },
+            };
+
+            return rules;
+        }
+
+        private static readonly Dictionary<string, List<string>> source_exclude = new();
+
+        /// <summary>卸载作用域：释放仅属于该作用域的图集。</summary>
         public static void UnloadScope(this ResourceScopeComponent self, string scopeType, string scopeId)
         {
             string scopeKey = $"{scopeType}:{scopeId}";
@@ -94,10 +184,8 @@ namespace ET.Client
 
                 if (scopes.Count == 0)
                 {
-                    // 没有其他作用域引用了 → 释放图集
                     animRes?.Atlases.Remove(atlasKey);
                     animRes?.AtlasCenters.Remove(atlasKey);
-
                     self.ImgScopes.Remove(atlasKey);
                     self.LoadedAtlasKeys.Remove(atlasKey);
                 }
@@ -122,7 +210,6 @@ namespace ET.Client
         private static void BuildAtlasInternal(LSAnimResComponent animRes, string atlasName, byte[] imgBytes)
         {
             NpkSprite[] npk = NpkImgParser.Parse(imgBytes);
-            Log.Info($"[ResourceScope] {atlasName}: 解析 {npk.Length} 帧");
 
             List<PackingRectangle> rectList = new();
             for (int i = 0; i < npk.Length; i++)
