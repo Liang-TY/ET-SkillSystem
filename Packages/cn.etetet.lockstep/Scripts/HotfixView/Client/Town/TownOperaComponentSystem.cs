@@ -36,10 +36,10 @@ namespace ET.Client
                 {
                     v = v.normalized;
                     FP dt = (FP)(int)(Time.deltaTime * 1000) / 1000;
-                    // 格子等速：z 分量乘格比（城镇格子同款非正方形，03 文档 §4.4）
-                    FP zRatio = collision != null && collision.CellSize > FP.Zero && collision.CellSizeZ > FP.Zero
-                        ? collision.CellSizeZ / collision.CellSize : FP.One;
-                    TSVector delta = new(v.x * LSConstValue.PlayerMoveSpeed * dt, FP.Zero, v.y * LSConstValue.PlayerMoveSpeed * dt * zRatio);
+                    // 屏幕等速（2026-08-27 改）：原实现 z 分量乘 zRatio（CellSizeZ/CellSize）做"格子等速"。
+                    // 城镇格子本为正方形（16×16，zRatio=1）效果等同无补偿，但为与战斗侧统一口径、
+                    // 消除两图手感差异，这里也去掉 z 补偿——x/z 两轴同速度，屏幕 1:1 等速。
+                    TSVector delta = new(v.x * LSConstValue.PlayerMoveSpeed * dt, FP.Zero, v.y * LSConstValue.PlayerMoveSpeed * dt);
                     if (collision != null)
                     {
                         collision.TryMove(player, delta);   // 网格阻挡+贴墙滑动

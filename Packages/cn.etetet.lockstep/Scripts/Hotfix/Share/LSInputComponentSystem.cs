@@ -86,9 +86,10 @@ namespace ET
 
             // 网格碰撞：被挡轴回退（贴墙滑动）；空地图无 LSCollisionComponent 直落
             LSCollisionComponent collision = unit.LSWorld().GetComponent<LSCollisionComponent>();
-            // DNF 手感：地面平面格子等速——纵向格子更高（18.67px vs 16px），z 分量乘格尺寸比例，
-            // 两轴与斜向全部同格/秒（屏幕上 W/S 比 A/D 快 ~17%，纵深感烘在美术的非正方形格里；03 文档 §9）
-            TSVector delta = new(v2.x, vy, v2.y * (collision?.ZCellRatio() ?? FP.One));
+            // 屏幕等速（2026-08-27 改）：原实现 z 分量乘 ZCellRatio()（=CellSizeZ/CellSize）做"格子等速"，
+            // 使副本（非正方格 16×18.67px）W/S 比 A/D 快 ~17%，且与城镇（正方格 16×16，无补偿）W/S 手感不一致。
+            // 现去掉 z 补偿，x/z 两轴同速度——屏幕坐标 1:1 映射下 W/S 与 A/D 等速，两图口径统一。
+            TSVector delta = new(v2.x, vy, v2.y);
             if (collision != null)
             {
                 collision.TryMove(unit, delta);
