@@ -103,18 +103,18 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
     - GroupName: AnimRes
-      GroupDesc: 
-      AssetTags: 
+      GroupDesc:
+      AssetTags:
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Packages/cn.etetet.lockstep/Bundles/AnimRes
         CollectorGUID: fe780460bc85e0c409c4739367a1b644
         CollectorType: 0
-        AddressRuleName: AddressByFileName
+        AddressRuleName: AddressByFilePath
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
+        AssetTags:
+        UserData:
     - GroupName: MapRes
       GroupDesc: 
       AssetTags: 

@@ -5,11 +5,15 @@ namespace ET.Client
 {
     /// <summary>
     /// 动画 clip 注册：加载 .ani.bytes JSON → AnimConfigRegistry.Register。
-    /// 文件路径镜像 PVF 目录结构（如 character/swordman/animation/stay.ani.bytes）。
+    /// YooAsset 地址 = AnimRes 下的相对路径（去扩展名），如 character/swordman/animation/stay.ani
     /// </summary>
     public static partial class LSAnimClipRegistrar
     {
-        private const string Res = "Packages/cn.etetet.lockstep/Bundles/AnimRes";
+        // AnimRes CollectPath 下的相对路径就是 YooAsset 地址（AddressByFilePath 规则）
+        private const string A = "character/swordman/animation";
+        private const string E = "character/swordman/effect/animation/bloodboom";
+        private const string P = "passiveobject/character/swordman/animation";
+        private const string M = "monster/event/bluemarble/bantuamazones/baanimation";
 
         public static async ETTask RegisterAll(Scene root)
         {
@@ -21,59 +25,54 @@ namespace ET.Client
             }
 
             // 怪物动画（bantuamazones）
-            string mob = $"{Res}/monster/event/bluemarble/bantuamazones/baanimation";
-            await RegisterOne(resLoader, $"{mob}/stay.ani.bytes", AnimId.Idle);
-            await RegisterOne(resLoader, $"{mob}/move.ani.bytes", AnimId.Walk);
-            await RegisterOne(resLoader, $"{mob}/kneekick.ani.bytes", AnimId.Attack1);
-            await RegisterOne(resLoader, $"{mob}/damage.ani.bytes", AnimId.Hurt);
-            await RegisterOne(resLoader, $"{mob}/lowkick.ani.bytes", AnimId.MonsterLowKick);
-            await RegisterOne(resLoader, $"{mob}/highkick.ani.bytes", AnimId.MonsterHighKick);
-            await RegisterOne(resLoader, $"{mob}/icebreath.ani.bytes", AnimId.MonsterIceBreath);
-            await RegisterOne(resLoader, $"{mob}/down.ani.bytes", AnimId.MonsterDown);
+            await RegisterOne(resLoader, $"{M}/stay.ani", AnimId.Idle);
+            await RegisterOne(resLoader, $"{M}/move.ani", AnimId.Walk);
+            await RegisterOne(resLoader, $"{M}/kneekick.ani", AnimId.Attack1);
+            await RegisterOne(resLoader, $"{M}/damage.ani", AnimId.Hurt);
+            await RegisterOne(resLoader, $"{M}/lowkick.ani", AnimId.MonsterLowKick);
+            await RegisterOne(resLoader, $"{M}/highkick.ani", AnimId.MonsterHighKick);
+            await RegisterOne(resLoader, $"{M}/icebreath.ani", AnimId.MonsterIceBreath);
+            await RegisterOne(resLoader, $"{M}/down.ani", AnimId.MonsterDown);
 
             // 鬼剑士动画
-            string sw = $"{Res}/character/swordman/animation";
-            await RegisterOne(resLoader, $"{sw}/stay.ani.bytes", AnimId.SwordmanIdle);
-            await RegisterOne(resLoader, $"{sw}/move.ani.bytes", AnimId.SwordmanWalk);
-            await RegisterOne(resLoader, $"{sw}/attack1.ani.bytes", AnimId.SwordmanAttack1);
-            await RegisterOne(resLoader, $"{sw}/attack2.ani.bytes", AnimId.SwordmanAttack2);
-            await RegisterOne(resLoader, $"{sw}/attack3.ani.bytes", AnimId.SwordmanAttack3);
-            await RegisterOne(resLoader, $"{sw}/damage1.ani.bytes", AnimId.SwordmanHurt);
-            await RegisterOne(resLoader, $"{sw}/bloodboom.ani.bytes", AnimId.SwordmanBloodboom);
+            await RegisterOne(resLoader, $"{A}/stay.ani", AnimId.SwordmanIdle);
+            await RegisterOne(resLoader, $"{A}/move.ani", AnimId.SwordmanWalk);
+            await RegisterOne(resLoader, $"{A}/attack1.ani", AnimId.SwordmanAttack1);
+            await RegisterOne(resLoader, $"{A}/attack2.ani", AnimId.SwordmanAttack2);
+            await RegisterOne(resLoader, $"{A}/attack3.ani", AnimId.SwordmanAttack3);
+            await RegisterOne(resLoader, $"{A}/damage1.ani", AnimId.SwordmanHurt);
+            await RegisterOne(resLoader, $"{A}/bloodboom.ani", AnimId.SwordmanBloodboom);
 
             // 浴血之怒特效
-            string bb = $"{Res}/character/swordman/effect/animation/bloodboom";
-            await RegisterOne(resLoader, $"{bb}/boom1_bloodboom_casting.ani.bytes", AnimId.BloodboomCasting);
-            await RegisterOne(resLoader, $"{bb}/boom1_bloodboom_casting_back.ani.bytes", AnimId.BloodboomCastingBack);
-            await RegisterOne(resLoader, $"{bb}/boom1_bloodboom_boomfront.ani.bytes", AnimId.BloodboomBoomFront);
-            await RegisterOne(resLoader, $"{bb}/boom1_bloodboom_boomback.ani.bytes", AnimId.BloodboomBoomBack);
+            await RegisterOne(resLoader, $"{E}/boom1_bloodboom_casting.ani", AnimId.BloodboomCasting);
+            await RegisterOne(resLoader, $"{E}/boom1_bloodboom_casting_back.ani", AnimId.BloodboomCastingBack);
+            await RegisterOne(resLoader, $"{E}/boom1_bloodboom_boomfront.ani", AnimId.BloodboomBoomFront);
+            await RegisterOne(resLoader, $"{E}/boom1_bloodboom_boomback.ani", AnimId.BloodboomBoomBack);
 
-            // 浴血之怒施法特效叠加（bloodboom.ani.als）
+            // 浴血之怒施法特效叠加
             Dictionary<string, int> bloodboomAlias = new()
             {
                 ["casting_bloodboom_casting_back"] = AnimId.BloodboomCastingBack,
                 ["casting_bloodboom_casting"] = AnimId.BloodboomCasting,
             };
-            await RegisterOverlay(resLoader, $"{sw}/bloodboom.ani.als.bytes",
-                AnimId.SwordmanBloodboom, bloodboomAlias);
+            await RegisterOverlay(resLoader, $"{A}/bloodboom.ani.als", AnimId.SwordmanBloodboom, bloodboomAlias);
 
-            // 波动剑（被动对象动画）
-            await RegisterOne(resLoader, $"{Res}/passiveobject/character/swordman/animation/normalwave.ani.bytes", AnimId.NormalWave);
+            // 波动剑
+            await RegisterOne(resLoader, $"{P}/normalwave.ani", AnimId.NormalWave);
 
-            // 冰息弹（手组装，无 .ani 源，保留旧 JSON）
-            await RegisterOne(resLoader, $"{Res}/icebreath_bullet1.json", AnimId.IceBreathBullet1);
-            await RegisterOne(resLoader, $"{Res}/icebreath_bullet2.json", AnimId.IceBreathBullet2);
+            // 冰息弹（手组装，保留旧 JSON，地址仍用文件名）
+            await RegisterOne(resLoader, "icebreath_bullet1", AnimId.IceBreathBullet1);
+            await RegisterOne(resLoader, "icebreath_bullet2", AnimId.IceBreathBullet2);
             Dictionary<string, int> bulletAlias = new() { ["icebreath2"] = AnimId.IceBreathBullet2 };
-            await RegisterOverlay(resLoader, $"{Res}/icebreath_bullet_overlay.json",
-                AnimId.IceBreathBullet1, bulletAlias);
+            await RegisterOverlay(resLoader, "icebreath_bullet_overlay", AnimId.IceBreathBullet1, bulletAlias);
         }
 
-        private static async ETTask RegisterOne(ResourcesLoaderComponent resLoader, string path, int animId)
+        private static async ETTask RegisterOne(ResourcesLoaderComponent resLoader, string address, int animId)
         {
-            TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>(path);
+            TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>(address);
             if (asset == null)
             {
-                Log.Warning($"[LSAnimClip] 找不到: {path}");
+                Log.Warning($"[LSAnimClip] 找不到: {address}");
                 return;
             }
             AnimClipData data = JsonUtility.FromJson<AnimClipData>(asset.text);
@@ -81,19 +80,19 @@ namespace ET.Client
             Log.Info($"[LSAnimClip] {animId}: {data.frames.Length} frames, loop={data.loop}");
         }
 
-        private static async ETTask RegisterOverlay(ResourcesLoaderComponent resLoader, string path, int parentAnimId,
+        private static async ETTask RegisterOverlay(ResourcesLoaderComponent resLoader, string address, int parentAnimId,
             Dictionary<string, int> aliasToAnimId)
         {
-            TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>(path);
+            TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>(address);
             if (asset == null)
             {
-                Log.Warning($"[LSAnimClip] overlay 找不到: {path}");
+                Log.Warning($"[LSAnimClip] overlay 找不到: {address}");
                 return;
             }
             AnimOverlayConfig config = JsonUtility.FromJson<AnimOverlayConfig>(asset.text);
             if (config?.overlays == null || config.overlays.Length == 0)
             {
-                Log.Warning($"[LSAnimClip] overlay 为空：{path}");
+                Log.Warning($"[LSAnimClip] overlay 为空：{address}");
                 return;
             }
             foreach (AnimOverlayEntry entry in config.overlays)
