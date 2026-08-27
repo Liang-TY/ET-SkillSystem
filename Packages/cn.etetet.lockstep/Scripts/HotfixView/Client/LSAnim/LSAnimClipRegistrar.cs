@@ -61,10 +61,10 @@ namespace ET.Client
             await RegisterOne(resLoader, $"{P}/normalwave.ani", AnimId.NormalWave);
 
             // 冰息弹（手组装，保留旧 JSON，地址仍用文件名）
-            await RegisterOne(resLoader, "icebreath_bullet1", AnimId.IceBreathBullet1);
-            await RegisterOne(resLoader, "icebreath_bullet2", AnimId.IceBreathBullet2);
+            await RegisterOne(resLoader, "icebreath_bullet1.json", AnimId.IceBreathBullet1);
+            await RegisterOne(resLoader, "icebreath_bullet2.json", AnimId.IceBreathBullet2);
             Dictionary<string, int> bulletAlias = new() { ["icebreath2"] = AnimId.IceBreathBullet2 };
-            await RegisterOverlay(resLoader, "icebreath_bullet_overlay", AnimId.IceBreathBullet1, bulletAlias);
+            await RegisterOverlay(resLoader, "icebreath_bullet_overlay.json", AnimId.IceBreathBullet1, bulletAlias);
         }
 
         private static async ETTask RegisterOne(ResourcesLoaderComponent resLoader, string address, int animId)
