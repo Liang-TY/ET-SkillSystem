@@ -17,7 +17,6 @@ namespace ET
         public const int NormalAttack = 1;   // 普攻（鬼剑士 swordman_attack1）
         public const int TestCooldown = 2;   // CD/眩晕验证技能（K 键：起 CD + 给自己挂 Stun）
         public const int WaveSword = 3;      // 地裂·波动剑（I 键，投射物）
-        public const int FireCircle = 4;     // 火圈（O 键，区域效果）
         public const int BloodBoom = 5;      // 浴血之怒（U 键，自耗 HP 的自身中心血爆）
 
         // 怪物技能段（班图女战士；无按键映射——由 AI/轮播驱动施放）
@@ -34,7 +33,6 @@ namespace ET
                 case 1: skillId = NormalAttack; return true;
                 case 2: skillId = TestCooldown; return true;
                 case 3: skillId = WaveSword; return true;
-                case 4: skillId = FireCircle; return true;
                 case 5: skillId = BloodBoom; return true;
                 default: skillId = 0; return false;
             }

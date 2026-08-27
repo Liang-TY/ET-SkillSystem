@@ -29,7 +29,6 @@ namespace ET.Client
             if (Input.GetKey(KeyCode.J)) button = 1;    // 普攻
             else if (Input.GetKey(KeyCode.K)) button = 2;   // CD/眩晕测试
             else if (Input.GetKey(KeyCode.I)) button = 3;   // 波动剑（投射物）
-            else if (Input.GetKey(KeyCode.O)) button = 4;   // 火圈（区域效果）
             else if (Input.GetKey(KeyCode.U)) button = 5;   // 浴血之怒（自耗 HP 血爆）
             else if (Input.GetKey(KeyCode.R)) button = 7;   // 调试：回出生点（位移出界救援，方案3）
 

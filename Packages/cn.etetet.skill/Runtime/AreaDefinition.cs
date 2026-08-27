@@ -16,7 +16,6 @@ namespace ET
     /// <summary>区域效果 ID 常量。</summary>
     public static class AreaIds
     {
-        public const int FireCircle = 1;   // 火圈：持续燃烧，单位在内每秒扣血
         public const int BloodBoom = 2;    // 浴血之怒爆炸：以施法者为中心的一次性血爆（伤害+出血）
     }
 
