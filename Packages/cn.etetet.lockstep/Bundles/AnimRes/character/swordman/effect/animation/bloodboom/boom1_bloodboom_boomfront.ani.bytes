@@ -1,0 +1,137 @@
+{
+  "loop": false,
+  "frameMax": 10,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 60
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 55
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 50
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 40
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 40
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 40
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 40
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 7
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 40
+    },
+    {
+      "index": 8,
+      "image": {
+        "path": "sprite/character/swordman/effect/bloodboom/bloodboom_boomfront.img",
+        "pathLegacy": "bloodboom_boomfront.img",
+        "index": 8
+      },
+      "imagePos": {
+        "x": -358,
+        "y": -452
+      },
+      "delay": 40
+    },
+    {
+      "index": 9,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 42,
+        "y": 148
+      },
+      "delay": 40
+    }
+  ],
+  "totalDuration": 445
+}

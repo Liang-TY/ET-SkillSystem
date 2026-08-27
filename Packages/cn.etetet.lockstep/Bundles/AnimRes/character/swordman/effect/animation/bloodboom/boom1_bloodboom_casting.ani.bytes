@@ -1,0 +1,137 @@
+{
+  "loop": false,
+  "frameMax": 10,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 60
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 55
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 50
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 40
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 40
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 40
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 40
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 40
+    },
+    {
+      "index": 8,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 40
+    },
+    {
+      "index": 9,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": 40,
+        "y": 152
+      },
+      "delay": 40
+    }
+  ],
+  "totalDuration": 445
+}

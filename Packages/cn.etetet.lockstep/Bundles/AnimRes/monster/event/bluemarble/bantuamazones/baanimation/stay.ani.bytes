@@ -1,0 +1,46 @@
+{
+  "loop": false,
+  "frameMax": 1,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/monster/bantu/bantuamazones.img",
+        "pathLegacy": "BantuAmazones.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -249,
+        "y": -301
+      },
+      "delay": 80,
+      "damageBox": {
+        "min": {
+          "x": -21,
+          "y": -7,
+          "z": -5
+        },
+        "max": {
+          "x": 44,
+          "y": 14,
+          "z": 106
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -21,
+            "y": -7,
+            "z": -5
+          },
+          "max": {
+            "x": 44,
+            "y": 14,
+            "z": 106
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 80
+}

@@ -35,7 +35,8 @@ namespace ET
     [Serializable]
     public struct AnimFrameImage
     {
-        public string path;
+        public string path;          // 新版：完整 NPK 虚拟路径（sprite/character/...）；旧版：纯文件名
+        public string pathLegacy;    // 旧版兼容：纯文件名（新版 JSON 有此字段，旧版无=空）
         public int index;
     }
 

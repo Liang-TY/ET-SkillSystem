@@ -52,8 +52,10 @@ namespace ET.Client
 
             Log.Info($"[ResourceScope] {scopeKey} 收集: {imgNames.Count} 个 IMG");
 
-            foreach (string atlasKey in imgNames)
+            foreach (string imgPath in imgNames)
             {
+                // 规范化 atlas key 为文件名（渲染代码用文件名查找）
+                string atlasKey = System.IO.Path.GetFileName(imgPath);
                 self.ScopePaths[scopeKey].Add(atlasKey);
                 self.ImgScopes.TryAdd(atlasKey, new HashSet<string>());
                 self.ImgScopes[atlasKey].Add(scopeKey);
@@ -61,8 +63,8 @@ namespace ET.Client
                 // 已在 LSAnimResComponent 中 → 跳过加载
                 if (animRes.Atlases.ContainsKey(atlasKey)) continue;
 
-                // 加载：NPK 优先 + .img.bytes fallback
-                byte[] imgBytes = npkLoader?.TryReadImg(atlasKey);
+                // 加载：NPK 优先（path 可能是完整虚拟路径或文件名）+ .img.bytes fallback
+                byte[] imgBytes = npkLoader?.TryReadImg(imgPath);
                 if (imgBytes == null)
                 {
                     TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>($"{animResDir}/{atlasKey}.bytes");

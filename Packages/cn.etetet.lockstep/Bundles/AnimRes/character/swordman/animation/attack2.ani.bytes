@@ -1,0 +1,832 @@
+{
+  "loop": false,
+  "frameMax": 11,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 10
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": 21,
+          "y": -5,
+          "z": -3
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 89
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 21,
+            "y": -5,
+            "z": -3
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 89
+          }
+        },
+        {
+          "min": {
+            "x": 8,
+            "y": -6,
+            "z": 21
+          },
+          "max": {
+            "x": 20,
+            "y": 12,
+            "z": 48
+          }
+        },
+        {
+          "min": {
+            "x": -18,
+            "y": -5,
+            "z": -6
+          },
+          "max": {
+            "x": 25,
+            "y": 10,
+            "z": 43
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 11
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": 23,
+          "y": -5,
+          "z": -1
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 85
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 23,
+            "y": -5,
+            "z": -1
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 85
+          }
+        },
+        {
+          "min": {
+            "x": 6,
+            "y": -5,
+            "z": 18
+          },
+          "max": {
+            "x": 20,
+            "y": 10,
+            "z": 49
+          }
+        },
+        {
+          "min": {
+            "x": -11,
+            "y": -5,
+            "z": 7
+          },
+          "max": {
+            "x": 20,
+            "y": 10,
+            "z": 30
+          }
+        },
+        {
+          "min": {
+            "x": -24,
+            "y": -2,
+            "z": -5
+          },
+          "max": {
+            "x": 20,
+            "y": 5,
+            "z": 23
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 12
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": 22,
+          "y": -5,
+          "z": -1
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 86
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": 22,
+            "y": -5,
+            "z": -1
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 86
+          }
+        },
+        {
+          "min": {
+            "x": 20,
+            "y": -2,
+            "z": 20
+          },
+          "max": {
+            "x": 46,
+            "y": 5,
+            "z": 49
+          }
+        },
+        {
+          "min": {
+            "x": 4,
+            "y": -3,
+            "z": 16
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 42
+          }
+        },
+        {
+          "min": {
+            "x": -16,
+            "y": -1,
+            "z": -2
+          },
+          "max": {
+            "x": 20,
+            "y": 6,
+            "z": 33
+          }
+        },
+        {
+          "min": {
+            "x": -25,
+            "y": -1,
+            "z": -7
+          },
+          "max": {
+            "x": 20,
+            "y": 5,
+            "z": 20
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 13
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": -11,
+          "y": -5,
+          "z": 21
+        },
+        "max": {
+          "x": 26,
+          "y": 10,
+          "z": 62
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -11,
+            "y": -5,
+            "z": 21
+          },
+          "max": {
+            "x": 26,
+            "y": 10,
+            "z": 62
+          }
+        },
+        {
+          "min": {
+            "x": 14,
+            "y": -4,
+            "z": -1
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 43
+          }
+        },
+        {
+          "min": {
+            "x": -27,
+            "y": -4,
+            "z": -5
+          },
+          "max": {
+            "x": 17,
+            "y": 8,
+            "z": 43
+          }
+        },
+        {
+          "min": {
+            "x": -41,
+            "y": -4,
+            "z": 20
+          },
+          "max": {
+            "x": 36,
+            "y": 7,
+            "z": 59
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 14
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": -18,
+          "y": -5,
+          "z": 31
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 54
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -18,
+            "y": -5,
+            "z": 31
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 54
+          }
+        },
+        {
+          "min": {
+            "x": 13,
+            "y": -4,
+            "z": -2
+          },
+          "max": {
+            "x": 20,
+            "y": 9,
+            "z": 42
+          }
+        },
+        {
+          "min": {
+            "x": -31,
+            "y": -3,
+            "z": -6
+          },
+          "max": {
+            "x": 20,
+            "y": 7,
+            "z": 46
+          }
+        },
+        {
+          "min": {
+            "x": -40,
+            "y": -4,
+            "z": 20
+          },
+          "max": {
+            "x": 21,
+            "y": 7,
+            "z": 63
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 15
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": -15,
+          "y": -5,
+          "z": 35
+        },
+        "max": {
+          "x": 23,
+          "y": 10,
+          "z": 50
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -15,
+            "y": -5,
+            "z": 35
+          },
+          "max": {
+            "x": 23,
+            "y": 10,
+            "z": 50
+          }
+        },
+        {
+          "min": {
+            "x": 6,
+            "y": -5,
+            "z": -3
+          },
+          "max": {
+            "x": 23,
+            "y": 9,
+            "z": 43
+          }
+        },
+        {
+          "min": {
+            "x": -32,
+            "y": -4,
+            "z": -4
+          },
+          "max": {
+            "x": 21,
+            "y": 9,
+            "z": 40
+          }
+        },
+        {
+          "min": {
+            "x": -36,
+            "y": -3,
+            "z": 20
+          },
+          "max": {
+            "x": 25,
+            "y": 5,
+            "z": 63
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 16
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": -17,
+          "y": -5,
+          "z": 29
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 56
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -17,
+            "y": -5,
+            "z": 29
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 56
+          }
+        },
+        {
+          "min": {
+            "x": 10,
+            "y": -3,
+            "z": -2
+          },
+          "max": {
+            "x": 25,
+            "y": 7,
+            "z": 42
+          }
+        },
+        {
+          "min": {
+            "x": -31,
+            "y": -4,
+            "z": -3
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 42
+          }
+        },
+        {
+          "min": {
+            "x": -40,
+            "y": -3,
+            "z": 20
+          },
+          "max": {
+            "x": 28,
+            "y": 7,
+            "z": 65
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 17
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": -19,
+          "y": -5,
+          "z": 32
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 54
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -19,
+            "y": -5,
+            "z": 32
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 54
+          }
+        },
+        {
+          "min": {
+            "x": 9,
+            "y": -4,
+            "z": -2
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 44
+          }
+        },
+        {
+          "min": {
+            "x": -28,
+            "y": -4,
+            "z": -3
+          },
+          "max": {
+            "x": 20,
+            "y": 7,
+            "z": 40
+          }
+        },
+        {
+          "min": {
+            "x": -38,
+            "y": -3,
+            "z": 20
+          },
+          "max": {
+            "x": 20,
+            "y": 6,
+            "z": 66
+          }
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 18
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": -19,
+          "y": -5,
+          "z": 32
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 54
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -19,
+            "y": -5,
+            "z": 32
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 54
+          }
+        },
+        {
+          "min": {
+            "x": 9,
+            "y": -4,
+            "z": -2
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 44
+          }
+        },
+        {
+          "min": {
+            "x": -28,
+            "y": -4,
+            "z": -3
+          },
+          "max": {
+            "x": 20,
+            "y": 7,
+            "z": 40
+          }
+        },
+        {
+          "min": {
+            "x": -38,
+            "y": -3,
+            "z": 20
+          },
+          "max": {
+            "x": 20,
+            "y": 6,
+            "z": 66
+          }
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 19
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 50,
+      "damageBox": {
+        "min": {
+          "x": -17,
+          "y": -5,
+          "z": 29
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 56
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -17,
+            "y": -5,
+            "z": 29
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 56
+          }
+        },
+        {
+          "min": {
+            "x": 10,
+            "y": -3,
+            "z": -3
+          },
+          "max": {
+            "x": 19,
+            "y": 6,
+            "z": 40
+          }
+        },
+        {
+          "min": {
+            "x": -29,
+            "y": -5,
+            "z": -5
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 42
+          }
+        },
+        {
+          "min": {
+            "x": -38,
+            "y": -3,
+            "z": 20
+          },
+          "max": {
+            "x": 22,
+            "y": 7,
+            "z": 63
+          }
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 20
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 150,
+      "damageBox": {
+        "min": {
+          "x": -19,
+          "y": -5,
+          "z": 30
+        },
+        "max": {
+          "x": 30,
+          "y": 10,
+          "z": 53
+        }
+      },
+      "damageBoxes": [
+        {
+          "min": {
+            "x": -19,
+            "y": -5,
+            "z": 30
+          },
+          "max": {
+            "x": 30,
+            "y": 10,
+            "z": 53
+          }
+        },
+        {
+          "min": {
+            "x": 9,
+            "y": -3,
+            "z": -3
+          },
+          "max": {
+            "x": 19,
+            "y": 7,
+            "z": 42
+          }
+        },
+        {
+          "min": {
+            "x": -29,
+            "y": -4,
+            "z": -7
+          },
+          "max": {
+            "x": 20,
+            "y": 8,
+            "z": 42
+          }
+        },
+        {
+          "min": {
+            "x": -36,
+            "y": -4,
+            "z": 20
+          },
+          "max": {
+            "x": 19,
+            "y": 8,
+            "z": 62
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 650
+}

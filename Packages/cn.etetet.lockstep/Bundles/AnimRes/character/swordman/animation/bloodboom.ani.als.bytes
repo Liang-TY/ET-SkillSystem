@@ -1,0 +1,40 @@
+{
+  "overlays": [
+    {
+      "startFrame": 3,
+      "z": -2,
+      "effectAni": "casting_bloodboom_casting_back",
+      "effectAniPath": "sprite/../effect/animation/bloodboom/casting_bloodboom_casting_back.ani"
+    },
+    {
+      "startFrame": -1,
+      "z": -1,
+      "effectAni": "casting_bloodboom_boomback",
+      "effectAniPath": "sprite/../effect/animation/bloodboom/casting_bloodboom_boomback.ani"
+    },
+    {
+      "startFrame": 3,
+      "z": 10001,
+      "effectAni": "casting_bloodboom_casting",
+      "effectAniPath": "sprite/../effect/animation/bloodboom/casting_bloodboom_casting.ani"
+    },
+    {
+      "startFrame": -1,
+      "z": 10002,
+      "effectAni": "casting_bloodboom_boomfront",
+      "effectAniPath": "sprite/../effect/animation/bloodboom/casting_bloodboom_boomfront.ani"
+    },
+    {
+      "startFrame": -1,
+      "z": 10003,
+      "effectAni": "casting_bloodboom_circle1",
+      "effectAniPath": "sprite/../effect/animation/bloodboom/casting_bloodboom_circle1.ani"
+    },
+    {
+      "startFrame": -1,
+      "z": 10004,
+      "effectAni": "casting_bloodboom_circle2",
+      "effectAniPath": "sprite/../effect/animation/bloodboom/casting_bloodboom_circle2.ani"
+    }
+  ]
+}

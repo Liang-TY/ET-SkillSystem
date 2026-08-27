@@ -68,14 +68,24 @@ namespace ET.Client
         }
 
         /// <summary>
-        /// 通过 atlas key（文件名，如 "bantuamazones.img"）从 NPK 提取 IMG 字节。
-        /// 短期方案：NpkMountManager 文件名反查，JSON/C# 用简单文件名即可。
+        /// 从 NPK 提取 IMG 字节。双版本兼容：
+        /// 新版 JSON path = 完整虚拟路径（sprite/character/...）→ Read() 直接命中
+        /// 旧版 JSON path = 纯文件名（bantuamazones.img）→ ReadByFilename() 反查命中
         /// 返回 null = NPK 中找不到（调用方走 .img.bytes fallback）。
         /// </summary>
-        public static byte[] TryReadImg(this NpkLoaderComponent self, string atlasKey)
+        public static byte[] TryReadImg(this NpkLoaderComponent self, string path)
         {
             if (self.Manager == null || self.Manager.Count == 0) return null;
-            return self.Manager.ReadByFilename(atlasKey);
+
+            // 新版：path 含 / 的是完整虚拟路径，直接 Read
+            if (path.Contains('/'))
+            {
+                byte[] result = self.Manager.Read(path);
+                if (result != null) return result;
+            }
+
+            // 旧版/兜底：文件名反查
+            return self.Manager.ReadByFilename(path);
         }
     }
 }
