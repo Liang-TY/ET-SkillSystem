@@ -191,6 +191,9 @@ namespace ET.Client
         public static Sprite GetSprite(this LSAnimResComponent self, string atlasName, int imgIndex)
         {
             if (atlasName == null || atlasName.Length == 0) return null;
+            // 规范化：新版 JSON path 是完整虚拟路径（sprite/.../xxx.img），取文件名查图集
+            if (atlasName.Contains('/'))
+                atlasName = System.IO.Path.GetFileName(atlasName);
             if (self.Atlases.TryGetValue(atlasName, out Dictionary<int, Sprite> sprites))
             {
                 if (!sprites.TryGetValue(imgIndex, out Sprite sprite))
@@ -203,6 +206,9 @@ namespace ET.Client
 
         public static Vector2 GetFrameCenter(this LSAnimResComponent self, string atlasName, int imgIndex)
         {
+            if (atlasName == null || atlasName.Length == 0) return Vector2.zero;
+            if (atlasName.Contains('/'))
+                atlasName = System.IO.Path.GetFileName(atlasName);
             if (self.AtlasCenters.TryGetValue(atlasName, out Dictionary<int, Vector2> centers))
             {
                 centers.TryGetValue(imgIndex, out Vector2 center);
