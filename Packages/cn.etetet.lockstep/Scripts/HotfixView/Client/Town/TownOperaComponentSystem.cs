@@ -39,7 +39,7 @@ namespace ET.Client
                     // 格子等速：z 分量乘格比（城镇格子同款非正方形，03 文档 §4.4）
                     FP zRatio = collision != null && collision.CellSize > FP.Zero && collision.CellSizeZ > FP.Zero
                         ? collision.CellSizeZ / collision.CellSize : FP.One;
-                    TSVector delta = new(v.x * 6 * dt, FP.Zero, v.y * 6 * dt * zRatio);
+                    TSVector delta = new(v.x * LSConstValue.PlayerMoveSpeed * dt, FP.Zero, v.y * LSConstValue.PlayerMoveSpeed * dt * zRatio);
                     if (collision != null)
                     {
                         collision.TryMove(player, delta);   // 网格阻挡+贴墙滑动

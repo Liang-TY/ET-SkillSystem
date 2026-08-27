@@ -28,12 +28,12 @@ namespace ET
     public abstract class MonsterAiDefinition
     {
         // ---- 索敌 ----
-        /// <summary>视野/仇恨半径（单位）。.mob [sight] 600px</summary>
-        public virtual FP SightRange => 6;
+        /// <summary>视野/仇恨半径（单位）。.mob [sight] 300px</summary>
+        public virtual FP SightRange => 3;
 
         // ---- 移动 ----
         /// <summary>移动速度（单位/s）。.mob [move speed] 1000 → demo 换算 4（玩家 6，怪追不上玩家）</summary>
-        public virtual FP MoveSpeed => 4;
+        public virtual FP MoveSpeed => 2;
 
         /// <summary>移动动画（循环）</summary>
         public virtual int MoveAnimId => AnimId.Walk;
@@ -46,7 +46,7 @@ namespace ET
         public virtual int ThinkIntervalMs => 1000;
 
         /// <summary>两次出手最小间隔 ms。.mob [attack delay] 800</summary>
-        public virtual int AttackIntervalMs => 800;
+        public virtual int AttackIntervalMs => 2000;
 
         // ---- 近战选招池（attack kind 权重列直译）----
         /// <summary>近战技能池（static readonly 数组防 GC）</summary>
@@ -56,7 +56,7 @@ namespace ET
         public virtual int[] MeleeWeights => null;
 
         /// <summary>近战触发距离（单位）。attack kind 第 5 列：LowKick 115px</summary>
-        public virtual FP MeleeRange => (FP)115 / 100;
+        public virtual FP MeleeRange => (FP)100 / 100;
 
         // ---- 远程先手 ----
         /// <summary>远程技能（0=无）。触发窗口 (RangedMinRange, RangedMaxRange]</summary>

@@ -70,9 +70,18 @@ namespace ET
             if (numeric != null && numeric.Get(NumericType.ForbidMove) > FP.Zero) return;
 
             LSInput input = self.LSInput;
-            TSVector2 v2 = input.V * 6 * 50 / 1000;
-            FP vy = input.VY * 6 * 50 / 1000;
+            TSVector2 v2 = input.V * LSConstValue.PlayerMoveSpeed * 50 / 1000;
+            FP vy = input.VY * LSConstValue.PlayerMoveSpeed * 50 / 1000;
             bool hasMovement = v2.LengthSquared() > FP.Zero || vy != FP.Zero;
+
+            // 走/停动画切换（逻辑层驱动，视图层 LSSpriteAnimViewComponent 读 AnimId 换 sprite）。
+            // 怪物 AI 同款防重启（!= 才 Play）；受击/攻击/ForbidMove 已在上方 return，这里再加技中锁不抢施法动画
+            if (anim != null && unit.GetComponent<LSCastComponent>()?.GetActiveCast() == null)
+            {
+                int wantAnim = hasMovement ? AnimId.SwordmanWalk : AnimId.SwordmanIdle;
+                if (anim.AnimId != wantAnim) anim.Play(wantAnim);
+            }
+
             if (!hasMovement) return;
 
             // 网格碰撞：被挡轴回退（贴墙滑动）；空地图无 LSCollisionComponent 直落
