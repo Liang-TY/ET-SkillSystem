@@ -87,10 +87,10 @@ namespace ET.Client
                 Transform parentT = layer.Renderer.transform.parent;
                 Vector3 chain = parentT != null && parentT != view.GameObject.transform
                     ? parentT.localPosition : Vector3.zero;
-                layer.Renderer.transform.localPosition = new Vector3(
-                    (frame.imagePos.x + center.x) / 100f - chain.x,
-                    -(frame.imagePos.y + center.y) / 100f - chain.y,
-                    0f);
+                // 像素对齐（2026-08-27）：帧偏移 (imagePos+center) 里 center 奇宽带 .5px，随换帧翻转 → snap 整像素（成因②）
+                float offX = Mathf.Round(frame.imagePos.x + center.x) / 100f;
+                float offY = Mathf.Round(frame.imagePos.y + center.y) / 100f;
+                layer.Renderer.transform.localPosition = new Vector3(offX - chain.x, -offY - chain.y, 0f);
 
                 // LINEARDODGE 加法混合
                 if (frame.graphicEffect == 1 && res != null && res.AdditiveMaterial != null)

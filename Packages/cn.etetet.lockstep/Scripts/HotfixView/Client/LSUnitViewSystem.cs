@@ -93,6 +93,11 @@ namespace ET.Client
             float lerpT = self.totalTime > 0 ? Mathf.Min(self.t / self.totalTime, 1f) : 1f;
             self.Transform.position = Vector3.Lerp(self.Transform.position, self.Position, lerpT);
 
+            // 像素对齐（2026-08-27）：Lerp 产出小数坐标 → Point 采样沸腾。snap 到 1/100 单位（=1 屏幕像素）。
+            // 只动视图层，逻辑层（帧同步）绝不动；逐像素步进是 2D 像素游戏标准观感。
+            Vector3 p = self.Transform.position;
+            self.Transform.position = new Vector3(Mathf.Round(p.x * 100f) / 100f, Mathf.Round(p.y * 100f) / 100f, p.z);
+
             // 排序：Z 越大越远，sortingOrder 越小越先画（在后面）
             if (self.SpriteRenderer != null)
             {

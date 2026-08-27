@@ -10,11 +10,13 @@ namespace ET.Client
     [EntitySystemOf(typeof(TownPlayerViewComponent))]
     [FriendOf(typeof(TownPlayerViewComponent))]
     [FriendOf(typeof(TownPlayerComponent))]
+    [FriendOf(typeof(TownCollisionComponent))]   // 读 OriginX/OriginZ 钳相机边界（ET0002）
     public static partial class TownPlayerViewComponentSystem
     {
         [EntitySystem]
         private static void Awake(this TownPlayerViewComponent self)
         {
+            self.Camera = Camera.main;
         }
 
         [EntitySystem]
@@ -77,6 +79,32 @@ namespace ET.Client
             AdvanceFrame(self, Time.deltaTime);
         }
 
+        [EntitySystem]
+        private static void LateUpdate(this TownPlayerViewComponent self)
+        {
+            if (self.Root == null || self.Camera == null) return;
+
+            // 相机跟随（2026-08-28）：城镇长图，相机跟本地玩家；+0.5 让角色居中（脚底上方 0.5 单位）。
+            Vector3 pos = self.Root.transform.position;
+            Vector3 target = new Vector3(pos.x, pos.y + 0.5f, 0f);
+
+            // 边界钳制：读碰撞组件 OriginX/OriginZ（视觉半宽/半高），clamp 到地图内再 snap 到像素格
+            Room room = self.GetParent<Room>();
+            TownCollisionComponent collision = room?.GetComponent<TownCollisionComponent>();
+            if (collision != null)
+            {
+                self.Camera.transform.position = CameraClampHelper.ClampToMap(
+                    target, (float)collision.OriginX, (float)collision.OriginZ, self.Camera);
+            }
+            else
+            {
+                self.Camera.transform.position = new Vector3(
+                    Mathf.Round(target.x * 100f) / 100f,
+                    Mathf.Round(target.y * 100f) / 100f,
+                    self.Camera.transform.position.z);
+            }
+        }
+
         /// <summary>位置/朝向同步：屏幕映射 (x, z+y, 0)（同战斗单位）；翻转翻根 GO（所有层一起镜像）</summary>
         private static void SyncTransform(this TownPlayerViewComponent self)
         {
@@ -85,6 +113,11 @@ namespace ET.Client
 
             TSVector pos = player.Position;
             self.Root.transform.position = new Vector3((float)pos.x, (float)(pos.z + pos.y), 0f);
+
+            // 像素对齐（2026-08-27）：运动时坐标是小数 → Point 采样逐帧跳变（沸腾/糊）。
+            // snap 到 1/100 单位（100ppu = 1 屏幕像素）；只动视图层，逻辑层（帧同步）绝不动。
+            Vector3 p = self.Root.transform.position;
+            self.Root.transform.position = new Vector3(Mathf.Round(p.x * 100f) / 100f, Mathf.Round(p.y * 100f) / 100f, p.z);
 
             bool faceRight = player.Forward.x >= FP.Zero;
             if (faceRight != self.FaceRight)
@@ -140,10 +173,10 @@ namespace ET.Client
                 Transform parentT = layer.Renderer.transform.parent;
                 Vector3 chain = parentT != null && parentT != self.Root.transform
                     ? parentT.localPosition : Vector3.zero;
-                layer.Renderer.transform.localPosition = new Vector3(
-                    (frame.imagePos.x + center.x) / 100f - chain.x,
-                    -(frame.imagePos.y + center.y) / 100f - chain.y,
-                    0f);
+                // 像素对齐（2026-08-27）：帧偏移 (imagePos+center) 里 center 奇宽带 .5px，随换帧翻转 → snap 整像素（成因②）
+                float offX = Mathf.Round(frame.imagePos.x + center.x) / 100f;
+                float offY = Mathf.Round(frame.imagePos.y + center.y) / 100f;
+                layer.Renderer.transform.localPosition = new Vector3(offX - chain.x, -offY - chain.y, 0f);
             }
 
             self.LastAnimId = self.AnimId;

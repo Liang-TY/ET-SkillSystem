@@ -89,6 +89,10 @@ namespace ET.Client
                 view.DisplayPos = Vector3.Lerp(view.DisplayPos, target, Mathf.Min(1f, dt * InterpolateFactor));
                 view.Root.transform.position = view.DisplayPos;
 
+                // 像素对齐（2026-08-27）：同本地玩家视图——Lerp 小数坐标 snap 到 1/100 单位。
+                Vector3 rp = view.Root.transform.position;
+                view.Root.transform.position = new Vector3(Mathf.Round(rp.x * 100f) / 100f, Mathf.Round(rp.y * 100f) / 100f, rp.z);
+
                 bool faceRight = view.TargetForward.x >= 0f;
                 if (faceRight != view.FaceRight)
                 {
@@ -207,10 +211,10 @@ namespace ET.Client
                 Transform parentT = layer.Renderer.transform.parent;
                 Vector3 chain = parentT != null && parentT != view.Root.transform
                     ? parentT.localPosition : Vector3.zero;
-                layer.Renderer.transform.localPosition = new Vector3(
-                    (frame.imagePos.x + center.x) / 100f - chain.x,
-                    -(frame.imagePos.y + center.y) / 100f - chain.y,
-                    0f);
+                // 像素对齐（2026-08-27）：帧偏移 (imagePos+center) 里 center 奇宽带 .5px，随换帧翻转 → snap 整像素（成因②）
+                float offX = Mathf.Round(frame.imagePos.x + center.x) / 100f;
+                float offY = Mathf.Round(frame.imagePos.y + center.y) / 100f;
+                layer.Renderer.transform.localPosition = new Vector3(offX - chain.x, -offY - chain.y, 0f);
             }
             view.LastAnimId = view.AnimId;
             view.LastFrameIndex = view.FrameIndex;
