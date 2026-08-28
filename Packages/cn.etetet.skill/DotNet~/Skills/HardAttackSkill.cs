@@ -28,8 +28,9 @@ namespace ET
         // 攻击盒时间窗口（帧 → ms：f6 = 50×3+25×2+50 = 300ms，f12 = 550ms）
         private const int HitboxOnMs = 300;        // F6 起盒（挥砍动作开始）
         private const int HitboxOffMs = 550;       // F12 关盒（挥砍动作结束）
-        private static readonly TSVector HitboxOffset = new((FP)9 / 10, FP.Zero, (FP)4 / 5);
-        private static readonly TSVector HitboxHalfExtents = new((FP)4 / 5, (FP)3 / 10, (FP)3 / 5);
+        // 注意坐标：我们 TSVector=(x=横向, y=高度, z=纵深)，笔记 offset(0.9,0,0.8)/half(0.8,0.3,0.6) 是 DNF 坐标(y=纵深,z=高度)，y/z 要对调。
+        private static readonly TSVector HitboxOffset = new((FP)9 / 10, (FP)4 / 5, FP.Zero);        // (0.9, 0.8, 0)：前 0.9、高 0.8、纵深 0
+        private static readonly TSVector HitboxHalfExtents = new((FP)4 / 5, (FP)3 / 5, (FP)3 / 10);  // (0.8, 0.6, 0.3)
 
         private static readonly int[] HitActionsArr = { ActionIds.MeleeHit };
         public override int[] HitActions => HitActionsArr;
@@ -40,12 +41,14 @@ namespace ET
             ctx.ClearHitTargets();
         }
 
-        public override void OnUpdate(SkillContext ctx, int elapsedMs)
+        public override void OnUpdate(SkillContext ctx, int dtMs)
         {
-            // 攻击盒窗口：挥砍开始起盒，结束关盒（只调一次由系统幂等处理）
-            if (elapsedMs >= HitboxOnMs && elapsedMs < HitboxOffMs)
+            // 攻击盒窗口：挥砍开始起盒，结束关盒。注意 OnUpdate 第二参是 dtMs（每 tick 50ms 增量），
+            // 累计经过时间要用 ctx.GetElapsedMs()（= cast.ElapsedMs），否则永远 < 300 起不了盒。
+            int elapsed = ctx.GetElapsedMs();
+            if (elapsed >= HitboxOnMs && elapsed < HitboxOffMs)
                 ctx.SetAttackHitbox(HitboxOffset, HitboxHalfExtents);
-            else if (elapsedMs >= HitboxOffMs)
+            else if (elapsed >= HitboxOffMs)
                 ctx.DisableAttackHitbox();
         }
 
