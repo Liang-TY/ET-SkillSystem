@@ -10,6 +10,7 @@ namespace ET.Client
     public static partial class LSAnimClipRegistrar
     {
         // AnimRes CollectPath 下的相对路径就是 YooAsset 地址（AddressByFilePath 规则）
+        private const string Res = "Bundles/AnimRes";
         private const string A = "character/swordman/animation";
         private const string E = "character/swordman/effect/animation/bloodboom";
         private const string P = "passiveobject/character/swordman/animation";
