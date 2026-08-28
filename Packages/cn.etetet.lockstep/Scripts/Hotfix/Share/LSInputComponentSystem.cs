@@ -7,6 +7,7 @@ namespace ET
     [LSEntitySystemOf(typeof(LSInputComponent))]
     [FriendOf(typeof(LSCombatComponent))]
     [FriendOf(typeof(LSInputBufferComponent))]
+    [FriendOf(typeof(LSFlightComponent))]   // 跳跃写 Active/IsJump/Velocity（skill 包实体，跨包显式友元）
     public static partial class LSInputComponentSystem
     {
         [EntitySystem]

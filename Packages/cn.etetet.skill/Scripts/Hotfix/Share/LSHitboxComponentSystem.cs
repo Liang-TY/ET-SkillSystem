@@ -9,30 +9,19 @@ namespace ET
     [FriendOf(typeof(LSCast))]
     public static partial class LSHitboxComponentSystem
     {
-        /// <summary>帧驱动攻击盒缓存：注册动画 json 任一帧自带 attackBoxes → 自动激活采样（判定帧=有盒帧）。
+        /// <summary>注册动画 json 任一帧自带 attackBoxes → 帧驱动自动激活采样（判定帧=有盒帧）。
         /// 翻译产物有盒即设计意图，不再白名单逐技能接线（漏加=静默无判定的坑）；无盒动画不受影响
-        /// （手动盒路径 SetAttackHitbox 照常）。冰息本体无盒（判定在弹上）。</summary>
-        [StaticField]
-        private static readonly System.Collections.Generic.HashSet<int> attackDrivenCache = new();
-
+        /// （手动盒路径 SetAttackHitbox 照常）。冰息本体无盒（判定在弹上）。
+        /// 不做静态缓存（ET0004：Hotfix 层禁静态字段）——每帧遍历 ≤16 帧零分配，开销可忽略。</summary>
         private static bool IsAttackDrivenAnim(int animId)
         {
-            if (attackDrivenCache.TryGetValue(animId, out bool cached)) return cached;
-            bool has = false;
             AnimClipData clip = AnimConfigRegistry.Get(animId);
-            if (clip?.frames != null)
+            if (clip?.frames == null) return false;
+            foreach (AnimFrameData frame in clip.frames)
             {
-                foreach (AnimFrameData frame in clip.frames)
-                {
-                    if (frame.attackBoxes is { Length: > 0 })
-                    {
-                        has = true;
-                        break;
-                    }
-                }
+                if (frame.attackBoxes is { Length: > 0 }) return true;
             }
-            attackDrivenCache[animId] = has;
-            return has;
+            return false;
         }
 
         [EntitySystem]
