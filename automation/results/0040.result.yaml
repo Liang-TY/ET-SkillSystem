@@ -1,0 +1,62 @@
+# automation/results/0040.result.yaml
+id: "0040"
+status: failed
+reason: compile_error
+base: 3a2e8071a
+created: 2026-08-29T01:37:00+08:00
+message: |
+  compile_check 失败：7 个编译错误，全部来自基点 3a2e8071a 的新提交代码
+  （第1批4技+跳跃系统+普攻三段），与 build 产物无关。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 3a2e8071a（已自检核对）。
+
+  错误分布：2 个文件，cn.etetet.skill 的 LSHitboxComponentSystem.cs 3 条 + cn.etetet.lockstep
+  的 LSInputComponentSystem.cs 4 条。
+
+  判读（供主 AI 修复参考，未修任何代码）：
+  1) skill/LSHitboxComponentSystem.cs：
+     - (20,59) CS1503 + (34,13) CS0021 同源：attackDrivenCache 声明为 HashSet<int> 却按
+       Dictionary 用（TryGetValue/索引器），类型用错，应为 Dictionary<int,bool>。
+     - (16,73) ET0004：static readonly 字段在 Hotfix 层被拒（HotfixProjectFieldDeclarationAnalyzer
+       只看 IsConst，不认 [StaticField] 豁免）——Hotfix 层连 static readonly 也不允许，
+       只能 const。该缓存若需静态持有，考虑挪到 Model 层实体或改 const 常量表。
+  2) lockstep/LSInputComponentSystem.cs 4 条 ET0002：访问 skill 包 LSFlightComponent 的
+     字段 Active/IsJump/Velocity，但本类仅 [FriendOf(typeof(LSCombatComponent))]
+     和 [FriendOf(typeof(LSInputBufferComponent))]，缺 [FriendOf(typeof(LSFlightComponent))]。
+     注意 LSFlightComponent 属 cn.etetet.skill 包 Model 层，跨包友元需显式声明。
+
+  验证真实性：recompile 真实触发（compiling → completed, failed:true），错误条数
+  recompile_status 与 console 日志（seq 11312-11318，共 7 条，完全一致）交叉验证通过。
+  编译程序集：ET.Hotfix（skill+lockstep 两个 Hotfix 源）。
+build:
+  errors:
+    - file: Packages/cn.etetet.skill/Scripts/Hotfix/Share/LSHitboxComponentSystem.cs
+      line: 20
+      type: CS1503
+      message: "Argument 2: cannot convert from 'out bool' to 'out int'（attackDrivenCache.TryGetValue(animId, out bool cached)）"
+    - file: Packages/cn.etetet.skill/Scripts/Hotfix/Share/LSHitboxComponentSystem.cs
+      line: 34
+      type: CS0021
+      message: "Cannot apply indexing with [] to an expression of type 'HashSet<int>'（attackDrivenCache[animId] = has）"
+    - file: Packages/cn.etetet.skill/Scripts/Hotfix/Share/LSHitboxComponentSystem.cs
+      line: 16
+      type: ET0004
+      message: "Hotfix程序集中 不允许声明非Const字段 字段: attackDrivenCache（static readonly 不豁免，只能 const）"
+    - file: Packages/cn.etetet.lockstep/Scripts/Hotfix/Share/LSInputComponentSystem.cs
+      line: 77
+      type: ET0002
+      message: "实体: ET.LSFlightComponent 字段: Active 只能在实体类生命周期组件或友元类(含有FriendOfAttribute)中访问（缺 [FriendOf(typeof(LSFlightComponent))]，跨包）"
+    - file: Packages/cn.etetet.lockstep/Scripts/Hotfix/Share/LSInputComponentSystem.cs
+      line: 81
+      type: ET0002
+      message: "实体: ET.LSFlightComponent 字段: Active 只能在实体类生命周期组件或友元类(含有FriendOfAttribute)中访问"
+    - file: Packages/cn.etetet.lockstep/Scripts/Hotfix/Share/LSInputComponentSystem.cs
+      line: 82
+      type: ET0002
+      message: "实体: ET.LSFlightComponent 字段: IsJump 只能在实体类生命周期组件或友元类(含有FriendOfAttribute)中访问"
+    - file: Packages/cn.etetet.lockstep/Scripts/Hotfix/Share/LSInputComponentSystem.cs
+      line: 83
+      type: ET0002
+      message: "实体: ET.LSFlightComponent 字段: Velocity 只能在实体类生命周期组件或友元类(含有FriendOfAttribute)中访问"
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":true,"errors":7条}'
+  - 'console(level=error): seq 11312-11318 共7条，与 recompile_status 完全一致'
