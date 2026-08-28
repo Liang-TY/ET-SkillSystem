@@ -78,5 +78,7 @@ namespace ET
 
         // 鬼剑士主动技（第 1 批起，49+）
         public const int HardAttack = 49;            // hardattack.ani（鬼斩 18 帧 950ms）
+        public const int HardAttackBlade1 = 50;      // hardattack1.ani（鬼斩刀光1 8 帧 550ms）
+        public const int HardAttackBlade2 = 51;      // hardattack2.ani（鬼斩刀光2 8 帧 550ms）
     }
 }

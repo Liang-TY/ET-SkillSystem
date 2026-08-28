@@ -44,6 +44,18 @@ namespace ET.Client
             await RegisterOne(resLoader, $"{A}/bloodboom.ani", AnimId.SwordmanBloodboom);
             await RegisterOne(resLoader, $"{A}/hardattack.ani", AnimId.HardAttack);
 
+            // 鬼斩刀光特效 + overlay（手组装：无 .als，直接用 .ani 文件名做别名）
+            string ha = $"{Res}/character/swordman/effect/animation/hardattack";
+            await RegisterOne(resLoader, $"{ha}/hardattack1.ani", AnimId.HardAttackBlade1);
+            await RegisterOne(resLoader, $"{ha}/hardattack2.ani", AnimId.HardAttackBlade2);
+            Dictionary<string, int> hardAttackAlias = new()
+            {
+                ["hardattack1"] = AnimId.HardAttackBlade1,
+                ["hardattack2"] = AnimId.HardAttackBlade2,
+            };
+            await RegisterOverlay(resLoader, $"{ha}/hardattack_blade_overlay.json",
+                AnimId.HardAttack, hardAttackAlias);
+
             // 浴血之怒特效
             await RegisterOne(resLoader, $"{E}/boom1_bloodboom_casting.ani", AnimId.BloodboomCasting);
             await RegisterOne(resLoader, $"{E}/boom1_bloodboom_casting_back.ani", AnimId.BloodboomCastingBack);
