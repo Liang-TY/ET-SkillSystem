@@ -1,0 +1,8 @@
+id: "0041"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T01:55:00+08:00
+timeout_sec: 600
+notes: >
+  0040 失败修复复验：LSHitboxComponentSystem 去静态缓存（ET0004）+ LSInputComponentSystem
+  补 [FriendOf(typeof(LSFlightComponent))]（ET0002）。基点 938072fa3。
