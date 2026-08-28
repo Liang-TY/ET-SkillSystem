@@ -1,0 +1,16 @@
+id: "0044"
+type: eval
+eval_file: automation/eval/0044-f6-then-skillcompile.cs
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T02:40:00+08:00
+timeout_sec: 600
+notes: >
+  0043 失败根因：内容编译引用 Temp/Bin/Debug/ET.Skill.dll（F6 热更产物，时间戳 08-28 旧版，
+  无本批新增的 SkillIds/BulletIds/AreaIds 常量与 RequireAirborne）。0042 的 recompile 只编
+  编辑器程序集，不重建热更 DLL。本单顺序执行两步（eval 片段若不支持按 notes 降级）：
+  ① `unity command MenuItemExecute --menuPath "ET/Loader/Compile"`（F6 重建热更 5 件套，含 ET.Skill.dll）
+  ② `unity command MenuItemExecute --menuPath "ET/Skill/Compile"`（内容 DLL）
+  验证并写进 result：① Temp/SkillCompile.log error 行（有则 failed 原样回传）；
+  ② Packages/cn.etetet.skill/Bundles/SkillContent/ET.SkillContent.dll.bytes 时间戳应晚于本单开始；
+  ③ Temp/Bin/Debug/ET.Skill.dll 时间戳应已刷新。.bytes 不入库（gitignore）。
+  基点 7b2e0cf45。
