@@ -1,0 +1,11 @@
+id: "0040"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T00:40:00+08:00
+timeout_sec: 600
+notes: >
+  本批含大量新资源文件（ImagePacks2 NPK + AnimRes 动画 json）无 .meta——
+  refresh 后 Unity 自动生成即可，无需处理；编译重点是热更程序集
+  （ET.Skill / ET.Hotfix / ET.Model / lockstep Hotfix+HotfixView）。
+  注意：AssetBundleCollectorSetting.asset 的 npks 组 CollectPath 已改指
+  Bundles/ImagePacks2 并打 npk tag——若 collector 设置变更报错，recollect 一次。
