@@ -1,0 +1,15 @@
+id: "0043"
+type: eval
+eval_file: automation/eval/0043-skillcompile.cs
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T02:25:00+08:00
+timeout_sec: 300
+notes: >
+  目标：产出技能内容 DLL（ET/Skill/Compile = dotnet build DotNet~/ET.SkillContent.csproj →
+  .bytes 拷到 Packages/cn.etetet.skill/Bundles/SkillContent/）。前置 Temp/Bin/Debug/ET.Skill.dll
+  在 0042 编译通过后已存在。eval 片段若格式不被支持或超时 → 降级直接执行
+  `unity command MenuItemExecute --menuPath "ET/Skill/Compile"`（dotnet build 约 30-60s，别按 1min 判死）。
+  完成后验证两件事并原样写进 result：① Temp/SkillCompile.log 的 error 行（有则 failed 原样回传）；
+  ② Packages/cn.etetet.skill/Bundles/SkillContent/ 下应出现 ET.SkillContent.dll.bytes。
+  产物 .bytes 不入库（Bundles 目录被 gitignore，YooAsset 本地收集）。
+  基点 7b2e0cf45（含 meta×30 合并）。
