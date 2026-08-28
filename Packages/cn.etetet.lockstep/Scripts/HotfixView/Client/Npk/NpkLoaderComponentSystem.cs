@@ -10,6 +10,7 @@ namespace ET.Client
     /// </summary>
     [EntitySystemOf(typeof(NpkLoaderComponent))]
     [FriendOf(typeof(NpkLoaderComponent))]
+    [FriendOf(typeof(ResourcesLoaderComponent))]   // 读 package 做 GetAssetInfos("npk") 自动遍历
     public static partial class NpkLoaderComponentSystem
     {
         [EntitySystem]
