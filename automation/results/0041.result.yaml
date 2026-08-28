@@ -1,0 +1,40 @@
+# automation/results/0041.result.yaml
+id: "0041"
+status: failed
+reason: compile_error
+base: 938072fa3
+created: 2026-08-29T01:45:00+08:00
+message: |
+  compile_check 失败：2 个编译错误，来自 HotfixView 层 NpkLoaderComponentSystem.cs（ET0002）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 938072fa3（已自检核对）。
+
+  0040 的 7 条错误已全部清零（验证通过）：
+  - skill/LSHitboxComponentSystem.cs：CS1503/CS0021/ET0004 三条消失（静态缓存已去除）
+  - lockstep/LSInputComponentSystem.cs：ET0002×4 消失（[FriendOf(typeof(LSFlightComponent))] 已补）
+
+  本轮暴露的 2 条是新一层的既有错误（非本轮代码改动引入）：
+  Packages\cn.etetet.lockstep\Scripts\HotfixView\Client\Npk\NpkLoaderComponentSystem.cs
+  (37,38)+(39,43) ET0002：访问 ET.Client.ResourcesLoaderComponent 字段 package
+  —— 类上仅 [FriendOf(typeof(NpkLoaderComponent))]，缺 [FriendOf(typeof(ResourcesLoaderComponent))]。
+  判读：NpkLoader 不在基点 diff 范围（diff 仅 LSHitboxComponentSystem.cs + LSInputComponentSystem.cs
+  两文件），此错误是 ET.HotfixView 层既有问题——上一轮 0040 编译在 ET.Hotfix 层就失败中断，
+  HotfixView 依赖 Hotfix 未参与编译，错误被下游挡住未暴露；0040 修复后编译链推进到 HotfixView，
+  该既有错误才浮现。修复权在主 AI（补 FriendOf 或改走 ResourcesLoaderComponentSystem 现有门面）。
+
+  验证真实性：recompile 真实触发（compiling → completed, failed:true），错误条数
+  recompile_status 与 console 日志（seq 11325-11326，共 2 条）交叉验证一致；
+  旧错误 seq 11312-11318（0040 的 7 条）本轮已不再出现。
+  编译程序集：本轮推进到 ET.HotfixView（ET.Hotfix 已过）。
+build:
+  errors:
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/Npk/NpkLoaderComponentSystem.cs
+      line: 37
+      type: ET0002
+      message: "实体: ET.Client.ResourcesLoaderComponent 字段: package 只能在实体类生命周期组件或友元类(含有FriendOfAttribute)中访问（缺 [FriendOf(typeof(ResourcesLoaderComponent))]）"
+    - file: Packages/cn.etetet.lockstep/Scripts/HotfixView/Client/Npk/NpkLoaderComponentSystem.cs
+      line: 39
+      type: ET0002
+      message: "实体: ET.Client.ResourcesLoaderComponent 字段: package 只能在实体类生命周期组件或友元类(含有FriendOfAttribute)中访问"
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":true,"errors":2条}'
+  - 'console(level=error): seq 11325-11326 本轮2条一致；旧 seq 11312-11318 已清零'
