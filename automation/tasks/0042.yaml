@@ -1,0 +1,9 @@
+id: "0042"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T02:05:00+08:00
+timeout_sec: 600
+notes: >
+  0041 失败修复复验：NpkLoaderComponentSystem 补
+  [FriendOf(typeof(ResourcesLoaderComponent))]。基点 df6d087ed。
+  本单过了的话请顺手把 refresh 生成的 .meta 一并提交（新资源文件多）。
