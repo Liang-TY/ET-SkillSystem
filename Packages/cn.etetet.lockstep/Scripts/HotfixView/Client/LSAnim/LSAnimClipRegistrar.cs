@@ -10,7 +10,7 @@ namespace ET.Client
     public static partial class LSAnimClipRegistrar
     {
         // AnimRes CollectPath 下的相对路径就是 YooAsset 地址（AddressByFilePath 规则）
-        private const string Res = "Bundles/AnimRes";
+        private const string Res = "";
         private const string A = "character/swordman/animation";
         private const string E = "character/swordman/effect/animation/bloodboom";
         private const string P = "passiveobject/character/swordman/animation";
@@ -46,7 +46,7 @@ namespace ET.Client
             await RegisterOne(resLoader, $"{A}/hardattack.ani", AnimId.HardAttack);
 
             // 鬼斩刀光特效 + overlay（手组装：无 .als，直接用 .ani 文件名做别名）
-            string ha = $"{Res}/character/swordman/effect/animation/hardattack";
+            string ha = $"character/swordman/effect/animation/hardattack";
             await RegisterOne(resLoader, $"{ha}/hardattack1.ani", AnimId.HardAttackBlade1);
             await RegisterOne(resLoader, $"{ha}/hardattack2.ani", AnimId.HardAttackBlade2);
             Dictionary<string, int> hardAttackAlias = new()
