@@ -19,7 +19,7 @@ Bundles
 Packages/cn.etetet.lockstep/Bundles/*
 !Packages/cn.etetet.lockstep/Bundles/AnimRes/
 !Packages/cn.etetet.lockstep/Bundles/MapRes/
-!Packages/cn.etetet.lockstep/Bundles/NPK/
+!Packages/cn.etetet.lockstep/Bundles/ImagePacks2/
 Library
 Logs
 UserSettings

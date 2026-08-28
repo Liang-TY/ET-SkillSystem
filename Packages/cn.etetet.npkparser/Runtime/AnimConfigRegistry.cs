@@ -80,5 +80,28 @@ namespace ET
         public const int HardAttack = 49;            // hardattack.ani（鬼斩 18 帧 950ms）
         public const int HardAttackBlade1 = 50;      // hardattack1.ani（鬼斩刀光1 8 帧 550ms）
         public const int HardAttackBlade2 = 51;      // hardattack2.ani（鬼斩刀光2 8 帧 550ms）
+
+        // 第 1 批剩余 4 技 + 跳跃（2026-08-29，52+）
+        public const int SwordmanUpAttack = 52;      // up_attack.ani（上挑 9 帧 550ms，F2/F3 自带攻击盒）
+        public const int UpperslashFx = 53;          // upperslash1.ani（上挑刀光 4 帧 200ms，.als 挂层）
+        public const int SwordmanTripleSlash1 = 54;  // tripleslash1.ani（三段斩·段1 5 帧 580ms，无攻击盒→手动盒）
+        public const int SwordmanTripleSlash2 = 55;  // tripleslash2.ani（段2）
+        public const int SwordmanTripleSlash3 = 56;  // tripleslash3.ani（段3 终段击倒）
+        public const int SwordmanTripleSlash4 = 57;  // tripleslash4.ani（5 连扩展预留，当前不用）
+        public const int SwordmanTripleSlash5 = 58;  // tripleslash5.ani（同上）
+        public const int TripleSlashFx1 = 59;        // slash1.ani（段1 挥砍弧光 5 帧 350ms，overlay 挂层）
+        public const int TripleSlashFx2 = 60;        // slash2.ani
+        public const int TripleSlashFx3 = 61;        // slash3.ani
+        public const int TripleSlashFx4 = 62;        // slash4.ani
+        public const int TripleSlashFx5 = 63;        // slash5.ani
+        public const int TripleSlashMoveDust1 = 64;  // move1.ani（前冲扬尘 5 帧 350ms，overlay 挂层）
+        public const int TripleSlashMoveDust2 = 65;  // move2.ani
+        public const int SwordmanDashAttackMultiHit = 66; // dashattackmultihit.ani（连突刺 8 帧 500ms，F2-F6 自带攻击盒）
+        public const int ThrustBeam = 67;            // dashattackmultihitsub.ani（激光剑气弹 6 帧 425ms，视图层自推帧）
+        public const int SwordmanJumpAttack = 68;    // jumpattack.ani（银光落刃下落刺击 6 帧 300ms，F2 贯地盒）
+        public const int AshenForkSubRing = 69;      // ashenforksub.ani（落地冲击波环 6 帧 330ms，区域视图主层）
+        public const int AshenForkSubDust = 70;      // ashenforksubdust.ani（冲击波尘土 11 帧 537ms，区域视图背层）
+        public const int JumpUp = 71;                // jump.ani 切片：起跳段 F0-F6（600ms）
+        public const int JumpFall = 72;              // jump.ani 切片：下落段 F8-F13（520ms）
     }
 }

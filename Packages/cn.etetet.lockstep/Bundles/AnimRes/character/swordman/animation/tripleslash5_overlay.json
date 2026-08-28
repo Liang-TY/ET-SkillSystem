@@ -1,0 +1,14 @@
+{
+  "overlays": [
+    {
+      "startFrame": 0,
+      "z": 10001,
+      "effectAni": "slash5"
+    },
+    {
+      "startFrame": 0,
+      "z": -10001,
+      "effectAni": "move1"
+    }
+  ]
+}

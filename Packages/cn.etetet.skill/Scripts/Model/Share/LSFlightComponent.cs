@@ -18,6 +18,10 @@ namespace ET
         [MemoryPackOrder(0)]
         public bool Active;
 
+        // 主动跳跃（true = 落地不播倒地动画/不加硬直，回默认动画；false = 击退/击飞走 Down 链）
+        [MemoryPackOrder(5)]
+        public bool IsJump;
+
         // 当前速度（单位/秒；y 分量受重力）
         [MemoryPackOrder(1)]
         public TSVector Velocity;

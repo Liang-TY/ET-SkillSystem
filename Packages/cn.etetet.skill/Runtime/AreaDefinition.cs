@@ -17,6 +17,8 @@ namespace ET
     public static class AreaIds
     {
         public const int BloodBoom = 2;    // 浴血之怒爆炸：以施法者为中心的一次性血爆（伤害+出血）
+        public const int TripleSlashFinish = 3;  // 三段斩终段击倒（身前一次性，本体盒让位防双结算）
+        public const int AshenFork = 4;          // 银光落刃落地冲击波（落点中心贴地，击倒浮空）
     }
 
     /// <summary>

@@ -9,12 +9,31 @@ namespace ET
     [FriendOf(typeof(LSCast))]
     public static partial class LSHitboxComponentSystem
     {
-        /// <summary>判定帧驱动攻击盒的动画（json 自带 attackBoxes 的）：怪物系（kneekick/lowkick/highkick）
-        /// + 波动爆发冲刺。冰息本体无盒（判定在弹上）。</summary>
+        /// <summary>帧驱动攻击盒缓存：注册动画 json 任一帧自带 attackBoxes → 自动激活采样（判定帧=有盒帧）。
+        /// 翻译产物有盒即设计意图，不再白名单逐技能接线（漏加=静默无判定的坑）；无盒动画不受影响
+        /// （手动盒路径 SetAttackHitbox 照常）。冰息本体无盒（判定在弹上）。</summary>
+        [StaticField]
+        private static readonly System.Collections.Generic.HashSet<int> attackDrivenCache = new();
+
         private static bool IsAttackDrivenAnim(int animId)
-            => animId == AnimId.Attack1
-               || animId == AnimId.MonsterLowKick
-               || animId == AnimId.MonsterHighKick;
+        {
+            if (attackDrivenCache.TryGetValue(animId, out bool cached)) return cached;
+            bool has = false;
+            AnimClipData clip = AnimConfigRegistry.Get(animId);
+            if (clip?.frames != null)
+            {
+                foreach (AnimFrameData frame in clip.frames)
+                {
+                    if (frame.attackBoxes is { Length: > 0 })
+                    {
+                        has = true;
+                        break;
+                    }
+                }
+            }
+            attackDrivenCache[animId] = has;
+            return has;
+        }
 
         [EntitySystem]
         private static void Awake(this LSHitboxComponent self)

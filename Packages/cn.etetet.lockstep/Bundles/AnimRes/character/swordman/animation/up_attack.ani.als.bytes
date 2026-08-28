@@ -1,0 +1,10 @@
+{
+  "overlays": [
+    {
+      "startFrame": 2,
+      "z": 1000,
+      "effectAni": "sub2",
+      "effectAniPath": "sprite/../effect/animation/upperslash1.ani"
+    }
+  ]
+}

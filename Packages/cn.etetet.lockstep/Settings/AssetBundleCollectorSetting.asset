@@ -188,11 +188,11 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Packages/cn.etetet.lockstep/Bundles/NPK
+      - CollectPath: Packages/cn.etetet.lockstep/Bundles/ImagePacks2
         CollectorGUID: a8fbed95099553149b32d1496c90aabe
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags: 
+        AssetTags: npk
         UserData: 

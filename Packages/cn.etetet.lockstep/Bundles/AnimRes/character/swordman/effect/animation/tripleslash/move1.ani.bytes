@@ -1,0 +1,77 @@
+{
+  "loop": false,
+  "frameMax": 5,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -191,
+        "y": -83
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/tripleslash/move.img",
+        "pathLegacy": "move.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -191,
+        "y": -83
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/tripleslash/move.img",
+        "pathLegacy": "move.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -191,
+        "y": -83
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/tripleslash/move.img",
+        "pathLegacy": "move.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -191,
+        "y": -83
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/tripleslash/move.img",
+        "pathLegacy": "move.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -191,
+        "y": -83
+      },
+      "delay": 70,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 350
+}

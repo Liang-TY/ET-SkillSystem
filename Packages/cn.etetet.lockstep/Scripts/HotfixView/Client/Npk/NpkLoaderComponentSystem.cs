@@ -25,7 +25,8 @@ namespace ET.Client
         }
 
         /// <summary>
-        /// 从 Bundles/NPK/ 加载所有 .npk.bytes 并挂载。
+        /// 挂载 Bundles/ImagePacks2/ 下全部 NPK（YooAsset collector 打 npk tag，运行时按 tag 枚举）。
+        /// 目录即清单：拷新 NPK 进目录零接线（2026-08-29 从硬编码数组改自动遍历）。
         /// 在 InitAsync 开头调用。
         /// </summary>
         public static async ETTask LoadAllNpks(this NpkLoaderComponent self)
@@ -33,30 +34,19 @@ namespace ET.Client
             Room room = self.GetParent<Room>();
             if (room == null) return;
             ResourcesLoaderComponent resLoader = room.GetComponent<ResourcesLoaderComponent>();
-            if (resLoader == null) return;
+            if (resLoader == null || resLoader.package == null) return;
 
-            string npkDir = "Packages/cn.etetet.lockstep/Bundles/NPK";
-
-            string[] npkFiles = new string[]
+            YooAsset.AssetInfo[] assets = resLoader.package.GetAssetInfos("npk");
+            foreach (YooAsset.AssetInfo info in assets)
             {
-                "sprite_monster_bantu",
-                "sprite_character_swordman_effect",
-                "sprite_character_swordman_effect_bloodboom",
-                "sprite_character_swordman_equipment_weapon_katana",
-                "sprite_character_swordman_equipment_avatar_skin",
-                "sprite_common_commoneffect_glow",
-                "sprite_map_village_aganzo",
-            };
-
-            foreach (string npkName in npkFiles)
-            {
+                // 地址 = AddressByFileName = 去 .bytes 后的文件名（即归档名）
+                string npkName = info.Address;
                 if (self.LoadedArchiveNames.Contains(npkName)) continue;
 
-                string path = $"{npkDir}/{npkName}.npk.bytes";
-                TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>(path);
+                TextAsset asset = await resLoader.LoadAssetAsync<TextAsset>(npkName);
                 if (asset == null)
                 {
-                    Log.Warning($"[NpkLoader] 找不到 NPK: {path}");
+                    Log.Warning($"[NpkLoader] 加载失败: {npkName}");
                     continue;
                 }
 

@@ -29,6 +29,9 @@ namespace ET
 
         public long GetCasterId() => caster.Id;
 
+        /// <summary>施法者是否在空中（y > 0；跳跃/被击飞浮空段；贴地滑行不算——y=0）</summary>
+        public bool IsCasterAirborne() => caster.Position.y > FP.Zero;
+
         public TSVector GetTargetPosition() => cast.TargetPosition;
 
         /// <summary>技能子状态（LSCast.SubState 门面：DNF setSkillSubState 同构——帧内一次性触发的
@@ -36,6 +39,12 @@ namespace ET
         public int GetSubState() => cast.SubState;
 
         public void SetSubState(int value) => cast.SubState = value;
+
+        /// <summary>技能相位（LSCast.Phase 门面）：连段技能存"当前段开始时的累计 ms"，
+        /// 段内时间 = GetElapsedMs() - GetPhase()；与 SubState 配对进快照回滚安全</summary>
+        public int GetPhase() => cast.Phase;
+
+        public void SetPhase(int value) => cast.Phase = value;
 
         // ---- 施法者数值（自耗 HP 类技能用；DNF onSetState 扣血同构）----
         public FP GetCasterHp()
@@ -162,6 +171,9 @@ namespace ET
             cast.EndNow(this);
             SkillCastHelper.TryCast(caster, cast.SkillId);
         }
+
+        /// <summary>主动结束当前施放（连段收招/自控时长技能的正常出口；OnEnd 照常执行，ManualCooldown 此刻起 CD）</summary>
+        public void EndCast() => cast.EndNow(this);
 
         // ---- 施法者位移（DNF onProc sq_setCurrentAxisPos 逐帧插值同构）----
         /// <summary>

@@ -1,0 +1,63 @@
+{
+  "loop": false,
+  "frameMax": 4,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/effect/upperslash.img",
+        "pathLegacy": "upperslash.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -134,
+        "y": -240
+      },
+      "delay": 50,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/upperslash.img",
+        "pathLegacy": "upperslash.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -134,
+        "y": -240
+      },
+      "delay": 50,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/upperslash.img",
+        "pathLegacy": "upperslash.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -134,
+        "y": -240
+      },
+      "delay": 50,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/upperslash.img",
+        "pathLegacy": "upperslash.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -134,
+        "y": -240
+      },
+      "delay": 50,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 200
+}

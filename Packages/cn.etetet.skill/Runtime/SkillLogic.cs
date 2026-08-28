@@ -29,6 +29,12 @@ namespace ET
         public virtual FP MinCastHpPct => FP.Zero;
 
         /// <summary>
+        /// 是否要求空中施放（true = 只在离地时可放，银光落刃等跳跃系技能；DNF"跳跃状态中按指令"同构）。
+        /// TryCast 检查：地面施放 → 拒绝且不进 CD。
+        /// </summary>
+        public virtual bool RequireAirborne => false;
+
+        /// <summary>
         /// 命中反应参数（DNF .atk 同构）：伤害/硬直/击退/浮空。override 时用 static readonly
         /// 预分配实例（零 GC）；默认 = 50 伤害 + 500ms 硬直（与旧 MeleeHit 硬编码一致）。
         /// 区域/投射物结算的伤害在各自 AreaDefinition/BulletDefinition.HitReaction。

@@ -1,0 +1,147 @@
+{
+  "loop": false,
+  "frameMax": 6,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/common/commoneffect/earthquakering.img",
+        "pathLegacy": "EarthQuakeRing.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -260,
+        "y": -370
+      },
+      "delay": 55,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -94,
+            "y": -33,
+            "z": -17
+          },
+          "max": {
+            "x": 188,
+            "y": 66,
+            "z": 35
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/common/commoneffect/earthquakering.img",
+        "pathLegacy": "EarthQuakeRing.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -260,
+        "y": -370
+      },
+      "delay": 55,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -94,
+            "y": -33,
+            "z": -17
+          },
+          "max": {
+            "x": 188,
+            "y": 66,
+            "z": 35
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/common/commoneffect/earthquakering.img",
+        "pathLegacy": "EarthQuakeRing.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -260,
+        "y": -370
+      },
+      "delay": 55,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -110,
+            "y": -37,
+            "z": -17
+          },
+          "max": {
+            "x": 220,
+            "y": 75,
+            "z": 35
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/common/commoneffect/earthquakering.img",
+        "pathLegacy": "EarthQuakeRing.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -260,
+        "y": -370
+      },
+      "delay": 55,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -110,
+            "y": -40,
+            "z": -17
+          },
+          "max": {
+            "x": 220,
+            "y": 80,
+            "z": 40
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/common/commoneffect/earthquakering.img",
+        "pathLegacy": "EarthQuakeRing.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -260,
+        "y": -370
+      },
+      "delay": 55,
+      "graphicEffect": 1
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -260,
+        "y": -370
+      },
+      "delay": 55,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 330
+}

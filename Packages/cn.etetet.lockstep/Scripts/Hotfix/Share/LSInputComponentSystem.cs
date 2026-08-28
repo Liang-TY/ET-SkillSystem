@@ -69,14 +69,33 @@ namespace ET
             var numeric = unit.GetComponent<LSNumericComponent>();
             if (numeric != null && numeric.Get(NumericType.ForbidMove) > FP.Zero) return;
 
+            // 跳跃（C 键，button 16；DNF 跳跃非技能同构）：地面 + 非硬直 + 非在技 → 起跳初速度交给
+            // LSFlightComponent 重力积分（IsJump 落地回默认动画）。空中不接二段跳。
+            if (pressed && self.LSInput.Button == 16)
+            {
+                LSFlightComponent flight = unit.GetComponent<LSFlightComponent>();
+                bool grounded = unit.Position.y <= FP.Zero && (flight == null || !flight.Active);
+                if (flight != null && grounded
+                    && unit.GetComponent<LSCastComponent>()?.GetActiveCast() == null)
+                {
+                    flight.Active = true;
+                    flight.IsJump = true;
+                    flight.Velocity = new TSVector(FP.Zero, 10, FP.Zero);   // 重力40 → 空中0.5s，最高1.25单位
+                    anim?.Play(AnimId.JumpUp);
+                    return;
+                }
+            }
+
             LSInput input = self.LSInput;
             TSVector2 v2 = input.V * LSConstValue.PlayerMoveSpeed * 50 / 1000;
             FP vy = input.VY * LSConstValue.PlayerMoveSpeed * 50 / 1000;
             bool hasMovement = v2.LengthSquared() > FP.Zero || vy != FP.Zero;
 
             // 走/停动画切换（逻辑层驱动，视图层 LSSpriteAnimViewComponent 读 AnimId 换 sprite）。
-            // 怪物 AI 同款防重启（!= 才 Play）；受击/攻击/ForbidMove 已在上方 return，这里再加技中锁不抢施法动画
-            if (anim != null && unit.GetComponent<LSCastComponent>()?.GetActiveCast() == null)
+            // 怪物 AI 同款防重启（!= 才 Play）；受击/攻击/ForbidMove 已在上方 return，这里再加技中锁不抢施法动画；
+            // 空中不切（跳跃动画由 LSFlightComponentSystem 按物理状态驱动，起跳/下落段不被覆盖）
+            if (anim != null && unit.Position.y <= FP.Zero
+                && unit.GetComponent<LSCastComponent>()?.GetActiveCast() == null)
             {
                 int wantAnim = hasMovement ? AnimId.SwordmanWalk : AnimId.SwordmanIdle;
                 if (anim.AnimId != wantAnim) anim.Play(wantAnim);

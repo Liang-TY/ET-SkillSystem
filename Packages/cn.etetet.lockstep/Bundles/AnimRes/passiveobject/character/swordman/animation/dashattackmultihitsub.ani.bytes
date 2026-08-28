@@ -1,0 +1,147 @@
+{
+  "loop": false,
+  "frameMax": 6,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/effect/dashattackmultihit/thrust_beemsword.img",
+        "pathLegacy": "thrust_beemsword.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -170,
+        "y": -233
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/dashattackmultihit/thrust_beemsword.img",
+        "pathLegacy": "thrust_beemsword.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -170,
+        "y": -233
+      },
+      "delay": 65,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 65,
+            "y": -35,
+            "z": 30
+          },
+          "max": {
+            "x": 92,
+            "y": 70,
+            "z": 51
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/dashattackmultihit/thrust_beemsword.img",
+        "pathLegacy": "thrust_beemsword.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -170,
+        "y": -233
+      },
+      "delay": 65,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 98,
+            "y": -35,
+            "z": 28
+          },
+          "max": {
+            "x": 105,
+            "y": 70,
+            "z": 53
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/dashattackmultihit/thrust_beemsword.img",
+        "pathLegacy": "thrust_beemsword.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -170,
+        "y": -233
+      },
+      "delay": 65,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 109,
+            "y": -22,
+            "z": 24
+          },
+          "max": {
+            "x": 126,
+            "y": 45,
+            "z": 54
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/dashattackmultihit/thrust_beemsword.img",
+        "pathLegacy": "thrust_beemsword.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -170,
+        "y": -233
+      },
+      "delay": 65,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": 95,
+            "y": -8,
+            "z": 15
+          },
+          "max": {
+            "x": 141,
+            "y": 16,
+            "z": 58
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/effect/dashattackmultihit/thrust_beemsword.img",
+        "pathLegacy": "thrust_beemsword.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -170,
+        "y": -233
+      },
+      "delay": 65,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 425
+}

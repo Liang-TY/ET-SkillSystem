@@ -20,6 +20,13 @@ namespace ET
             LSCombatComponent combat = unit.GetComponent<LSCombatComponent>();
             if (combat != null && combat.HitstunTimer > 0) return false;
 
+            // 空中限定技（银光落刃等跳跃系）：地面施放拒绝（不进 CD 不建 cast）
+            if (logic.RequireAirborne && unit.Position.y <= FP.Zero)
+            {
+                Log.Info($"[Skill] unit{unit.Id} 技能{skillId} 要求空中施放，当前在地面，拒绝");
+                return false;
+            }
+
             // 在技中不能施放（连段取消走 SkillContext.RestartCurrentSkill）
             LSCastComponent castComp = unit.GetComponent<LSCastComponent>();
             if (castComp == null) return false;

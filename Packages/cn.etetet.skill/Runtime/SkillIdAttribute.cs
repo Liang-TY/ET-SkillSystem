@@ -25,8 +25,12 @@ namespace ET
         public const int MonsterHighKick = 9;   // 高踢（击倒 + 20% 出血）
         public const int MonsterIceBreath = 10; // 冰息（远程，帧 3 发冰雾弹，10% 冰冻）
         public const int HardAttack = 11;       // 鬼斩（G 键，暗属性击倒）
+        public const int UpperSlash = 12;       // 上挑（Z 键，浮空）
+        public const int TripleSlash = 13;      // 三段斩（D 键，连段+前冲）
+        public const int DashAttackMultiHit = 14; // 连突刺（T 键，突刺+剑气穿透弹）
+        public const int AshenFork = 15;        // 银光落刃（F 键，空中施放+落地冲击波）
 
-        /// <summary>按键值 → 技能槽位映射</summary>
+        /// <summary>按键值 → 技能槽位映射（16=起跳，非技能，不进本表）</summary>
         public static bool ButtonToSkill(int button, out int skillId)
         {
             switch (button)
@@ -36,6 +40,10 @@ namespace ET
                 case 3: skillId = WaveSword; return true;
                 case 5: skillId = BloodBoom; return true;
                 case 11: skillId = HardAttack; return true;
+                case 12: skillId = UpperSlash; return true;
+                case 13: skillId = TripleSlash; return true;
+                case 14: skillId = DashAttackMultiHit; return true;
+                case 15: skillId = AshenFork; return true;
                 default: skillId = 0; return false;
             }
         }
