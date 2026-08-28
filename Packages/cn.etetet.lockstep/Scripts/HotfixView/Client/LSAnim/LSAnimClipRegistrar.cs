@@ -42,6 +42,7 @@ namespace ET.Client
             await RegisterOne(resLoader, $"{A}/attack3.ani", AnimId.SwordmanAttack3);
             await RegisterOne(resLoader, $"{A}/damage1.ani", AnimId.SwordmanHurt);
             await RegisterOne(resLoader, $"{A}/bloodboom.ani", AnimId.SwordmanBloodboom);
+            await RegisterOne(resLoader, $"{A}/hardattack.ani", AnimId.HardAttack);
 
             // 浴血之怒特效
             await RegisterOne(resLoader, $"{E}/boom1_bloodboom_casting.ani", AnimId.BloodboomCasting);

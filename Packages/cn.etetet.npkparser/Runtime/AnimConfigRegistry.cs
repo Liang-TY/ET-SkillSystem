@@ -75,5 +75,8 @@ namespace ET
         public const int MonsterOverturn = 46;      // 预留（起身动画依赖 IMAGE ROTATE，未注册）
         public const int IceBreathBullet1 = 47;     // icebreath_bullet1.json（冰息弹主层 6 帧 150ms）
         public const int IceBreathBullet2 = 48;     // icebreath_bullet2.json（冰息弹第二层视觉）
+
+        // 鬼剑士主动技（第 1 批起，49+）
+        public const int HardAttack = 49;            // hardattack.ani（鬼斩 18 帧 950ms）
     }
 }

@@ -24,6 +24,7 @@ namespace ET
         public const int MonsterKneeKick = 8;   // 膝踢（贴身 30px，击倒）
         public const int MonsterHighKick = 9;   // 高踢（击倒 + 20% 出血）
         public const int MonsterIceBreath = 10; // 冰息（远程，帧 3 发冰雾弹，10% 冰冻）
+        public const int HardAttack = 11;       // 鬼斩（G 键，暗属性击倒）
 
         /// <summary>按键值 → 技能槽位映射</summary>
         public static bool ButtonToSkill(int button, out int skillId)
@@ -34,6 +35,7 @@ namespace ET
                 case 2: skillId = TestCooldown; return true;
                 case 3: skillId = WaveSword; return true;
                 case 5: skillId = BloodBoom; return true;
+                case 11: skillId = HardAttack; return true;
                 default: skillId = 0; return false;
             }
         }
