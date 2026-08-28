@@ -1,0 +1,69 @@
+# automation/results/0043.result.yaml
+id: "0043"
+status: failed
+reason: compile_error
+base: 7b2e0cf45
+created: 2026-08-29T02:10:00+08:00
+message: |
+  eval 失败：ET/Skill/Compile（dotnet build 内容层 → ET.SkillContent.dll.bytes）编译不通过，
+  Temp/SkillCompile.log 报 8 个错误，全部来自内容层（DotNet~），任务要求①不满足。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 7b2e0cf45（wip-0043 基点）。
+
+  错误分布：7 个 CS0117（SkillIds/BulletIds/AreaIds 未包含对应常量定义）+ 1 个 CS0115
+  （AshenForkSkill.RequireAirborne 没有可重写的基类方法），共 6 个内容文件。
+
+  判读（供主 AI 修复参考，未修任何代码）：
+  1) CS0117 ×7：内容层引用的 Id 常量在对应 Ids 表中缺失——
+     - SkillIds 缺：AshenFork / DashAttackMultiHit / UpperSlash / TripleSlash
+     - BulletIds 缺：ThrustBeam
+     - AreaIds 缺：AshenFork / TripleSlashFinish
+     （Id 常量表在 Runtime/ 各定义文件，按 CLAUDE.md 规范"常量先加进 Runtime/xxx 表"）
+  2) CS0115 ×1：AshenForkSkill.RequireAirborne 重写无基类虚方法——SkillLogic 基类
+     没有 RequireAirborne 虚方法（或签名不符），需主 AI 核对基类 API。
+  3) 编译输出 Bundles/SkillContent/ET.SkillContent.dll.bytes 未更新（产物停留在旧的
+     Aug 28 18:43 时间戳，本次构建失败未产出新 DLL）。任务要求②（出现 .bytes）本次
+     仅有旧产物，未通过本次构建验证。
+
+  验证真实性：unity eval_file 执行了自动化/eval/0043-skillcompile.cs（ExecuteMenuItem
+  "ET/Skill/Compile" 成功返回），随后 Temp/SkillCompile.log 出现本次构建（Aug 29 02:05），
+  尾部含 "8 个错误"。错误行已按 UTF-8 原文解码，与下方 errors 一一对应。
+
+  后续建议（按总线流程，不自动重试）：主 AI 补齐 7 个 Id 常量 + 核对 RequireAirborne
+  基类签名后，重新下单即可。未改动任何 .cs/.yaml。
+build:
+  errors:
+    - file: Packages/cn.etetet.skill/DotNet~/Areas/TripleSlashFinishArea.cs
+      line: 11
+      type: CS0117
+      message: "“AreaIds”未包含“TripleSlashFinish”的定义"
+    - file: Packages/cn.etetet.skill/DotNet~/Bullets/ThrustBeamBullet.cs
+      line: 10
+      type: CS0117
+      message: "“BulletIds”未包含“ThrustBeam”的定义"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/AshenForkSkill.cs
+      line: 14
+      type: CS0117
+      message: "“SkillIds”未包含“AshenFork”的定义"
+    - file: Packages/cn.etetet.skill/DotNet~/Areas/AshenForkArea.cs
+      line: 11
+      type: CS0117
+      message: "“AreaIds”未包含“AshenFork”的定义"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/AshenForkSkill.cs
+      line: 29
+      type: CS0115
+      message: "“AshenForkSkill.RequireAirborne”没有找到适合的方法来重写（SkillLogic 基类无此虚方法或签名不符）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/DashAttackMultiHitSkill.cs
+      line: 12
+      type: CS0117
+      message: "“SkillIds”未包含“DashAttackMultiHit”的定义"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/UpperSlashSkill.cs
+      line: 13
+      type: CS0117
+      message: "“SkillIds”未包含“UpperSlash”的定义"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/TripleSlashSkill.cs
+      line: 15
+      type: CS0117
+      message: "“SkillIds”未包含“TripleSlash”的定义"
+log_tail:
+  - "生成失败。 1 个警告  8 个错误"
+  - "Temp/SkillCompile.log 全文 UTF-8；error 行与上方 errors 列表一致"
