@@ -1,0 +1,22 @@
+# automation/results/0042.result.yaml
+id: "0042"
+status: done
+base: df6d087ed
+created: 2026-08-29T01:50:00+08:00
+message: |
+  compile_check 通过：0 错误。NpkLoader 修复验证成功（0041 的 2 条 ET0002 已清零）。
+  基点 origin/et9lockStepYIUISeqFrameAniTestDev @ df6d087ed（已自检核对）。
+
+  验证真实性：recompile 真实触发（compiling → completed, failed:false），
+  console error 无本轮新增条目（最新 seq 11326 为 0041 历史错误，本轮已不再出现）。
+  编译程序集：本轮已推进过 ET.Hotfix → ET.HotfixView，无进一步既有错误暴露。
+
+  按任务 notes 顺手提交 meta：refresh 生成的 30 个新资源 .meta（ImagePacks2 NPK×3 +
+  AnimRes 动画×27，抽查均对应基点已存在资源文件，无孤儿 meta）已提交 wip-0042
+  （commit 7b2e0cf45，[task:0042][build] meta×30），等待主 AI merge 验收。
+build:
+  errors: []
+wip_branch: wip-0042
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":false,"errors":[]}'
+  - 'console(level=error): 本轮无新增 error 条目（最新 seq 11326 为 0041 历史）'
