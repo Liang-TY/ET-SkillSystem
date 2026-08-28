@@ -1,0 +1,29 @@
+# automation/results/0044.result.yaml
+id: "0044"
+status: done
+base: 7b2e0cf45
+created: 2026-08-29T02:20:00+08:00
+message: |
+  F6 重建热更 DLL + 内容编译复验通过，三项验证全部满足。0043 失败根因确认并修复：
+  F6（ET/Loader/Compile）重建后 SkillIds/BulletIds/AreaIds 常量 + RequireAirborne 均进入
+  ET.Skill.dll，内容层编译 0 错误。
+
+  执行说明（eval_file 触发后主线程超时，按 notes 降级 MenuItemExecute→实际用 menu 命令）：
+  1. eval_file automation/eval/0044-f6-then-skillcompile.cs 触发后返回
+     "Main thread operation timed out after 5000ms"（F6 编译使主线程繁忙，命令通道超时），
+     但菜单已实际在后台执行，ET.Skill.dll 成功刷新。
+  2. 降级用 `unity command menu --path "ET/Loader/Compile"` 复核 F6 已完成
+     （ET.Skill.dll 02:15:07 已刷新，体积 38400→38912）。
+  3. 降级用 `unity command menu --path "ET/Skill/Compile"` 执行内容编译，Temp/SkillCompile.log
+     显示 0 错误（1 警告 MSB3277 版本冲突，构建耗时 0.62s 增量）。
+
+  验证：
+  ① Temp/SkillCompile.log error 行 = 0（1 个警告为 System.IO.Compression 版本冲突提示，非阻塞）
+  ② ET.SkillContent.dll.bytes 时间戳 2026-08-29 02:15:12，晚于本单开始 02:14:57 ✓
+  ③ Temp/Bin/Debug/ET.Skill.dll 时间戳 2026-08-29 02:15:07，已刷新（基线 08-28 17:44）✓
+  .bytes 未入库（gitignore，仅本地验证）。
+build:
+  errors: []
+log_tail:
+  - "0 个错误  1 个警告"
+  - "已用时间 00:00:00.62（增量编译，F6 产物已含新常量）"
