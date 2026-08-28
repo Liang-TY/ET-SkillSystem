@@ -1,0 +1,111 @@
+{
+  "loop": false,
+  "frameMax": 8,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 150
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/hardattackblade1.img",
+        "pathLegacy": "HardAttackBlade1.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 50
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/hardattackblade1.img",
+        "pathLegacy": "HardAttackBlade1.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 50
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/hardattackblade1.img",
+        "pathLegacy": "HardAttackBlade1.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 50
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/hardattackblade1.img",
+        "pathLegacy": "HardAttackBlade1.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 50
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/effect/hardattackblade1.img",
+        "pathLegacy": "HardAttackBlade1.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 50
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "sprite/character/swordman/effect/hardattackblade1.img",
+        "pathLegacy": "HardAttackBlade1.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 50
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -172,
+        "y": -233
+      },
+      "delay": 100
+    }
+  ],
+  "totalDuration": 550
+}
