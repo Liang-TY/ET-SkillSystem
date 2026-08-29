@@ -1,0 +1,48 @@
+# automation/results/0048.result.yaml
+id: "0048"
+status: failed
+reason: compile_error
+base: e0da4bf56
+created: 2026-08-29T17:05:00+08:00
+message: |
+  compile_check 通过（failed:false, errors:[]），但内容编译（步骤③ ET/Skill/Compile）
+  失败：Temp/SkillCompile.log 报 5 个 CS0246（去重后），全部"找不到类型或命名空间名
+  'FP'（是否缺少 using 指令或程序集引用?）"。基点 origin/et9lockStepYIUISeqFrameAniTestDev
+  @ e0da4bf56（第2批5技+霸体框架）。
+
+  根因：第 2 批新增的 VaneSlashSkill.cs 与 GoreCrossSkill.cs **完全缺 using 指令**，
+  却使用了 TrueSync 的 FP 类型（(FP)8/10、ctx.CreateAreaInFront(AreaIds.X, (FP)9/10)）。
+  同目录已有文件（如 TripleSlashSkill.cs）均以 `using TrueSync;` 开头，这两文件漏加。
+  错误文件行均为 (FP) 强转处：VaneSlashSkill.cs 50/57，GoreCrossSkill.cs 87/98/105。
+
+  修法参考（主 AI 侧，未改任何代码）：两个文件顶部补 `using TrueSync;` 即可
+  （其余同批技能文件若也漏 using 需一并检查）。
+
+  验证真实性：F6（ET/Loader/Compile）已重建热更 DLL（ET.Skill.dll 15:21:56→16:59:06，
+  本批动 Model 层实体字段已生效），内容编译失败后 ET.SkillContent.dll.bytes 未刷新
+  （仍 15:49:14，本次构建失败未产出新 DLL）。
+build:
+  errors:
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/VaneSlashSkill.cs
+      line: 50
+      type: CS0246
+      message: "找不到类型或命名空间名“FP”（是否缺少 using 指令或程序集引用?）（缺 using TrueSync;）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/VaneSlashSkill.cs
+      line: 57
+      type: CS0246
+      message: "找不到类型或命名空间名“FP”（是否缺少 using 指令或程序集引用?）（缺 using TrueSync;）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/GoreCrossSkill.cs
+      line: 87
+      type: CS0246
+      message: "找不到类型或命名空间名“FP”（是否缺少 using 指令或程序集引用?）（缺 using TrueSync;）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/GoreCrossSkill.cs
+      line: 98
+      type: CS0246
+      message: "找不到类型或命名空间名“FP”（是否缺少 using 指令或程序集引用?）（缺 using TrueSync;）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/GoreCrossSkill.cs
+      line: 105
+      type: CS0246
+      message: "找不到类型或命名空间名“FP”（是否缺少 using 指令或程序集引用?）（缺 using TrueSync;）"
+log_tail:
+  - "error 行 5 条（去重），全部 CS0246 类型 FP 未找到"
+  - "日志中文为双重编码乱码，错误码/文件/行号/FP 均确认无误"
