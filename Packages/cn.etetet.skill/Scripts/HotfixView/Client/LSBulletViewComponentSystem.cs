@@ -117,8 +117,8 @@ namespace ET.Client
                 ViewGrounded = def.ViewGrounded,
                 // 补偿按面右语义配置，面左镜像 x（弹心为轴同款口径）
                 ViewOffset = new Vector2(
-                    def.ViewOffset.x * (bullet.Direction.x >= 0 ? 1f : -1f),
-                    def.ViewOffset.y),
+                    (float)def.ViewOffset.x * (bullet.Direction.x >= 0 ? 1f : -1f),
+                    (float)def.ViewOffset.y),
                 // .als 叠加子层（弹主层 sortingOrder=10，子层 base=11 绕主层排）
                 Overlays = LSAnimOverlayUtil.CreateOverlays(go.transform, def.ViewAnimId, 11),
             };
