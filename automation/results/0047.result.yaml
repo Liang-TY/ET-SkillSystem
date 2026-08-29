@@ -1,0 +1,21 @@
+# automation/results/0047.result.yaml
+id: "0047"
+status: done
+base: f28bc645b
+created: 2026-08-29T15:46:00+08:00
+message: |
+  剑气面左镜像修复复验通过，compile_check + F6 + 内容编译三步全过。
+
+  ① compile_check：recompile → completed, failed:false, errors:[]（f28bc645b 的
+     弹视图翻根 GO 镜像 + 摆位公式改动编译通过）。
+  ② F6（menu ET/Loader/Compile）：ET.HotfixView.dll 刷新 15:21:56→15:42:12
+     （本提交只改 LSBulletViewComponentSystem.cs，属 HotfixView 层，F6 增量只重建该
+     程序集；框架 ET.Skill.dll 无改动保持 15:21:56，符合预期）。
+  ③ 内容编译（menu ET/Skill/Compile）：Temp/SkillCompile.log 0 错误，构建 1.31s 增量；
+     ET.SkillContent.dll.bytes 刷新 15:45:09（晚于本单开始 15:41:48）。
+  .bytes 未入库（gitignore，仅本地验证）。
+build:
+  errors: []
+log_tail:
+  - "0 个错误"
+  - "已用时间 00:00:01.31（增量编译）"
