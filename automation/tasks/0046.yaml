@@ -1,0 +1,9 @@
+id: "0046"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T15:25:00+08:00
+timeout_sec: 600
+notes: >
+  0045 修复复验（ViewOffset FP→float 强转×2）。compile_check 通过后照 0045 notes
+  顺序补：① menu "ET/Loader/Compile" ② menu "ET/Skill/Compile"，
+  验证 SkillCompile.log 0 错误 + 两 DLL 时间戳刷新。基点见 ref 最新提交。
