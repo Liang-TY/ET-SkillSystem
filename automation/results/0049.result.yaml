@@ -1,0 +1,22 @@
+# automation/results/0049.result.yaml
+id: "0049"
+status: done
+base: f295993ed
+created: 2026-08-29T17:14:14+08:00
+message: |
+  0048 修复复验通过：compile_check + 内容编译两步全过，5 个 CS0246 已消除。
+
+  ① compile_check：recompile → up_to_date（"No scripts needed recompilation"，
+     recompile_status up_to_date, failed:false, errors:[]）。内容层修复无需编辑器程序集
+     重编，符合预期（F6 已在 0048 完成，本单 notes 明确无需再 F6）。
+  ② 内容编译（menu ET/Skill/Compile）：Temp/SkillCompile.log 0 错误；ET.SkillContent.dll.bytes
+     刷新 15:49:14（0048 失败时未产出）→ 17:13:05（晚于本单开始 17:12:52）。
+
+  验证工作区基点 f295993ed 的修复：VaneSlashSkill.cs 与 GoreCrossSkill.cs 均已在文件
+  首行补 `using TrueSync;`（第 50/57 行、第 87/98/105 行的 (FP) 强转处全部编译通过）。
+  .bytes 未入库（gitignore，仅本地验证）。
+build:
+  errors: []
+log_tail:
+  - "error 行 0 条"
+  - "ET.SkillContent.dll.bytes mtime 17:13:05（基线 15:49:14 → 已刷新）"
