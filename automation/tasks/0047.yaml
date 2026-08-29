@@ -1,0 +1,9 @@
+id: "0047"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T15:45:00+08:00
+timeout_sec: 600
+notes: >
+  剑气面左镜像修复（弹视图翻根 GO+摆位公式对齐单位口径）。compile_check 通过后照旧补：
+  ① menu "ET/Loader/Compile" ② menu "ET/Skill/Compile"，验证 SkillCompile.log 0 错误 +
+  两 DLL 时间戳刷新。基点见 ref 最新提交。
