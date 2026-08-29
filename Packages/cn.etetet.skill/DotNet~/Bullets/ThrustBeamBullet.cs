@@ -35,5 +35,10 @@ namespace ET
 
         public override int ViewAnimId => AnimId.ThrustBeam;
         public override bool ViewGrounded => false;      // 腰位光束，不用贴地渲染
+
+        // 视觉锚回 DNF PO 原点（=施法者位置）：PO 贴图 imagePos(-170,-233) 以自身原点为锚，
+        // GO 若停在碰撞中心(1.65,0.55)会叠加 imagePos 抬升 → 飘到角色右上方。
+        // 补偿后视觉=DNF 原版（刀刃处），碰撞盒仍在身前 0.9-2.4 不变。
+        public override TSVector ViewOffset => new(-(FP)165 / 100, -(FP)55 / 100, FP.Zero);
     }
 }

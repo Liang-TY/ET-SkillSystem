@@ -54,6 +54,10 @@ namespace ET
         /// <summary>视图是否贴地渲染（true=GO 落地面，地波类；false=GO 用逻辑高度，空中弹类）</summary>
         public virtual bool ViewGrounded => true;
 
+        /// <summary>视图摆位补偿（面右为正，视图层按朝向镜像）：逻辑碰撞中心与 DNF PO 原点不重合时，
+        /// 把视觉锚回 PO 原点——DNF 的 PO 贴图 imagePos 以自身原点为锚，GO 偏到碰撞中心会双重偏移</summary>
+        public virtual TSVector ViewOffset => TSVector.zero;
+
         /// <summary>视图动画 id（视图层按此查 clip 自推帧；逻辑不消费。属性名避开 AnimId 类型名）</summary>
         public virtual int ViewAnimId => AnimId.None;
     }

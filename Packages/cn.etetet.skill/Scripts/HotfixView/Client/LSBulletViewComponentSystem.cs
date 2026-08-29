@@ -80,10 +80,11 @@ namespace ET.Client
                 if (bullet == null) continue;
                 BulletViewInfo info = kv.Value;
                 // 屏幕映射与单位同款（z→屏幕Y、深度 0，03 文档 §9 第6轮定稿）：
-                // ViewGrounded=贴地弹 Y=z；否则 Y=z+高度 y。碰撞盒中心的 y 只用于逻辑，视觉贴地
+                // ViewGrounded=贴地弹 Y=z；否则 Y=z+高度 y。碰撞盒中心的 y 只用于逻辑，视觉贴地。
+                // ViewOffset：逻辑碰撞中心≠DNF PO 原点时把视觉锚回原点（如连突刺剑气）
                 info.Go.transform.position = new Vector3(
-                    (float)bullet.Position.x,
-                    info.ViewGrounded ? (float)bullet.Position.z : (float)(bullet.Position.z + bullet.Position.y),
+                    (float)bullet.Position.x + info.ViewOffset.x,
+                    (info.ViewGrounded ? (float)bullet.Position.z : (float)(bullet.Position.z + bullet.Position.y)) + info.ViewOffset.y,
                     0f);
                 AdvanceFrame(info, res, Time.deltaTime);
                 // .als 叠加子层自推（门控用弹主层帧号）
@@ -114,6 +115,10 @@ namespace ET.Client
                 Timer = 0,
                 FaceRight = bullet.Direction.x >= 0,
                 ViewGrounded = def.ViewGrounded,
+                // 补偿按面右语义配置，面左镜像 x（弹心为轴同款口径）
+                ViewOffset = new Vector2(
+                    def.ViewOffset.x * (bullet.Direction.x >= 0 ? 1f : -1f),
+                    def.ViewOffset.y),
                 // .als 叠加子层（弹主层 sortingOrder=10，子层 base=11 绕主层排）
                 Overlays = LSAnimOverlayUtil.CreateOverlays(go.transform, def.ViewAnimId, 11),
             };

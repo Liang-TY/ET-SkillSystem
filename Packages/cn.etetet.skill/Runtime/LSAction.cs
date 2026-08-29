@@ -114,6 +114,7 @@ namespace ET
                 FP.Zero);
             flight.Active = true;   // 重打刷新（空中再被击 → 覆盖速度，DNF 行为）
             flight.IsJump = false;  // 被击飞 ≠ 主动跳：落地要走击倒链（Down 动画+硬直）
+            flight.Gravity = 40;    // 回击飞重力（跳跃用 16——被击飞后按击飞手感走，与 Awake 默认一致）
         }
 
         /// <summary>受击者自己的受击动画 ID（DNF sq_GetDamageAni 同构——每角色自带，0=未配置）</summary>

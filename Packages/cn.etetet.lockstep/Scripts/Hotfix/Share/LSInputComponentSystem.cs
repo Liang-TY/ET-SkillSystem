@@ -81,7 +81,10 @@ namespace ET
                 {
                     flight.Active = true;
                     flight.IsJump = true;
-                    flight.Velocity = new TSVector(FP.Zero, 10, FP.Zero);   // 重力40 → 空中0.5s，最高1.25单位
+                    // 跳跃专用重力 16（击飞重力 40 不变——LaunchOwner 会改回）：初速 8 → 空中 1.0s、
+                    // 最高 2.0 单位=200px（DNF 手感）；上升 0.5s≈JumpUp 段 600ms、下落≈JumpFall 520ms
+                    flight.Gravity = 16;
+                    flight.Velocity = new TSVector(FP.Zero, 8, FP.Zero);
                     anim?.Play(AnimId.JumpUp);
                     return;
                 }

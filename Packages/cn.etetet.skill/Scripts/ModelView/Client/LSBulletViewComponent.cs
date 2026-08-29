@@ -29,6 +29,7 @@ namespace ET.Client
         public float Timer;
         public bool FaceRight;
         public bool ViewGrounded = true;   // true=GO 贴地面（地波）；false=GO 用逻辑高度（空中弹）
+        public Vector2 ViewOffset;         // 摆位补偿（CreateView 按朝向镜像 x；def.ViewOffset 直译）
         public System.Collections.Generic.List<OverlayViewInfo> Overlays;   // .als 叠加子层
     }
 }
