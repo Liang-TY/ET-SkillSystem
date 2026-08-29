@@ -1,0 +1,98 @@
+{
+  "loop": false,
+  "frameMax": 7,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 204
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 70
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 205
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 70
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 205
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 140
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 206
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 70
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 207
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 70
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 208
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 70
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "sprite/character/swordman/equipment/avatar/skin/sm_body0000.img",
+        "pathLegacy": "sm_body%04d.img",
+        "index": 209
+      },
+      "imagePos": {
+        "x": -232,
+        "y": -333
+      },
+      "delay": 1000
+    }
+  ],
+  "totalDuration": 1490
+}

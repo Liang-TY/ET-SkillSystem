@@ -57,6 +57,14 @@ namespace ET
         public void ConsumeCasterHp(FP amount)
             => caster.GetComponent<LSNumericComponent>()?.Add(NumericType.Hp, -amount);
 
+        /// <summary>施法者进入霸体（DNF DAMAGE TYPE SUPERARMOR 同构：持续 ms 内被击只扣血，
+        /// 不吃硬直/击退/浮空/受击动画；技能在起霸时点一次性调用，重复调用取覆盖值）</summary>
+        public void SetCasterSuperArmor(int durationMs)
+        {
+            LSCombatComponent combat = caster.GetComponent<LSCombatComponent>();
+            if (combat != null && durationMs > combat.SuperArmorTimer) combat.SuperArmorTimer = durationMs;
+        }
+
         // ---- 动画 ----
         /// <summary>播放动画（LSAnimComponentSystem.Play 是 ET.Hotfix 扩展，ET.Skill 引用不到，
         /// 统一走 LSAnimPlayUtil 属性赋值实现——与那边保持同步）</summary>

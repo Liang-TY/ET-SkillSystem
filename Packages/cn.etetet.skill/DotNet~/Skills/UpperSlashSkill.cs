@@ -33,6 +33,7 @@ namespace ET
         {
             ctx.PlayAnim(AnimId.SwordmanUpAttack);
             ctx.ClearHitTargets();
+            ctx.SetCasterSuperArmor(TotalTimeMs);   // 全 9 帧 SUPERARMOR（up_attack.ani 实测）——霸体框架落地后补
         }
 
         public override void OnEnd(SkillContext ctx)

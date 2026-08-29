@@ -1,0 +1,64 @@
+{
+  "loop": false,
+  "frameMax": 4,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -268,
+        "y": -136
+      },
+      "delay": 40
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/gorecross/gorecross_obj_3cross_dodge.img",
+        "pathLegacy": "gorecross_obj_3cross_dodge.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -323,
+        "y": -332
+      },
+      "delay": 140,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/gorecross/gorecross_obj_3cross_dodge.img",
+        "pathLegacy": "gorecross_obj_3cross_dodge.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -323,
+        "y": -332
+      },
+      "delay": 70,
+      "rgba": 1090519039,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/gorecross/gorecross_obj_3cross_dodge.img",
+        "pathLegacy": "gorecross_obj_3cross_dodge.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -323,
+        "y": -332
+      },
+      "delay": 70,
+      "rgba": 16777215,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 320
+}

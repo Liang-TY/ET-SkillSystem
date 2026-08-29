@@ -1,0 +1,91 @@
+{
+  "loop": false,
+  "frameMax": 6,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/effect/hopsmash/b_bottom_01_d.img",
+        "pathLegacy": "b_bottom_01_d.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -165,
+        "y": -103
+      },
+      "delay": 80,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/hopsmash/b_bottom_01_d.img",
+        "pathLegacy": "b_bottom_01_d.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -165,
+        "y": -103
+      },
+      "delay": 80,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/hopsmash/b_bottom_01_d.img",
+        "pathLegacy": "b_bottom_01_d.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -165,
+        "y": -103
+      },
+      "delay": 80,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/hopsmash/b_bottom_01_d.img",
+        "pathLegacy": "b_bottom_01_d.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -165,
+        "y": -103
+      },
+      "delay": 80,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/hopsmash/b_bottom_01_d.img",
+        "pathLegacy": "b_bottom_01_d.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -165,
+        "y": -103
+      },
+      "delay": 80,
+      "graphicEffect": 1
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/effect/hopsmash/b_bottom_01_d.img",
+        "pathLegacy": "b_bottom_01_d.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -165,
+        "y": -103
+      },
+      "delay": 80,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 480
+}

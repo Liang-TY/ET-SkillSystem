@@ -29,6 +29,10 @@ namespace ET
         public const int TripleSlash = 13;      // 三段斩（D 键，连段+前冲）
         public const int DashAttackMultiHit = 14; // 连突刺（T 键，突刺+剑气穿透弹）
         public const int AshenFork = 15;        // 银光落刃（F 键，空中施放+落地冲击波）
+        public const int HopSmash = 16;         // 崩山击（E 键，前跃多段下砸+冲击波）
+        public const int VaneSlash = 17;        // 裂波斩（V 键，上斩+波轮多段+终结）
+        public const int GoreCross = 18;        // 十字斩（Q 键，两刀+血之十字+追击）
+        public const int WeaponCombo = 19;      // 里·鬼剑术（A 键，太刀4段连击）
 
         /// <summary>按键值 → 技能槽位映射（16=起跳，非技能，不进本表）</summary>
         public static bool ButtonToSkill(int button, out int skillId)
@@ -44,6 +48,10 @@ namespace ET
                 case 13: skillId = TripleSlash; return true;
                 case 14: skillId = DashAttackMultiHit; return true;
                 case 15: skillId = AshenFork; return true;
+                case 16: skillId = HopSmash; return true;
+                case 17: skillId = VaneSlash; return true;
+                case 18: skillId = GoreCross; return true;
+                case 19: skillId = WeaponCombo; return true;
                 default: skillId = 0; return false;
             }
         }

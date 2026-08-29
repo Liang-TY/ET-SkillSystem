@@ -89,9 +89,14 @@ namespace ET
         // ---- 战斗状态 ----
         public void SetOwnerHitstun(int ms)
         {
+            if (IsOwnerSuperArmor()) return;                // 霸体：不吃硬直
             LSCombatComponent combat = owner.GetComponent<LSCombatComponent>();
             if (combat != null) combat.HitstunTimer = ms;   // 重打刷新（DNF 行为）
         }
+
+        /// <summary>owner 是否霸体中（>0 被击只扣血：硬直/击退/浮空/受击动画全免）</summary>
+        public bool IsOwnerSuperArmor()
+            => owner.GetComponent<LSCombatComponent>()?.SuperArmorTimer > 0;
 
         /// <summary>禁移动开关（眩晕类；NumericType.ForbidMove 的门面封装——内容层不见 ET.Model 类型）</summary>
         public void OwnerForbidMove(bool on)

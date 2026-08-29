@@ -113,6 +113,7 @@ namespace ET
             activeCast?.NotifyHit(target.Id);
 
             // 分发技能命中效果节点（owner=受击者，source=攻击方）
+            // 反应参数走 PhaseHitReaction(SubState)——多段不同 .atk 同构（崩山击多段/末击、十字斩两刀等）
             SkillLogic logic = activeCast != null ? SkillLoader.Get(activeCast.SkillId) : null;
             int[] hitActions = logic?.HitActions;
             if (hitActions == null)
@@ -120,6 +121,7 @@ namespace ET
                 Log.Warning($"[Combat] 帧{frameNo} unit{attacker.Id} 命中 unit{target.Id}，但技能未配 HitActions，无效果");
                 return;
             }
+            HitReaction phaseReaction = logic.PhaseHitReaction(activeCast?.SubState ?? 0);
             foreach (int actionId in hitActions)
             {
                 LSAction action = ActionLoader.Get(actionId);
@@ -128,7 +130,7 @@ namespace ET
                     Log.Error($"[Combat] 技能{activeCast.SkillId} 引用了未注册的 actionId={actionId}，跳过");
                     continue;
                 }
-                action.Run(new LSActionContext(attacker.LSWorld(), target, attacker, frameNo, logic?.HitReaction));
+                action.Run(new LSActionContext(attacker.LSWorld(), target, attacker, frameNo, phaseReaction));
             }
         }
 

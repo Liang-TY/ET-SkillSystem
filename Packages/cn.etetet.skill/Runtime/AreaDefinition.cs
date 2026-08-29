@@ -19,6 +19,12 @@ namespace ET
         public const int BloodBoom = 2;    // 浴血之怒爆炸：以施法者为中心的一次性血爆（伤害+出血）
         public const int TripleSlashFinish = 3;  // 三段斩终段击倒（身前一次性，本体盒让位防双结算）
         public const int AshenFork = 4;          // 银光落刃落地冲击波（落点中心贴地，击倒浮空）
+        public const int HopSmashWave = 5;       // 崩山击冲击波（贴地扩张+出血，血气旺盛常开）
+        public const int VaneSlashWheel = 6;     // 裂波波轮（身前固定点 Tick350×3 多段）
+        public const int VaneSlashFinal = 7;     // 裂波终结（下斩大击飞）
+        public const int GoreCrossCross = 8;     // 血之十字相位1（升起+出血）
+        public const int GoreCrossBurst = 9;     // 血之十字相位2（三联爆发击倒）
+        public const int GoreCrossFinish = 10;   // 十字斩强力追击（输入窗口触发）
     }
 
     /// <summary>

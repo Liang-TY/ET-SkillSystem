@@ -42,6 +42,13 @@ namespace ET
         public virtual HitReaction HitReaction => HitReaction.Default;
 
         /// <summary>
+        /// 分段命中反应（DNF 单技能多段不同 .atk 同构：如崩山击多段 push30/末击 down 击倒）。
+        /// phase = 命中时的 LSCast.SubState（连段技能=段号/多段技能=命中窗口号），默认忽略 phase
+        /// 返回 HitReaction。多段技能 override 本方法代替"末击走小 Area"的手法（回滚安全，零编排）。
+        /// </summary>
+        public virtual HitReaction PhaseHitReaction(int phase) => HitReaction;
+
+        /// <summary>
         /// 命中时执行的效果节点列表（ActionIds）——伤害/硬直/挂 Buff 等效果全在节点里配置组合，
         /// 生命周期类只管"过程"（连段/取消/位移）。用 static readonly 数组避免每次命中分配。
         /// attack 表化（luban 专题）后此配置迁表。

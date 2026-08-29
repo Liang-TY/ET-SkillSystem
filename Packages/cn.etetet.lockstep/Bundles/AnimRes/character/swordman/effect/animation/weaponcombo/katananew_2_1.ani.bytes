@@ -1,0 +1,72 @@
+{
+  "loop": false,
+  "frameMax": 5,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/effect/weaponcombo/ura_katana_plus02.img",
+        "pathLegacy": "ura_katana_plus02.img",
+        "index": 25
+      },
+      "imagePos": {
+        "x": -282,
+        "y": -283
+      },
+      "delay": 60
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/weaponcombo/ura_katana_plus02.img",
+        "pathLegacy": "ura_katana_plus02.img",
+        "index": 26
+      },
+      "imagePos": {
+        "x": -282,
+        "y": -283
+      },
+      "delay": 60
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/weaponcombo/ura_katana_plus02.img",
+        "pathLegacy": "ura_katana_plus02.img",
+        "index": 27
+      },
+      "imagePos": {
+        "x": -282,
+        "y": -283
+      },
+      "delay": 60
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/weaponcombo/ura_katana_plus02.img",
+        "pathLegacy": "ura_katana_plus02.img",
+        "index": 28
+      },
+      "imagePos": {
+        "x": -282,
+        "y": -283
+      },
+      "delay": 60
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/weaponcombo/ura_katana_plus02.img",
+        "pathLegacy": "ura_katana_plus02.img",
+        "index": 29
+      },
+      "imagePos": {
+        "x": -282,
+        "y": -283
+      },
+      "delay": 400
+    }
+  ],
+  "totalDuration": 640
+}

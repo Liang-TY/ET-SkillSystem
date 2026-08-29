@@ -88,6 +88,86 @@ namespace ET.Client
                 (8, 13, AnimId.JumpFall),   // F8-F13 下落段 520ms（F7/F14 悬停帧丢弃，F15 落地帧由落地逻辑切走）
             });
 
+            // ---- 第 2 批（2026-08-29）----
+
+            // 空中连斩（融入普攻：空中 X 首击复用 JumpAttack，链斩交替）
+            await RegisterOne(resLoader, $"{A}/jumpattackmultislash1.ani", AnimId.JumpAttackMultiSlash1);
+            await RegisterOne(resLoader, $"{A}/jumpattackmultislash2.ani", AnimId.JumpAttackMultiSlash2);
+
+            // 崩山击（蓄力→前跃下砸 F3-F5 自带盒→落地冲击波）
+            await RegisterOne(resLoader, $"{A}/hopsmashready.ani", AnimId.SwordmanHopSmashReady);
+            await RegisterOne(resLoader, $"{A}/hopsmash.ani", AnimId.SwordmanHopSmash);
+            await RegisterOne(resLoader, $"{P}/hopsmashsubfront1.ani", AnimId.HopSmashWaveFront);
+            await RegisterOne(resLoader, $"{P}/hopsmashsubfront2.ani", AnimId.HopSmashWaveGlow);
+
+            // 裂波斩（上斩→旋转→波轮多段→终结；波轮 F13 悬停帧已钳 80ms）
+            await RegisterOne(resLoader, $"{A}/vaneslashtry.ani", AnimId.SwordmanVaneSlashTry);
+            await RegisterOne(resLoader, $"{A}/vaneslash.ani", AnimId.SwordmanVaneSlash);
+            await RegisterOne(resLoader, $"{P}/vaneslashwheel.ani", AnimId.VaneSlashWheel);
+            await RegisterOne(resLoader, $"{P}/vaneslashnormal.ani", AnimId.VaneSlashNormal);
+
+            // 十字斩（两刀+血之十字两相位+追击）
+            await RegisterOne(resLoader, $"{A}/gorecross.ani", AnimId.SwordmanGoreCross);
+            await RegisterOne(resLoader, $"{P}/gorecross1.ani", AnimId.GoreCrossFlash);
+            await RegisterOne(resLoader, $"{P}/gorecross2.ani", AnimId.GoreCrossCross);
+            await RegisterOne(resLoader, $"{P}/gorecross3.ani", AnimId.GoreCross3Cross);
+            await RegisterOne(resLoader, $"{P}/gorecross4.ani", AnimId.GoreCross3CrossFade);
+
+            // 里·鬼剑术（太刀 4 段，json 自带攻击盒；刀光走 .als overlay——含 followParent 新节）
+            string wc = "character/swordman/effect/animation/weaponcombo";
+            await RegisterOne(resLoader, $"{wc}/katananew_1_1.ani", AnimId.KatananewFx11);
+            await RegisterOne(resLoader, $"{wc}/katananew_1_2.ani", AnimId.KatananewFx12);
+            await RegisterOne(resLoader, $"{wc}/katananew_1-1.ani", AnimId.KatananewFx1m1);
+            await RegisterOne(resLoader, $"{wc}/ura_katana_eff.ani", AnimId.UraKatanaEff);
+            await RegisterOne(resLoader, $"{wc}/katananew_2_1.ani", AnimId.KatananewFx21);
+            await RegisterOne(resLoader, $"{wc}/katananew_2_2.ani", AnimId.KatananewFx22);
+            await RegisterOne(resLoader, $"{wc}/katananew_2-1.ani", AnimId.KatananewFx2m1);
+            await RegisterOne(resLoader, $"{wc}/katananew_2-2.ani", AnimId.KatananewFx2m2);
+            await RegisterOne(resLoader, $"{wc}/katana_new1_under_effect.ani", AnimId.KatanaNew1Under);
+            await RegisterOne(resLoader, $"{wc}/katana_new1_upper_effect.ani", AnimId.KatanaNew1Upper);
+            await RegisterOne(resLoader, $"{wc}/katananew_3_1.ani", AnimId.KatananewFx31);
+            await RegisterOne(resLoader, $"{wc}/katananew_3_2.ani", AnimId.KatananewFx32);
+            await RegisterOne(resLoader, $"{wc}/katananew_3-1.ani", AnimId.KatananewFx3m1);
+            await RegisterOne(resLoader, $"{wc}/katananew_3-2.ani", AnimId.KatananewFx3m2);
+            await RegisterOne(resLoader, $"{wc}/katana_new2_under_effect.ani", AnimId.KatanaNew2Under);
+            await RegisterOne(resLoader, $"{wc}/katana_new2_upper_effect.ani", AnimId.KatanaNew2Upper);
+            Dictionary<string, int> blade1Alias = new()
+            {
+                ["katananew_1_1"] = AnimId.KatananewFx11,
+                ["katananew_1_2"] = AnimId.KatananewFx12,
+                ["katananew_1-1"] = AnimId.KatananewFx1m1,
+                ["ura_katana_eff"] = AnimId.UraKatanaEff,
+            };
+            await RegisterOverlay(resLoader, $"{A}/weaponcomboblade1.ani.als", AnimId.SwordmanWeaponComboBlade1, blade1Alias);
+            Dictionary<string, int> blade2Alias = new()
+            {
+                ["katananew_2_1"] = AnimId.KatananewFx21,
+                ["katananew_2_2"] = AnimId.KatananewFx22,
+                ["katananew_2-1"] = AnimId.KatananewFx2m1,
+                ["katananew_2-2"] = AnimId.KatananewFx2m2,
+                ["katana_new1_under_effect"] = AnimId.KatanaNew1Under,
+                ["katana_new1_upper_effect"] = AnimId.KatanaNew1Upper,
+            };
+            await RegisterOverlay(resLoader, $"{A}/weaponcomboblade2.ani.als", AnimId.SwordmanWeaponComboBlade2, blade2Alias);
+            Dictionary<string, int> blade3Alias = new()
+            {
+                ["katananew_1_1"] = AnimId.KatananewFx11,
+                ["katananew_1_2"] = AnimId.KatananewFx12,
+                ["katananew_1-1"] = AnimId.KatananewFx1m1,
+                ["ura_katana_eff"] = AnimId.UraKatanaEff,
+            };
+            await RegisterOverlay(resLoader, $"{A}/weaponcomboblade3.ani.als", AnimId.SwordmanWeaponComboBlade3, blade3Alias);
+            Dictionary<string, int> blade4Alias = new()
+            {
+                ["katananew_3_1"] = AnimId.KatananewFx31,
+                ["katananew_3_2"] = AnimId.KatananewFx32,
+                ["katananew_3-1"] = AnimId.KatananewFx3m1,
+                ["katananew_3-2"] = AnimId.KatananewFx3m2,
+                ["katana_new2_under_effect"] = AnimId.KatanaNew2Under,
+                ["katana_new2_upper_effect"] = AnimId.KatanaNew2Upper,
+            };
+            await RegisterOverlay(resLoader, $"{A}/weaponcomboblade4.ani.als", AnimId.SwordmanWeaponComboBlade4, blade4Alias);
+
             // 鬼斩刀光特效 + overlay（手组装：无 .als，直接用 .ani 文件名做别名）
             string ha = $"character/swordman/effect/animation/hardattack";
             await RegisterOne(resLoader, $"{ha}/hardattack1.ani", AnimId.HardAttackBlade1);

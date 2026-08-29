@@ -30,20 +30,45 @@ namespace ET
         private static readonly int[] HitActionsArr = { ActionIds.MeleeHit, ActionIds.AddBurnBuff };
         public override int[] HitActions => HitActionsArr;
 
+        // 空中攻击链（DNF 空中连斩同构：首击 jumpattack 普攻数值，第 2 击起链斩交替技能数值）
+        private static readonly HitReaction AirReaction = new()
+        {
+            Damage = 60,
+            HitstunMs = 500,
+            KnockbackX = 270,
+            LaunchY = 180,
+        };
+
+        // phase = SubState：地面段 0-2 → 默认反应；空中段 10-12 → 链斩反应（jumpattack.atk 直译）
+        public override HitReaction PhaseHitReaction(int phase) => phase >= 10 ? AirReaction : HitReaction;
+
         public override int CooldownMs => 0;
-        public override int TotalTimeMs => 2000;   // 保险丝：全连 600+650+550=1800 内必 EndCast，超时强制收招
+        public override int TotalTimeMs => 2000;   // 保险丝：地面全连 1800 / 空中链 ~1300 内必 EndCast
 
         public override void OnCast(SkillContext ctx)
         {
-            ctx.SetSubState(0);
             ctx.SetPhase(0);
-            ctx.PlayAnim(AnimId.SwordmanAttack1);
             ctx.ClearHitTargets();
+            if (ctx.IsCasterAirborne())
+            {
+                // 空中链：首击 = jumpattack（与银光落刃共用动作，F2 盒帧驱动自动激活）
+                ctx.SetSubState(10);
+                ctx.PlayAnim(AnimId.SwordmanJumpAttack);
+                return;
+            }
+            ctx.SetSubState(0);
+            ctx.PlayAnim(AnimId.SwordmanAttack1);
             ctx.SetAttackHitbox(Box12Offset, Box12Half);
         }
 
         public override void OnUpdate(SkillContext ctx, int dtMs)
         {
+            if (ctx.GetSubState() >= 10)
+            {
+                UpdateAir(ctx);
+                return;
+            }
+
             int seg = ctx.GetSubState();
             int t = ctx.GetElapsedMs() - ctx.GetPhase();   // 段内时间
 
@@ -74,6 +99,53 @@ namespace ET
 
             // 收招：本段播完无续段输入
             if (t >= SegmentMs[seg])
+            {
+                ctx.EndCast();
+            }
+        }
+
+        // ---- 空中攻击链（SubState 10=首击 jumpattack，11/12=链斩交替）----
+        private const int AirFirstMs = 300;        // jumpattack 6 帧 300ms
+        private const int AirSlashMs = 370;        // jumpattackmultislash 5 帧 370ms
+        private const int AirBoxOnMs = 50;
+        private const int AirBoxOffMs = 300;
+
+        private static void UpdateAir(SkillContext ctx)
+        {
+            // 落地：链终止（DNF 落地回地面状态）
+            if (!ctx.IsCasterAirborne())
+            {
+                ctx.EndCast();
+                return;
+            }
+
+            int seg = ctx.GetSubState();
+            int t = ctx.GetElapsedMs() - ctx.GetPhase();
+
+            // 链斩段（json 无攻击盒 → 手动盒；首击 jumpattack 帧驱动自动）
+            if (seg > 10)
+            {
+                if (t >= AirBoxOnMs && t < AirBoxOffMs)
+                    ctx.SetAttackHitbox(Box12Offset, Box12Half);
+                else if (t >= AirBoxOffMs)
+                    ctx.DisableAttackHitbox();
+            }
+
+            // 首击播完 / 链斩段推进：按 X 交替 1↔2（DNF 空中攻击键连打同构）
+            int segMs = seg == 10 ? AirFirstMs : AirSlashMs;
+            if (t >= segMs && ctx.PeekBufferedButton() == 1)
+            {
+                ctx.ConsumeBuffer();
+                int next = seg == 10 ? 11 : (seg == 11 ? 12 : 11);
+                ctx.SetSubState(next);
+                ctx.SetPhase(ctx.GetElapsedMs());
+                ctx.PlayAnim(AnimId.JumpAttackMultiSlash1 + (next - 11));
+                ctx.ClearHitTargets();
+                return;
+            }
+
+            // 无输入：首击播完收招 / 链斩段播完收招（滞空重按 X 再续）
+            if (t >= segMs)
             {
                 ctx.EndCast();
             }

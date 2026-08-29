@@ -39,6 +39,13 @@ namespace ET
                 self.HitstopTimer -= LSConstValue.UpdateInterval;
                 if (self.HitstopTimer < 0) self.HitstopTimer = 0;
             }
+
+            // 霸体倒计时（>0 期间被击只扣血，命中结算侧检查）
+            if (self.SuperArmorTimer > 0)
+            {
+                self.SuperArmorTimer -= LSConstValue.UpdateInterval;
+                if (self.SuperArmorTimer < 0) self.SuperArmorTimer = 0;
+            }
         }
     }
 }

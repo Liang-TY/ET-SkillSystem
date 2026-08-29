@@ -1,0 +1,42 @@
+{
+  "overlays": [
+    {
+      "startFrame": 0,
+      "z": 10000,
+      "effectAni": "katananew_3_1",
+      "effectAniPath": "sprite/../effect/animation/weaponcombo/katananew_3_1.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 10000,
+      "effectAni": "katananew_3_2",
+      "effectAniPath": "sprite/../effect/animation/weaponcombo/katananew_3_2.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 10000,
+      "effectAni": "katananew_3-1",
+      "effectAniPath": "sprite/../effect/animation/weaponcombo/katananew_3-1.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 10000,
+      "effectAni": "katananew_3-2",
+      "effectAniPath": "sprite/../effect/animation/weaponcombo/katananew_3-2.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 10003,
+      "effectAni": "katana_new2_under_effect",
+      "followParent": true,
+      "effectAniPath": "sprite/../effect/animation/weaponcombo/katana_new2_under_effect.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 10003,
+      "effectAni": "katana_new2_upper_effect",
+      "followParent": true,
+      "effectAniPath": "sprite/../effect/animation/weaponcombo/katana_new2_upper_effect.ani"
+    }
+  ]
+}

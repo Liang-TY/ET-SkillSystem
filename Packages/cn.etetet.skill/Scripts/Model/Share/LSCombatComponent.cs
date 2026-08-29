@@ -34,5 +34,9 @@ namespace ET
         // 击倒落地动画（LSFlightComponentSystem 落地时播放 + 硬直托底；0=未配置→落地直接回默认）
         [MemoryPackOrder(5)]
         public int DownAnimId;
+
+        // 霸体剩余 ms（>0 时被击只扣血：不吃硬直/击退/浮空/受击动画——DNF DAMAGE TYPE SUPERARMOR 同构）
+        [MemoryPackOrder(6)]
+        public int SuperArmorTimer;
     }
 }

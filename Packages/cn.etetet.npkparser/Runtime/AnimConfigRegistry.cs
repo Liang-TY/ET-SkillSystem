@@ -103,5 +103,43 @@ namespace ET
         public const int AshenForkSubDust = 70;      // ashenforksubdust.ani（冲击波尘土 11 帧 537ms，区域视图背层）
         public const int JumpUp = 71;                // jump.ani 切片：起跳段 F0-F6（600ms）
         public const int JumpFall = 72;              // jump.ani 切片：下落段 F8-F13（520ms）
+
+        // 第 2 批（2026-08-29，73+）
+        public const int JumpAttackMultiSlash1 = 73; // jumpattackmultislash1.ani（空中链斩1 5帧370ms，无盒→手动盒）
+        public const int JumpAttackMultiSlash2 = 74; // jumpattackmultislash2.ani（空中链斩2）
+        public const int SwordmanHopSmashReady = 75; // hopsmashready.ani（崩山击蓄力 1帧400ms）
+        public const int SwordmanHopSmash = 76;      // hopsmash.ani（前跃下砸 7帧900ms，F3-F5 自带盒）
+        public const int HopSmashWaveFront = 77;     // HopSmashSubFront1.ani（冲击波主层 6帧480ms）
+        public const int HopSmashWaveGlow = 78;      // HopSmashSubFront2.ani（冲击波辉光背层）
+        public const int SwordmanVaneSlashTry = 79;  // vaneslashtry.ani（裂波上斩 5帧350ms，F2/F3 自带盒）
+        public const int SwordmanVaneSlash = 80;     // vaneslash.ani（裂波旋转 7帧1490ms）
+        public const int VaneSlashWheel = 81;        // VaneSlash.ani PO（波轮 20帧，悬停帧钳80ms→1410ms）
+        public const int VaneSlashNormal = 82;       // VaneSlashNormal.ani PO（终结爆发 4帧280ms）
+        public const int SwordmanGoreCross = 83;     // gorecross.ani（十字斩 29帧1330ms，无盒→手动盒）
+        public const int GoreCrossFlash = 84;        // gorecross1.ani PO（十字闪光 4帧320ms）
+        public const int GoreCrossCross = 85;        // gorecross2.ani PO（十字叠加层）
+        public const int GoreCross3Cross = 86;       // gorecross3.ani PO（三联爆发 4帧320ms）
+        public const int GoreCross3CrossFade = 87;   // gorecross4.ani PO（渐隐 4帧320ms）
+        public const int SwordmanWeaponComboBlade1 = 88; // weaponcomboblade1.ani（里鬼太刀段1 700ms，自带盒）
+        public const int SwordmanWeaponComboBlade2 = 89; // weaponcomboblade2.ani（段2 640ms）
+        public const int SwordmanWeaponComboBlade3 = 90; // weaponcomboblade3.ani（段3 700ms）
+        public const int SwordmanWeaponComboBlade4 = 91; // weaponcomboblade4.ani（段4 640ms）
+        // 里鬼刀光特效（.als 别名 → AnimId）
+        public const int KatananewFx11 = 92;         // katananew_1_1.ani（blade1/3 复用）
+        public const int KatananewFx12 = 93;         // katananew_1_2.ani
+        public const int KatananewFx1m1 = 94;        // katananew_1-1.ani
+        public const int UraKatanaEff = 95;          // ura_katana_eff.ani（followParent 辉光）
+        public const int KatananewFx21 = 96;         // katananew_2_1.ani（blade2）
+        public const int KatananewFx22 = 97;         // katananew_2_2.ani
+        public const int KatananewFx2m1 = 98;        // katananew_2-1.ani
+        public const int KatananewFx2m2 = 99;        // katananew_2-2.ani
+        public const int KatanaNew1Under = 100;      // katana_new1_under_effect.ani
+        public const int KatanaNew1Upper = 101;      // katana_new1_upper_effect.ani
+        public const int KatananewFx31 = 102;        // katananew_3_1.ani（blade4）
+        public const int KatananewFx32 = 103;        // katananew_3_2.ani
+        public const int KatananewFx3m1 = 104;       // katananew_3-1.ani
+        public const int KatananewFx3m2 = 105;       // katananew_3-2.ani
+        public const int KatanaNew2Under = 106;      // katana_new2_under_effect.ani
+        public const int KatanaNew2Upper = 107;      // katana_new2_upper_effect.ani
     }
 }

@@ -28,10 +28,12 @@ namespace ET
             // 不算空中会被误判成滑行——虽然小初速下一帧就落地，语义上仍是击飞）
             bool wasAirborne = unit.Position.y > FP.Zero || self.Velocity.y > FP.Zero;
             TSVector v = self.Velocity;
-            // 跳跃最高点：上升转下降（重力积分后过 0）→ 切下落段动画（切片注册的 JumpFall）
+            // 跳跃最高点：上升转下降（重力积分后过 0）→ 切下落段动画（切片注册的 JumpFall）。
+            // 在技中不切（空中连斩等空中攻击动画优先于跳跃姿态）
             bool jumpApex = self.IsJump && v.y > FP.Zero;
             v.y -= self.Gravity * dt;
-            if (jumpApex && v.y <= FP.Zero)
+            if (jumpApex && v.y <= FP.Zero
+                && unit.GetComponent<LSCastComponent>()?.GetActiveCast() == null)
             {
                 unit.GetComponent<LSAnimComponent>()?.Play(AnimId.JumpFall);
             }
@@ -46,10 +48,12 @@ namespace ET
                     self.Active = false;
                     if (self.IsJump)
                     {
-                        // 主动跳跃落地：动量清零回默认动画（无倒地/无硬直——与击飞落地链区分）
+                        // 主动跳跃落地：动量清零回默认动画（无倒地/无硬直——与击飞落地链区分）。
+                        // 在技中不抢动画（空中连斩落地收招由技能 OnEnd 管）
                         self.IsJump = false;
                         LSCombatComponent combatOk = unit.GetComponent<LSCombatComponent>();
-                        if (combatOk != null && combatOk.HitstunTimer <= 0)
+                        if (combatOk != null && combatOk.HitstunTimer <= 0
+                            && unit.GetComponent<LSCastComponent>()?.GetActiveCast() == null)
                         {
                             unit.GetComponent<LSAnimComponent>()?.Play(combatOk.DefaultAnimId);
                         }

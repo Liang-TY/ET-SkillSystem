@@ -33,6 +33,10 @@ namespace ET.Client
             else if (Input.GetKey(KeyCode.D)) button = 13;  // 三段斩（连段+前冲）
             else if (Input.GetKey(KeyCode.T)) button = 14;  // 连突刺（突刺+剑气弹）
             else if (Input.GetKey(KeyCode.F)) button = 15;  // 银光落刃（空中限定+落地冲击波）
+            else if (Input.GetKey(KeyCode.E)) button = 16;  // 崩山击（前跃多段下砸+冲击波）
+            else if (Input.GetKey(KeyCode.V)) button = 17;  // 裂波斩（上斩+波轮多段+终结）
+            else if (Input.GetKey(KeyCode.Q)) button = 18;  // 十字斩（两刀+血之十字+追击）
+            else if (Input.GetKey(KeyCode.A)) button = 19;  // 里·鬼剑术（太刀4段连击）
             else if (Input.GetKey(KeyCode.C)) button = 16;  // 起跳（非技能，LSInputComponentSystem 消费）
             else if (Input.GetKey(KeyCode.R)) button = 7;   // 调试：回出生点（位移出界救援，方案3）
 
