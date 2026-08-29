@@ -33,7 +33,7 @@ namespace ET
 
         // ---- 移动 ----
         /// <summary>移动速度（单位/s）。.mob [move speed] 1000 → demo 换算 4（玩家 6，怪追不上玩家）</summary>
-        public virtual FP MoveSpeed => 2;
+        public virtual FP MoveSpeed => 1;
 
         /// <summary>移动动画（循环）</summary>
         public virtual int MoveAnimId => AnimId.Walk;
@@ -43,10 +43,10 @@ namespace ET
 
         // ---- 决策节奏 ----
         /// <summary>行为重估节流 ms（行为机调度周期）</summary>
-        public virtual int ThinkIntervalMs => 1000;
+        public virtual int ThinkIntervalMs => 3000;
 
         /// <summary>两次出手最小间隔 ms。.mob [attack delay] 800</summary>
-        public virtual int AttackIntervalMs => 2000;
+        public virtual int AttackIntervalMs => 4000;
 
         // ---- 近战选招池（attack kind 权重列直译）----
         /// <summary>近战技能池（static readonly 数组防 GC）</summary>
