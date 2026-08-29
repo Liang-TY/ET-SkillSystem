@@ -1,0 +1,11 @@
+id: "0048"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T16:20:00+08:00
+timeout_sec: 600
+notes: >
+  第 2 批 5 技 + 霸体框架 + 分段反应（PhaseHitReaction）。改了 skill Model/Hotfix/Runtime +
+  lockstep Hotfix/HotfixView + 内容层 10 文件。compile_check 通过后照旧：
+  ① menu "ET/Loader/Compile"（F6，本批动了 Model 层实体字段必须重建）
+  ② menu "ET/Skill/Compile"，验证 SkillCompile.log 0 错误 + 两 DLL 时间戳刷新。
+  基点见 ref 最新提交（e0da4bf56）。
