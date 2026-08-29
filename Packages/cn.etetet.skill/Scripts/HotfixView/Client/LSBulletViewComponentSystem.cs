@@ -102,6 +102,9 @@ namespace ET.Client
             // 复用 Unit2D 预制体（同单位渲染层级与摆位补偿），只换 sprite
             GameObject go = UnityEngine.Object.Instantiate(self.Prefab, globalComponent.Unit, true);
             go.name = "Bullet";
+            // 朝向翻根 GO（单位同款口径）：所有层图像+摆位一体镜像——只翻 renderer 会让
+            // imagePos 摆位不跟随（连突刺剑气面左仍画右边的坑）
+            go.transform.localScale = bullet.Direction.x >= 0 ? Vector3.one : new Vector3(-1f, 1f, 1f);
             SpriteRenderer renderer = go.GetComponentInChildren<SpriteRenderer>();
             renderer.sortingOrder = 10;   // 单位之上
 
@@ -133,7 +136,8 @@ namespace ET.Client
         }
 
         /// <summary>渲染时间自推帧：按 clip 的 delay 换帧，播完停末帧（非循环——波扩散后保持）；
-        /// 摆位同单位：imagePos+锚点修正，面左镜像（绕弹心）</summary>
+        /// 摆位同单位绝对摆位（chain 用 localPosition——不受根 GO 翻转影响；像素对齐同单位）。
+        /// 朝向镜像在 CreateView 翻根 GO（图像+摆位一体），此处不重复处理。</summary>
         private static void AdvanceFrame(BulletViewInfo info, LSAnimResComponent res, float dt)
         {
             AnimClipData clip = AnimConfigRegistry.Get(info.AnimId);
@@ -153,17 +157,16 @@ namespace ET.Client
             Sprite sprite = res?.GetSprite(frame.image.path, frame.image.index);
             info.Renderer.sprite = sprite;   // 空路径帧 sprite=null（隐形占位）
 
-            // §2.1 绝对摆位公式（与单位同款）：local = 内容真实中心 − prefab 中间层偏移（运行时自标定）
+            // §2.1 绝对摆位（与单位 LSSpriteAnimView 同款）：local = 内容中心 − 中间层链（localPosition）
             Vector2 center = res?.GetFrameCenter(frame.image.path, frame.image.index) ?? Vector2.zero;
             Transform parentT = info.Renderer.transform.parent;
-            Vector3 chain = parentT != null ? parentT.position - info.Go.transform.position : Vector3.zero;
-            info.Renderer.transform.localPosition = new Vector3(
-                (frame.imagePos.x + center.x) / 100f - chain.x,
-                -(frame.imagePos.y + center.y) / 100f - chain.y,
-                0f);
-            info.Renderer.transform.localScale = info.FaceRight
-                ? Vector3.one
-                : new Vector3(-1, 1, 1);   // 面左：绕弹心镜像
+            Vector3 chain = parentT != null && parentT != info.Go.transform
+                ? parentT.localPosition
+                : Vector3.zero;
+            // 像素对齐（同单位）：center 奇宽带 .5px，随换帧翻转 → snap 整像素
+            float offX = Mathf.Round(frame.imagePos.x + center.x) / 100f;
+            float offY = Mathf.Round(frame.imagePos.y + center.y) / 100f;
+            info.Renderer.transform.localPosition = new Vector3(offX - chain.x, -offY - chain.y, 0f);
 
             // 帧级效果：LINEARDODGE 加法混合 + RGBA 染色（LSAnimOverlayUtil 共享实现）
             LSAnimOverlayUtil.ApplyFrameEffects(info.Renderer, info.OriginalMaterial, frame, res);
