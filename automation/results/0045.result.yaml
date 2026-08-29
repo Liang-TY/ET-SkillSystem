@@ -1,0 +1,35 @@
+# automation/results/0045.result.yaml
+id: "0045"
+status: failed
+reason: compile_error
+base: 6f9e7423c
+created: 2026-08-29T15:15:00+08:00
+message: |
+  compile_check 失败：2 个 CS1503，全部在调参提交 6f9e7423c 新增的剑气弹 ViewOffset
+  视图补偿代码（HotfixView 层 LSBulletViewComponentSystem.cs），与后续 F6/内容编译无关，
+  未执行第 ②③ 步。基点 origin/et9lockStepYIUISeqFrameAniTestDev @ 6f9e7423c。
+
+  根因：BulletDefinition.ViewOffset 为逻辑层类型 TSVector（FP 分量），内容层 ThrustBeamBullet
+  覆写为 TSVector 值 ✓ 无问题；但 HotfixView 层用它构造 Unity 的 Vector2(float,float) 时
+  直接传 def.ViewOffset.x / def.ViewOffset.y（FP），缺 (float) 强转 → CS1503。
+  注：同文件 82 行用 (float)bullet.Position.x 已有正确写法可参考。
+
+  修法参考（主 AI 侧，未改任何代码）：Vector2 构造两参数补 (float) 强转：
+    ViewOffset = new Vector2(
+        (float)def.ViewOffset.x * (bullet.Direction.x >= 0 ? 1f : -1f),
+        (float)def.ViewOffset.y),
+
+  验证真实性：recompile 真实触发（compiling → completed, failed:true），recompile_status
+  errors 2 条与本次回传一致。编译程序集：ET.HotfixView（cn.etetet.skill）。
+build:
+  errors:
+    - file: Packages/cn.etetet.skill/Scripts/HotfixView/Client/LSBulletViewComponentSystem.cs
+      line: 120
+      type: CS1503
+      message: "Argument 1: cannot convert from 'TrueSync.FP' to 'float'（Vector2 首参 def.ViewOffset.x 缺 (float) 强转）"
+    - file: Packages/cn.etetet.skill/Scripts/HotfixView/Client/LSBulletViewComponentSystem.cs
+      line: 121
+      type: CS1503
+      message: "Argument 2: cannot convert from 'TrueSync.FP' to 'float'（Vector2 次参 def.ViewOffset.y 缺 (float) 强转）"
+log_tail:
+  - 'recompile_status: {"status":"completed","failed":true,"errors":2条}'
