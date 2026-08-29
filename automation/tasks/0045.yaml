@@ -1,0 +1,11 @@
+id: "0045"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T03:05:00+08:00
+timeout_sec: 600
+notes: >
+  调参单：剑气弹 ViewOffset 视图补偿 + 跳跃降速（改了 skill/Runtime + lockstep Hotfix +
+  内容层 ThrustBeamBullet）。标准 compile_check（refresh+recompile+status）通过后，
+  顺序补两步：① menu "ET/Loader/Compile"（F6 重建热更 DLL）② menu "ET/Skill/Compile"
+  （内容 DLL），验证 Temp/SkillCompile.log 0 错误 + 两个 DLL 时间戳刷新。
+  基点见 ref 最新提交。
