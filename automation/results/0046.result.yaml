@@ -1,0 +1,23 @@
+# automation/results/0046.result.yaml
+id: "0046"
+status: done
+base: e571308a2
+created: 2026-08-29T15:26:00+08:00
+message: |
+  0045 修复复验通过，compile_check + F6 + 内容编译三步全过。
+
+  ① compile_check：recompile → completed, failed:false, errors:[]（修复提交 e571308a2
+     的 (float) 强转×2 生效，0045 的 2 个 CS1503 消失）。
+  ② F6（menu ET/Loader/Compile）：ET.Skill.dll 刷新 14:43→15:21:56（含修复后热更代码）。
+  ③ 内容编译（menu ET/Skill/Compile）：Temp/SkillCompile.log 0 错误（1 警告 MSB3277
+     System.IO.Compression 版本冲突提示，非阻塞），构建 1.28s 增量；
+     ET.SkillContent.dll.bytes 刷新 14:43→15:24:14（晚于本单开始 15:21:35）。
+  .bytes 未入库（gitignore，仅本地验证）。
+
+  说明：F6 菜单首次调用报瞬时网络错误，重试一次成功执行（编辑器就绪态正常）。
+  基点 6f9e7423c（调参提交）→ e571308a2（修复提交）编译链闭环。
+build:
+  errors: []
+log_tail:
+  - "0 个错误  1 个警告"
+  - "已用时间 00:00:01.28（增量编译）"
