@@ -29,6 +29,9 @@ namespace ET
 
         public long GetCasterId() => caster.Id;
 
+        /// <summary>施法者本体（接触检测用：CheckHit(自己, 敌人)——破军冲撞撞敌停驻等）</summary>
+        public LSUnit GetCaster() => caster;
+
         /// <summary>施法者是否在空中（y > 0；跳跃/被击飞浮空段；贴地滑行不算——y=0）</summary>
         public bool IsCasterAirborne() => caster.Position.y > FP.Zero;
 

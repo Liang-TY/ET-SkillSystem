@@ -1,0 +1,168 @@
+{
+  "loop": false,
+  "frameMax": 7,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -162,
+        "y": -81
+      },
+      "delay": 100
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/b-01.img",
+        "pathLegacy": "b-01.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -162,
+        "y": -81
+      },
+      "delay": 50,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -42,
+            "y": -18,
+            "z": -22
+          },
+          "max": {
+            "x": 82,
+            "y": 36,
+            "z": 38
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/b-01.img",
+        "pathLegacy": "b-01.img",
+        "index": 1
+      },
+      "imagePos": {
+        "x": -162,
+        "y": -81
+      },
+      "delay": 50,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -107,
+            "y": -24,
+            "z": -54
+          },
+          "max": {
+            "x": 220,
+            "y": 43,
+            "z": 86
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/b-01.img",
+        "pathLegacy": "b-01.img",
+        "index": 2
+      },
+      "imagePos": {
+        "x": -162,
+        "y": -81
+      },
+      "delay": 50,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -129,
+            "y": -26,
+            "z": -60
+          },
+          "max": {
+            "x": 254,
+            "y": 50,
+            "z": 103
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/b-01.img",
+        "pathLegacy": "b-01.img",
+        "index": 3
+      },
+      "imagePos": {
+        "x": -162,
+        "y": -81
+      },
+      "delay": 50,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -128,
+            "y": -26,
+            "z": -64
+          },
+          "max": {
+            "x": 248,
+            "y": 48,
+            "z": 115
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/b-01.img",
+        "pathLegacy": "b-01.img",
+        "index": 4
+      },
+      "imagePos": {
+        "x": -162,
+        "y": -81
+      },
+      "delay": 50,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -127,
+            "y": -24,
+            "z": -64
+          },
+          "max": {
+            "x": 254,
+            "y": 48,
+            "z": 116
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/b-01.img",
+        "pathLegacy": "b-01.img",
+        "index": 5
+      },
+      "imagePos": {
+        "x": -162,
+        "y": -81
+      },
+      "delay": 50
+    }
+  ],
+  "totalDuration": 400
+}

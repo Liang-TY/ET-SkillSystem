@@ -141,5 +141,39 @@ namespace ET
         public const int KatananewFx3m2 = 105;       // katananew_3-2.ani
         public const int KatanaNew2Under = 106;      // katana_new2_under_effect.ani
         public const int KatanaNew2Upper = 107;      // katana_new2_upper_effect.ani
+
+        // 第 3 批（2026-08-29，108+）
+        public const int SwordmanMoonlightSlash1 = 108;  // moonlightslash1.ani（月光段1 620ms，F2/F3 自带盒）
+        public const int SwordmanMoonlightSlash2 = 109;  // moonlightslash2.ani（段2 单手上挑 620ms，F0/F1 自带盒）
+        public const int SwordmanMoonlightSlashFull = 110; // moonlightslashfull.ani（段3 满月 550ms，F1-F5 自带盒）
+        public const int MoonlightSlashFx1 = 111;    // effect moonlightslash1.ani（月牙斩光 overlay）
+        public const int MoonlightSlashFx2 = 112;    // effect moonlightslash2.ani
+        public const int MoonlightSlashFxFull = 113; // effect moonlightslashfull.ani（满月）
+        public const int SwordmanWaveCast = 114;     // wave.ani 切片 F1-F8（邪光斩施法挥手 500ms，DNF 借用同款）
+        public const int GrandWaveWheel = 115;       // PO grandwave_light_grandwave2.ani（波体 loop 320ms）
+        public const int GrandWaveFx = 116;          // effect grandwave.ani（挥剑特效 overlay）
+        public const int SwordmanMomentarySlash = 117; // momentaryslash.ani（拔刀斩 12帧1055ms，F0=500 蓄势）
+        public const int MomentarySlashWave = 118;   // PO start.ani（拔刀波，F0 悬停已钳 200ms→480ms）
+        public const int MomentarySlashWaveB = 119;  // PO startb.ani（拔刀波叠层）
+        public const int SwordmanChargeCrashDash = 120;  // ChargeCrashDash.ani（冲撞 350ms，全帧自带盒）
+        public const int SwordmanChargeCrashUpper = 121; // ChargeCrashUpper.ani（上挑 340ms，F2/F3 自带盒）
+        public const int ChargeCrashUpSlash = 122;   // effect up-slash.ani（上挑弧光，Area 视觉）
+        public const int ChargeCrashSubBack = 123;   // PO damage-back.ani（溅射背层，未用预留）
+        public const int BlastBloodPre = 124;        // blastbloodpresub_back.ani（怒气前段 400ms）
+        public const int BlastBloodPreFront = 125;   // blastbloodpresub_front.ani（前段前景层）
+        public const int BlastBlood1 = 126;          // blastblood1.ani（血柱主层 2200ms，.als 挂 blood1-8）
+        public const int BlastBloodCore = 127;       // blastbloodsub.ani（内圈宽柱 2160ms）
+        public const int BlastBloodBlood1 = 128;     // BlastBlood/blood1~8.ani（.als 血柱 8 层）
+        public const int BlastBloodBlood2 = 129;
+        public const int BlastBloodBlood3 = 130;
+        public const int BlastBloodBlood4 = 131;
+        public const int BlastBloodBlood5 = 132;
+        public const int BlastBloodBlood6 = 133;
+        public const int BlastBloodBlood7 = 134;
+        public const int BlastBloodBlood8 = 135;
+        public const int BlastBloodFloorOver = 136;  // BlastBlood/floor_over.ani
+        public const int BlastBloodLight = 137;      // BlastBlood/blast_blood_light.ani
+        public const int GrandWaveLight = 138;       // PO grandwave light 层（波体 als 叠层）
+        public const int GrandWaveLight1 = 139;      // PO grandwave light1 层
     }
 }

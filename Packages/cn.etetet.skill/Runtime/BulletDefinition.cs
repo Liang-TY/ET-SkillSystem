@@ -18,7 +18,8 @@ namespace ET
     {
         public const int NormalWave = 1;   // 地裂·波动剑（穿透地波，命中伤害+硬直）
         public const int IceBreath = 2;    // 冰息弹（班图女战士冰雾，穿透+10% 冰冻）
-        public const int ThrustBeam = 3;   // 连突刺激光剑气（贴身不飞行穿透短命弹）
+        public const int ThrustBeam = 3;   // 连突刺激光剑气（贴身不飞行���透短命弹）
+        public const int GrandWave = 4;    // 邪光斩慢速爬行波（穿透+350ms 多段重置）
     }
 
     /// <summary>
@@ -57,6 +58,10 @@ namespace ET
         /// <summary>视图摆位补偿（面右为正，视图层按朝向镜像）：逻辑碰撞中心与 DNF PO 原点不重合时，
         /// 把视觉锚回 PO 原点——DNF 的 PO 贴图 imagePos 以自身原点为锚，GO 偏到碰撞中心会双重偏移</summary>
         public virtual TSVector ViewOffset => TSVector.zero;
+
+        /// <summary>多段命中重置间隔 ms（DNF resetHitObjectList/setTimeEvent 同构：0=单跳不去重重置；
+        /// >0 时弹体每 interval 清空 HitTargets，同目标可再结算——邪光斩 350ms ×3 跳首个用例）</summary>
+        public virtual int HitResetIntervalMs => 0;
 
         /// <summary>视图动画 id（视图层按此查 clip 自推帧；逻辑不消费。属性名避开 AnimId 类型名）</summary>
         public virtual int ViewAnimId => AnimId.None;

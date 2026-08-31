@@ -1,0 +1,9 @@
+{
+  "overlays": [
+    {
+      "startFrame": 0,
+      "z": 10001,
+      "effectAni": "grandwavefx"
+    }
+  ]
+}

@@ -39,6 +39,11 @@ namespace ET.Client
             else if (Input.GetKey(KeyCode.A)) button = 19;  // 里·鬼剑术（太刀4段连击）
             else if (Input.GetKey(KeyCode.C)) button = 16;  // 起跳（非技能，LSInputComponentSystem 消费）
             else if (Input.GetKey(KeyCode.R)) button = 7;   // 调试：回出生点（位移出界救援，方案3）
+            else if (Input.GetKey(KeyCode.Alpha1)) button = 20; // 月光斩（三段自动连段）
+            else if (Input.GetKey(KeyCode.Alpha2)) button = 21; // 邪光斩（慢速爬行多段波）
+            else if (Input.GetKey(KeyCode.Alpha3)) button = 22; // 拔刀斩（蓄势大范围一击）
+            else if (Input.GetKey(KeyCode.Alpha4)) button = 23; // 破军升龙击（冲撞+上挑）
+            else if (Input.GetKey(KeyCode.Alpha5)) button = 24; // 怒气爆发（中心8段血柱）
 
             LSClientUpdater lsClientUpdater = self.GetParent<Room>().GetComponent<LSClientUpdater>();
             lsClientUpdater.Input.V = v.normalized;

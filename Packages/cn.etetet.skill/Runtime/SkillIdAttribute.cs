@@ -33,6 +33,11 @@ namespace ET
         public const int VaneSlash = 17;        // 裂波斩（V 键，上斩+波轮多段+终结）
         public const int GoreCross = 18;        // 十字斩（Q 键，两刀+血之十字+追击）
         public const int WeaponCombo = 19;      // 里·鬼剑术（A 键，太刀4段连击）
+        public const int MoonlightSlash = 20;   // 月光斩（数字1，三段自动连段）
+        public const int GrandWave = 21;        // 邪光斩（数字2，慢速爬行多段波）
+        public const int MomentarySlash = 22;   // 拔刀斩（数字3，蓄势大范围一击）
+        public const int ChargeCrash = 23;      // 破军升龙击（数字4，冲撞撞敌停驻+上挑）
+        public const int BloodBlast = 24;       // 怒气爆发（数字5，中心8段血柱）
 
         /// <summary>按键值 → 技能槽位映射（16=起跳，非技能，不进本表）</summary>
         public static bool ButtonToSkill(int button, out int skillId)
@@ -52,6 +57,11 @@ namespace ET
                 case 17: skillId = VaneSlash; return true;
                 case 18: skillId = GoreCross; return true;
                 case 19: skillId = WeaponCombo; return true;
+                case 20: skillId = MoonlightSlash; return true;
+                case 21: skillId = GrandWave; return true;
+                case 22: skillId = MomentarySlash; return true;
+                case 23: skillId = ChargeCrash; return true;
+                case 24: skillId = BloodBlast; return true;
                 default: skillId = 0; return false;
             }
         }

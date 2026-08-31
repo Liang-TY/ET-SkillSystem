@@ -1,0 +1,176 @@
+{
+  "loop": false,
+  "frameMax": 13,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 8,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 9,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 10,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 11,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/blood-back.img",
+        "pathLegacy": "blood-back.img",
+        "index": 10
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    },
+    {
+      "index": 12,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -402
+      },
+      "delay": 100
+    }
+  ],
+  "totalDuration": 1300
+}

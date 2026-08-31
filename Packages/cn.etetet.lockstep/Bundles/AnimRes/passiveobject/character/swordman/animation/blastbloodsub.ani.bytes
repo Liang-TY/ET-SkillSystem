@@ -1,0 +1,150 @@
+{
+  "loop": false,
+  "frameMax": 5,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -131,
+        "y": -365
+      },
+      "delay": 1120
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -131,
+        "y": -365
+      },
+      "delay": 80,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -73,
+            "y": -50,
+            "z": 0
+          },
+          "max": {
+            "x": 146,
+            "y": 100,
+            "z": 330
+          }
+        },
+        {
+          "min": {
+            "x": -110,
+            "y": -33,
+            "z": 0
+          },
+          "max": {
+            "x": 220,
+            "y": 66,
+            "z": 330
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -131,
+        "y": -365
+      },
+      "delay": 80,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -73,
+            "y": -50,
+            "z": 0
+          },
+          "max": {
+            "x": 146,
+            "y": 100,
+            "z": 330
+          }
+        },
+        {
+          "min": {
+            "x": -110,
+            "y": -33,
+            "z": 0
+          },
+          "max": {
+            "x": 220,
+            "y": 66,
+            "z": 330
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -131,
+        "y": -365
+      },
+      "delay": 80,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -73,
+            "y": -50,
+            "z": 0
+          },
+          "max": {
+            "x": 146,
+            "y": 100,
+            "z": 330
+          }
+        },
+        {
+          "min": {
+            "x": -110,
+            "y": -33,
+            "z": 0
+          },
+          "max": {
+            "x": 220,
+            "y": 66,
+            "z": 330
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -131,
+        "y": -365
+      },
+      "delay": 800
+    }
+  ],
+  "totalDuration": 2160
+}

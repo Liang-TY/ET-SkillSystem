@@ -32,5 +32,9 @@ namespace ET
         // 已命中单位（防同一目标反复结算；穿透弹跨帧去重）
         [MemoryPackOrder(5)]
         public HashSet<long> HitTargets = new();
+
+        // 多段重置计时（def.HitResetIntervalMs > 0 时启用；到点清 HitTargets=DNF resetHitObjectList）
+        [MemoryPackOrder(6)]
+        public int HitResetTimer;
     }
 }

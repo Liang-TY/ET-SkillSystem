@@ -25,6 +25,11 @@ namespace ET
         public const int GoreCrossCross = 8;     // 血之十字相位1（升起+出血）
         public const int GoreCrossBurst = 9;     // 血之十字相位2（三联爆发击倒）
         public const int GoreCrossFinish = 10;   // 十字斩强力追击（输入窗口触发）
+        public const int MomentarySlashWave = 11; // 拔刀斩大波（纯视觉区）
+        public const int ChargeCrashUpper = 12;  // 破军上挑（Ly400 浮空挑起）
+        public const int BloodBlastPre = 13;     // 怒气前段（先手浮空 Ly400）
+        public const int BloodBlastOuter = 14;   // 怒气外圈（Tick450×4 段）
+        public const int BloodBlastCore = 15;    // 怒气内圈（中心双倍=与外圈叠加）
     }
 
     /// <summary>

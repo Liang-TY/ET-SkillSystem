@@ -1,0 +1,16 @@
+{
+  "overlays": [
+    {
+      "startFrame": 0,
+      "z": 10001,
+      "effectAni": "light_GrandWave1",
+      "effectAniPath": "sprite/grandwave_light_grandwave1.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 10002,
+      "effectAni": "light_GrandWave_light",
+      "effectAniPath": "sprite/grandwave_light_grandwave_light.ani"
+    }
+  ]
+}

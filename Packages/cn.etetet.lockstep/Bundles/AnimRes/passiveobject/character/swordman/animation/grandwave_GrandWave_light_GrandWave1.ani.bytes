@@ -1,0 +1,415 @@
+{
+  "loop": true,
+  "frameMax": 8,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "sprite/character/swordman/effect/grandwave.img",
+        "pathLegacy": "GRANDWAVE.IMG",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -257,
+        "y": -242
+      },
+      "delay": 40,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -63,
+            "y": -25,
+            "z": 1
+          },
+          "max": {
+            "x": 62,
+            "y": 50,
+            "z": 31
+          }
+        },
+        {
+          "min": {
+            "x": -74,
+            "y": -25,
+            "z": 49
+          },
+          "max": {
+            "x": 84,
+            "y": 50,
+            "z": 84
+          }
+        },
+        {
+          "min": {
+            "x": -7,
+            "y": -25,
+            "z": 31
+          },
+          "max": {
+            "x": 55,
+            "y": 50,
+            "z": 69
+          }
+        }
+      ]
+    }
+  ],
+  "totalDuration": 320
+}

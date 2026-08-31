@@ -1,0 +1,254 @@
+{
+  "loop": false,
+  "frameMax": 19,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 8,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 9,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 10,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 11,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/bloodred.img",
+        "pathLegacy": "bloodred.img",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 12,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/bloodred.img",
+        "pathLegacy": "bloodred.img",
+        "index": 6
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 13,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/bloodred.img",
+        "pathLegacy": "bloodred.img",
+        "index": 7
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 14,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/bloodred.img",
+        "pathLegacy": "bloodred.img",
+        "index": 8
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 15,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/bloodred.img",
+        "pathLegacy": "bloodred.img",
+        "index": 9
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 16,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/bloodred.img",
+        "pathLegacy": "bloodred.img",
+        "index": 10
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 17,
+      "image": {
+        "path": "sprite/character/swordman/effect/blastblood/bloodred.img",
+        "pathLegacy": "bloodred.img",
+        "index": 11
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    },
+    {
+      "index": 18,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -369,
+        "y": -464
+      },
+      "delay": 100
+    }
+  ],
+  "totalDuration": 1900
+}

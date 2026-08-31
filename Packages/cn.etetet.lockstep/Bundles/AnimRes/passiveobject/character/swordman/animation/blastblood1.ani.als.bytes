@@ -1,0 +1,64 @@
+{
+  "overlays": [
+    {
+      "startFrame": 0,
+      "z": 18,
+      "effectAni": "blood1",
+      "effectAniPath": "sprite/blastblood/blood1.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 17,
+      "effectAni": "blood2",
+      "effectAniPath": "sprite/blastblood/blood2.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 16,
+      "effectAni": "blood3",
+      "effectAniPath": "sprite/blastblood/blood3.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 15,
+      "effectAni": "blood4",
+      "effectAniPath": "sprite/blastblood/blood4.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 14,
+      "effectAni": "blood5",
+      "effectAniPath": "sprite/blastblood/blood5.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 13,
+      "effectAni": "blood6",
+      "effectAniPath": "sprite/blastblood/blood6.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 12,
+      "effectAni": "blood7",
+      "effectAniPath": "sprite/blastblood/blood7.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 11,
+      "effectAni": "blood8",
+      "effectAniPath": "sprite/blastblood/blood8.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 20,
+      "effectAni": "floor_over",
+      "effectAniPath": "sprite/blastblood/floor_over.ani"
+    },
+    {
+      "startFrame": 0,
+      "z": 30,
+      "effectAni": "blast_blood_light",
+      "effectAniPath": "sprite/blastblood/blast_blood_light.ani"
+    }
+  ]
+}

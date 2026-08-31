@@ -41,6 +41,7 @@ namespace ET
                               + new TSVector(bullet.Direction.x * def.SpawnOffset.x, FP.Zero, FP.Zero)
                               + new TSVector(FP.Zero, def.SpawnOffset.y, def.SpawnOffset.z);
             bullet.RemainingMs = def.TotalTimeMs;
+            bullet.HitResetTimer = def.HitResetIntervalMs;
             Log.Info($"[Bullet] unit{caster.Id} 发射 {def.GetType().Name} @ {bullet.Position}");
             return bullet;
         }
@@ -63,6 +64,17 @@ namespace ET
             {
                 self.Dispose();
                 return;
+            }
+
+            // 1.5) 多段重置（DNF setTimeEvent + resetHitObjectList 同构）：到点清命中表，同目标可再结算
+            if (def.HitResetIntervalMs > 0)
+            {
+                self.HitResetTimer -= LSConstValue.UpdateInterval;
+                if (self.HitResetTimer <= 0)
+                {
+                    self.HitResetTimer = def.HitResetIntervalMs;
+                    if (self.HitTargets.Count > 0) self.HitTargets.Clear();
+                }
             }
 
             // 2) 飞行（先判碰撞再移动：出生帧身前的盒就能命中贴脸目标）

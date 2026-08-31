@@ -168,6 +168,83 @@ namespace ET.Client
             };
             await RegisterOverlay(resLoader, $"{A}/weaponcomboblade4.ani.als", AnimId.SwordmanWeaponComboBlade4, blade4Alias);
 
+            // ---- 第 3 批（2026-08-29）----
+
+            // 月光斩（三段 json 自带盒 → 帧驱动；月牙/满月斩光手组装 overlay）
+            await RegisterOne(resLoader, $"{A}/moonlightslash1.ani", AnimId.SwordmanMoonlightSlash1);
+            await RegisterOne(resLoader, $"{A}/moonlightslash2.ani", AnimId.SwordmanMoonlightSlash2);
+            await RegisterOne(resLoader, $"{A}/moonlightslashfull.ani", AnimId.SwordmanMoonlightSlashFull);
+            string mf = "character/swordman/effect/animation";
+            await RegisterOne(resLoader, $"{mf}/moonlightslashfx1.ani", AnimId.MoonlightSlashFx1);
+            await RegisterOne(resLoader, $"{mf}/moonlightslashfx2.ani", AnimId.MoonlightSlashFx2);
+            await RegisterOne(resLoader, $"{mf}/moonlightslashfxfull.ani", AnimId.MoonlightSlashFxFull);
+            await RegisterOverlay(resLoader, $"{A}/moonlightslash1_overlay.json", AnimId.SwordmanMoonlightSlash1,
+                new Dictionary<string, int> { ["moonlightfx1"] = AnimId.MoonlightSlashFx1 });
+            await RegisterOverlay(resLoader, $"{A}/moonlightslash2_overlay.json", AnimId.SwordmanMoonlightSlash2,
+                new Dictionary<string, int> { ["moonlightfx2"] = AnimId.MoonlightSlashFx2 });
+            await RegisterOverlay(resLoader, $"{A}/moonlightslashfull_overlay.json", AnimId.SwordmanMoonlightSlashFull,
+                new Dictionary<string, int> { ["moonlightfxfull"] = AnimId.MoonlightSlashFxFull });
+
+            // 邪光斩（施法 = wave.ani 切片 F1-F8，DNF 引擎借用同款；波体 PO loop + 挥剑特效 overlay）
+            await RegisterSliced(resLoader, $"{A}/wave.ani", new (int start, int end, int animId)[]
+            {
+                (1, 8, AnimId.SwordmanWaveCast),   // F1-F8 挥剑 500ms（F0 10000ms 蓄势哨兵帧丢弃）
+            });
+            await RegisterOne(resLoader, $"{P}/grandwavewheel.ani", AnimId.GrandWaveWheel);
+            await RegisterOne(resLoader, $"{P}/grandwave_GrandWave_light_GrandWave_light.ani", AnimId.GrandWaveLight);
+            await RegisterOne(resLoader, $"{P}/grandwave_GrandWave_light_GrandWave1.ani", AnimId.GrandWaveLight1);
+            await RegisterOverlay(resLoader, $"{P}/grandwavewheel.ani.als", AnimId.GrandWaveWheel,
+                new Dictionary<string, int>
+                {
+                    ["light_GrandWave1"] = AnimId.GrandWaveLight1,
+                    ["light_GrandWave_light"] = AnimId.GrandWaveLight,
+                });
+            await RegisterOne(resLoader, $"{mf}/grandwavefx.ani", AnimId.GrandWaveFx);
+            await RegisterOverlay(resLoader, $"{A}/wave_overlay.json", AnimId.SwordmanWaveCast,
+                new Dictionary<string, int> { ["grandwavefx"] = AnimId.GrandWaveFx });
+
+            // 拔刀斩（F0=500 蓄势原帧直用；大波视觉区）
+            await RegisterOne(resLoader, $"{A}/momentaryslash.ani", AnimId.SwordmanMomentarySlash);
+            await RegisterOne(resLoader, $"{P}/momentaryslashwave.ani", AnimId.MomentarySlashWave);
+            await RegisterOne(resLoader, $"{P}/momentaryslashwaveb.ani", AnimId.MomentarySlashWaveB);
+
+            // 破军升龙击（冲撞/上挑 json 自带盒；上挑弧光 = 上挑区视觉）
+            await RegisterOne(resLoader, $"{A}/chargecrashdash.ani", AnimId.SwordmanChargeCrashDash);
+            await RegisterOne(resLoader, $"{A}/chargecrashupper.ani", AnimId.SwordmanChargeCrashUpper);
+            await RegisterOne(resLoader, $"{mf}/chargecrashupslash.ani", AnimId.ChargeCrashUpSlash);
+            await RegisterOne(resLoader, $"{P}/chargecrashsubback.ani", AnimId.ChargeCrashSubBack);
+
+            // 怒气爆发（血柱全套：前段 + 主血柱 .als 挂 blood1-8 + 内圈宽柱）
+            await RegisterOne(resLoader, $"{P}/blastbloodpresubback.ani", AnimId.BlastBloodPre);
+            await RegisterOne(resLoader, $"{P}/blastbloodpresubfront.ani", AnimId.BlastBloodPreFront);
+            await RegisterOne(resLoader, $"{P}/blastblood1.ani", AnimId.BlastBlood1);
+            await RegisterOne(resLoader, $"{P}/blastbloodsub.ani", AnimId.BlastBloodCore);
+            string bb = "passiveobject/character/swordman/animation";
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood1.ani", AnimId.BlastBloodBlood1);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood2.ani", AnimId.BlastBloodBlood2);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood3.ani", AnimId.BlastBloodBlood3);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood4.ani", AnimId.BlastBloodBlood4);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood5.ani", AnimId.BlastBloodBlood5);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood6.ani", AnimId.BlastBloodBlood6);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood7.ani", AnimId.BlastBloodBlood7);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blood8.ani", AnimId.BlastBloodBlood8);
+            await RegisterOne(resLoader, $"{bb}/blastblood_floor_over.ani", AnimId.BlastBloodFloorOver);
+            await RegisterOne(resLoader, $"{bb}/blastblood_blast_blood_light.ani", AnimId.BlastBloodLight);
+            Dictionary<string, int> blastBloodAlias = new()
+            {
+                ["blood1"] = AnimId.BlastBloodBlood1,
+                ["blood2"] = AnimId.BlastBloodBlood2,
+                ["blood3"] = AnimId.BlastBloodBlood3,
+                ["blood4"] = AnimId.BlastBloodBlood4,
+                ["blood5"] = AnimId.BlastBloodBlood5,
+                ["blood6"] = AnimId.BlastBloodBlood6,
+                ["blood7"] = AnimId.BlastBloodBlood7,
+                ["blood8"] = AnimId.BlastBloodBlood8,
+                ["floor_over"] = AnimId.BlastBloodFloorOver,
+                ["blast_blood_light"] = AnimId.BlastBloodLight,
+            };
+            await RegisterOverlay(resLoader, $"{P}/blastblood1.ani.als", AnimId.BlastBlood1, blastBloodAlias);
+
             // 鬼斩刀光特效 + overlay（手组装：无 .als，直接用 .ani 文件名做别名）
             string ha = $"character/swordman/effect/animation/hardattack";
             await RegisterOne(resLoader, $"{ha}/hardattack1.ani", AnimId.HardAttackBlade1);

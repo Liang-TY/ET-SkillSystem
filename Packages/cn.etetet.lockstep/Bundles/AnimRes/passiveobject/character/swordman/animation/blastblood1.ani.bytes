@@ -1,0 +1,321 @@
+{
+  "loop": false,
+  "frameMax": 15,
+  "frames": [
+    {
+      "index": 0,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 1,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 2,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 3,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 4,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 5,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 6,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 7,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 8,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 9,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1
+    },
+    {
+      "index": 10,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -41,
+            "y": -77,
+            "z": 0
+          },
+          "max": {
+            "x": 80,
+            "y": 54,
+            "z": 330
+          }
+        },
+        {
+          "min": {
+            "x": -61,
+            "y": -68,
+            "z": 0
+          },
+          "max": {
+            "x": 120,
+            "y": 36,
+            "z": 330
+          }
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -41,
+            "y": -77,
+            "z": 0
+          },
+          "max": {
+            "x": 80,
+            "y": 54,
+            "z": 330
+          }
+        },
+        {
+          "min": {
+            "x": -61,
+            "y": -68,
+            "z": 0
+          },
+          "max": {
+            "x": 120,
+            "y": 36,
+            "z": 330
+          }
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -41,
+            "y": -77,
+            "z": 0
+          },
+          "max": {
+            "x": 80,
+            "y": 54,
+            "z": 330
+          }
+        },
+        {
+          "min": {
+            "x": -61,
+            "y": -68,
+            "z": 0
+          },
+          "max": {
+            "x": 120,
+            "y": 36,
+            "z": 330
+          }
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 100,
+      "graphicEffect": 1,
+      "attackBoxes": [
+        {
+          "min": {
+            "x": -41,
+            "y": -77,
+            "z": 0
+          },
+          "max": {
+            "x": 80,
+            "y": 54,
+            "z": 330
+          }
+        },
+        {
+          "min": {
+            "x": -61,
+            "y": -68,
+            "z": 0
+          },
+          "max": {
+            "x": 120,
+            "y": 36,
+            "z": 330
+          }
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "image": {
+        "path": "",
+        "pathLegacy": "",
+        "index": 0
+      },
+      "imagePos": {
+        "x": -345,
+        "y": -401
+      },
+      "delay": 800,
+      "graphicEffect": 1
+    }
+  ],
+  "totalDuration": 2200
+}
