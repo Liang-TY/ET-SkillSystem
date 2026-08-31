@@ -1,0 +1,69 @@
+# automation/results/0050.result.yaml
+id: "0050"
+status: failed
+reason: compile_error
+base: d8c667f2e
+created: 2026-08-31T11:39:37+08:00
+message: |
+  compile_check + F6 通过，但内容编译（步骤② ET/Skill/Compile）失败：
+  Temp/SkillCompile.log 报 8 个唯一错误（16 行，dotnet 行内+总结各重复一次），
+  涉及 2 个第 3 批技能文件。基点 origin/et9lockStepYIUISeqFrameAniTestDev @ d8c667f2e
+  （第3批5技+弹体多段重置）。
+
+  ① compile_check：recompile → up_to_date, failed:false, errors:[]（编辑器已随启动结算
+     编译过当前工作区）。
+  ② F6（menu ET/Loader/Compile）：5 件套热更 DLL 全部产出，ET.Model.dll/ET.Skill.dll
+     11:36:26、ET.Hotfix.dll/ET.HotfixView.dll 11:36:27（本单启动 11:34 后新建，之前
+     Temp/Bin/Debug 不存在）→ 框架/实体层编译干净，LSBullet.HitResetTimer（Model 层实体
+     字段）已生效。
+  ③ 内容编译（menu ET/Skill/Compile）：构建失败，ET.SkillContent.dll.bytes 未刷新
+     （仍 2026-08-29 17:39:04，本次失败未产出新 DLL）。
+
+  根因（两类，均未改任何代码）：
+  A. BloodBlastSkill.cs（怒气爆发）：文件**无任何 using 指令**，却用 `FP.Zero`
+     （18/19/20 行）→ CS0103 "FP 不在上下文"×3。与 0048 的 VaneSlash/GoreCross 同款
+     漏 `using TrueSync;`。修法：文件首行补 `using TrueSync;`。
+  B. ChargeCrashSkill.cs（破军升龙击）：53/55 行**直接使用 ET.Model 的 LSUnit 类型**
+     （`foreach (LSUnit enemy in ctx.GetEnemies())` + `ctx.CheckHit(ctx.GetCaster(), enemy)`）
+     → CS0246 "找不到 LSUnit" + CS0012 "LSUnit 在未引用的程序集 ET.Model 中定义"×4。
+     违反内容层铁律"不要在内容层碰 ET.Model 类型"（ET.SkillContent csproj 刻意不引用
+     ET.Model，只能走 SkillContext 门面）。修法（主 AI 侧定夺，参考）：在框架层
+     SkillContext 加门面方法（如 `bool AnyEnemyInDashBox()` 内部做 GetEnemies+CheckHit
+     循环，LSUnit 在框架层可见），ChargeCrash 改调门面，不在内容层声明 LSUnit；
+     或 GetEnemies 改返回内容层可引用类型。
+
+  其余第 3 批技能（月光斩/邪光斩/拔刀斩）编译通过，无缺 using 问题。
+build:
+  errors:
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/BloodBlastSkill.cs
+      line: 18
+      type: CS0103
+      message: "当前上下文中不存在名称 FP（缺 using TrueSync;）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/BloodBlastSkill.cs
+      line: 19
+      type: CS0103
+      message: "当前上下文中不存在名称 FP（缺 using TrueSync;）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/BloodBlastSkill.cs
+      line: 20
+      type: CS0103
+      message: "当前上下文中不存在名称 FP（缺 using TrueSync;）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/ChargeCrashSkill.cs
+      line: 53
+      type: CS0246
+      message: "找不到类型或命名空间名 LSUnit（内容层不引用 ET.Model）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/ChargeCrashSkill.cs
+      line: 53
+      type: CS0012
+      message: "类型 LSUnit 在未引用的程序集 ET.Model 中定义，必须添加对 ET.Model 的引用（走 SkillContext 门面替代）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/ChargeCrashSkill.cs
+      line: 55
+      type: CS0012
+      message: "类型 LSUnit 在未引用的程序集 ET.Model 中定义（ctx.GetCaster() 返回 LSUnit）"
+    - file: Packages/cn.etetet.skill/DotNet~/Skills/ChargeCrashSkill.cs
+      line: 55
+      type: CS0012
+      message: "类型 LSUnit 在未引用的程序集 ET.Model 中定义（ctx.CheckHit 参数）"
+log_tail:
+  - "error 行 16 条（去重后 8 条，dotnet 行内+总结重复）"
+  - "BloodBlastSkill.cs:18-20 CS0103 FP ×3；ChargeCrashSkill.cs:53/55 LSUnit CS0246/CS0012 ×5"
+  - "日志中文为双重编码乱码，错误码/文件/行号/类型名已逐条核对"
