@@ -1,0 +1,10 @@
+id: "0051"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-31T11:55:00+08:00
+timeout_sec: 600
+notes: >
+  0050 修复复验：BloodBlast 补 using TrueSync；ChargeCrash 撤 ET.Model 类型改
+  ctx.AnyEnemyHit() 门面（SkillContext 新增）。框架层变了（SkillContext）但 F6 已在
+  0050 重建且本次仅加方法——保险起见照旧：① menu "ET/Loader/Compile" ② menu "ET/Skill/Compile"，
+  验证 SkillCompile.log 0 错误 + 两 DLL 刷新。基点见 ref 最新提交。
