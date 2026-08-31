@@ -133,6 +133,17 @@ namespace ET
             return enemyBuf;
         }
 
+        /// <summary>任一敌人的受击盒与施法者当前攻击盒相交（接触检测：破军冲撞撞敌停驻等）。
+        /// 收拢在门面层——内容层禁碰 ET.Model 类型（LSUnit）</summary>
+        public bool AnyEnemyHit()
+        {
+            foreach (LSUnit enemy in GetEnemies())
+            {
+                if (CheckHit(caster, enemy)) return true;
+            }
+            return false;
+        }
+
         public bool CheckHit(LSUnit attacker, LSUnit target)
         {
             LSHitboxComponent atk = attacker.GetComponent<LSHitboxComponent>();

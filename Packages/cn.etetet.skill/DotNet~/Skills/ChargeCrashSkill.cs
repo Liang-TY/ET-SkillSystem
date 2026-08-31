@@ -48,13 +48,8 @@ namespace ET
             // 冲撞段：匀速前冲 + 撞敌即停
             if (sub == 0)
             {
-                // 撞敌停驻（帧驱动盒已激活——CheckHit 用当帧攻击盒 vs 受击盒）
-                bool crashed = false;
-                foreach (LSUnit enemy in ctx.GetEnemies())
-                {
-                    if (ctx.CheckHit(ctx.GetCaster(), enemy)) { crashed = true; break; }
-                }
-                if (crashed || elapsed >= DashMs)
+                // 撞敌停驻（帧驱动盒已激活——AnyEnemyHit 用当帧攻击盒 vs 受击盒）
+                if (ctx.AnyEnemyHit() || elapsed >= DashMs)
                 {
                     ctx.SetSubState(1);
                     ctx.SetPhase(elapsed);
