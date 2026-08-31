@@ -1,0 +1,27 @@
+# automation/results/0051.result.yaml
+id: "0051"
+status: done
+base: 9072d3029
+created: 2026-08-31T11:46:44+08:00
+message: |
+  0050 修复复验通过：compile_check + F6 + 内容编译三步全过，8 个内容层错误已消除。
+
+  ① compile_check：recompile → completed, failed:false, errors:[]（9072d3029 的
+     SkillContext 新增 AnyEnemyHit 门面 + 两技能文件修复编译通过）。
+  ② F6（menu ET/Loader/Compile）：ET.Skill.dll 刷新 11:36:26→11:46:29（框架层
+     SkillContext 加方法属 ET.Skill 程序集，增量只重建该层）；ET.Model.dll 保持 11:36:26
+     （无实体变更，符合预期）。
+  ③ 内容编译（menu ET/Skill/Compile）：Temp/SkillCompile.log 0 错误 0 警告（已用时间
+     00:00:01.37 增量）；ET.SkillContent.dll.bytes 刷新 2026-08-29 17:39:04 →
+     2026-08-31 11:46:41。
+
+  验证工作区基点 9072d3029 的修复：BloodBlastSkill.cs 首行已补 `using TrueSync;`
+  （18-20 行 FP.Zero 编译通过）；ChargeCrashSkill.cs 已撤 LSUnit，改用
+  `ctx.AnyEnemyHit()` 门面（框架层 SkillContext 新增，内容层不再碰 ET.Model 类型）。
+  .bytes 未入库（gitignore，仅本地验证）。
+build:
+  errors: []
+log_tail:
+  - "error 行 0 条，警告 0 条"
+  - "ET.SkillContent.dll.bytes mtime 11:46:41（基线 17:39:04 → 已刷新）"
+  - "ET.Skill.dll mtime 11:46:29（框架层刷新）；ET.Model.dll 保持 11:36:26"
