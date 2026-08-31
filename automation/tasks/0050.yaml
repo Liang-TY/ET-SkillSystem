@@ -1,0 +1,9 @@
+id: "0050"
+type: compile_check
+ref: et9lockStepYIUISeqFrameAniTestDev
+created: 2026-08-29T18:20:00+08:00
+timeout_sec: 600
+notes: >
+  第 3 批 5 技 + Bullet 多段重置（LSBullet 加 HitResetTimer 字段=Model 层实体变更）。
+  compile_check 通过后：① menu "ET/Loader/Compile"（F6 必须）② menu "ET/Skill/Compile"，
+  验证 SkillCompile.log 0 错误 + 两 DLL 时间戳刷新。基点见 ref 最新提交。
