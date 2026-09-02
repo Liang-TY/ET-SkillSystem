@@ -22,8 +22,8 @@ namespace ET.Client
         public YIUIWindowComponent UIWindow => u_UIWindow;
         public EntityRef<YIUIPanelComponent> u_UIPanel;
         public YIUIPanelComponent UIPanel => u_UIPanel;
-        public UnityEngine.UI.Text u_ComTextMain;
-        public UnityEngine.UI.Text u_ComTextSub;
+        public TMPro.TextMeshProUGUI u_ComTextMain;
+        public TMPro.TextMeshProUGUI u_ComTextSub;
 
     }
 }

@@ -24,7 +24,7 @@ namespace ET.Client
         public YIUIPanelComponent UIPanel => u_UIPanel;
         public UnityEngine.RectTransform u_ComWindow;
         public UnityEngine.UI.Image u_ComImgBg;
-        public UnityEngine.UI.Text u_ComTextInfo;
+        public TMPro.TextMeshProUGUI u_ComTextInfo;
         public UnityEngine.UI.Button u_ComBtnClose;
         public UITaskEventP0 u_EventClose;
         public UITaskEventHandleP0 u_EventCloseHandle;

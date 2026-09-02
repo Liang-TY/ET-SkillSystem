@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using YIUIFramework;
 
 namespace ET.UIBuilder
@@ -27,7 +28,7 @@ namespace ET.UIBuilder
             new Dictionary<string, Func<NodeSpec, GameObject>>
             {
                 { "node", _ => CreateNode() },
-                { "text", _ => InstantiateTemplate("YIUIText_NoRaycast") },
+                { "text", _ => InstantiateTemplate("YIUIText (TMP)") },
                 { "tmp", _ => InstantiateTemplate("YIUIText (TMP)") },
                 { "image", _ => InstantiateTemplate("YIUIImage_NoRaycast") },
                 { "button", _ => CreateButton() },
@@ -92,10 +93,9 @@ namespace ET.UIBuilder
 
             var labelGo = new GameObject("Text");
             RectTransform labelRect = labelGo.AddComponent<RectTransform>();
-            Text label = labelGo.AddComponent<Text>();
-            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            TextMeshProUGUI label = labelGo.AddComponent<TextMeshProUGUI>();
             label.fontSize = 24;
-            label.alignment = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignmentOptions.Center;
             label.color = new Color(0.13f, 0.13f, 0.13f, 1f);
             label.raycastTarget = false;
             labelRect.SetParent(go.transform, false);

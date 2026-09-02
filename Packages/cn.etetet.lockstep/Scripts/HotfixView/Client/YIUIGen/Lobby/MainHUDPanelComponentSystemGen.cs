@@ -36,7 +36,7 @@ namespace ET.Client
             self.UIPanel.StackOption = EPanelStackOption.VisibleTween;
             self.UIPanel.Priority = 0;
 
-            self.u_ComTextRoleName = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Text>("u_ComTextRoleName");
+            self.u_ComTextRoleName = self.UIBase.ComponentTable.FindComponent<TMPro.TextMeshProUGUI>("u_ComTextRoleName");
             self.u_ComBtnRoot = self.UIBase.ComponentTable.FindComponent<UnityEngine.RectTransform>("u_ComBtnRoot");
             self.u_ComBtnSettings = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnSettings");
             self.u_ComBtnBag = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnBag");

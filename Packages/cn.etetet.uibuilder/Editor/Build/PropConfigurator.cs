@@ -34,7 +34,7 @@ namespace ET.UIBuilder
             switch (node.Type)
             {
                 case "text":
-                    ConfigureText(go.GetComponentInChildren<Text>(true), node.Props);
+                    ConfigureTmp(go.GetComponentInChildren<TextMeshProUGUI>(true), node.Props);
                     break;
 
                 case "tmp":
@@ -102,6 +102,8 @@ namespace ET.UIBuilder
             if (p.ContainsKey("alignment")
                 && TmpAlignmentMap.TryGetValue(GetStr(p, "alignment", ""), out TextAlignmentOptions alignment))
                 text.alignment = alignment;
+            text.raycastTarget = GetBool(p, "raycast", text.raycastTarget);
+            text.enableAutoSizing = GetBool(p, "bestfit", text.enableAutoSizing);
         }
 
         private static void ConfigureImage(Image image, Dictionary<string, object> p)

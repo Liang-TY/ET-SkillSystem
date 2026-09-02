@@ -127,6 +127,43 @@ namespace ET.UIBuilder
             }
         }
 
+        /// <summary>批量重建：cn.etetet.lockstep 的 YIUI 全部 .ui.yaml → prefab（字体/模板/映射变更后全量刷新，不生成预览截图）。</summary>
+        [MenuItem("Tools/YIUI Builder/Build All LockStep Specs To Prefab")]
+        public static void BuildAllLockStepToPrefab()
+        {
+            const string Dir = "Packages/cn.etetet.lockstep/Assets/GameRes/YIUI";
+            string absDir = Path.Combine(SpecLoader.ProjectRoot, Dir);
+            if (!Directory.Exists(absDir))
+            {
+                Debug.LogWarning($"[UIBuilder] 目录不存在: {absDir}");
+                return;
+            }
+
+            string[] files = Directory.GetFiles(absDir, "*.ui.yaml", SearchOption.AllDirectories);
+            int ok = 0, fail = 0;
+
+            foreach (string file in files)
+            {
+                string abs = file.Replace('\\', '/');
+                string root = SpecLoader.ProjectRoot.Replace('\\', '/') + "/";
+                string rel = abs.StartsWith(root, StringComparison.OrdinalIgnoreCase)
+                    ? abs.Substring(root.Length) : abs;
+
+                BuildResult r = UIBuildPipeline.Build(rel, runPreview: false);
+                if (r.Ok)
+                {
+                    ok++;
+                }
+                else
+                {
+                    fail++;
+                    Debug.LogError($"[UIBuilder] FAIL {rel} :: {string.Join("; ", r.Errors.ToArray())}");
+                }
+            }
+
+            Debug.Log($"[UIBuilder] 批量构建完成: {files.Length} 个 spec，成功 {ok}，失败 {fail}");
+        }
+
         /// <summary>S4：预览截图（选中 .prefab 直接截；选中 .ui.yaml 则截其对应 prefab，需先 Build）。</summary>
         [MenuItem("Tools/YIUI Builder/Preview Prefab (选中 .prefab 或 .ui.yaml)")]
         public static void PreviewPrefab()

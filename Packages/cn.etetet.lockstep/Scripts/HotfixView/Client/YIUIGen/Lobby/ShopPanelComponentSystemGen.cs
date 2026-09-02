@@ -37,7 +37,7 @@ namespace ET.Client
             self.UIPanel.Priority = 0;
 
             self.u_ComImgBg = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Image>("u_ComImgBg");
-            self.u_ComTextTip = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Text>("u_ComTextTip");
+            self.u_ComTextTip = self.UIBase.ComponentTable.FindComponent<TMPro.TextMeshProUGUI>("u_ComTextTip");
             self.u_ComBtnClose = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Button>("u_ComBtnClose");
             self.u_EventClose = self.UIBase.EventTable.FindEvent<UITaskEventP0>("u_EventClose");
             self.u_EventCloseHandle = self.u_EventClose.Add(self,ShopPanelComponent.OnEventCloseInvoke);

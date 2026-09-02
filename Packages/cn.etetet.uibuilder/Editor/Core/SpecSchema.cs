@@ -108,7 +108,7 @@ namespace ET.UIBuilder
         public static readonly Dictionary<string, string> TypeBindComponents = new Dictionary<string, string>
         {
             { "node", "RectTransform" },
-            { "text", "Text" },
+            { "text", "TextMeshProUGUI" },
             { "tmp", "TextMeshProUGUI" },
             { "image", "Image" },
             { "button", "Button" },

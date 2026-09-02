@@ -36,7 +36,7 @@ namespace ET.Client
             self.UIPanel.StackOption = EPanelStackOption.VisibleTween;
             self.UIPanel.Priority = 0;
 
-            self.u_ComTextTip = self.UIBase.ComponentTable.FindComponent<UnityEngine.UI.Text>("u_ComTextTip");
+            self.u_ComTextTip = self.UIBase.ComponentTable.FindComponent<TMPro.TextMeshProUGUI>("u_ComTextTip");
 
         }
     }

@@ -22,7 +22,7 @@ namespace ET.Client
         public YIUIWindowComponent UIWindow => u_UIWindow;
         public EntityRef<YIUIPanelComponent> u_UIPanel;
         public YIUIPanelComponent UIPanel => u_UIPanel;
-        public UnityEngine.UI.Text u_ComTextTip;
+        public TMPro.TextMeshProUGUI u_ComTextTip;
 
     }
 }

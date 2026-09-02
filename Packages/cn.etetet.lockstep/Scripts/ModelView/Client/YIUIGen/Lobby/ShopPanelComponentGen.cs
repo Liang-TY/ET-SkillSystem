@@ -23,7 +23,7 @@ namespace ET.Client
         public EntityRef<YIUIPanelComponent> u_UIPanel;
         public YIUIPanelComponent UIPanel => u_UIPanel;
         public UnityEngine.UI.Image u_ComImgBg;
-        public UnityEngine.UI.Text u_ComTextTip;
+        public TMPro.TextMeshProUGUI u_ComTextTip;
         public UnityEngine.UI.Button u_ComBtnClose;
         public UITaskEventP0 u_EventClose;
         public UITaskEventHandleP0 u_EventCloseHandle;
