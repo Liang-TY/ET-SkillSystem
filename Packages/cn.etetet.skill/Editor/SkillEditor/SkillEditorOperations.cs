@@ -168,7 +168,10 @@ namespace ET.Editor
             result.Path = asset.Path;
 
             string diskHash = SkillEditorDocumentStore.ComputeSha256(asset.Path);
-            if (!string.Equals(diskHash, request.expectedHash, StringComparison.OrdinalIgnoreCase))
+            string expected = request.expectedHash;
+            if (expected != null && expected.StartsWith("sha256:", StringComparison.OrdinalIgnoreCase))
+                expected = expected.Substring("sha256:".Length);
+            if (!string.Equals(diskHash, expected, StringComparison.OrdinalIgnoreCase))
             {
                 result.Ok = false;
                 result.Code = "conflict";
@@ -200,7 +203,9 @@ namespace ET.Editor
             if (!string.IsNullOrEmpty(applyError))
             {
                 result.Ok = false;
-                result.Code = "invalid_request";
+                result.Code = applyError.Contains("validation_error:", StringComparison.OrdinalIgnoreCase)
+                    ? "validation_error"
+                    : "invalid_request";
                 result.Errors.Add(applyError);
                 return result;
             }
