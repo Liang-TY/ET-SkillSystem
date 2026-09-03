@@ -177,8 +177,9 @@ namespace ET.Editor
             }
             result.BaseHash = $"sha256:{diskHash}";
 
+            string loadError = null;
             if (asset.Error != null
-                || !SkillEditorDocument.TryLoad(asset, out SkillEditorDocument document, out string loadError))
+                || !SkillEditorDocument.TryLoad(asset, out SkillEditorDocument document, out loadError))
             {
                 result.Ok = false;
                 result.Code = "validation_error";
@@ -232,16 +233,20 @@ namespace ET.Editor
                 return result;
             }
 
-            if (document.Save(skill))
+            try
             {
+                document.Save(skill);
                 result.Saved = true;
                 result.ResultHash = $"sha256:{SkillEditorDocumentStore.ComputeSha256(asset.Path)}";
                 return result;
             }
-            result.Ok = false;
-            result.Code = "save_failed";
-            result.Errors.Add("原子写入失败（原文件保留）");
-            return result;
+            catch (Exception e)
+            {
+                result.Ok = false;
+                result.Code = "save_failed";
+                result.Errors.Add($"原子写入失败（原文件保留）: {e.Message}");
+                return result;
+            }
         }
 
         private static string ComputeHash(SkillParamJson skill)

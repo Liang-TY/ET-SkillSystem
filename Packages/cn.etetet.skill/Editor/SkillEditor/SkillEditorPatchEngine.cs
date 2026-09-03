@@ -586,7 +586,8 @@ namespace ET.Editor
         private static bool TryGetInt(JToken token, out int value)
         {
             value = 0;
-            return token?.Type == JTokenType.Integer && int.TryParse(token.ToString(CultureInfo.InvariantCulture), out value);
+            // JTokenType.Integer 时 token.Value<int>() 即强类型取值，不做字符串转换
+            return token is { Type: JTokenType.Integer } && (value = token.Value<int>()) == value;
         }
 
         private static bool TryGetNullableInt(JToken token, out int? value)
@@ -594,8 +595,7 @@ namespace ET.Editor
             value = null;
             if (token == null || token.Type == JTokenType.Null) return true;
             if (token.Type != JTokenType.Integer) return false;
-            if (!int.TryParse(token.ToString(CultureInfo.InvariantCulture), out int parsed)) return false;
-            value = parsed;
+            value = token.Value<int>();
             return true;
         }
 

@@ -63,7 +63,9 @@ namespace ET.Editor
             {
                 SkillParamJson skill = document.Skill;
                 SkillSpawnEventJson[] old = skill.spawnEvents ?? Array.Empty<SkillSpawnEventJson>();
-                SkillSpawnEventJson spawn = new() { phase = 0, atMs = 0, timeBase = "PhaseTime", kind = "playAnim", animId = 0 };
+                // 默认值必须过 SkillParamLoader.ValidateSkill（superArmor 需 durationMs>0），
+                // 否则新增事件立即被保存门禁卡死
+                SkillSpawnEventJson spawn = new() { phase = 0, atMs = 0, timeBase = "PhaseTime", kind = "superArmor", durationMs = 1 };
                 skill.spawnEvents = Append(old, spawn);
             });
 
