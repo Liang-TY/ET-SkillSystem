@@ -31,7 +31,11 @@ namespace ET
                 {
                     if (kv.Value is LSCast cast)
                     {
+                        // JustHit/ResolvedHitTargets describe the previous frame for
+                        // view consumers. PendingHitTargets is intentionally retained
+                        // until the cast logic consumes it on this frame.
                         cast.JustStarted = cast.JustHit = cast.JustFinished = false;
+                        cast.ResolvedHitTargets?.Clear();
                     }
                 }
             }

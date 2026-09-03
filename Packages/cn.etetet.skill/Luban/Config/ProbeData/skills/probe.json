@@ -1,0 +1,74 @@
+{
+  "id": 900001,
+  "name": "LubanProbe",
+  "type": "AreaBurst",
+  "cooldownMs": 1000,
+  "totalTimeMs": 300,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "phases": [
+    {
+      "animId": 1002,
+      "durationMs": 300,
+      "cancelMs": -1,
+      "clearHitTargets": true,
+      "superArmorMs": 0,
+      "movement": {
+        "distance": 0.5,
+        "durationMs": 100,
+        "stopOnHit": false
+      },
+      "nextSkillId": 0,
+      "nextTrigger": "none"
+    }
+  ],
+  "hitReactions": [
+    {
+      "phase": 0,
+      "damage": 80,
+      "hitstunMs": 500,
+      "kbX": 0,
+      "launchY": 150,
+      "procBuffId": 0,
+      "procChance": 0
+    }
+  ],
+  "hitActions": [1],
+  "manualBoxes": [
+    {
+      "phase": 0,
+      "onMs": 50,
+      "offMs": 150,
+      "offset": [0.5, 0.35, 0],
+      "half": [1.1, 0.7, 0.7]
+    }
+  ],
+  "spawnEvents": [
+    {
+      "atMs": 0,
+      "timeBase": "CastTime",
+      "kind": "createArea",
+      "areaId": 14,
+      "at": "self",
+      "dist": 0
+    },
+    {
+      "atMs": 100,
+      "timeBase": "PhaseTime",
+      "kind": "superArmor",
+      "at": "self",
+      "dist": 0,
+      "durationMs": 100
+    }
+  ],
+  "hitEvents": [
+    {
+      "phase": 0,
+      "on": "hit",
+      "hitPolicy": "FirstHitInPhase",
+      "kind": "nextPhase",
+      "nextPhase": 0
+    }
+  ]
+}

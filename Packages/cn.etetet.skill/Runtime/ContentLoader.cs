@@ -45,6 +45,7 @@ namespace ET
                 }
 
                 items[attr.Id] = (TBase)Activator.CreateInstance(type);
+                ContentIds.Register(typeof(TBase), attr.Id, type.Name);
                 Log.Info($"[Content] 注册 {typeof(TBase).Name} {attr.Id}: {type.Name}");
             }
         }

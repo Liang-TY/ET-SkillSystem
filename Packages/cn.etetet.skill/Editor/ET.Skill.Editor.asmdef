@@ -1,7 +1,9 @@
 {
     "name": "ET.Skill.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "ET.Skill"
+    ],
     "includePlatforms": [
         "Editor"
     ],

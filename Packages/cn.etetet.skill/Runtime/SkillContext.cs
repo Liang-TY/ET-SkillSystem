@@ -27,6 +27,9 @@ namespace ET
         // ---- 状态读取（门面：技能不直接摸 LSCast/LSCast 字段）----
         public int GetElapsedMs() => cast.ElapsedMs;
 
+        /// <summary>当前施放对应的整数 skillId；参数化逻辑据此查询 SkillParam。</summary>
+        public int GetSkillId() => cast.SkillId;
+
         public long GetCasterId() => caster.Id;
 
         /// <summary>施法者本体（接触检测用：CheckHit(自己, 敌人)——破军冲撞撞敌停驻等）</summary>
@@ -41,13 +44,105 @@ namespace ET
         /// "已引爆/已进入下一阶段"标记用；进快照回滚安全，施放开始时为 0）</summary>
         public int GetSubState() => cast.SubState;
 
-        public void SetSubState(int value) => cast.SubState = value;
+        public void SetSubState(int value)
+        {
+            if (cast.SubState == value) return;
+            cast.SubState = value;
+            // SubState is the phase index for parameterized skills. Reset only the
+            // phase-scoped cursors; cast-scoped and hit-scoped state stay intact.
+            cast.PhaseEventMask = 0;
+            cast.PhaseHitEventMask = 0;
+            cast.HitEventTargets?.Clear();
+        }
+
+        /// <summary>参数化执行器进入 phase 的显式入口，允许同一 phase 循环时也重置游标。</summary>
+        public void BeginPhase(int phaseIndex, int startMs)
+        {
+            cast.SubState = phaseIndex;
+            cast.Phase = startMs;
+            cast.PhaseEventMask = 0;
+            cast.PhaseHitEventMask = 0;
+            cast.HitEventTargets?.Clear();
+        }
 
         /// <summary>技能相位（LSCast.Phase 门面）：连段技能存"当前段开始时的累计 ms"，
         /// 段内时间 = GetElapsedMs() - GetPhase()；与 SubState 配对进快照回滚安全</summary>
         public int GetPhase() => cast.Phase;
 
         public void SetPhase(int value) => cast.Phase = value;
+
+        /// <summary>本帧是否有新的命中通知（由 LSHitbox/LSBullet 回写）。</summary>
+        public bool WasHitThisTick() => cast.JustHit;
+
+        public long GetLastHitTargetId() => cast.LastHitTargetId;
+
+        public IReadOnlyList<long> GetResolvedHitTargets() => cast.ResolvedHitTargets;
+
+        /// <summary>取得由上一阶段 Hitbox 写入、尚未被技能逻辑消费的命中目标。</summary>
+        public IReadOnlyList<long> GetPendingHitTargets() => cast.PendingHitTargets;
+
+        public bool HasPendingHitTargets()
+            => cast.PendingHitTargets != null && cast.PendingHitTargets.Count > 0;
+
+        /// <summary>技能逻辑完成本 tick 命中事件处理后清空待处理队列。</summary>
+        public void ClearPendingHitTargets() => cast.PendingHitTargets?.Clear();
+
+        public void SelectHitTarget(long targetId) => cast.LastHitTargetId = targetId;
+
+        /// <summary>给最近一次命中的目标挂 Buff；没有目标时安全忽略。</summary>
+        public void AddBuffToLastHitTarget(int buffId)
+        {
+            if (cast.LastHitTargetId == 0) return;
+            LSUnit target = world.GetComponent<LSUnitComponent>()?.GetChild<LSUnit>(cast.LastHitTargetId);
+            target?.GetComponent<LSBuffComponent>()?.AddBuff(caster, buffId);
+        }
+
+        /// <summary>标记一次参数化 spawn 事件。index 超出位图容量时返回 false。</summary>
+        public bool TryMarkSpawnEvent(int index, bool phaseScoped)
+        {
+            if (index < 0 || index >= 64) return false;
+            ulong bit = 1UL << index;
+            if (phaseScoped)
+            {
+                if ((cast.PhaseEventMask & bit) != 0) return false;
+                cast.PhaseEventMask |= bit;
+            }
+            else
+            {
+                if ((cast.SpawnEventMask & bit) != 0) return false;
+                cast.SpawnEventMask |= bit;
+            }
+            return true;
+        }
+
+        /// <summary>按策略标记命中事件；EveryResolvedHit 不占用一次性位。</summary>
+        public bool TryMarkHitEvent(int index, SkillParamHitPolicy policy, long targetId)
+        {
+            if (policy == SkillParamHitPolicy.EveryResolvedHit) return true;
+            if (policy == SkillParamHitPolicy.OncePerTargetInPhase)
+            {
+                if (targetId == 0 || cast.HitEventTargets == null) return false;
+                if (!cast.HitEventTargets.TryGetValue(index, out List<long> targets))
+                {
+                    targets = new List<long>();
+                    cast.HitEventTargets.Add(index, targets);
+                }
+                if (targets.Contains(targetId)) return false;
+                targets.Add(targetId);
+                return true;
+            }
+            if (index < 0 || index >= 64) return false;
+            ulong bit = 1UL << index;
+            ulong mask = policy == SkillParamHitPolicy.FirstHitInPhase
+                ? cast.PhaseHitEventMask
+                : cast.HitEventMask;
+            if ((mask & bit) != 0) return false;
+            if (policy == SkillParamHitPolicy.FirstHitInPhase)
+                cast.PhaseHitEventMask |= bit;
+            else
+                cast.HitEventMask |= bit;
+            return true;
+        }
 
         // ---- 施法者数值（自耗 HP 类技能用；DNF onSetState 扣血同构）----
         public FP GetCasterHp()

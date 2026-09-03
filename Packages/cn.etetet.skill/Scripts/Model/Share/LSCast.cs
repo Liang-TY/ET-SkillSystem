@@ -57,5 +57,37 @@ namespace ET
 
         [MemoryPackOrder(11)]
         public bool JustFinished;
+
+        // 参数化技能事件游标（回滚安全）：位图中的第 N 位表示该 cast 级事件
+        // 已执行；PhaseEventMask 在进入新 phase 时清零，HitEventMask 记录一次性命中事件。
+        // 当前编辑器限制每类事件最多 64 个，超过时由参数校验拒载。
+        [MemoryPackOrder(12)]
+        public ulong SpawnEventMask;
+
+        [MemoryPackOrder(13)]
+        public ulong PhaseEventMask;
+
+        [MemoryPackOrder(14)]
+        public ulong HitEventMask;
+
+        [MemoryPackOrder(15)]
+        public ulong PhaseHitEventMask;
+
+        // 最近一次命中的目标，用于参数化 hitEvent 的 target 策略。
+        [MemoryPackOrder(16)]
+        public long LastHitTargetId;
+
+        // OncePerTargetInPhase 按 hitEvent 索引分别去重；随实体快照恢复。
+        [MemoryPackOrder(17)]
+        public Dictionary<int, List<long>> HitEventTargets = new();
+
+        // 本 tick 已完成结算的目标序列；允许同一 tick 多目标逐个触发 hitEvent。
+        [MemoryPackOrder(18)]
+        public List<long> ResolvedHitTargets = new();
+
+        // Hitbox 在 Cast 逻辑更新之后运行。该列表跨一个逻辑 tick 保存待由
+        // SkillLogic 消费的目标；ResolvedHitTargets 则只给视图/日志保留本帧结果。
+        [MemoryPackOrder(19)]
+        public List<long> PendingHitTargets = new();
     }
 }

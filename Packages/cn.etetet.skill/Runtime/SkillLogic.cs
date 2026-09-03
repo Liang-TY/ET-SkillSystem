@@ -11,6 +11,18 @@ namespace ET
     public abstract class SkillLogic
     {
         /// <summary>
+        /// 参数表对应的整数 ID。普通手写技能返回 0；参数化技能由无状态子类以
+        /// const-backed property 指定，所有配置 getter 再按该 ID 查询。
+        /// </summary>
+        public virtual int ConfiguredSkillId => 0;
+
+        protected SkillParam GetConfiguredParam()
+            => ConfiguredSkillId > 0 ? SkillParamLoader.GetSkill(ConfiguredSkillId) : null;
+
+        protected SkillParam GetConfiguredParam(SkillContext ctx)
+            => SkillParamLoader.GetSkill(ConfiguredSkillId > 0 ? ConfiguredSkillId : ctx.GetSkillId());
+
+        /// <summary>
         /// 冷却 ms。CD 双机制（DNF 实证）：默认 TryCast 成功即进 CD（.skl [auto cooltime apply]）；
         /// ManualCooldown=true 时延迟到 OnEnd 后进 CD（= startSkillCoolTime，多段技能用）。
         /// </summary>

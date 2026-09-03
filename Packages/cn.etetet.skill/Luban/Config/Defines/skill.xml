@@ -1,0 +1,203 @@
+<module name="cn.etetet.skill.skillconfig">
+    <enum name="SkillType">
+        <var name="MeleeCombo"/>
+        <var name="Dash"/>
+        <var name="Projectile"/>
+        <var name="AreaBurst"/>
+        <var name="Buff"/>
+    </enum>
+    <enum name="NextTrigger">
+        <var name="none"/>
+        <var name="phaseEnd"/>
+        <var name="hit"/>
+        <var name="key"/>
+    </enum>
+    <enum name="TimeBase">
+        <var name="CastTime"/>
+        <var name="PhaseTime"/>
+        <var name="AnimationFrame"/>
+        <var name="PhaseEnter"/>
+        <var name="PhaseEnd"/>
+        <var name="Landing"/>
+        <var name="Input"/>
+    </enum>
+    <enum name="SpawnKind">
+        <var name="createArea"/>
+        <var name="createBullet"/>
+        <var name="superArmor"/>
+        <var name="playAnim"/>
+        <var name="addBuff"/>
+    </enum>
+    <enum name="SpawnAt">
+        <var name="self"/>
+        <var name="inFront"/>
+        <var name="target"/>
+    </enum>
+    <enum name="HitTrigger">
+        <var name="hit"/>
+        <var name="resolvedHit"/>
+        <var name="targetHit"/>
+    </enum>
+    <enum name="HitPolicy">
+        <var name="FirstHitInCast"/>
+        <var name="FirstHitInPhase"/>
+        <var name="OncePerTargetInPhase"/>
+        <var name="EveryResolvedHit"/>
+    </enum>
+    <enum name="HitEventKind">
+        <var name="nextPhase"/>
+        <var name="nextSkill"/>
+        <var name="grab"/>
+        <var name="addBuff"/>
+    </enum>
+
+    <bean name="Movement" valueType="1" sep=",">
+        <var name="distance" type="float"/>
+        <var name="durationMs" type="int"/>
+        <var name="stopOnHit" type="bool"/>
+    </bean>
+
+    <bean name="Phase">
+        <var name="animId" type="int"/>
+        <var name="durationMs" type="int"/>
+        <var name="cancelMs" type="int"/>
+        <var name="cancelButton" type="int?"/>
+        <var name="clearHitTargets" type="bool"/>
+        <var name="superArmorMs" type="int"/>
+        <var name="movement" type="Movement"/>
+        <var name="nextPhase" type="int?"/>
+        <var name="nextSkillId" type="int"/>
+        <var name="nextTrigger" type="NextTrigger"/>
+        <var name="endOnLanding" type="bool?"/>
+    </bean>
+
+    <bean name="ManualBox">
+        <var name="phase" type="int"/>
+        <var name="onMs" type="int"/>
+        <var name="offMs" type="int"/>
+        <var name="offset" type="list,float"/>
+        <var name="half" type="list,float"/>
+    </bean>
+
+    <bean name="SpawnEvent">
+        <var name="phase" type="int"/>
+        <var name="atMs" type="int"/>
+        <var name="atFrame" type="int"/>
+        <var name="timeBase" type="TimeBase"/>
+        <var name="kind" type="SpawnKind"/>
+        <var name="areaId" type="int?"/>
+        <var name="bulletId" type="int?"/>
+        <var name="buffId" type="int?"/>
+        <var name="animId" type="int?"/>
+        <var name="at" type="SpawnAt"/>
+        <var name="dist" type="float"/>
+        <var name="durationMs" type="int?"/>
+        <var name="button" type="int?"/>
+        <var name="consumeInput" type="bool?"/>
+        <var name="untilMs" type="int?"/>
+    </bean>
+
+    <bean name="HitReaction">
+        <var name="phase" type="int"/>
+        <var name="damage" type="int"/>
+        <var name="hitstunMs" type="int"/>
+        <var name="kbX" type="float"/>
+        <var name="launchY" type="float"/>
+        <var name="procBuffId" type="int"/>
+        <var name="procChance" type="int"/>
+    </bean>
+
+    <bean name="HitEvent">
+        <var name="phase" type="int"/>
+        <var name="on" type="HitTrigger"/>
+        <var name="hitPolicy" type="HitPolicy"/>
+        <var name="kind" type="HitEventKind"/>
+        <var name="nextPhase" type="int?"/>
+        <var name="nextSkillId" type="int?"/>
+        <var name="buffId" type="int?"/>
+    </bean>
+
+    <bean name="SkillParam">
+        <var name="id" type="int"/>
+        <var name="name" type="string"/>
+        <var name="type" type="SkillType"/>
+        <var name="cooldownMs" type="int"/>
+        <var name="totalTimeMs" type="int"/>
+        <var name="requireAirborne" type="bool"/>
+        <var name="manualCooldown" type="bool"/>
+        <var name="minCastHpPct" type="int"/>
+        <var name="castHpCostPct" type="int"/>
+        <var name="entryPhase" type="int?"/>
+        <var name="airborneEntryPhase" type="int?"/>
+        <var name="phases" type="list,Phase"/>
+        <var name="hitReactions" type="list,HitReaction"/>
+        <var name="hitActions" type="list,int"/>
+        <var name="manualBoxes" type="list,ManualBox"/>
+        <var name="spawnEvents" type="list,SpawnEvent"/>
+        <var name="hitEvents" type="list,HitEvent"/>
+    </bean>
+
+    <bean name="BulletParam">
+        <var name="id" type="int"/>
+        <var name="name" type="string"/>
+        <var name="speed" type="float"/>
+        <var name="totalTimeMs" type="int"/>
+        <var name="destroyOnHit" type="bool"/>
+        <var name="hitResetIntervalMs" type="int"/>
+        <var name="halfExtents" type="list,float"/>
+        <var name="spawnOffset" type="list,float"/>
+        <var name="viewOffset" type="list,float"/>
+        <var name="viewGrounded" type="bool"/>
+        <var name="viewAnimId" type="int"/>
+        <var name="hitReaction" type="HitReaction"/>
+        <var name="hitActions" type="list,int"/>
+    </bean>
+
+    <bean name="AreaParam">
+        <var name="id" type="int"/>
+        <var name="name" type="string"/>
+        <var name="halfExtents" type="list,float"/>
+        <var name="totalTimeMs" type="int"/>
+        <var name="tickTimeMs" type="int"/>
+        <var name="enterActions" type="list,int"/>
+        <var name="tickActions" type="list,int"/>
+        <var name="exitActions" type="list,int"/>
+        <var name="hitReaction" type="HitReaction"/>
+        <var name="viewAnimId" type="int"/>
+        <var name="viewBackAnimId" type="int?"/>
+        <var name="viewEndAnimId" type="int?"/>
+    </bean>
+
+    <bean name="BuffParam">
+        <var name="id" type="int"/>
+        <var name="name" type="string"/>
+        <var name="durationMs" type="int"/>
+        <var name="tickTimeMs" type="int"/>
+        <var name="maxStacks" type="int"/>
+        <var name="refreshOnApply" type="bool"/>
+        <var name="addActions" type="list,int"/>
+        <var name="tickActions" type="list,int"/>
+        <var name="removeActions" type="list,int"/>
+    </bean>
+
+    <bean name="ActionParam">
+        <var name="id" type="int"/>
+        <var name="name" type="string"/>
+        <var name="kind" type="string"/>
+        <var name="value" type="float"/>
+        <var name="intervalMs" type="int"/>
+        <var name="buffId" type="int?"/>
+    </bean>
+
+    <bean name="ButtonMapping">
+        <var name="button" type="int"/>
+        <var name="skillId" type="int"/>
+    </bean>
+
+    <table name="SkillParams" value="SkillParam" index="id" input="Packages/cn.etetet.skill/Bundles/SkillParams/skills" group="c" output="skill_params"/>
+    <table name="BulletParams" value="BulletParam" index="id" input="Packages/cn.etetet.skill/Bundles/SkillParams/bullets" group="c" output="bullet_params"/>
+    <table name="AreaParams" value="AreaParam" index="id" input="Packages/cn.etetet.skill/Bundles/SkillParams/areas" group="c" output="area_params"/>
+    <table name="BuffParams" value="BuffParam" index="id" input="Packages/cn.etetet.skill/Bundles/SkillParams/buffs" group="c" output="buff_params"/>
+    <table name="ActionParams" value="ActionParam" index="id" input="Packages/cn.etetet.skill/Bundles/SkillParams/actions" group="c" output="action_params"/>
+    <table name="SkillButtonMappings" value="ButtonMapping" index="button" input="*buttons@Packages/cn.etetet.skill/Bundles/SkillParams/index.json" group="c" output="skill_button_mappings"/>
+</module>

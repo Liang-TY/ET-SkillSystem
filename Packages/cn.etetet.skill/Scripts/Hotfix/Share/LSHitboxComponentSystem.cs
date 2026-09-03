@@ -72,6 +72,13 @@ namespace ET
             {
                 CheckAttack(self, unit, unit.LSWorld().Frame);
             }
+
+            LSCast activeCast = unit.GetComponent<LSCastComponent>()?.GetActiveCast();
+            if (activeCast != null && SkillLoader.Get(activeCast.SkillId) is ParametricSkillLogic parametric)
+            {
+                parametric.ApplyPostHitbox(new SkillContext(unit.LSWorld(), unit, activeCast));
+                self.AttackEnabled = self.CurrentAttackBoxes.Count > 0;
+            }
         }
 
         // 攻击盒 × 受击盒 双层循环；命中且本次攻击未命中过 → 结算

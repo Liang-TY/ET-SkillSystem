@@ -32,6 +32,12 @@ namespace ET
     /// </summary>
     public abstract class LSAction
     {
+        /// <summary>参数表对应的整数 actionId；普通行为可返回 0 使用代码默认值。</summary>
+        public virtual int ConfiguredActionId => 0;
+
+        protected ActionParam GetConfiguredParam()
+            => ConfiguredActionId > 0 ? SkillParamLoader.GetAction(ConfiguredActionId) : null;
+
         public virtual void Run(LSActionContext ctx) { }
     }
 

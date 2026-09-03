@@ -93,8 +93,8 @@ namespace ET
             foreach (var kv in self.Children)
             {
                 if (kv.Value is not LSBuff buff || buff.ConfigId != buffId || buff.Removing) continue;
-                buff.Stack++;
-                buff.RemainingMs = def.TotalTimeMs;   // 刷新型叠层
+                if (def.MaxStacks <= 0 || buff.Stack < def.MaxStacks) buff.Stack++;
+                if (def.RefreshOnApply) buff.RemainingMs = def.TotalTimeMs;
                 buff.JustAdded = true;                 // Route B：视图可感知刷新
                 return buff;
             }

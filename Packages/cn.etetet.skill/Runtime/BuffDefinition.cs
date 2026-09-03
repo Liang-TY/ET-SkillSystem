@@ -33,6 +33,12 @@ namespace ET
         /// <summary>Tick 间隔 ms；0 = 不 Tick</summary>
         public virtual int TickTimeMs => 0;
 
+        /// <summary>叠层上限；0 = 不限制（兼容旧 Buff 行为）</summary>
+        public virtual int MaxStacks => 0;
+
+        /// <summary>重复添加时是否刷新剩余时间</summary>
+        public virtual bool RefreshOnApply => true;
+
         /// <summary>添加时执行（ActionIds；static readonly 数组避免分配）</summary>
         public virtual int[] AddActions => null;
 

@@ -11,6 +11,9 @@ namespace ET
         {
             self.SkillId = skillId;
             self.TargetIds ??= new();
+            self.HitEventTargets ??= new();
+            self.ResolvedHitTargets ??= new();
+            self.PendingHitTargets ??= new();
         }
 
         /// <summary>创建施放实例并立刻 OnCast（SkillCastHelper.TryCast 调；回滚后从快照恢复不重跑）</summary>
@@ -73,8 +76,11 @@ namespace ET
         /// <summary>命中回写（LSHitboxComponentSystem.ApplyHit 调；Route B：JustHit + TargetIds）</summary>
         public static void NotifyHit(this LSCast self, long targetId)
         {
-            if (self.Finished || self.TargetIds.Contains(targetId)) return;
-            self.TargetIds.Add(targetId);
+            if (self.Finished) return;
+            if (!self.TargetIds.Contains(targetId)) self.TargetIds.Add(targetId);
+            self.ResolvedHitTargets.Add(targetId);
+            self.PendingHitTargets.Add(targetId);
+            self.LastHitTargetId = targetId;
             self.JustHit = true;
         }
     }

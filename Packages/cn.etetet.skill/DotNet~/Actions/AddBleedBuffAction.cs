@@ -1,9 +1,15 @@
 namespace ET
 {
-    /// <summary>命中挂出血（BloodBoomArea.EnterActions 用；source=攻击方）。</summary>
+    /// <summary>命中挂出血；buffId 和显示名称来自 SkillParams/actions/.</summary>
     [ActionId(ActionIds.AddBleedBuff)]
-    public class AddBleedBuffAction : LSAction
+    public sealed class AddBleedBuffAction : LSAction
     {
-        public override void Run(LSActionContext ctx) => ctx.AddBuffToOwner(BuffIds.Bleed);
+        public override int ConfiguredActionId => ActionIds.AddBleedBuff;
+
+        public override void Run(LSActionContext ctx)
+        {
+            ActionParam param = GetConfiguredParam();
+            ctx.AddBuffToOwner(param?.BuffId ?? BuffIds.Bleed);
+        }
     }
 }

@@ -1,15 +1,17 @@
 namespace ET
 {
-    /// <summary>燃烧 Tick 伤害（BurnBuff 每 1 秒触发）。</summary>
+    /// <summary>燃烧 Tick 伤害；value 来自 SkillParams/actions/.</summary>
     [ActionId(ActionIds.FireDamageTick)]
-    public class FireDamageTickAction : LSAction
+    public sealed class FireDamageTickAction : LSAction
     {
-        private const int Damage = 10;
+        public override int ConfiguredActionId => ActionIds.FireDamageTick;
 
         public override void Run(LSActionContext ctx)
         {
-            ctx.DamageOwner(Damage);
-            Log.Info($"[Buff] 帧{ctx.FrameNo} unit{ctx.GetOwnerId()} 燃烧伤害{Damage}，HP={ctx.GetOwnerHp()}");
+            ActionParam param = GetConfiguredParam();
+            int damage = param == null ? 10 : (int)param.Value;
+            ctx.DamageOwner(damage);
+            Log.Info($"[Buff] 帧{ctx.FrameNo} unit{ctx.GetOwnerId()} 燃烧伤害{damage}，HP={ctx.GetOwnerHp()}");
         }
     }
 }

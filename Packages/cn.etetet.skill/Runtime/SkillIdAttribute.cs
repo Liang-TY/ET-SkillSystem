@@ -42,6 +42,10 @@ namespace ET
         /// <summary>按键值 → 技能槽位映射（16=起跳，非技能，不进本表）</summary>
         public static bool ButtonToSkill(int button, out int skillId)
         {
+            // 参数表加载后以 index.json 为准；启动早期或配置加载失败时保留
+            // 旧映射兜底，避免输入系统因资源时序直接失效。
+            if (SkillParamLoader.TryGetSkillForButton(button, out skillId)) return true;
+
             switch (button)
             {
                 case 1: skillId = NormalAttack; return true;
