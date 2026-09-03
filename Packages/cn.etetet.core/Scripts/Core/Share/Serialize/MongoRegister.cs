@@ -54,6 +54,11 @@ namespace ET
                     continue;
                 }
 
+                if (type.GetConstructor(Type.EmptyTypes) == null)
+                {
+                    continue;
+                }
+
                 BsonClassMap.LookupClassMap(type);
             }
         }
