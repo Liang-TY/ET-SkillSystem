@@ -1,0 +1,19 @@
+{
+  "id": 12,
+  "name": "UpperSlash",
+  "type": "MeleeCombo",
+  "cooldownMs": 2000,
+  "totalTimeMs": 550,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 52, "durationMs": 550, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 550, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [{ "phase": 0, "damage": 70, "hitstunMs": 500, "kbX": 100, "launchY": 350, "procBuffId": 0, "procChance": 0 }],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [],
+  "hitEvents": []
+}

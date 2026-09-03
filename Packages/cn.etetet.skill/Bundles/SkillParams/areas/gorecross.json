@@ -1,0 +1,14 @@
+{
+  "id": 8,
+  "name": "GoreCrossCross",
+  "halfExtents": [1.1, 0.4, 1.4],
+  "totalTimeMs": 320,
+  "tickTimeMs": 0,
+  "enterActions": [1, 7],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 120, "hitstunMs": 500, "kbX": 30, "launchY": 30, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 84,
+  "viewBackAnimId": 85,
+  "viewEndAnimId": 0
+}

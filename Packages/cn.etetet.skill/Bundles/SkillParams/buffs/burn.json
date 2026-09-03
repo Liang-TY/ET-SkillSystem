@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "name": "Burn",
+  "durationMs": 3000,
+  "tickTimeMs": 1000,
+  "maxStacks": 0,
+  "refreshOnApply": true,
+  "addActions": [],
+  "tickActions": [2],
+  "removeActions": []
+}

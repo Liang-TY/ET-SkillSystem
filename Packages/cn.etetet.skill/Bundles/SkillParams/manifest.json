@@ -1,0 +1,31 @@
+{
+  "skills": [
+    "skills/normalattack.json",
+    "skills/testcooldown.json",
+    "skills/wavesword.json",
+    "skills/bloodboom.json",
+    "skills/monsterlowkick.json",
+    "skills/monsterkneekick.json",
+    "skills/monsterhighkick.json",
+    "skills/monstericebreath.json",
+    "skills/hardattack.json",
+    "skills/upperslash.json",
+    "skills/tripleslash.json",
+    "skills/dashattackmultihit.json",
+    "skills/ashenfork.json",
+    "skills/hopsmash.json",
+    "skills/vaneslash.json",
+    "skills/gorecross.json",
+    "skills/weaponcombo.json",
+    "skills/moonlightslash.json",
+    "skills/grandwave.json",
+    "skills/momentaryslash.json",
+    "skills/chargecrash.json",
+    "skills/bloodblast.json"
+  ],
+  "bullets": ["bullets/grandwave.json", "bullets/icebreath.json", "bullets/normalwave.json", "bullets/thrustbeam.json"],
+  "areas": ["areas/ashenfork.json", "areas/bloodblastcore.json", "areas/bloodblastouter.json", "areas/bloodblastpre.json", "areas/bloodboom.json", "areas/chargecrashupper.json", "areas/gorecross.json", "areas/gorecrossburst.json", "areas/gorecrossfinish.json", "areas/hopsmashwave.json", "areas/momentaryslashwave.json", "areas/tripleslashfinish.json", "areas/vaneslashfinal.json", "areas/vaneslashwheel.json"],
+  "buffs": ["buffs/bleed.json", "buffs/burn.json", "buffs/freeze.json", "buffs/stun.json"],
+  "actions": ["actions/addbleedbuff.json", "actions/addburnbuff.json", "actions/bleeddamagetick.json", "actions/firedamagetick.json", "actions/forbidmoveoff.json", "actions/forbidmoveon.json", "actions/meleehit.json"],
+  "index": "index.json"
+}

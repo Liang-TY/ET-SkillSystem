@@ -1,0 +1,14 @@
+{
+  "id": 5,
+  "name": "HopSmashWave",
+  "halfExtents": [2.2, 0.5, 0.4],
+  "totalTimeMs": 480,
+  "tickTimeMs": 0,
+  "enterActions": [1, 7],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 130, "hitstunMs": 800, "kbX": 0, "launchY": 300, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 77,
+  "viewBackAnimId": 78,
+  "viewEndAnimId": 0
+}

@@ -1,0 +1,11 @@
+{
+  "id": 4,
+  "name": "Freeze",
+  "durationMs": 3500,
+  "tickTimeMs": 0,
+  "maxStacks": 1,
+  "refreshOnApply": true,
+  "addActions": [3],
+  "tickActions": [],
+  "removeActions": [4]
+}

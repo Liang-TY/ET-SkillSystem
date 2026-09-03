@@ -1,0 +1,38 @@
+{
+  "id": 1,
+  "name": "NormalAttack",
+  "type": "MeleeCombo",
+  "cooldownMs": 0,
+  "totalTimeMs": 2000,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "entryPhase": 0,
+  "airborneEntryPhase": 3,
+  "phases": [
+    { "animId": 12, "durationMs": 600, "cancelMs": 300, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextPhase": 1, "nextSkillId": 0, "nextTrigger": "key", "endOnLanding": false },
+    { "animId": 13, "durationMs": 650, "cancelMs": 300, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextPhase": 2, "nextSkillId": 0, "nextTrigger": "key", "endOnLanding": false },
+    { "animId": 14, "durationMs": 550, "cancelMs": 300, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextPhase": 0, "nextSkillId": 0, "nextTrigger": "key", "endOnLanding": false },
+    { "animId": 68, "durationMs": 300, "cancelMs": 300, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextPhase": 4, "nextSkillId": 0, "nextTrigger": "key", "endOnLanding": true },
+    { "animId": 73, "durationMs": 370, "cancelMs": 370, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextPhase": 5, "nextSkillId": 0, "nextTrigger": "key", "endOnLanding": true },
+    { "animId": 74, "durationMs": 370, "cancelMs": 370, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextPhase": 4, "nextSkillId": 0, "nextTrigger": "key", "endOnLanding": true }
+  ],
+  "hitReactions": [
+    { "phase": 0, "damage": 50, "hitstunMs": 500, "kbX": 0, "launchY": 0, "procBuffId": 0, "procChance": 0 },
+    { "phase": 1, "damage": 50, "hitstunMs": 500, "kbX": 0, "launchY": 0, "procBuffId": 0, "procChance": 0 },
+    { "phase": 2, "damage": 50, "hitstunMs": 500, "kbX": 0, "launchY": 0, "procBuffId": 0, "procChance": 0 },
+    { "phase": 3, "damage": 60, "hitstunMs": 500, "kbX": 270, "launchY": 180, "procBuffId": 0, "procChance": 0 },
+    { "phase": 4, "damage": 60, "hitstunMs": 500, "kbX": 270, "launchY": 180, "procBuffId": 0, "procChance": 0 },
+    { "phase": 5, "damage": 60, "hitstunMs": 500, "kbX": 270, "launchY": 180, "procBuffId": 0, "procChance": 0 }
+  ],
+  "hitActions": [1, 5],
+  "manualBoxes": [
+    { "phase": 0, "onMs": 0, "offMs": 400, "offset": [0.8, 0.5, 0], "half": [0.4, 0.5, 0.3] },
+    { "phase": 1, "onMs": 0, "offMs": 400, "offset": [0.8, 0.5, 0], "half": [0.4, 0.5, 0.3] },
+    { "phase": 4, "onMs": 50, "offMs": 300, "offset": [0.8, 0.5, 0], "half": [0.4, 0.5, 0.3] },
+    { "phase": 5, "onMs": 50, "offMs": 300, "offset": [0.8, 0.5, 0], "half": [0.4, 0.5, 0.3] }
+  ],
+  "spawnEvents": [],
+  "hitEvents": []
+}

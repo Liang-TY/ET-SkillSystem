@@ -1,0 +1,14 @@
+{
+  "id": 6,
+  "name": "VaneSlashWheel",
+  "halfExtents": [1.4, 0.5, 0.45],
+  "totalTimeMs": 1250,
+  "tickTimeMs": 350,
+  "enterActions": [],
+  "tickActions": [1],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 45, "hitstunMs": 500, "kbX": 100, "launchY": 50, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 81,
+  "viewBackAnimId": 0,
+  "viewEndAnimId": 0
+}

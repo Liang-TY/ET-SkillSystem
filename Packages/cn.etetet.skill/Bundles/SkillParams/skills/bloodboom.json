@@ -1,0 +1,21 @@
+{
+  "id": 5,
+  "name": "BloodBoom",
+  "type": "AreaBurst",
+  "cooldownMs": 5000,
+  "totalTimeMs": 980,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 10,
+  "castHpCostPct": 5,
+  "phases": [
+    { "animId": 16, "durationMs": 980, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [],
+  "hitActions": [],
+  "manualBoxes": [],
+  "spawnEvents": [
+    { "phase": 0, "atMs": 0, "atFrame": 22, "timeBase": "AnimationFrame", "kind": "createArea", "areaId": 2, "at": "self", "dist": 0, "durationMs": 0 }
+  ],
+  "hitEvents": []
+}

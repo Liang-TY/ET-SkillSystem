@@ -1,0 +1,50 @@
+{
+  "id": 11,
+  "name": "HardAttack",
+  "type": "MeleeCombo",
+  "cooldownMs": 6000,
+  "totalTimeMs": 950,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    {
+      "animId": 49,
+      "durationMs": 950,
+      "cancelMs": -1,
+      "clearHitTargets": true,
+      "superArmorMs": 0,
+      "movement": {
+        "distance": 0,
+        "durationMs": 0,
+        "stopOnHit": false
+      },
+      "nextSkillId": 0,
+      "nextTrigger": "none"
+    }
+  ],
+  "hitReactions": [
+    {
+      "phase": 0,
+      "damage": 80,
+      "hitstunMs": 800,
+      "kbX": 300,
+      "launchY": 300,
+      "procBuffId": 0,
+      "procChance": 0
+    }
+  ],
+  "hitActions": [1],
+  "manualBoxes": [
+    {
+      "phase": 0,
+      "onMs": 300,
+      "offMs": 550,
+      "offset": [0.9, 0.8, 0],
+      "half": [0.8, 0.6, 0.3]
+    }
+  ],
+  "spawnEvents": [],
+  "hitEvents": []
+}

@@ -1,0 +1,14 @@
+{
+  "id": 12,
+  "name": "ChargeCrashUpper",
+  "halfExtents": [0.83, 0.4, 0.55],
+  "totalTimeMs": 200,
+  "tickTimeMs": 0,
+  "enterActions": [1],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 120, "hitstunMs": 800, "kbX": 0, "launchY": 400, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 122,
+  "viewBackAnimId": 0,
+  "viewEndAnimId": 0
+}

@@ -1,0 +1,34 @@
+{
+  "id": 16,
+  "name": "HopSmash",
+  "type": "MeleeCombo",
+  "cooldownMs": 4000,
+  "totalTimeMs": 1300,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 75, "durationMs": 400, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 76, "durationMs": 420, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 1.5, "durationMs": 420, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 180, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 60, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 60, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 180, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [
+    { "phase": 0, "damage": 40, "hitstunMs": 300, "kbX": 30, "launchY": 30, "procBuffId": 0, "procChance": 0 },
+    { "phase": 1, "damage": 40, "hitstunMs": 300, "kbX": 30, "launchY": 30, "procBuffId": 0, "procChance": 0 },
+    { "phase": 2, "damage": 40, "hitstunMs": 300, "kbX": 30, "launchY": 30, "procBuffId": 0, "procChance": 0 },
+    { "phase": 3, "damage": 80, "hitstunMs": 700, "kbX": 200, "launchY": 200, "procBuffId": 0, "procChance": 0 },
+    { "phase": 4, "damage": 80, "hitstunMs": 700, "kbX": 200, "launchY": 200, "procBuffId": 0, "procChance": 0 },
+    { "phase": 5, "damage": 80, "hitstunMs": 700, "kbX": 200, "launchY": 200, "procBuffId": 0, "procChance": 0 }
+  ],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [
+    { "phase": -1, "atMs": 760, "atFrame": 0, "timeBase": "CastTime", "kind": "superArmor", "at": "self", "dist": 0, "durationMs": 540 },
+    { "phase": -1, "atMs": 1120, "atFrame": 0, "timeBase": "CastTime", "kind": "createArea", "areaId": 5, "at": "inFront", "dist": 0.5, "durationMs": 0 }
+  ],
+  "hitEvents": []
+}

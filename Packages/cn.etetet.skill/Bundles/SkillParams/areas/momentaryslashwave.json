@@ -1,0 +1,14 @@
+{
+  "id": 11,
+  "name": "MomentarySlashWave",
+  "halfExtents": [0, 0, 0],
+  "totalTimeMs": 480,
+  "tickTimeMs": 0,
+  "enterActions": [],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 50, "hitstunMs": 500, "kbX": 0, "launchY": 0, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 118,
+  "viewBackAnimId": 119,
+  "viewEndAnimId": 0
+}

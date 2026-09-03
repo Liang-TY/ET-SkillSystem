@@ -1,0 +1,14 @@
+{
+  "id": 3,
+  "name": "TripleSlashFinish",
+  "halfExtents": [0.8, 0.4, 0.7],
+  "totalTimeMs": 280,
+  "tickTimeMs": 0,
+  "enterActions": [1],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 90, "hitstunMs": 800, "kbX": 300, "launchY": 200, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 0,
+  "viewBackAnimId": 0,
+  "viewEndAnimId": 0
+}

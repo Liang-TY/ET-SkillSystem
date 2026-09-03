@@ -1,0 +1,21 @@
+{
+  "id": 14,
+  "name": "DashAttackMultiHit",
+  "type": "Projectile",
+  "cooldownMs": 1000,
+  "totalTimeMs": 500,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 66, "durationMs": 500, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [{ "phase": 0, "damage": 60, "hitstunMs": 400, "kbX": 250, "launchY": 80, "procBuffId": 0, "procChance": 0 }],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [
+    { "phase": -1, "atMs": 200, "atFrame": 0, "timeBase": "CastTime", "kind": "createBullet", "bulletId": 3, "at": "self", "dist": 0, "durationMs": 0 }
+  ],
+  "hitEvents": []
+}

@@ -1,0 +1,14 @@
+{
+  "id": 7,
+  "name": "VaneSlashFinal",
+  "halfExtents": [1.2, 0.5, 0.5],
+  "totalTimeMs": 280,
+  "tickTimeMs": 0,
+  "enterActions": [1],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 120, "hitstunMs": 800, "kbX": 500, "launchY": 200, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 82,
+  "viewBackAnimId": 0,
+  "viewEndAnimId": 0
+}

@@ -1,0 +1,19 @@
+{
+  "id": 9,
+  "name": "MonsterHighKick",
+  "type": "MeleeCombo",
+  "cooldownMs": 800,
+  "totalTimeMs": 370,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 43, "durationMs": 370, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [{ "phase": 0, "damage": 60, "hitstunMs": 800, "kbX": 200, "launchY": 200, "procBuffId": 3, "procChance": 20 }],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [],
+  "hitEvents": []
+}

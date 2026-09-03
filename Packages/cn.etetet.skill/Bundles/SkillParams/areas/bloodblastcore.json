@@ -1,0 +1,14 @@
+{
+  "id": 15,
+  "name": "BloodBlastCore",
+  "halfExtents": [1.2, 1, 1.65],
+  "totalTimeMs": 1800,
+  "tickTimeMs": 450,
+  "enterActions": [],
+  "tickActions": [1],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 90, "hitstunMs": 500, "kbX": 0, "launchY": 150, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 127,
+  "viewBackAnimId": 0,
+  "viewEndAnimId": 0
+}

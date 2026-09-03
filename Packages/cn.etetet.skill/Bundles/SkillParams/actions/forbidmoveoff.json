@@ -1,0 +1,8 @@
+{
+  "id": 4,
+  "name": "ForbidMoveOff",
+  "kind": "ForbidMove",
+  "value": -1,
+  "intervalMs": 0,
+  "buffId": 0
+}

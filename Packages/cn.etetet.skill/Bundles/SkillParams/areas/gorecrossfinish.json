@@ -1,0 +1,14 @@
+{
+  "id": 10,
+  "name": "GoreCrossFinish",
+  "halfExtents": [1.4, 0.5, 1.7],
+  "totalTimeMs": 280,
+  "tickTimeMs": 0,
+  "enterActions": [1, 7],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 250, "hitstunMs": 800, "kbX": 120, "launchY": 300, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 86,
+  "viewBackAnimId": 0,
+  "viewEndAnimId": 0
+}

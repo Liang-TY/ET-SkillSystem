@@ -1,0 +1,11 @@
+{
+  "id": 3,
+  "name": "Bleed",
+  "durationMs": 3000,
+  "tickTimeMs": 1000,
+  "maxStacks": 0,
+  "refreshOnApply": true,
+  "addActions": [],
+  "tickActions": [6],
+  "removeActions": []
+}

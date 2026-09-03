@@ -1,0 +1,8 @@
+{
+  "id": 7,
+  "name": "AddBleedBuff",
+  "kind": "AddBuff",
+  "value": 0,
+  "intervalMs": 0,
+  "buffId": 3
+}

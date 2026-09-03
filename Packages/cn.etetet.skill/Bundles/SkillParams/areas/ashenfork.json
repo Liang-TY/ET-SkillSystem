@@ -1,0 +1,14 @@
+{
+  "id": 4,
+  "name": "AshenFork",
+  "halfExtents": [1.1, 0.2, 0.35],
+  "totalTimeMs": 330,
+  "tickTimeMs": 0,
+  "enterActions": [1],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 90, "hitstunMs": 800, "kbX": 0, "launchY": 300, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 69,
+  "viewBackAnimId": 70,
+  "viewEndAnimId": 0
+}

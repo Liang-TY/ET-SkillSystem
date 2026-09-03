@@ -1,0 +1,24 @@
+{
+  "id": 17,
+  "name": "VaneSlash",
+  "type": "AreaBurst",
+  "cooldownMs": 8000,
+  "totalTimeMs": 2000,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 79, "durationMs": 350, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 80, "durationMs": 1250, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 400, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [{ "phase": 0, "damage": 70, "hitstunMs": 600, "kbX": 0, "launchY": 180, "procBuffId": 0, "procChance": 0 }],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [
+    { "phase": 1, "atMs": 0, "atFrame": 0, "timeBase": "PhaseEnter", "kind": "createArea", "areaId": 6, "at": "inFront", "dist": 0.8, "durationMs": 0 },
+    { "phase": 2, "atMs": 0, "atFrame": 0, "timeBase": "PhaseEnter", "kind": "createArea", "areaId": 7, "at": "inFront", "dist": 0.8, "durationMs": 0 }
+  ],
+  "hitEvents": []
+}

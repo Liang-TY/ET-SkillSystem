@@ -1,0 +1,27 @@
+{
+  "id": 19,
+  "name": "WeaponCombo",
+  "type": "MeleeCombo",
+  "cooldownMs": 0,
+  "totalTimeMs": 2800,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 88, "durationMs": 700, "cancelMs": 300, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 89, "durationMs": 640, "cancelMs": 300, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 90, "durationMs": 700, "cancelMs": 300, "cancelButton": 1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 91, "durationMs": 640, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [
+    { "phase": 0, "damage": 60, "hitstunMs": 400, "kbX": 30, "launchY": 80, "procBuffId": 0, "procChance": 0 },
+    { "phase": 1, "damage": 70, "hitstunMs": 400, "kbX": 30, "launchY": 95, "procBuffId": 0, "procChance": 0 },
+    { "phase": 2, "damage": 80, "hitstunMs": 400, "kbX": 30, "launchY": 105, "procBuffId": 0, "procChance": 0 },
+    { "phase": 3, "damage": 110, "hitstunMs": 700, "kbX": 80, "launchY": 400, "procBuffId": 0, "procChance": 0 }
+  ],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [],
+  "hitEvents": []
+}

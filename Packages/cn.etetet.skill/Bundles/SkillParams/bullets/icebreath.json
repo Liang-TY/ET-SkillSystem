@@ -1,0 +1,15 @@
+{
+  "id": 2,
+  "name": "IceBreath",
+  "speed": 2.5,
+  "totalTimeMs": 1200,
+  "destroyOnHit": false,
+  "hitResetIntervalMs": 0,
+  "halfExtents": [1.2, 0.4, 0.15],
+  "spawnOffset": [0.6, 0.7, 0],
+  "viewOffset": [0, 0, 0],
+  "viewGrounded": false,
+  "viewAnimId": 47,
+  "hitReaction": { "phase": 0, "damage": 40, "hitstunMs": 400, "kbX": 30, "launchY": 100, "procBuffId": 4, "procChance": 10 },
+  "hitActions": [1]
+}

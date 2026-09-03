@@ -1,0 +1,15 @@
+{
+  "id": 4,
+  "name": "GrandWave",
+  "speed": 2.5,
+  "totalTimeMs": 900,
+  "destroyOnHit": false,
+  "hitResetIntervalMs": 350,
+  "halfExtents": [1.5, 0.5, 0.75],
+  "spawnOffset": [0.8, 0.5, 0],
+  "viewOffset": [0, 0, 0],
+  "viewGrounded": true,
+  "viewAnimId": 115,
+  "hitReaction": { "phase": 0, "damage": 45, "hitstunMs": 400, "kbX": 300, "launchY": 200, "procBuffId": 0, "procChance": 0 },
+  "hitActions": [1]
+}

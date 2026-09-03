@@ -1,0 +1,30 @@
+{
+  "id": 13,
+  "name": "TripleSlash",
+  "type": "MeleeCombo",
+  "cooldownMs": 6000,
+  "totalTimeMs": 2000,
+  "requireAirborne": false,
+  "manualCooldown": true,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 54, "durationMs": 580, "cancelMs": 210, "cancelButton": 13, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 2, "durationMs": 200, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "key" },
+    { "animId": 55, "durationMs": 580, "cancelMs": 210, "cancelButton": 13, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 2, "durationMs": 200, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "key" },
+    { "animId": 56, "durationMs": 580, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 2, "durationMs": 200, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [
+    { "phase": 0, "damage": 60, "hitstunMs": 500, "kbX": 200, "launchY": 120, "procBuffId": 0, "procChance": 0 },
+    { "phase": 1, "damage": 60, "hitstunMs": 500, "kbX": 200, "launchY": 120, "procBuffId": 0, "procChance": 0 },
+    { "phase": 2, "damage": 60, "hitstunMs": 500, "kbX": 200, "launchY": 120, "procBuffId": 0, "procChance": 0 }
+  ],
+  "hitActions": [1],
+  "manualBoxes": [
+    { "phase": 0, "onMs": 0, "offMs": 280, "offset": [0.8, 0.3, 0], "half": [0.7, 0.35, 0.6] },
+    { "phase": 1, "onMs": 0, "offMs": 280, "offset": [0.8, 0.3, 0], "half": [0.7, 0.35, 0.6] }
+  ],
+  "spawnEvents": [
+    { "phase": 2, "atMs": 0, "atFrame": 0, "timeBase": "PhaseEnter", "kind": "createArea", "areaId": 3, "at": "inFront", "dist": 0.9, "durationMs": 0 }
+  ],
+  "hitEvents": []
+}

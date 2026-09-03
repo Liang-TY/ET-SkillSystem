@@ -1,0 +1,22 @@
+{
+  "buttons": [
+    { "button": 1, "skillId": 1 },
+    { "button": 2, "skillId": 2 },
+    { "button": 3, "skillId": 3 },
+    { "button": 5, "skillId": 5 },
+    { "button": 11, "skillId": 11 },
+    { "button": 12, "skillId": 12 },
+    { "button": 13, "skillId": 13 },
+    { "button": 14, "skillId": 14 },
+    { "button": 15, "skillId": 15 },
+    { "button": 16, "skillId": 16 },
+    { "button": 17, "skillId": 17 },
+    { "button": 18, "skillId": 18 },
+    { "button": 19, "skillId": 19 },
+    { "button": 20, "skillId": 20 },
+    { "button": 21, "skillId": 21 },
+    { "button": 22, "skillId": 22 },
+    { "button": 23, "skillId": 23 },
+    { "button": 24, "skillId": 24 }
+  ]
+}

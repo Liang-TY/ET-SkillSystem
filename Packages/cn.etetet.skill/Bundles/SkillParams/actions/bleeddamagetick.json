@@ -1,0 +1,8 @@
+{
+  "id": 6,
+  "name": "BleedDamageTick",
+  "kind": "DamageOwner",
+  "value": 15,
+  "intervalMs": 0,
+  "buffId": 0
+}

@@ -1,0 +1,19 @@
+{
+  "id": 22,
+  "name": "MomentarySlash",
+  "type": "MeleeCombo",
+  "cooldownMs": 2000,
+  "totalTimeMs": 1055,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 117, "durationMs": 1055, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [{ "phase": 0, "damage": 120, "hitstunMs": 800, "kbX": 0, "launchY": 0, "procBuffId": 0, "procChance": 0 }],
+  "hitActions": [1],
+  "manualBoxes": [{ "phase": 0, "onMs": 575, "offMs": 725, "offset": [0.5, 0.35, 0], "half": [1.1, 0.7, 0.7] }],
+  "spawnEvents": [{ "phase": -1, "atMs": 575, "atFrame": 0, "timeBase": "CastTime", "kind": "createArea", "areaId": 11, "at": "inFront", "dist": 0.5, "durationMs": 0 }],
+  "hitEvents": []
+}

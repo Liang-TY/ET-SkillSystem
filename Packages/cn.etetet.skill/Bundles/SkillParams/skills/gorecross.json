@@ -1,0 +1,34 @@
+{
+  "id": 18,
+  "name": "GoreCross",
+  "type": "AreaBurst",
+  "cooldownMs": 3000,
+  "totalTimeMs": 1400,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 83, "durationMs": 350, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 150, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 570, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 130, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 190, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 0, "durationMs": 10, "cancelMs": -1, "clearHitTargets": false, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [
+    { "phase": 1, "damage": 80, "hitstunMs": 500, "kbX": 100, "launchY": 100, "procBuffId": 0, "procChance": 0 },
+    { "phase": 3, "damage": 90, "hitstunMs": 600, "kbX": 100, "launchY": 200, "procBuffId": 0, "procChance": 0 }
+  ],
+  "hitActions": [1],
+  "manualBoxes": [
+    { "phase": 1, "onMs": 0, "offMs": 150, "offset": [0.9, 0.3, 0], "half": [0.7, 0.3, 0.6] },
+    { "phase": 3, "onMs": 0, "offMs": 130, "offset": [0.9, 0.3, 0], "half": [0.7, 0.3, 0.6] }
+  ],
+  "spawnEvents": [
+    { "phase": 3, "atMs": 0, "atFrame": 0, "timeBase": "PhaseEnter", "kind": "createArea", "areaId": 8, "at": "inFront", "dist": 0.9, "durationMs": 0 },
+    { "phase": 5, "atMs": 0, "atFrame": 0, "timeBase": "PhaseEnter", "kind": "createArea", "areaId": 9, "at": "inFront", "dist": 0.9, "durationMs": 0 },
+    { "phase": -1, "atMs": 1070, "untilMs": 1390, "atFrame": 0, "timeBase": "Input", "kind": "createArea", "areaId": 10, "at": "inFront", "dist": 0.9, "durationMs": 0, "button": 18, "consumeInput": true }
+  ],
+  "hitEvents": []
+}

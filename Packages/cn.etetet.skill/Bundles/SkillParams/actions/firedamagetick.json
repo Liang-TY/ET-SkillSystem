@@ -1,0 +1,8 @@
+{
+  "id": 2,
+  "name": "FireDamageTick",
+  "kind": "DamageOwner",
+  "value": 10,
+  "intervalMs": 0,
+  "buffId": 0
+}

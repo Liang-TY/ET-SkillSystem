@@ -1,0 +1,19 @@
+{
+  "id": 7,
+  "name": "MonsterLowKick",
+  "type": "MeleeCombo",
+  "cooldownMs": 800,
+  "totalTimeMs": 540,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 42, "durationMs": 540, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [{ "phase": 0, "damage": 50, "hitstunMs": 400, "kbX": 100, "launchY": 200, "procBuffId": 0, "procChance": 0 }],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [],
+  "hitEvents": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": 24,
+  "name": "BloodBlast",
+  "type": "AreaBurst",
+  "cooldownMs": 2000,
+  "totalTimeMs": 400,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 0, "durationMs": 400, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [],
+  "hitActions": [],
+  "manualBoxes": [],
+  "spawnEvents": [
+    { "phase": -1, "atMs": 0, "atFrame": 0, "timeBase": "CastTime", "kind": "createArea", "areaId": 13, "at": "self", "dist": 0, "durationMs": 0 },
+    { "phase": -1, "atMs": 0, "atFrame": 0, "timeBase": "CastTime", "kind": "createArea", "areaId": 14, "at": "self", "dist": 0, "durationMs": 0 },
+    { "phase": -1, "atMs": 0, "atFrame": 0, "timeBase": "CastTime", "kind": "createArea", "areaId": 15, "at": "self", "dist": 0, "durationMs": 0 }
+  ],
+  "hitEvents": []
+}

@@ -1,0 +1,25 @@
+{
+  "id": 20,
+  "name": "MoonlightSlash",
+  "type": "MeleeCombo",
+  "cooldownMs": 2000,
+  "totalTimeMs": 1850,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 108, "durationMs": 620, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 109, "durationMs": 620, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "phaseEnd" },
+    { "animId": 110, "durationMs": 550, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [
+    { "phase": 0, "damage": 70, "hitstunMs": 500, "kbX": 0, "launchY": 300, "procBuffId": 0, "procChance": 0 },
+    { "phase": 1, "damage": 80, "hitstunMs": 600, "kbX": 0, "launchY": 300, "procBuffId": 0, "procChance": 0 },
+    { "phase": 2, "damage": 100, "hitstunMs": 800, "kbX": 100, "launchY": 300, "procBuffId": 0, "procChance": 0 }
+  ],
+  "hitActions": [1],
+  "manualBoxes": [],
+  "spawnEvents": [],
+  "hitEvents": []
+}

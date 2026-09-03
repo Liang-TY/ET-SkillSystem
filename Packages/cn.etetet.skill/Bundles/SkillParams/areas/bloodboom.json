@@ -1,0 +1,14 @@
+{
+  "id": 2,
+  "name": "BloodBoom",
+  "halfExtents": [4, 1.5, 1.5],
+  "totalTimeMs": 500,
+  "tickTimeMs": 0,
+  "enterActions": [1, 5],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 300, "hitstunMs": 1000, "kbX": 0, "launchY": 0, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 19,
+  "viewBackAnimId": 20,
+  "viewEndAnimId": 0
+}

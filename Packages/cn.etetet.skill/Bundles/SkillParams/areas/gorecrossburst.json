@@ -1,0 +1,14 @@
+{
+  "id": 9,
+  "name": "GoreCrossBurst",
+  "halfExtents": [1.4, 0.5, 1.7],
+  "totalTimeMs": 320,
+  "tickTimeMs": 0,
+  "enterActions": [1],
+  "tickActions": [],
+  "exitActions": [],
+  "hitReaction": { "phase": 0, "damage": 150, "hitstunMs": 800, "kbX": 250, "launchY": 300, "procBuffId": 0, "procChance": 0 },
+  "viewAnimId": 86,
+  "viewBackAnimId": 0,
+  "viewEndAnimId": 87
+}

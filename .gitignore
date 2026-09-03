@@ -20,6 +20,9 @@ Packages/cn.etetet.lockstep/Bundles/*
 !Packages/cn.etetet.lockstep/Bundles/AnimRes/
 !Packages/cn.etetet.lockstep/Bundles/MapRes/
 !Packages/cn.etetet.lockstep/Bundles/ImagePacks2/
+!Packages/cn.etetet.skill/Bundles/
+Packages/cn.etetet.skill/Bundles/*
+!Packages/cn.etetet.skill/Bundles/SkillParams/
 Library
 Logs
 UserSettings

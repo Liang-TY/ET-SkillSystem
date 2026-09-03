@@ -1,0 +1,21 @@
+{
+  "id": 10,
+  "name": "MonsterIceBreath",
+  "type": "Projectile",
+  "cooldownMs": 2000,
+  "totalTimeMs": 660,
+  "requireAirborne": false,
+  "manualCooldown": false,
+  "minCastHpPct": 0,
+  "castHpCostPct": 0,
+  "phases": [
+    { "animId": 44, "durationMs": 660, "cancelMs": -1, "clearHitTargets": true, "superArmorMs": 0, "movement": { "distance": 0, "durationMs": 0, "stopOnHit": false }, "nextSkillId": 0, "nextTrigger": "none" }
+  ],
+  "hitReactions": [],
+  "hitActions": [],
+  "manualBoxes": [],
+  "spawnEvents": [
+    { "phase": 0, "atMs": 0, "atFrame": 3, "timeBase": "AnimationFrame", "kind": "createBullet", "bulletId": 2, "at": "self", "dist": 0, "durationMs": 0 }
+  ],
+  "hitEvents": []
+}
