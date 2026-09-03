@@ -10,8 +10,7 @@
 
 namespace ET.skillconfig
 {
-[ConfigProcess(ConfigType.Code)]
-public partial class BulletParams : Singleton<BulletParams>, IConfig
+public partial class BulletParams : Singleton<BulletParams>
 {
     private readonly System.Collections.Generic.Dictionary<int, skillconfig.BulletParam> _dataMap;
 

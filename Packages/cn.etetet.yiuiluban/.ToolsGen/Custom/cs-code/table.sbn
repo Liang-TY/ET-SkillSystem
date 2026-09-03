@@ -32,8 +32,7 @@
 /// {{escape_comment __table.comment}}
 /// </summary>
 {{~end~}}
-[ConfigProcess(ConfigType.Code)]
-public partial class {{__name}} : Singleton<{{__name}}>, IConfig
+public partial class {{__name}} : Singleton<{{__name}}>
 {
     {{~if __table.is_map_table ~}}
     private readonly System.Collections.Generic.Dictionary<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}> _dataMap;

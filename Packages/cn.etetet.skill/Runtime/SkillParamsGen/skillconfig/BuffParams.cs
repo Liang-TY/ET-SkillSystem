@@ -10,8 +10,7 @@
 
 namespace ET.skillconfig
 {
-[ConfigProcess(ConfigType.Code)]
-public partial class BuffParams : Singleton<BuffParams>, IConfig
+public partial class BuffParams : Singleton<BuffParams>
 {
     private readonly System.Collections.Generic.Dictionary<int, skillconfig.BuffParam> _dataMap;
 

@@ -10,8 +10,7 @@
 
 namespace ET.skillconfig
 {
-[ConfigProcess(ConfigType.Code)]
-public partial class SkillParams : Singleton<SkillParams>, IConfig
+public partial class SkillParams : Singleton<SkillParams>
 {
     private readonly System.Collections.Generic.Dictionary<int, skillconfig.SkillParam> _dataMap;
 

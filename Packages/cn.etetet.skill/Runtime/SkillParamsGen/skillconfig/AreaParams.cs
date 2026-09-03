@@ -10,8 +10,7 @@
 
 namespace ET.skillconfig
 {
-[ConfigProcess(ConfigType.Code)]
-public partial class AreaParams : Singleton<AreaParams>, IConfig
+public partial class AreaParams : Singleton<AreaParams>
 {
     private readonly System.Collections.Generic.Dictionary<int, skillconfig.AreaParam> _dataMap;
 

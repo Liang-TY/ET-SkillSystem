@@ -10,8 +10,7 @@
 
 namespace ET.skillconfig
 {
-[ConfigProcess(ConfigType.Code)]
-public partial class SkillButtonMappings : Singleton<SkillButtonMappings>, IConfig
+public partial class SkillButtonMappings : Singleton<SkillButtonMappings>
 {
     private readonly System.Collections.Generic.Dictionary<int, skillconfig.ButtonMapping> _dataMap;
 
