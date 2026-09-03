@@ -356,66 +356,514 @@ namespace ET.Editor
             }
 
             parent.Add(new IntegerField("id") { isReadOnly = true, value = skill.id });
-
-            TextField nameField = new TextField("name") { value = skill.name ?? string.Empty };
-            BindDeferred(
-                nameField,
+            parent.Add(SkillInspectorFields.Text(
+                "name", skill.name,
                 () => session.Document?.Skill?.name,
                 value => session.Execute(new SkillEditorDelegateCommand(
-                    $"修改 name → {value}", document => document.Skill.name = value)));
-            parent.Add(nameField);
+                    $"修改 name → {value}", document => document.Skill.name = value))));
+            parent.Add(SkillInspectorFields.Enum<SkillParamType>(
+                "type", skill.type,
+                value => session.Execute(new SkillEditorDelegateCommand(
+                    $"修改 type → {value}", document => document.Skill.type = value))));
+            parent.Add(SkillInspectorFields.Int(
+                "cooldownMs", skill.cooldownMs, true,
+                () => session.Document?.Skill?.cooldownMs ?? 0,
+                value => session.Execute(new SkillEditorDelegateCommand(
+                    $"修改 cooldownMs → {value}", document => document.Skill.cooldownMs = value))));
+            parent.Add(SkillInspectorFields.Int(
+                "totalTimeMs", skill.totalTimeMs, true,
+                () => session.Document?.Skill?.totalTimeMs ?? 0,
+                value => session.Execute(new SkillEditorDelegateCommand(
+                    $"修改 totalTimeMs → {value}", document => document.Skill.totalTimeMs = value))));
+            parent.Add(SkillInspectorFields.Bool(
+                "requireAirborne", skill.requireAirborne,
+                () => session.Document?.Skill?.requireAirborne ?? false,
+                value => session.Execute(new SkillEditorDelegateCommand(
+                    $"修改 requireAirborne → {value}", document => document.Skill.requireAirborne = value))));
+            parent.Add(SkillInspectorFields.Bool(
+                "manualCooldown", skill.manualCooldown,
+                () => session.Document?.Skill?.manualCooldown ?? false,
+                value => session.Execute(new SkillEditorDelegateCommand(
+                    $"修改 manualCooldown → {value}", document => document.Skill.manualCooldown = value))));
 
-            SkillParamType parsedType = Enum.TryParse(skill.type, true, out SkillParamType type)
-                ? type
-                : SkillParamType.MeleeCombo;
-            EnumField typeField = new EnumField("type", parsedType);
-            typeField.RegisterValueChangedCallback(_ => session.Execute(new SkillEditorDelegateCommand(
-                $"修改 type → {typeField.value}",
-                document => document.Skill.type = typeField.value.ToString())));
-            parent.Add(typeField);
-
-            IntegerField cooldownField = new IntegerField("cooldownMs") { isDelayed = true, value = skill.cooldownMs };
-            cooldownField.RegisterValueChangedCallback(_ => session.Execute(new SkillEditorDelegateCommand(
-                $"修改 cooldownMs → {cooldownField.value}",
-                document => document.Skill.cooldownMs = cooldownField.value)));
-            parent.Add(cooldownField);
-
-            IntegerField totalField = new IntegerField("totalTimeMs") { isDelayed = true, value = skill.totalTimeMs };
-            totalField.RegisterValueChangedCallback(_ => session.Execute(new SkillEditorDelegateCommand(
-                $"修改 totalTimeMs → {totalField.value}",
-                document => document.Skill.totalTimeMs = totalField.value)));
-            parent.Add(totalField);
-
-            Toggle airborneToggle = new Toggle("requireAirborne") { value = skill.requireAirborne };
-            airborneToggle.RegisterValueChangedCallback(_ => session.Execute(new SkillEditorDelegateCommand(
-                $"修改 requireAirborne → {airborneToggle.value}",
-                document => document.Skill.requireAirborne = airborneToggle.value)));
-            parent.Add(airborneToggle);
-
-            Toggle manualCooldownToggle = new Toggle("manualCooldown") { value = skill.manualCooldown };
-            manualCooldownToggle.RegisterValueChangedCallback(_ => session.Execute(new SkillEditorDelegateCommand(
-                $"修改 manualCooldown → {manualCooldownToggle.value}",
-                document => document.Skill.manualCooldown = manualCooldownToggle.value)));
-            parent.Add(manualCooldownToggle);
-
-            Label hint = new Label("Phase / 手动盒 / 事件编辑在 Step 2 开放");
-            hint.style.color = new Color(0.6f, 0.65f, 0.7f);
-            parent.Add(hint);
+            BuildPhasesBlock(parent, skill);
+            BuildReactionsBlock(parent, skill);
+            BuildManualBoxesBlock(parent, skill);
+            BuildSpawnEventsBlock(parent, skill);
+            BuildHitEventsBlock(parent, skill);
         }
-
-        /// <summary>文本输入在失焦时形成一次命令（02 §7：不为每个字符建历史）。</summary>
-        private static void BindDeferred(TextField field, Func<string> getValue, Action<string> commit)
+        private void BuildPhasesBlock(VisualElement parent, SkillParamJson skill)
         {
-            string original = getValue();
-            field.RegisterCallback<FocusInEvent>(_ => original = getValue());
-            field.RegisterCallback<FocusOutEvent>(_ =>
+            SkillEditorSelection selection = session.Selection;
+            SkillInspectorListBlock block = new(
+                "Phases",
+                skill.phases?.Length ?? 0,
+                () => session.Execute(SkillEditorListCommands.AddPhase((skill.phases?.Length ?? 1) - 1)),
+                index => session.Execute(SkillEditorListCommands.RemoveAt("phases", index)),
+                index => session.Execute(SkillEditorListCommands.DuplicateAt("phases", index)));
+            parent.Add(block.Root);
+
+            SkillPhaseJson[] phases = skill.phases ?? Array.Empty<SkillPhaseJson>();
+            for (int i = 0; i < phases.Length; i++)
             {
-                if (!string.Equals(field.value, original, StringComparison.Ordinal))
-                    commit(field.value);
-                original = null;
-            });
+                int index = i;
+                SkillPhaseJson phase = phases[i];
+                bool selected = selection.PhaseIndex == index && selection.SpawnEventIndex is -3 or -1;
+                block.AddItemRow($"[{index}] {phase?.durationMs ?? 0}ms anim={phase?.animId ?? 0}", index, selected,
+                    () => SelectPhase(index));
+                if (!selected) continue;
+
+                VisualElement detail = new() { style = { paddingLeft = 12, marginBottom = 6 } };
+                block.ItemsContainer.Add(detail);
+                detail.Add(SkillInspectorFields.Int(
+                    "animId", phase.animId, true,
+                    () => PhaseAt(index)?.animId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].animId = {value}",
+                        document => PhaseAt(document, index).animId = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "durationMs", phase.durationMs, true,
+                    () => PhaseAt(index)?.durationMs ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].durationMs = {value}",
+                        document => PhaseAt(document, index).durationMs = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "cancelMs", phase.cancelMs, true,
+                    () => PhaseAt(index)?.cancelMs ?? -1,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].cancelMs = {value}",
+                        document => PhaseAt(document, index).cancelMs = value))));
+                detail.Add(SkillInspectorFields.Bool(
+                    "clearHitTargets", phase.clearHitTargets,
+                    () => PhaseAt(index)?.clearHitTargets ?? false,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].clearHitTargets = {value}",
+                        document => PhaseAt(document, index).clearHitTargets = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "superArmorMs", phase.superArmorMs, true,
+                    () => PhaseAt(index)?.superArmorMs ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].superArmorMs = {value}",
+                        document => PhaseAt(document, index).superArmorMs = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "nextPhase", phase.nextPhase ?? -1, true,
+                    () => PhaseAt(index)?.nextPhase ?? -1,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].nextPhase = {value}",
+                        document => PhaseAt(document, index).nextPhase = value < 0 ? null : value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "nextSkillId", phase.nextSkillId, true,
+                    () => PhaseAt(index)?.nextSkillId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].nextSkillId = {value}",
+                        document => PhaseAt(document, index).nextSkillId = value))));
+                if (phase.nextSkillId > 0)
+                    detail.Add(SkillInspectorFields.Hint($"-> {ContentName(SkillEditorAssetKind.Skill, phase.nextSkillId)}"));
+                detail.Add(SkillInspectorFields.Enum<SkillParamNextTrigger>(
+                    "nextTrigger", phase.nextTrigger,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"phases[{index}].nextTrigger = {value}",
+                        document => PhaseAt(document, index).nextTrigger = value))));
+
+                VisualElement rowButtons = new() { style = { flexDirection = FlexDirection.Row, marginTop = 2 } };
+                Button moveUp = new(() => session.Execute(SkillEditorListCommands.MoveWithin("phases", index, index - 1))) { text = "上移" };
+                moveUp.SetEnabled(index > 0);
+                Button moveDown = new(() => session.Execute(SkillEditorListCommands.MoveWithin("phases", index, index + 1))) { text = "下移" };
+                moveDown.SetEnabled(index < phases.Length - 1);
+                rowButtons.Add(moveUp);
+                rowButtons.Add(moveDown);
+                detail.Add(rowButtons);
+            }
         }
 
+        private void BuildReactionsBlock(VisualElement parent, SkillParamJson skill)
+        {
+            SkillEditorSelection selection = session.Selection;
+            SkillInspectorListBlock block = new(
+                "HitReactions",
+                skill.hitReactions?.Length ?? 0,
+                () => session.Execute(SkillEditorListCommands.AddHitReaction()),
+                index => session.Execute(SkillEditorListCommands.RemoveAt("hitReactions", index)),
+                index => session.Execute(SkillEditorListCommands.DuplicateAt("hitReactions", index)));
+            parent.Add(block.Root);
+
+            SkillHitReactionJson[] reactions = skill.hitReactions ?? Array.Empty<SkillHitReactionJson>();
+            for (int i = 0; i < reactions.Length; i++)
+            {
+                int index = i;
+                SkillHitReactionJson reaction = reactions[i];
+                bool selected = selection.PhaseIndex == index && selection.SpawnEventIndex == -2;
+                block.AddItemRow($"[phase {reaction?.phase ?? 0}] {reaction?.damage ?? 0} 伤", index, selected,
+                    () => SelectReaction(index));
+                if (!selected) continue;
+
+                VisualElement detail = new() { style = { paddingLeft = 12, marginBottom = 6 } };
+                block.ItemsContainer.Add(detail);
+                detail.Add(SkillInspectorFields.Int(
+                    "damage", reaction.damage, true,
+                    () => ReactionAt(index)?.damage ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitReactions[{index}].damage = {value}",
+                        document => ReactionAt(document, index).damage = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "hitstunMs", reaction.hitstunMs, true,
+                    () => ReactionAt(index)?.hitstunMs ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitReactions[{index}].hitstunMs = {value}",
+                        document => ReactionAt(document, index).hitstunMs = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "kbX", (int)reaction.kbX, true,
+                    () => (int)(ReactionAt(index)?.kbX ?? 0),
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitReactions[{index}].kbX = {value}",
+                        document => ReactionAt(document, index).kbX = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "launchY", (int)reaction.launchY, true,
+                    () => (int)(ReactionAt(index)?.launchY ?? 0),
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitReactions[{index}].launchY = {value}",
+                        document => ReactionAt(document, index).launchY = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "procBuffId", reaction.procBuffId, true,
+                    () => ReactionAt(index)?.procBuffId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitReactions[{index}].procBuffId = {value}",
+                        document => ReactionAt(document, index).procBuffId = value))));
+                if (reaction.procBuffId > 0)
+                    detail.Add(SkillInspectorFields.Hint($"-> {ContentName(SkillEditorAssetKind.Buff, reaction.procBuffId)}"));
+            }
+        }
+
+        private void BuildManualBoxesBlock(VisualElement parent, SkillParamJson skill)
+        {
+            SkillEditorSelection selection = session.Selection;
+            SkillInspectorListBlock block = new(
+                "ManualBoxes",
+                skill.manualBoxes?.Length ?? 0,
+                () => session.Execute(SkillEditorListCommands.AddManualBox()),
+                index => session.Execute(SkillEditorListCommands.RemoveAt("manualBoxes", index)),
+                index => session.Execute(SkillEditorListCommands.DuplicateAt("manualBoxes", index)));
+            parent.Add(block.Root);
+
+            SkillManualBoxJson[] boxes = skill.manualBoxes ?? Array.Empty<SkillManualBoxJson>();
+            for (int i = 0; i < boxes.Length; i++)
+            {
+                int index = i;
+                SkillManualBoxJson box = boxes[i];
+                bool selected = selection.ManualBoxIndex == index;
+                block.AddItemRow($"[phase {box?.phase ?? 0}] {box?.onMs ?? 0}-{box?.offMs ?? 0}ms", index, selected,
+                    () => SelectManualBox(index));
+                if (!selected) continue;
+
+                VisualElement detail = new() { style = { paddingLeft = 12, marginBottom = 6 } };
+                block.ItemsContainer.Add(detail);
+                detail.Add(SkillInspectorFields.Int(
+                    "phase", box.phase, true,
+                    () => BoxAt(index)?.phase ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"manualBoxes[{index}].phase = {value}",
+                        document => BoxAt(document, index).phase = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "onMs", box.onMs, true,
+                    () => BoxAt(index)?.onMs ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"manualBoxes[{index}].onMs = {value}",
+                        document => BoxAt(document, index).onMs = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "offMs", box.offMs, true,
+                    () => BoxAt(index)?.offMs ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"manualBoxes[{index}].offMs = {value}",
+                        document => BoxAt(document, index).offMs = value))));
+                detail.Add(SkillInspectorFields.Hint(
+                    $"offset=({Fmt(box.offset, 0)},{Fmt(box.offset, 1)},{Fmt(box.offset, 2)})  "
+                    + $"half=({Fmt(box.half, 0)},{Fmt(box.half, 1)},{Fmt(box.half, 2)})  (float[] 编辑随 Step 3)"));
+            }
+        }
+
+        private static string Fmt(float[] array, int index)
+            => array != null && array.Length > index ? array[index].ToString("0.##") : "?";
+
+        private void BuildSpawnEventsBlock(VisualElement parent, SkillParamJson skill)
+        {
+            SkillEditorSelection selection = session.Selection;
+            SkillInspectorListBlock block = new(
+                "SpawnEvents",
+                skill.spawnEvents?.Length ?? 0,
+                () => session.Execute(SkillEditorListCommands.AddSpawnEvent()),
+                index => session.Execute(SkillEditorListCommands.RemoveAt("spawnEvents", index)),
+                index => session.Execute(SkillEditorListCommands.DuplicateAt("spawnEvents", index)));
+            parent.Add(block.Root);
+
+            SkillSpawnEventJson[] spawns = skill.spawnEvents ?? Array.Empty<SkillSpawnEventJson>();
+            for (int i = 0; i < spawns.Length; i++)
+            {
+                int index = i;
+                SkillSpawnEventJson spawn = spawns[i];
+                bool selected = selection.SpawnEventIndex == index && index >= 0;
+                block.AddItemRow(
+                    $"[{index}] {(spawn.phase < 0 ? "cast" : $"p{spawn.phase}")} @{spawn.atMs}ms {spawn.kind}"
+                    + (spawn.bulletId > 0 ? $" bullet={spawn.bulletId}" : spawn.areaId > 0 ? $" area={spawn.areaId}" : string.Empty),
+                    index, selected,
+                    () => SelectSpawnEvent(index));
+                if (!selected) continue;
+
+                VisualElement detail = new() { style = { paddingLeft = 12, marginBottom = 6 } };
+                block.ItemsContainer.Add(detail);
+                detail.Add(SkillInspectorFields.Int(
+                    "phase", spawn.phase, true,
+                    () => SpawnAt(index)?.phase ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].phase = {value}",
+                        document => SpawnAt(document, index).phase = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "atMs", spawn.atMs, true,
+                    () => SpawnAt(index)?.atMs ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].atMs = {value}",
+                        document => SpawnAt(document, index).atMs = value))));
+                detail.Add(SkillInspectorFields.Enum<SkillParamTimeBase>(
+                    "timeBase", spawn.timeBase,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].timeBase = {value}",
+                        document => SpawnAt(document, index).timeBase = value))));
+                detail.Add(SkillInspectorFields.Enum<SkillParamSpawnKind>(
+                    "kind", spawn.kind,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].kind = {value}",
+                        document => SpawnAt(document, index).kind = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "areaId", spawn.areaId ?? 0, true,
+                    () => SpawnAt(index)?.areaId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].areaId = {value}",
+                        document => SpawnAt(document, index).areaId = value > 0 ? value : (int?)null))));
+                if (spawn.areaId > 0)
+                    detail.Add(SkillInspectorFields.Hint($"-> {ContentName(SkillEditorAssetKind.Area, spawn.areaId ?? 0)}"));
+                detail.Add(SkillInspectorFields.Int(
+                    "bulletId", spawn.bulletId ?? 0, true,
+                    () => SpawnAt(index)?.bulletId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].bulletId = {value}",
+                        document => SpawnAt(document, index).bulletId = value > 0 ? value : (int?)null))));
+                if (spawn.bulletId > 0)
+                    detail.Add(SkillInspectorFields.Hint($"-> {ContentName(SkillEditorAssetKind.Bullet, spawn.bulletId ?? 0)}"));
+                detail.Add(SkillInspectorFields.Int(
+                    "buffId", spawn.buffId ?? 0, true,
+                    () => SpawnAt(index)?.buffId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].buffId = {value}",
+                        document => SpawnAt(document, index).buffId = value > 0 ? value : (int?)null))));
+                if (spawn.buffId > 0)
+                    detail.Add(SkillInspectorFields.Hint($"-> {ContentName(SkillEditorAssetKind.Buff, spawn.buffId ?? 0)}"));
+                detail.Add(SkillInspectorFields.Int(
+                    "untilMs", spawn.untilMs ?? -1, true,
+                    () => SpawnAt(index)?.untilMs ?? -1,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"spawnEvents[{index}].untilMs = {value}",
+                        document => SpawnAt(document, index).untilMs = value < 0 ? null : value))));
+                detail.Add(SkillInspectorFields.Hint("-1 = 开放窗口"));
+            }
+        }
+
+        private void BuildHitEventsBlock(VisualElement parent, SkillParamJson skill)
+        {
+            SkillEditorSelection selection = session.Selection;
+            SkillInspectorListBlock block = new(
+                "HitEvents",
+                skill.hitEvents?.Length ?? 0,
+                () => session.Execute(SkillEditorListCommands.AddHitEvent()),
+                index => session.Execute(SkillEditorListCommands.RemoveAt("hitEvents", index)),
+                index => session.Execute(SkillEditorListCommands.DuplicateAt("hitEvents", index)));
+            parent.Add(block.Root);
+
+            SkillHitEventJson[] hits = skill.hitEvents ?? Array.Empty<SkillHitEventJson>();
+            for (int i = 0; i < hits.Length; i++)
+            {
+                int index = i;
+                SkillHitEventJson hitEvent = hits[i];
+                bool selected = selection.HitEventIndex == index;
+                block.AddItemRow(
+                    $"[{index}] p{hitEvent?.phase ?? 0} {hitEvent?.kind} ({hitEvent?.hitPolicy})",
+                    index, selected,
+                    () => SelectHitEvent(index));
+                if (!selected) continue;
+
+                VisualElement detail = new() { style = { paddingLeft = 12, marginBottom = 6 } };
+                block.ItemsContainer.Add(detail);
+                detail.Add(SkillInspectorFields.Int(
+                    "phase", hitEvent.phase, true,
+                    () => HitAt(index)?.phase ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitEvents[{index}].phase = {value}",
+                        document => HitAt(document, index).phase = value))));
+                detail.Add(SkillInspectorFields.Enum<SkillParamHitTrigger>(
+                    "on", hitEvent.on,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitEvents[{index}].on = {value}",
+                        document => HitAt(document, index).on = value))));
+                detail.Add(SkillInspectorFields.Enum<SkillParamHitPolicy>(
+                    "hitPolicy", hitEvent.hitPolicy,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitEvents[{index}].hitPolicy = {value}",
+                        document => HitAt(document, index).hitPolicy = value))));
+                detail.Add(SkillInspectorFields.Enum<SkillParamHitEventKind>(
+                    "kind", hitEvent.kind,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitEvents[{index}].kind = {value}",
+                        document => HitAt(document, index).kind = value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "nextPhase", hitEvent.nextPhase ?? -1, true,
+                    () => HitAt(index)?.nextPhase ?? -1,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitEvents[{index}].nextPhase = {value}",
+                        document => HitAt(document, index).nextPhase = value < 0 ? null : value))));
+                detail.Add(SkillInspectorFields.Int(
+                    "nextSkillId", hitEvent.nextSkillId ?? 0, true,
+                    () => HitAt(index)?.nextSkillId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitEvents[{index}].nextSkillId = {value}",
+                        document => HitAt(document, index).nextSkillId = value > 0 ? value : (int?)null))));
+                if (hitEvent.nextSkillId > 0)
+                    detail.Add(SkillInspectorFields.Hint($"-> {ContentName(SkillEditorAssetKind.Skill, hitEvent.nextSkillId ?? 0)}"));
+                detail.Add(SkillInspectorFields.Int(
+                    "buffId", hitEvent.buffId ?? 0, true,
+                    () => HitAt(index)?.buffId ?? 0,
+                    value => session.Execute(new SkillEditorDelegateCommand(
+                        $"hitEvents[{index}].buffId = {value}",
+                        document => HitAt(document, index).buffId = value > 0 ? value : (int?)null))));
+                if (hitEvent.buffId > 0)
+                    detail.Add(SkillInspectorFields.Hint($"-> {ContentName(SkillEditorAssetKind.Buff, hitEvent.buffId ?? 0)}"));
+            }
+        }
+
+        // ---- selection helpers ----
+
+        private void SelectPhase(int index)
+        {
+            SkillEditorSelection selection = session.Selection;
+            bool same = selection.PhaseIndex == index && selection.SpawnEventIndex is -3 or -1;
+            selection.Clear();
+            if (!same)
+            {
+                selection.PhaseIndex = index;
+                selection.SpawnEventIndex = -3;   // -3 = 选中 phase 列表项
+            }
+            MarkViewsDirty();
+        }
+
+        private void SelectReaction(int index)
+        {
+            SkillEditorSelection selection = session.Selection;
+            bool same = selection.PhaseIndex == index && selection.SpawnEventIndex == -2;
+            selection.Clear();
+            if (!same)
+            {
+                selection.PhaseIndex = index;
+                selection.SpawnEventIndex = -2;   // -2 = 选中 reaction 列表项
+            }
+            MarkViewsDirty();
+        }
+
+        private void SelectManualBox(int index)
+        {
+            SkillEditorSelection selection = session.Selection;
+            bool same = selection.ManualBoxIndex == index;
+            selection.Clear();
+            if (!same) selection.ManualBoxIndex = index;
+            MarkViewsDirty();
+        }
+
+        private void SelectSpawnEvent(int index)
+        {
+            SkillEditorSelection selection = session.Selection;
+            bool same = selection.SpawnEventIndex == index && index >= 0;
+            selection.Clear();
+            if (!same) selection.SpawnEventIndex = index;
+            MarkViewsDirty();
+        }
+
+        private void SelectHitEvent(int index)
+        {
+            SkillEditorSelection selection = session.Selection;
+            bool same = selection.HitEventIndex == index;
+            selection.Clear();
+            if (!same) selection.HitEventIndex = index;
+            MarkViewsDirty();
+        }
+
+        private SkillPhaseJson PhaseAt(int index) => PhaseAt(session.Document, index);
+
+        private static SkillPhaseJson PhaseAt(SkillEditorDocument document, int index)
+        {
+            SkillPhaseJson[] phases = document?.Skill?.phases;
+            return index >= 0 && phases != null && index < phases.Length ? phases[index] : null;
+        }
+
+        private SkillHitReactionJson ReactionAt(int index)
+        {
+            SkillHitReactionJson[] items = session.Document?.Skill?.hitReactions;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private static SkillHitReactionJson ReactionAt(SkillEditorDocument document, int index)
+        {
+            SkillHitReactionJson[] items = document?.Skill?.hitReactions;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private SkillManualBoxJson BoxAt(int index)
+        {
+            SkillManualBoxJson[] items = session.Document?.Skill?.manualBoxes;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private static SkillManualBoxJson BoxAt(SkillEditorDocument document, int index)
+        {
+            SkillManualBoxJson[] items = document?.Skill?.manualBoxes;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private SkillSpawnEventJson SpawnAt(int index)
+        {
+            SkillSpawnEventJson[] items = session.Document?.Skill?.spawnEvents;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private static SkillSpawnEventJson SpawnAt(SkillEditorDocument document, int index)
+        {
+            SkillSpawnEventJson[] items = document?.Skill?.spawnEvents;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private SkillHitEventJson HitAt(int index)
+        {
+            SkillHitEventJson[] items = session.Document?.Skill?.hitEvents;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private static SkillHitEventJson HitAt(SkillEditorDocument document, int index)
+        {
+            SkillHitEventJson[] items = document?.Skill?.hitEvents;
+            return index >= 0 && items != null && index < items.Length ? items[index] : null;
+        }
+
+        private string ContentName(SkillEditorAssetKind kind, int id)
+        {
+            if (id <= 0) return "未设置";
+            string name = ContentIds.GetName(MapKind(kind), id);
+            return name != null ? $"{id} - {name}" : $"{id} (ContentIds 未加载)";
+        }
+
+        private static ContentIdKind MapKind(SkillEditorAssetKind kind) => kind switch
+        {
+            SkillEditorAssetKind.Skill => ContentIdKind.Skill,
+            SkillEditorAssetKind.Bullet => ContentIdKind.Bullet,
+            SkillEditorAssetKind.Area => ContentIdKind.Area,
+            SkillEditorAssetKind.Buff => ContentIdKind.Buff,
+            SkillEditorAssetKind.Action => ContentIdKind.Action,
+            _ => ContentIdKind.Skill,
+        };
         private void RebuildIssues()
         {
             issuesScroll.Clear();

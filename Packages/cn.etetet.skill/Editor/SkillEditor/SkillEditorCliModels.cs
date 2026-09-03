@@ -51,4 +51,22 @@ namespace ET.Editor
         public readonly List<string> Errors = new();
         public readonly List<string> Warnings = new();
     }
+
+    public sealed class SkillEditorPatchResult
+    {
+        public bool Ok = true;
+        public string Command = "skill_editor_patch";
+        /// <summary>03 §5 错误码；成功为 null。</summary>
+        public string Code;
+        public string Kind;
+        public int Id;
+        public string Path;
+        /// <summary>操作是否改变了 DTO（dryRun 也算）。</summary>
+        public bool Changed;
+        public bool Saved;
+        public string BaseHash;
+        public string ResultHash;
+        public readonly List<string> Errors = new();
+        public readonly List<string> Warnings = new();
+    }
 }

@@ -65,5 +65,35 @@ namespace ET.Editor
             }
             return SkillEditorOperations.Validate(parsed, id);
         }
+
+        /// <summary>
+        /// patch（03 §4）：请求文件传 --request（工程内相对路径），避免长 JSON 进命令行。
+        /// 请求体含 operations/dryRun/expectedHash/save；默认 dryRun 不写盘。
+        /// </summary>
+        [CliCommand("skill_editor_patch", "按白名单 JSON Pointer 操作修改 Skill 参数：读取→应用→校验→可选保存", Tags = new[] { "skill_editor" })]
+        public static SkillEditorPatchResult Patch(
+            [CliArg("request", "patch 请求 JSON 文件（工程内相对路径）", Required = true)] string request)
+        {
+            string path = System.IO.Path.Combine(
+                System.IO.Directory.GetCurrentDirectory(),
+                request.Replace('\\', '/'));
+            if (!System.IO.File.Exists(path))
+            {
+                return new SkillEditorPatchResult { Ok = false, Code = "invalid_request" };
+            }
+            SkillEditorPatchRequest parsed;
+            try
+            {
+                parsed = Newtonsoft.Json.JsonConvert.DeserializeObject<SkillEditorPatchRequest>(
+                    System.IO.File.ReadAllText(path));
+            }
+            catch (System.Exception e)
+            {
+                return new SkillEditorPatchResult { Ok = false, Code = "invalid_request", Errors = { $"请求解析失败: {e.Message}" } };
+            }
+            if (parsed == null)
+                return new SkillEditorPatchResult { Ok = false, Code = "invalid_request", Errors = { "请求为空" } };
+            return SkillEditorOperations.Patch(parsed);
+        }
     }
 }

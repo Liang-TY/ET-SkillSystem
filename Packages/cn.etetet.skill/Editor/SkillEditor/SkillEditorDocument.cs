@@ -122,7 +122,13 @@ namespace ET.Editor
 
         public void Save()
         {
-            string json = JsonConvert.SerializeObject(Raw, WriteSettings);
+            Save((SkillParamJson)Raw);
+        }
+
+        /// <summary>保存指定 DTO（patch 流程用：引擎改裸 DTO 后落盘）。原子替换。</summary>
+        public void Save(SkillParamJson skill)
+        {
+            string json = JsonConvert.SerializeObject(skill ?? Raw, WriteSettings);
             string temporaryPath = Asset.Path + ".tmp";
             File.WriteAllText(temporaryPath, json, new UTF8Encoding(false));
             // 同卷原子替换：复制中途失败不会截断原文件（03 §6.2 失败时保留原文件）

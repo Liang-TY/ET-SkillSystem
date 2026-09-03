@@ -38,8 +38,7 @@ namespace ET.Editor
             switch (document.Asset.Kind)
             {
                 case SkillEditorAssetKind.Skill:
-                    CollectStructural(SkillParamLoader.ValidateSkill, document.Skill, path, issues);
-                    ValidateSkillRefs(document, store, issues);
+                    ValidateSkillDto(document.Skill, path, store, issues);
                     break;
                 case SkillEditorAssetKind.Bullet:
                     CollectStructural(SkillParamLoader.ValidateBullet, document.Bullet, path, issues);
@@ -80,14 +79,24 @@ namespace ET.Editor
             }
         }
 
-        private static void ValidateSkillRefs(
-            SkillEditorDocument document,
+        /// <summary>对未落盘的 Skill DTO 做全量校验（结构 + 跨表引用），供 patch 引擎复用。</summary>
+        public static void ValidateSkillDto(
+            SkillParamJson skill,
+            string path,
             SkillEditorDocumentStore store,
             List<SkillEditorIssue> issues)
         {
-            SkillParamJson skill = document.Skill;
+            CollectStructural(SkillParamLoader.ValidateSkill, skill, path, issues);
+            ValidateSkillRefs(skill, path, store, issues);
+        }
+
+        private static void ValidateSkillRefs(
+            SkillParamJson skill,
+            string path,
+            SkillEditorDocumentStore store,
+            List<SkillEditorIssue> issues)
+        {
             if (skill == null) return;
-            string path = document.Asset.Path;
             HashSet<int> actionIds = store.CollectIds(SkillEditorAssetKind.Action);
             HashSet<int> buffIds = store.CollectIds(SkillEditorAssetKind.Buff);
             HashSet<int> skillIds = store.CollectIds(SkillEditorAssetKind.Skill);
