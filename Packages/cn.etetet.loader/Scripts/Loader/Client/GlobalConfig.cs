@@ -23,5 +23,7 @@ namespace ET
         public string SceneName;
 
         public string Address;
+
+        public bool EditorScripts;
     }
 }
