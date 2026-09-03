@@ -88,7 +88,13 @@ namespace ET
         public static bool LoadSkillJson(string json, string source)
         {
             if (!TryDeserialize(json, source, out SkillParamJson raw)) return false;
-            if (!ValidateSkill(raw, source)) return false;
+            List<string> skillErrors = new();
+            ValidateSkill(raw, source, skillErrors);
+            if (skillErrors.Count > 0)
+            {
+                foreach (string error in skillErrors) Log.Error($"[SkillParams] 拒绝 {source}: {error}");
+                return false;
+            }
             if (skills.ContainsKey(raw.id)) return Reject(source, $"重复 skillId={raw.id}");
             skills.Add(raw.id, new SkillParam(raw));
             ContentIds.Register(ContentIdKind.Skill, raw.id, raw.name);
@@ -99,7 +105,13 @@ namespace ET
         public static bool LoadBulletJson(string json, string source)
         {
             if (!TryDeserialize(json, source, out BulletParamJson raw)) return false;
-            if (!ValidateBullet(raw, source)) return false;
+            List<string> bulletErrors = new();
+            ValidateBullet(raw, source, bulletErrors);
+            if (bulletErrors.Count > 0)
+            {
+                foreach (string error in bulletErrors) Log.Error($"[SkillParams] 拒绝 {source}: {error}");
+                return false;
+            }
             if (bullets.ContainsKey(raw.id)) return Reject(source, $"重复 bulletId={raw.id}");
             bullets.Add(raw.id, new BulletParam(raw));
             ContentIds.Register(ContentIdKind.Bullet, raw.id, raw.name);
@@ -110,7 +122,13 @@ namespace ET
         public static bool LoadAreaJson(string json, string source)
         {
             if (!TryDeserialize(json, source, out AreaParamJson raw)) return false;
-            if (!ValidateArea(raw, source)) return false;
+            List<string> areaErrors = new();
+            ValidateArea(raw, source, areaErrors);
+            if (areaErrors.Count > 0)
+            {
+                foreach (string error in areaErrors) Log.Error($"[SkillParams] 拒绝 {source}: {error}");
+                return false;
+            }
             if (areas.ContainsKey(raw.id)) return Reject(source, $"重复 areaId={raw.id}");
             areas.Add(raw.id, new AreaParam(raw));
             ContentIds.Register(ContentIdKind.Area, raw.id, raw.name);
@@ -121,7 +139,13 @@ namespace ET
         public static bool LoadBuffJson(string json, string source)
         {
             if (!TryDeserialize(json, source, out BuffParamJson raw)) return false;
-            if (!ValidateBuff(raw, source)) return false;
+            List<string> buffErrors = new();
+            ValidateBuff(raw, source, buffErrors);
+            if (buffErrors.Count > 0)
+            {
+                foreach (string error in buffErrors) Log.Error($"[SkillParams] 拒绝 {source}: {error}");
+                return false;
+            }
             if (buffs.ContainsKey(raw.id)) return Reject(source, $"重复 buffId={raw.id}");
             buffs.Add(raw.id, new BuffParam(raw));
             ContentIds.Register(ContentIdKind.Buff, raw.id, raw.name);
@@ -132,7 +156,13 @@ namespace ET
         public static bool LoadActionJson(string json, string source)
         {
             if (!TryDeserialize(json, source, out ActionParamJson raw)) return false;
-            if (!ValidateAction(raw, source)) return false;
+            List<string> actionErrors = new();
+            ValidateAction(raw, source, actionErrors);
+            if (actionErrors.Count > 0)
+            {
+                foreach (string error in actionErrors) Log.Error($"[SkillParams] 拒绝 {source}: {error}");
+                return false;
+            }
             if (actions.ContainsKey(raw.id)) return Reject(source, $"重复 actionId={raw.id}");
             actions.Add(raw.id, new ActionParam(raw));
             ContentIds.Register(ContentIdKind.Action, raw.id, raw.name);
@@ -255,92 +285,118 @@ namespace ET
             }
         }
 
-        private static bool ValidateSkill(SkillParamJson raw, string source)
+        /// <summary>
+        /// 结构校验（纯函数）：规则收集进 errors，不做日志与全局副作用。
+        /// 运行时加载与 Editor 校验服务共用同一份实现，避免规则漂移（02 §2.4 校验唯一实现）。
+        /// </summary>
+        public static void ValidateSkill(SkillParamJson raw, string source, List<string> errors)
         {
-            if (raw == null || raw.id <= 0) return Reject(source, "skill id 必须 > 0");
-            if (string.IsNullOrWhiteSpace(raw.name)) return Reject(source, $"skillId={raw.id} 缺少 name");
-            if (!IsEnum(raw.type, out SkillParamType _)) return Reject(source, $"skillId={raw.id} type 无效: {raw.type}");
+            if (raw == null || raw.id <= 0)
+            {
+                errors.Add("skill id 必须 > 0");
+                return;
+            }
+            string id = $"skillId={raw.id}";
+            if (string.IsNullOrWhiteSpace(raw.name)) errors.Add($"{id} 缺少 name");
+            if (!IsEnum(raw.type, out SkillParamType _)) errors.Add($"{id} type 无效: {raw.type}");
             if (raw.cooldownMs < 0 || raw.totalTimeMs < 0 || raw.minCastHpPct < 0 || raw.castHpCostPct < 0)
-                return Reject(source, $"skillId={raw.id} 时间/百分比不能为负");
+                errors.Add($"{id} 时间/百分比不能为负");
             if (raw.minCastHpPct > 100 || raw.castHpCostPct > 100)
-                return Reject(source, $"skillId={raw.id} 百分比必须在 0..100");
+                errors.Add($"{id} 百分比必须在 0..100");
             if (raw.phases == null || raw.phases.Length == 0)
-                return Reject(source, $"skillId={raw.id} 至少需要一个 phase");
+            {
+                errors.Add($"{id} 至少需要一个 phase");
+                return;
+            }
             int entryPhase = raw.entryPhase ?? 0;
             int airborneEntryPhase = raw.airborneEntryPhase ?? -1;
             if (entryPhase < 0 || entryPhase >= raw.phases.Length
                 || airborneEntryPhase < -1 || airborneEntryPhase >= raw.phases.Length)
-                return Reject(source, $"skillId={raw.id} entryPhase/airborneEntryPhase 越界");
+                errors.Add($"{id} entryPhase/airborneEntryPhase 越界");
             if (raw.spawnEvents != null && raw.spawnEvents.Length > 64)
-                return Reject(source, $"skillId={raw.id} spawnEvents 最多 64 个");
+                errors.Add($"{id} spawnEvents 最多 64 个");
             if (raw.hitEvents != null && raw.hitEvents.Length > 64)
-                return Reject(source, $"skillId={raw.id} hitEvents 最多 64 个");
+                errors.Add($"{id} hitEvents 最多 64 个");
             for (int i = 0; i < raw.phases.Length; i++)
             {
                 SkillPhaseJson phase = raw.phases[i];
                 if (phase == null || phase.durationMs < 0 || phase.cancelMs < -1
                     || (phase.cancelButton.HasValue && phase.cancelButton.Value < 0) || phase.superArmorMs < 0)
-                    return Reject(source, $"skillId={raw.id} phase[{i}] 时间字段无效");
-                if (!IsEnum(phase.nextTrigger, out SkillParamNextTrigger _))
-                    return Reject(source, $"skillId={raw.id} phase[{i}] nextTrigger 无效");
-                if (phase.nextPhase.HasValue
+                    errors.Add($"{id} phase[{i}] 时间字段无效");
+                if (!IsEnum(phase?.nextTrigger, out SkillParamNextTrigger _))
+                    errors.Add($"{id} phase[{i}] nextTrigger 无效");
+                if (phase?.nextPhase.HasValue == true
                     && (phase.nextPhase.Value < 0 || phase.nextPhase.Value >= raw.phases.Length))
-                    return Reject(source, $"skillId={raw.id} phase[{i}] nextPhase 越界");
-                if (phase.movement != null && phase.movement.durationMs < 0)
-                    return Reject(source, $"skillId={raw.id} phase[{i}] movement.durationMs 不能为负");
+                    errors.Add($"{id} phase[{i}] nextPhase 越界");
+                if (phase?.movement != null && phase.movement.durationMs < 0)
+                    errors.Add($"{id} phase[{i}] movement.durationMs 不能为负");
             }
             if (raw.manualBoxes != null)
             {
                 foreach (SkillManualBoxJson box in raw.manualBoxes)
                 {
-                    if (box == null || box.phase < 0 || box.phase >= raw.phases.Length || box.onMs < 0 || box.offMs < box.onMs)
-                        return Reject(source, $"skillId={raw.id} manualBox 无效");
+                    if (box == null || box.phase < 0 || box.phase >= raw.phases.Length
+                        || box.onMs < 0 || box.offMs < box.onMs)
+                    {
+                        errors.Add($"{id} manualBox 无效");
+                        continue;
+                    }
                     if (!HasVector3(box.offset) || !HasVector3(box.half))
-                        return Reject(source, $"skillId={raw.id} manualBox 必须提供 3 维 offset/half");
+                        errors.Add($"{id} manualBox 必须提供 3 维 offset/half");
                 }
             }
             if (raw.spawnEvents != null)
             {
                 foreach (SkillSpawnEventJson spawn in raw.spawnEvents)
                 {
-                    if (spawn == null || spawn.phase < -1 || spawn.atMs < 0 || spawn.atFrame < 0)
-                        return Reject(source, $"skillId={raw.id} spawnEvent 时间/phase 无效");
+                    if (spawn == null)
+                    {
+                        errors.Add($"{id} spawnEvent 为空");
+                        continue;
+                    }
+                    if (spawn.phase < -1 || spawn.atMs < 0 || spawn.atFrame < 0)
+                        errors.Add($"{id} spawnEvent 时间/phase 无效");
                     if (spawn.phase >= raw.phases.Length)
-                        return Reject(source, $"skillId={raw.id} spawnEvent phase 越界: {spawn.phase}");
+                        errors.Add($"{id} spawnEvent phase 越界: {spawn.phase}");
                     if (!IsEnum(spawn.timeBase, out SkillParamTimeBase timeBase)
                         || !IsEnum(spawn.kind, out SkillParamSpawnKind kind)
                         || !IsEnum(spawn.at, out SkillParamSpawnAt _))
-                        return Reject(source, $"skillId={raw.id} spawnEvent 枚举无效");
+                        errors.Add($"{id} spawnEvent 枚举无效");
                     if (spawn.dist < 0 || (spawn.durationMs.HasValue && spawn.durationMs.Value < 0))
-                        return Reject(source, $"skillId={raw.id} spawnEvent 数值无效");
+                        errors.Add($"{id} spawnEvent 数值无效");
                     if (spawn.untilMs.HasValue && (spawn.untilMs.Value < spawn.atMs))
-                        return Reject(source, $"skillId={raw.id} spawnEvent untilMs 必须 >= atMs");
+                        errors.Add($"{id} spawnEvent untilMs 必须 >= atMs");
                     if (timeBase != SkillParamTimeBase.CastTime && timeBase != SkillParamTimeBase.Input
                         && spawn.phase < 0)
-                        return Reject(source, $"skillId={raw.id} 该 timeBase 的 spawnEvent 必须指定 phase");
+                        errors.Add($"{id} 该 timeBase 的 spawnEvent 必须指定 phase");
                     if (timeBase == SkillParamTimeBase.Input && (!spawn.button.HasValue || spawn.button.Value <= 0))
-                        return Reject(source, $"skillId={raw.id} Input spawnEvent 必须指定 button>0");
+                        errors.Add($"{id} Input spawnEvent 必须指定 button>0");
                     if (kind == SkillParamSpawnKind.createArea && (!spawn.areaId.HasValue || spawn.areaId.Value <= 0)
                         || kind == SkillParamSpawnKind.createBullet && (!spawn.bulletId.HasValue || spawn.bulletId.Value <= 0)
                         || kind == SkillParamSpawnKind.addBuff && (!spawn.buffId.HasValue || spawn.buffId.Value <= 0)
                         || kind == SkillParamSpawnKind.playAnim && (!spawn.animId.HasValue || spawn.animId.Value <= 0)
                         || kind == SkillParamSpawnKind.superArmor && (!spawn.durationMs.HasValue || spawn.durationMs.Value <= 0))
-                        return Reject(source, $"skillId={raw.id} spawnEvent 缺少 kind 对应的整数引用/持续时间");
+                        errors.Add($"{id} spawnEvent 缺少 kind 对应的整数引用/持续时间");
                 }
             }
             if (raw.hitEvents != null)
             {
                 foreach (SkillHitEventJson hitEvent in raw.hitEvents)
                 {
-                    if (hitEvent == null || hitEvent.phase < 0 || hitEvent.phase >= raw.phases.Length)
-                        return Reject(source, $"skillId={raw.id} hitEvent phase 无效");
+                    if (hitEvent == null)
+                    {
+                        errors.Add($"{id} hitEvent 为空");
+                        continue;
+                    }
+                    if (hitEvent.phase < 0 || hitEvent.phase >= raw.phases.Length)
+                        errors.Add($"{id} hitEvent phase 无效");
                     if (!IsEnum(hitEvent.on, out SkillParamHitTrigger _)
                         || !IsEnum(hitEvent.hitPolicy, out SkillParamHitPolicy _)
                         || !IsEnum(hitEvent.kind, out SkillParamHitEventKind _))
-                        return Reject(source, $"skillId={raw.id} hitEvent 枚举无效");
+                        errors.Add($"{id} hitEvent 枚举无效");
                     if (hitEvent.nextPhase.HasValue
                         && (hitEvent.nextPhase.Value < 0 || hitEvent.nextPhase.Value >= raw.phases.Length))
-                        return Reject(source, $"skillId={raw.id} hitEvent nextPhase 越界");
+                        errors.Add($"{id} hitEvent nextPhase 越界");
                 }
             }
             if (raw.hitReactions != null)
@@ -348,51 +404,69 @@ namespace ET
                 foreach (SkillHitReactionJson reaction in raw.hitReactions)
                 {
                     if (reaction == null || reaction.phase < 0 || reaction.phase >= raw.phases.Length)
-                        return Reject(source, $"skillId={raw.id} hitReaction phase 无效");
+                    {
+                        errors.Add($"{id} hitReaction phase 无效");
+                        continue;
+                    }
                     if (reaction.hitstunMs < 0 || reaction.procChance < 0 || reaction.procChance > 100)
-                        return Reject(source, $"skillId={raw.id} hitReaction 数值无效");
+                        errors.Add($"{id} hitReaction 数值无效");
                 }
             }
-            return true;
         }
 
-        private static bool ValidateBullet(BulletParamJson raw, string source)
+        public static void ValidateBullet(BulletParamJson raw, string source, List<string> errors)
         {
-            if (raw == null || raw.id <= 0) return Reject(source, "bullet id 必须 > 0");
-            if (string.IsNullOrWhiteSpace(raw.name)) return Reject(source, $"bulletId={raw.id} 缺少 name");
+            if (raw == null || raw.id <= 0)
+            {
+                errors.Add("bullet id 必须 > 0");
+                return;
+            }
+            string id = $"bulletId={raw.id}";
+            if (string.IsNullOrWhiteSpace(raw.name)) errors.Add($"{id} 缺少 name");
             if (raw.speed < 0 || raw.totalTimeMs < 0 || raw.hitResetIntervalMs < 0)
-                return Reject(source, $"bulletId={raw.id} 数值不能为负");
+                errors.Add($"{id} 数值不能为负");
             if (!HasVector3(raw.halfExtents) || !HasVector3(raw.spawnOffset) || !HasVector3(raw.viewOffset))
-                return Reject(source, $"bulletId={raw.id} 必须提供 3 维盒/偏移");
-            return true;
+                errors.Add($"{id} 必须提供 3 维盒/偏移");
         }
 
-        private static bool ValidateArea(AreaParamJson raw, string source)
+        public static void ValidateArea(AreaParamJson raw, string source, List<string> errors)
         {
-            if (raw == null || raw.id <= 0) return Reject(source, "area id 必须 > 0");
-            if (string.IsNullOrWhiteSpace(raw.name)) return Reject(source, $"areaId={raw.id} 缺少 name");
+            if (raw == null || raw.id <= 0)
+            {
+                errors.Add("area id 必须 > 0");
+                return;
+            }
+            string id = $"areaId={raw.id}";
+            if (string.IsNullOrWhiteSpace(raw.name)) errors.Add($"{id} 缺少 name");
             if (raw.totalTimeMs < 0 || raw.tickTimeMs < 0)
-                return Reject(source, $"areaId={raw.id} 时间不能为负");
-            if (!HasVector3(raw.halfExtents)) return Reject(source, $"areaId={raw.id} halfExtents 必须为 3 维");
-            return true;
+                errors.Add($"{id} 时间不能为负");
+            if (!HasVector3(raw.halfExtents)) errors.Add($"{id} halfExtents 必须为 3 维");
         }
 
-        private static bool ValidateBuff(BuffParamJson raw, string source)
+        public static void ValidateBuff(BuffParamJson raw, string source, List<string> errors)
         {
-            if (raw == null || raw.id <= 0) return Reject(source, "buff id 必须 > 0");
-            if (string.IsNullOrWhiteSpace(raw.name)) return Reject(source, $"buffId={raw.id} 缺少 name");
+            if (raw == null || raw.id <= 0)
+            {
+                errors.Add("buff id 必须 > 0");
+                return;
+            }
+            string id = $"buffId={raw.id}";
+            if (string.IsNullOrWhiteSpace(raw.name)) errors.Add($"{id} 缺少 name");
             if (raw.durationMs < 0 || raw.tickTimeMs < 0 || raw.maxStacks < 0)
-                return Reject(source, $"buffId={raw.id} 数值不能为负");
-            return true;
+                errors.Add($"{id} 数值不能为负");
         }
 
-        private static bool ValidateAction(ActionParamJson raw, string source)
+        public static void ValidateAction(ActionParamJson raw, string source, List<string> errors)
         {
-            if (raw == null || raw.id <= 0) return Reject(source, "action id 必须 > 0");
+            if (raw == null || raw.id <= 0)
+            {
+                errors.Add("action id 必须 > 0");
+                return;
+            }
+            string id = $"actionId={raw.id}";
             if (string.IsNullOrWhiteSpace(raw.name) || string.IsNullOrWhiteSpace(raw.kind))
-                return Reject(source, $"actionId={raw.id} 缺少 name/kind");
-            if (raw.intervalMs < 0) return Reject(source, $"actionId={raw.id} intervalMs 不能为负");
-            return true;
+                errors.Add($"{id} 缺少 name/kind");
+            if (raw.intervalMs < 0) errors.Add($"{id} intervalMs 不能为负");
         }
 
         private static bool IsEnum<T>(string value, out T result) where T : struct

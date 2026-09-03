@@ -2,7 +2,8 @@
     "name": "ET.Skill.Editor",
     "rootNamespace": "",
     "references": [
-        "ET.Skill"
+        "ET.Skill",
+        "Unity.Pipeline"
     ],
     "includePlatforms": [
         "Editor"
