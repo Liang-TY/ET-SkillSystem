@@ -103,8 +103,8 @@ MonoBehaviour:
         AssetTags: 
         UserData: 
     - GroupName: AnimRes
-      GroupDesc:
-      AssetTags:
+      GroupDesc: 
+      AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
       - CollectPath: Packages/cn.etetet.lockstep/Bundles/AnimRes
@@ -113,8 +113,8 @@ MonoBehaviour:
         AddressRuleName: AddressByFilePath
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
-        AssetTags:
-        UserData:
+        AssetTags: 
+        UserData: 
     - GroupName: MapRes
       GroupDesc: 
       AssetTags: 
@@ -195,4 +195,17 @@ MonoBehaviour:
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: npk
+        UserData: 
+    - GroupName: skillParams
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Packages/cn.etetet.skill/Bundles/SkillParams
+        CollectorGUID: b51c4606ed926af4d90657025ce33118
+        CollectorType: 0
+        AddressRuleName: AddressByFilePath
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
         UserData: 
