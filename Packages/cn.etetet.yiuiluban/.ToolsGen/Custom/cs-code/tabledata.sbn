@@ -1,0 +1,45 @@
+{{
+    key_type = __table.key_ttype
+    value_type = __table.value_ttype
+    config_group = get_option_or_default 'configGroup' 'Config'
+    factory_type_name = __name + 'Factory_' + config_group
+
+    func table_data_list
+        dataList = __records |array.each do; ret (apply_value $0); end
+        ret array.join dataList ',\n'
+    end
+
+    func table_data_map
+        dataMap = __records |array.each do; ret '[ ' + (apply_key __table $0) + ' ] = ' + (apply_value $0); end
+        ret array.join dataMap ',\n'
+    end
+}}
+{{namespace_with_grace_begin __namespace_with_top_module}}
+{{~if __table.comment != '' ~}}
+/// <summary>
+/// {{escape_comment __table.comment}}
+/// </summary>
+{{~end~}}
+[ConfigGroup("{{config_group}}")]
+public sealed class {{factory_type_name}} : IConfigFactory
+{
+    public System.Type ConfigType => typeof({{__name}});
+
+    public ASingleton Create()
+    {
+        {{~if __table.is_map_table ~}}
+        return new {{__name}}(new System.Collections.Generic.Dictionary<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}>()
+        {
+            {{table_data_map}}
+        });
+        {{~else if __table.is_list_table ~}}
+        return new {{__name}}(new System.Collections.Generic.List<{{declaring_type_name value_type}}>()
+        {
+            {{table_data_list}}
+        });
+        {{~else~}}
+        return new {{__name}}({{table_data_list}});
+        {{~end~}}
+    }
+}
+{{namespace_with_grace_end __namespace_with_top_module}}

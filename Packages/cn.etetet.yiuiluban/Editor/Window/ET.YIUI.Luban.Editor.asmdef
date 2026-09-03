@@ -1,0 +1,30 @@
+{
+    "name": "ET.YIUI.Luban.Editor",
+    "rootNamespace": "",
+    "references": [
+        "ET.Core",
+        "ET.Core.Editor",
+        "ET.Model",
+        "ET.Hotfix",
+        "ET.ModelView",
+        "ET.HotfixView",
+        "UnityEngine.UI",
+        "DamageNumbersPro",
+        "ET.HybridCLR",
+        "ET.Loader",
+        "ET.YIUIFramework",
+        "ET.YooAssets",
+        "ET.Init"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
