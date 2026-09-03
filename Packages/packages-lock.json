@@ -255,6 +255,12 @@
         "cn.etetet.core": "1.0.0"
       }
     },
+    "cn.etetet.yiuiluban": {
+      "version": "file:cn.etetet.yiuiluban",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "cn.etetet.yiuiyooassets": {
       "version": "file:cn.etetet.yiuiyooassets",
       "depth": 0,
