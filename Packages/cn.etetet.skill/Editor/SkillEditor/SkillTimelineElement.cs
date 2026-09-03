@@ -89,7 +89,7 @@ namespace ET.Editor
             if (evt.button != 0) return;
             dragging = true;
             pointerId = evt.pointerId;
-            CapturePointer(pointerId);
+            PointerCaptureHelper.CapturePointer(this, pointerId);
             CurrentTimeMs = ToTime(evt.localPosition.x);
             TimeChanged?.Invoke(CurrentTimeMs);
             evt.StopPropagation();
@@ -106,7 +106,7 @@ namespace ET.Editor
         {
             if (evt.pointerId != pointerId) return;
             dragging = false;
-            ReleasePointer(pointerId);
+            PointerCaptureHelper.ReleasePointer(this, pointerId);
             pointerId = -1;
         }
 

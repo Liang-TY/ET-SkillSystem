@@ -358,9 +358,10 @@ namespace ET
                         errors.Add($"{id} spawnEvent 时间/phase 无效");
                     if (spawn.phase >= raw.phases.Length)
                         errors.Add($"{id} spawnEvent phase 越界: {spawn.phase}");
-                    if (!IsEnum(spawn.timeBase, out SkillParamTimeBase timeBase)
-                        || !IsEnum(spawn.kind, out SkillParamSpawnKind kind)
-                        || !IsEnum(spawn.at, out SkillParamSpawnAt _))
+                    bool timeBaseOk = IsEnum(spawn.timeBase, out SkillParamTimeBase timeBase);
+                    bool kindOk = IsEnum(spawn.kind, out SkillParamSpawnKind kind);
+                    bool atOk = IsEnum(spawn.at, out SkillParamSpawnAt _);
+                    if (!timeBaseOk || !kindOk || !atOk)
                         errors.Add($"{id} spawnEvent 枚举无效");
                     if (spawn.dist < 0 || (spawn.durationMs.HasValue && spawn.durationMs.Value < 0))
                         errors.Add($"{id} spawnEvent 数值无效");
