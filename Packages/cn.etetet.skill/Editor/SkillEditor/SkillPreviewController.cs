@@ -69,14 +69,19 @@ namespace ET.Editor
             overlayRenderer = overlayGo.AddComponent<SpriteRenderer>();
             overlayRenderer.sortingOrder = 20;
 
-            // Area 预览实例池（血爆等 createArea 特效视图；主层 + 背层，对应 LSAreaView）
+            // Area 预览实例池（血爆等 createArea 特效视图；主层 + 背层，对应 LSAreaView）。
+            // 一个 GO 只允许一个 Renderer → 每个实例拆两个子 GO 各挂 SpriteRenderer。
             for (int i = 0; i < 4; i++)
             {
                 GameObject areaGo = new($"Area_{i}");
                 areaGo.transform.SetParent(root, false);
-                SpriteRenderer main = areaGo.AddComponent<SpriteRenderer>();
+                GameObject mainGo = new("AreaMain");
+                mainGo.transform.SetParent(areaGo.transform, false);
+                SpriteRenderer main = mainGo.AddComponent<SpriteRenderer>();
                 main.sortingOrder = 5;    // 运行时区域主层=5
-                SpriteRenderer back = areaGo.AddComponent<SpriteRenderer>();
+                GameObject backGo = new("AreaBack");
+                backGo.transform.SetParent(areaGo.transform, false);
+                SpriteRenderer back = backGo.AddComponent<SpriteRenderer>();
                 back.sortingOrder = 4;    // 背层=4
                 areaRenderers.Add(main);
                 areaRenderers.Add(back);

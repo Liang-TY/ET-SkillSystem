@@ -148,7 +148,7 @@ namespace ET.Editor
                 if (area.viewAnimId > 0)
                     sample.Clip = SkillAnimCatalog.GetClip(area.viewAnimId, out string _);
                 if (area.viewBackAnimId > 0)
-                    sample.BackClip = SkillAnimCatalog.GetClip(area.viewBackAnimId, out string _);
+                    sample.BackClip = SkillAnimCatalog.GetClip(area.viewBackAnimId ?? 0, out string _);
                 if (sample.Clip != null) result.Add(sample);
             }
             return result;
