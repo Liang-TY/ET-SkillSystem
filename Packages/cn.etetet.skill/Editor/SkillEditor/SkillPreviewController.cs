@@ -174,7 +174,7 @@ namespace ET.Editor
         {
             EnsureBoxRenderers();
             int used = 0;
-            if (ShowBoxes && frame != null)
+            if (ShowBoxes)   // AnimFrameData 为 struct，恒非空
             {
                 used = DrawBoxSet(frame.attackBoxes, new Color(1f, 0.25f, 0.25f, 0.9f), used, "攻");
                 used = DrawBoxSet(frame.damageBoxes, new Color(0.3f, 1f, 0.4f, 0.9f), used, "受");
@@ -432,7 +432,7 @@ namespace ET.Editor
             {
                 Text = $"{label}  {System.IO.Path.GetFileName(path)}#{index}"
                     + $"  NPK={archive ?? "?"}"
-                    + $"  {sprite.width}×{sprite.height}"
+                    + $"  {sprite.textureRect.width:0}×{sprite.textureRect.height:0}"
                     + $"  center({center.x:0.#},{center.y:0.#})"
                     + $"  pos({imagePos.x},{imagePos.y})",
             };

@@ -210,10 +210,10 @@ namespace ET.Editor
                 }
             }
 
-            // 当前帧盒体原始数据（DNF 像素）
-            AnimFrameData frameData = clip.frames.Length > lastRenderedFrame ? clip.frames[lastRenderedFrame] : null;
-            if (frameData != null)
+            // 当前帧盒体原始数据（DNF 像素）；未渲染过(lastRenderedFrame=-1)或越界则跳过
+            if (lastRenderedFrame >= 0 && lastRenderedFrame < clip.frames.Length)
             {
+                AnimFrameData frameData = clip.frames[lastRenderedFrame];
                 AnimBox[] dmg = frameData.damageBoxes;
                 if ((dmg == null || dmg.Length == 0)
                     && (frameData.damageBox.min.x != 0 || frameData.damageBox.max.x != 0))
@@ -560,10 +560,11 @@ namespace ET.Editor
             });
             previewToolbar.Add(showBoxesToggle);
             previewArea.Add(previewToolbar);
-            debugLabel = new TextField(1, int.MaxValue)
+            debugLabel = new TextField
             {
                 value = "渲染后显示诊断",
                 isReadOnly = true,
+                multiline = true,   // TextField 无 (int,int) 构造；多行只读诊断
             };
             debugLabel.style.flexGrow = 0;
             debugLabel.style.maxHeight = 110;
