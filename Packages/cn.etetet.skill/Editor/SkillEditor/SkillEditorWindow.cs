@@ -237,9 +237,9 @@ namespace ET.Editor
             previewArea.style.paddingTop = 8;
             previewTitle = new Label("预览");
             previewArea.Add(previewTitle);
-            previewImage = new Image { image = null };
+            // 6000.0.25f1 IStyle 无 aspectRatioWidthHeight（也无 aspectRatio），用 ScaleToFit 防拉伸
+            previewImage = new Image { image = null, scaleMode = ScaleMode.ScaleToFit };
             previewImage.style.flexGrow = 1;
-            previewImage.style.aspectRatioWidthHeight = 960f / 540f;   // 与 RenderTexture 同比，避免拉伸
             previewArea.Add(previewImage);
             VisualElement previewToolbar = new() { style = { flexDirection = FlexDirection.Row } };
             Button faceButton = new(() =>

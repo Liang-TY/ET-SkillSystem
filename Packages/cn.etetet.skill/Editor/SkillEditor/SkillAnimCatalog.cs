@@ -80,8 +80,7 @@ namespace ET.Editor
         {
             if (!entryById.TryGetValue(animId, out LSAnimAddressTable.Entry entry) || entry.Overlay == null)
                 return null;
-            string path = System.IO.Path.Combine(AnimResRoot, entry.Overlay.File);
-            if (!System.IO.File.Exists(path)) return null;
+            if (!TryResolveFile(entry.Overlay.File, out string path)) return null;
             AnimOverlayConfig config = JsonUtility.FromJson<AnimOverlayConfig>(
                 System.IO.File.ReadAllText(path));
             if (config?.overlays == null) return null;
@@ -95,6 +94,21 @@ namespace ET.Editor
             return config;
         }
 
+        /// <summary>地址 → 磁盘文件：地址去 .bytes（YooAsset AddressByFileName 语义），磁盘实际带 .bytes
+        /// （.ani→.ani.bytes、.als→.als.bytes；.json overlay 无 .bytes）。先试原样，失败再补 .bytes。</summary>
+        private static bool TryResolveFile(string address, out string path)
+        {
+            path = System.IO.Path.Combine(AnimResRoot, address);
+            if (System.IO.File.Exists(path)) return true;
+            string withBytes = path + ".bytes";
+            if (System.IO.File.Exists(withBytes))
+            {
+                path = withBytes;
+                return true;
+            }
+            return false;
+        }
+
         private static AnimClipData LoadClip(string address, out string error)
         {
             error = null;
@@ -103,8 +117,7 @@ namespace ET.Editor
                 error = "地址表中无此 AnimId";
                 return null;
             }
-            string path = System.IO.Path.Combine(AnimResRoot, address);
-            if (!System.IO.File.Exists(path))
+            if (!TryResolveFile(address, out string path))
             {
                 error = $"资源文件不存在: {address}";
                 return null;

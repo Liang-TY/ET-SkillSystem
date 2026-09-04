@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace ET.Editor
@@ -30,10 +31,13 @@ namespace ET.Editor
             utility.camera.transform.position = new Vector3(0, 0, -10f);
             utility.camera.orthographic = true;
             utility.camera.orthographicSize = TextureHeight / (2f * PixelsPerUnit);
-            utility.camera.clearFlags = CameraClearFlags.Solid;
+            utility.camera.clearFlags = CameraClearFlags.SolidColor;
             utility.camera.backgroundColor = new Color(0.08f, 0.09f, 0.11f, 1f);
 
-            GameObject rootGo = utility.InstantiateGameObjectInScene(new GameObject("SkillPreviewRoot"));
+            // Unity 6000：PreviewRenderUtility 无 InstantiateGameObjectInScene，用 AddSingleGO 把
+            // 已有 GameObject 挂进预览场景（子物体 SetParent 自动随 root 入场景）。
+            GameObject rootGo = new("SkillPreviewRoot");
+            utility.AddSingleGO(rootGo);
             root = rootGo.transform;
             GameObject bodyGo = new("Body");
             bodyGo.transform.SetParent(root, false);
@@ -137,8 +141,7 @@ namespace ET.Editor
         {
             if (utility != null)
             {
-                utility.Cleanup();
-                utility.Dispose();
+                utility.Cleanup();   // Unity 6000 PreviewRenderUtility 无 Dispose()，Cleanup 即释放
                 utility = null;
             }
             if (Texture != null)
