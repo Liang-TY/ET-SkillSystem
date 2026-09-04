@@ -85,7 +85,7 @@ namespace ET.Editor
                             : spawn.atMs;
                     else if (spawn.timeBase == "CastTime")
                         trigger = spawn.atMs;
-                    int duration = spawn.durationMs > 0 ? spawn.durationMs : 500;   // Area 默认 500 与数据一致
+                    int duration = (spawn.durationMs ?? 0) > 0 ? spawn.durationMs.Value : 500;   // Area 默认 500 与数据一致
                     residueEnd = Math.Max(residueEnd, trigger + duration);
                 }
             }
