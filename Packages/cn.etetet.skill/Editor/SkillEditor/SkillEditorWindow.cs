@@ -50,6 +50,7 @@ namespace ET.Editor
         private Button redoButton;
         private VisualElement inspectorContainer;
         private Label previewTitle;
+        private Label debugLabel;
         private Image previewImage;
         private SkillPreviewController previewController;
         private int lastRenderedFrame = -1;
@@ -96,18 +97,72 @@ namespace ET.Editor
                 return;
             }
 
+            List<SkillPreviewController.AreaViewSample> areaViews = CollectAreaViews(skill, session.Preview.TimeMs);
+
             bool ok = previewController.Render(
-                clip, SkillAnimCatalog.GetOverlay(animId), session.Preview.TimeMs,
+                clip, SkillAnimCatalog.GetOverlay(animId), areaViews, session.Preview.TimeMs,
                 session.Preview.FacingLeft, out int frameIndex, out string renderError);
             if (!ok)
             {
                 previewImage.image = null;
                 previewTitle.text = $"渲染失败 animId={animId}: {renderError ?? clipError}";
+                debugLabel.text = renderError ?? clipError;
                 return;
             }
             previewImage.image = previewController.Texture;
             lastRenderedFrame = frameIndex;
             lastRenderedTime = session.Preview.TimeMs;
+            debugLabel.text = previewController.LastDebugInfo
+                + $"  |  {SkillAnimCatalog.GetAddress(animId) ?? $"animId={animId} 无地址"}";
+        }
+
+        /// <summary>
+        /// 按 spawnEvents 采样当前时刻应显示的 Area 视图（运行时 LSAreaViewComponentSystem 同构：
+        /// atMs 到点创建 → 独立推帧 → totalTimeMs 后消失）。animId 取 area.viewAnimId/viewBackAnimId。
+        /// </summary>
+        private List<SkillPreviewController.AreaViewSample> CollectAreaViews(SkillParamJson skill, int timeMs)
+        {
+            var result = new List<SkillPreviewController.AreaViewSample>();
+            if (skill.spawnEvents == null || skill.spawnEvents.Length == 0) return result;
+
+            foreach (SkillSpawnEventJson spawn in skill.spawnEvents)
+            {
+                if (spawn == null || spawn.kind != "createArea" || (spawn.areaId ?? 0) <= 0) continue;
+
+                // 事件触发时刻（CastTime/PhaseTime/AnimationFrame 首版近似：全部换算成 cast 全局 ms）
+                int triggerMs = timeline.Projection.TryGetSpawnMarker(spawn, out SkillTimelineProjection.EventMarker marker)
+                    && marker.Kind != SkillTimelineProjection.MarkerKind.Semantic
+                        ? marker.StartMs
+                        : -1;
+                // AnimationFrame 类没有确定 ms（语义标记），近似用 phase 起点
+                if (triggerMs < 0 && spawn.phase >= 0)
+                    triggerMs = timeline.Projection.PhaseStart(spawn.phase);
+
+                if (triggerMs < 0 || timeMs < triggerMs) continue;
+                int elapsed = timeMs - triggerMs;
+
+                AreaParamJson area = FindArea(spawn.areaId ?? 0);
+                if (area == null) continue;
+
+                var sample = new SkillPreviewController.AreaViewSample { AreaId = area.id, ElapsedMs = elapsed };
+                if (area.viewAnimId > 0)
+                    sample.Clip = SkillAnimCatalog.GetClip(area.viewAnimId, out string _);
+                if (area.viewBackAnimId > 0)
+                    sample.BackClip = SkillAnimCatalog.GetClip(area.viewBackAnimId, out string _);
+                if (sample.Clip != null) result.Add(sample);
+            }
+            return result;
+        }
+
+        /// <summary>areaId → AreaParamJson（从磁盘目录直查，不走全局 Loader——ISSUE-014 约束）。</summary>
+        private AreaParamJson FindArea(int areaId)
+        {
+            if (areaId <= 0) return null;
+            SkillEditorDocumentStore store = new();
+            SkillEditorAsset asset = store.Find(SkillEditorAssetKind.Area, areaId);
+            if (asset == null || !SkillEditorDocument.TryLoad(asset, out SkillEditorDocument document, out string _))
+                return null;
+            return document.Area;
         }
 
         private void OnDisable()
@@ -251,6 +306,17 @@ namespace ET.Editor
             }) { text = "翻转朝向" };
             previewToolbar.Add(faceButton);
             previewArea.Add(previewToolbar);
+            debugLabel = new Label("--")
+            {
+                style =
+                {
+                    color = new Color(0.55f, 0.75f, 0.95f),
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    whiteSpace = WhiteSpace.Normal,
+                    paddingTop = 2,
+                },
+            };
+            center.Add(debugLabel);
             previewController = new SkillPreviewController();
             center.Add(previewArea);
             timeLabel = new Label("t=0ms / 0ms");
