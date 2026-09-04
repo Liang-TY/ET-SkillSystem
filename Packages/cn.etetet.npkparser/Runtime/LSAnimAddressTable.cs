@@ -192,12 +192,7 @@ namespace ET
             // 裂波斩（上斩→旋转→波轮多段→终结；波轮 F13 悬停帧已钳 80ms）
             One(AnimId.SwordmanVaneSlashTry, $"{A}/vaneslashtry.ani");
             One(AnimId.SwordmanVaneSlash, $"{A}/vaneslash.ani");
-            One(AnimId.VaneSlashWheel, $"{P}/vaneslashwheel.ani",
-                O($"{P}/vaneslashwheel.ani.als", new Dictionary<string, int>
-                {
-                    ["light_GrandWave1"] = AnimId.GrandWaveLight1,
-                    ["light_GrandWave_light"] = AnimId.GrandWaveLight,
-                }));
+            One(AnimId.VaneSlashWheel, $"{P}/vaneslashwheel.ani");
             One(AnimId.VaneSlashNormal, $"{P}/vaneslashnormal.ani");
 
             // 十字斩（两刀+血之十字两相位+追击）
@@ -292,6 +287,7 @@ namespace ET
                     ["light_GrandWave1"] = AnimId.GrandWaveLight1,
                     ["light_GrandWave_light"] = AnimId.GrandWaveLight,
                 }));
+            // ↑ grandwavewheel.ani.als 挂 GrandWaveWheel（邪光波体）；勿与 VaneSlashWheel（裂波波轮，无 overlay）混淆
             One(AnimId.GrandWaveLight, $"{P}/grandwave_GrandWave_light_GrandWave_light.ani");
             One(AnimId.GrandWaveLight1, $"{P}/grandwave_GrandWave_light_GrandWave1.ani");
             One(AnimId.GrandWaveFx, $"{mf}/grandwavefx.ani");
