@@ -373,10 +373,7 @@ namespace ET.Editor
 
                 overlayRenderer.enabled = true;
                 overlayRenderer.sprite = sprite;
-                // graphicEffect==1 = LINEARDODGE 加法混合（运行时同 shader，消黑底）
-                overlayRenderer.sharedMaterial = effectFrameData.graphicEffect == 1 && additiveMaterial != null
-                    ? additiveMaterial
-                    : null;
+                // 材质一律不动（默认 sprite 材质）。URP 下挂 Built-in 加法 shader = 品红（ISSUE-018）
                 float offX = Mathf.Round(effectFrameData.imagePos.x + center.x) / PixelsPerUnit;
                 float offY = Mathf.Round(effectFrameData.imagePos.y + center.y) / PixelsPerUnit;
                 overlayRenderer.transform.localPosition = new Vector3(offX, -offY, 0f);
@@ -452,9 +449,7 @@ namespace ET.Editor
             }
             renderer.enabled = true;
             renderer.sprite = sprite;
-            renderer.sharedMaterial = frameData.graphicEffect == 1 && additiveMaterial != null
-                ? additiveMaterial
-                : null;
+            // 材质不动（同上，ISSUE-018）
             float offX = Mathf.Round(frameData.imagePos.x + center.x) / PixelsPerUnit;
             float offY = Mathf.Round(frameData.imagePos.y + center.y) / PixelsPerUnit;
             renderer.transform.localPosition = new Vector3(offX, -offY, 0f);
