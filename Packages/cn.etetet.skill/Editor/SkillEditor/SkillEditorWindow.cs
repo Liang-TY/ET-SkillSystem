@@ -50,6 +50,10 @@ namespace ET.Editor
         private Button redoButton;
         private VisualElement inspectorContainer;
         private Label previewTitle;
+        private Image previewImage;
+        private SkillPreviewController previewController;
+        private int lastRenderedFrame = -1;
+        private int lastRenderedTime = -1;
         private Label timeLabel;
         private SkillTimelineElement timeline;
         private ScrollView issuesScroll;
@@ -64,8 +68,54 @@ namespace ET.Editor
             MarkViewsDirty();
         }
 
+        private void RenderPreviewIfReady()
+        {
+            if (session?.Document == null || previewController == null) return;
+            SkillParamJson skill = session.Document.Skill;
+            if (skill == null) return;
+            int animId = 0;
+            if (timeline.Projection.PhaseCount > 0)
+            {
+                int phase = timeline.Projection.LocatePhase(session.Preview.TimeMs);
+                SkillPhaseJson[] phases = skill.phases;
+                if (phases != null && phase >= 0 && phase < phases.Length)
+                    animId = phases[phase].animId;
+            }
+            if (animId <= 0)
+            {
+                previewImage.image = null;
+                previewTitle.text = "当前 phase 无动画（animId=0）";
+                return;
+            }
+
+            AnimClipData clip = SkillAnimCatalog.GetClip(animId, out string clipError);
+            if (clip == null)
+            {
+                previewImage.image = null;
+                previewTitle.text = $"动画缺失 animId={animId}: {clipError}";
+                return;
+            }
+
+            bool ok = previewController.Render(
+                clip, SkillAnimCatalog.GetOverlay(animId), session.Preview.TimeMs,
+                session.Preview.FacingLeft, out int frameIndex, out string renderError);
+            if (!ok)
+            {
+                previewImage.image = null;
+                previewTitle.text = $"渲染失败 animId={animId}: {renderError ?? clipError}";
+                return;
+            }
+            previewImage.image = previewController.Texture;
+            lastRenderedFrame = frameIndex;
+            lastRenderedTime = session.Preview.TimeMs;
+        }
+
         private void OnDisable()
         {
+            previewController?.Dispose();
+            previewController = null;
+            previewImage = null;
+            SkillNpkSpriteStore.ClearCache();
             if (session == null) return;
             session.Changed -= MarkViewsDirty;
             session.Dispose();
@@ -77,9 +127,15 @@ namespace ET.Editor
 
         private void Update()
         {
+            if (!viewsDirty && session != null
+                && lastRenderedTime != session.Preview.TimeMs)
+            {
+                RenderPreviewIfReady();   // 播放头移动即采样（时间轴拖动/未来播放循环共用）
+            }
             if (!viewsDirty) return;
             viewsDirty = false;
             RefreshDynamic();
+            RenderPreviewIfReady();
         }
 
         private void BuildUI()
@@ -179,8 +235,23 @@ namespace ET.Editor
             previewArea.style.backgroundColor = new Color(0.08f, 0.09f, 0.11f);
             previewArea.style.justifyContent = Justify.FlexStart;
             previewArea.style.paddingTop = 8;
-            previewTitle = new Label("预览（Step 3 接入真实渲染）");
+            previewTitle = new Label("预览");
             previewArea.Add(previewTitle);
+            previewImage = new Image { image = null };
+            previewImage.style.flexGrow = 1;
+            previewImage.style.aspectRatioWidthHeight = 960f / 540f;   // 与 RenderTexture 同比，避免拉伸
+            previewArea.Add(previewImage);
+            VisualElement previewToolbar = new() { style = { flexDirection = FlexDirection.Row } };
+            Button faceButton = new(() =>
+            {
+                session.Preview.FacingLeft = !session.Preview.FacingLeft;
+                lastRenderedTime = -1;   // 强制重渲染
+                RenderPreviewIfReady();
+                previewTitle.text = BuildPreviewText();
+            }) { text = "翻转朝向" };
+            previewToolbar.Add(faceButton);
+            previewArea.Add(previewToolbar);
+            previewController = new SkillPreviewController();
             center.Add(previewArea);
             timeLabel = new Label("t=0ms / 0ms");
             center.Add(timeLabel);
