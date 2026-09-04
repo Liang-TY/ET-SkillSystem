@@ -52,7 +52,6 @@ namespace ET.Editor
         private Label previewTitle;
         private TextField debugLabel;
         private bool playing;
-        private bool loopPlayback;
         private int playAccumulatorMs;
         private double lastPlayTime;
         private Toggle showBoxesToggle;
@@ -89,6 +88,74 @@ namespace ET.Editor
             }
         }
 
+        /// <summary>上一帧：回退到上一帧起点（首帧停 0）。</summary>
+        private void StepPrevFrame()
+        {
+            playing = false;
+            SkillParamJson skill = session.Document?.Skill;
+            int animId = skill != null ? ResolveAnimId(skill, session.Preview.TimeMs, out int _) : 0;
+            AnimClipData clip = animId > 0 ? SkillAnimCatalog.GetClip(animId, out string _) : null;
+            if (clip?.frames == null || clip.frames.Length == 0) return;
+
+            int inherited = session.Preview.InheritedPhaseStartMs;
+            int sampleMs = inherited >= 0 ? session.Preview.TimeMs - inherited : session.Preview.TimeMs;
+            int curFrame = SampleFrameIndex(clip, sampleMs);
+            int target = curFrame > 0 ? FrameStartMs(clip, curFrame) - 1 : 0;
+            if (target < 0) target = 0;
+            // 上一帧起点（target 落在前一帧区间内）
+            int prevFrame = SampleFrameIndex(clip, target);
+            int newSample = FrameStartMs(clip, prevFrame);
+            session.Preview.TimeMs = inherited >= 0 ? inherited + newSample : newSample;
+            timeline.CurrentTimeMs = session.Preview.TimeMs;
+            lastRenderedTime = -1;
+            timeLabel.text = TimeText();
+            previewTitle.text = BuildPreviewText();
+        }
+
+        /// <summary>下一帧：跳到下一帧起点（尾帧停片尾）。</summary>
+        private void StepNextFrame()
+        {
+            playing = false;
+            SkillParamJson skill = session.Document?.Skill;
+            int animId = skill != null ? ResolveAnimId(skill, session.Preview.TimeMs, out int _) : 0;
+            AnimClipData clip = animId > 0 ? SkillAnimCatalog.GetClip(animId, out string _) : null;
+            if (clip?.frames == null || clip.frames.Length == 0) return;
+
+            int inherited = session.Preview.InheritedPhaseStartMs;
+            int sampleMs = inherited >= 0 ? session.Preview.TimeMs - inherited : session.Preview.TimeMs;
+            int curFrame = SampleFrameIndex(clip, sampleMs);
+            int total = 0;
+            for (int i = 0; i < clip.frames.Length; i++) total += clip.frames[i].delay > 0 ? clip.frames[i].delay : 50;
+            int newSample = curFrame + 1 < clip.frames.Length
+                ? FrameStartMs(clip, curFrame + 1)
+                : total;
+            session.Preview.TimeMs = inherited >= 0 ? inherited + newSample : newSample;
+            timeline.CurrentTimeMs = session.Preview.TimeMs;
+            lastRenderedTime = -1;
+            timeLabel.text = TimeText();
+            previewTitle.text = BuildPreviewText();
+        }
+
+        private static int SampleFrameIndex(AnimClipData clip, int timeMs)
+        {
+            int elapsed = 0;
+            for (int i = 0; i < clip.frames.Length; i++)
+            {
+                int delay = clip.frames[i].delay > 0 ? clip.frames[i].delay : 50;
+                if (timeMs < elapsed + delay) return i;
+                elapsed += delay;
+            }
+            return clip.frames.Length - 1;
+        }
+
+        private static int FrameStartMs(AnimClipData clip, int frameIndex)
+        {
+            int elapsed = 0;
+            for (int i = 0; i < frameIndex && i < clip.frames.Length; i++)
+                elapsed += clip.frames[i].delay > 0 ? clip.frames[i].delay : 50;
+            return elapsed;
+        }
+
         private void StopPlay()
         {
             playing = false;
@@ -111,12 +178,7 @@ namespace ET.Editor
             int total = timeline.DurationMs;
             if (playAccumulatorMs >= total)
             {
-                if (loopPlayback) playAccumulatorMs %= Mathf.Max(1, total);
-                else
-                {
-                    playAccumulatorMs = total;
-                    playing = false;
-                }
+                playAccumulatorMs %= Mathf.Max(1, total);   // 播放即循环
             }
             session.Preview.TimeMs = playAccumulatorMs;
             timeline.CurrentTimeMs = playAccumulatorMs;
@@ -319,6 +381,7 @@ namespace ET.Editor
                         OffsetX = (spawn.at == "inFront" ? spawn.dist : 0f)
                             + (bullet.spawnOffset != null && bullet.spawnOffset.Length > 0 ? bullet.spawnOffset[0] : 0f)
                             + distance,
+                        OffsetY = bullet.spawnOffset != null && bullet.spawnOffset.Length > 1 ? bullet.spawnOffset[1] : 0f,
                     };
                     if (bullet.viewAnimId > 0)
                         sample.Clip = SkillAnimCatalog.GetClip(bullet.viewAnimId, out string _);
@@ -542,17 +605,15 @@ namespace ET.Editor
                 previewTitle.text = BuildPreviewText();
             }) { text = "翻转朝向" };
             previewToolbar.Add(faceButton);
+            Button prevFrameButton = new(StepPrevFrame) { text = "<帧" };
+            previewToolbar.Add(prevFrameButton);
             Button playButton = new(TogglePlay) { text = "播放" };
             previewToolbar.Add(playButton);
             Button stopButton = new(StopPlay) { text = "停止" };
             previewToolbar.Add(stopButton);
-            Toggle loopToggle = new("循环") { value = loopPlayback };
-            loopToggle.RegisterValueChangedCallback(evt =>
-            {
-                loopPlayback = evt.newValue;
-            });
-            previewToolbar.Add(loopToggle);
-            showBoxesToggle = new Toggle("攻击/受击盒") { value = false };
+            Button nextFrameButton = new(StepNextFrame) { text = "帧>" };
+            previewToolbar.Add(nextFrameButton);
+            showBoxesToggle = new Toggle("盒体") { value = false };
             showBoxesToggle.RegisterValueChangedCallback(evt =>
             {
                 if (previewController != null) previewController.ShowBoxes = evt.newValue;
@@ -560,16 +621,6 @@ namespace ET.Editor
             });
             previewToolbar.Add(showBoxesToggle);
             previewArea.Add(previewToolbar);
-            debugLabel = new TextField
-            {
-                value = "渲染后显示诊断",
-                isReadOnly = true,
-                multiline = true,   // TextField 无 (int,int) 构造；多行只读诊断
-            };
-            debugLabel.style.flexGrow = 0;
-            debugLabel.style.maxHeight = 110;
-            debugLabel.style.whiteSpace = WhiteSpace.Normal;
-            center.Add(debugLabel);
             previewController = new SkillPreviewController();
             center.Add(previewArea);
             timeLabel = new Label("t=0ms / 0ms");
@@ -603,11 +654,24 @@ namespace ET.Editor
                 },
             };
             root.Add(legendLabel);
-            issuesScroll = new ScrollView(ScrollViewMode.Vertical) { style = { maxHeight = 90, flexShrink = 0 } };
-            root.Add(issuesScroll);
             timeline = new SkillTimelineElement { style = { flexShrink = 0 } };
             timeline.TimeChanged += OnTimelineTimeChanged;
             root.Add(timeline);
+
+            // 诊断面板：时间轴下方（只读多行，可全选复制）
+            debugLabel = new TextField
+            {
+                value = "渲染后显示诊断",
+                isReadOnly = true,
+                multiline = true,
+            };
+            debugLabel.style.flexGrow = 0;
+            debugLabel.style.maxHeight = 110;
+            debugLabel.style.whiteSpace = WhiteSpace.Normal;
+            root.Add(debugLabel);
+
+            issuesScroll = new ScrollView(ScrollViewMode.Vertical) { style = { maxHeight = 70, flexShrink = 0 } };
+            root.Add(issuesScroll);
 
             rootVisualElement.RegisterCallback<KeyDownEvent>(OnKeyDown, TrickleDown.TrickleDown);
         }

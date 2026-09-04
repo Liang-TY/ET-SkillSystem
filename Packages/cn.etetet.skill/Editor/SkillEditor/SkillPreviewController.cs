@@ -67,6 +67,15 @@ namespace ET.Editor
                 unitRenderers.Add(renderer);
             }
 
+            // 棋盘格底（-100 层）：深色特效在黑底上不可见 → 灰白格（Unity 预览惯例）
+            GameObject checkerGo = new("CheckerBoard");
+            checkerGo.transform.SetParent(root, false);
+            SpriteRenderer checker = checkerGo.AddComponent<SpriteRenderer>();
+            checker.sortingOrder = -100;
+            checker.sprite = MakeCheckerSprite();
+            checker.transform.localPosition = new Vector3(0, 0, 5f);   // 相机远侧铺满视口
+            checker.transform.localScale = new Vector3(20f, 12f, 1f);  // 960x540 视口全覆盖
+
             GameObject overlayGo = new("Overlay");
             overlayGo.transform.SetParent(root, false);
             overlayRenderer = overlayGo.AddComponent<SpriteRenderer>();
@@ -89,8 +98,10 @@ namespace ET.Editor
                 spawnRenderers.Add(back);
             }
 
-            Shader additiveShader = Shader.Find("ET/SpriteAdditive");
-            if (additiveShader != null) additiveMaterial = new Material(additiveShader);
+            // ET/SpriteAdditive 是 Built-in 管线 shader；本项目 URP 下 Shader.Find 返回的
+            // 对象在预览相机渲染成品红（=用户看到的淡紫红方框）。URP 加法混合 shader 是
+            // 独立欠账（运行时同样没生效，见 ISSUE-018），Editor 预览回退默认 sprite 材质。
+            additiveMaterial = null;
         }
 
         /// <summary>
@@ -218,6 +229,29 @@ namespace ET.Editor
                 renderer.enabled = false;
                 boxRenderers.Add(renderer);
             }
+        }
+
+        /// <summary>8x8 像素灰白棋盘格（repeat 纹理，铺底专用）。</summary>
+        private static Sprite MakeCheckerSprite()
+        {
+            const int cell = 8;
+            var tex = new Texture2D(cell * 2, cell * 2, TextureFormat.RGBA32, false, true)
+            {
+                wrapMode = TextureWrapMode.Repeat,
+                filterMode = FilterMode.Point,
+            };
+            var a = new Color32(0xE8, 0xE8, 0xE8, 0xFF);   // 浅灰
+            var b = new Color32(0xB8, 0xB8, 0xB8, 0xFF);   // 深灰
+            var pixels = new Color32[cell * 2 * cell * 2];
+            for (int y = 0; y < cell * 2; y++)
+            for (int x = 0; x < cell * 2; x++)
+            {
+                bool odd = ((x / cell) + (y / cell)) % 2 == 1;
+                pixels[y * cell * 2 + x] = odd ? b : a;
+            }
+            tex.SetPixels32(pixels);
+            tex.Apply(false, true);
+            return Sprite.Create(tex, new Rect(0, 0, cell * 2, cell * 2), new Vector2(0.5f, 0.5f), 100f);
         }
 
         private static Sprite MakeBoxSprite(float xMin, float xMax, float yMin, float yMax, Color color)
@@ -380,15 +414,26 @@ namespace ET.Editor
                         back.enabled = false;
                     }
 
-                    // inFront/Bullet 位移：x 横移（面向左时镜像根已翻转，localPosition.x 不需取反）
-                    main.transform.parent.localPosition = new Vector3(view.OffsetX, 0f, 0f);
-                    back.transform.parent.localPosition = new Vector3(view.OffsetX, 0f, 0f);
+                    // inFront/Bullet 位移：x 横移 + y 高度（镜像根已翻转，localPosition 不需取反）
+                    var spawnPos = new Vector3(view.OffsetX, view.OffsetY, 0f);
+                    main.transform.parent.localPosition = spawnPos;
+                    back.transform.parent.localPosition = spawnPos;
 
+                    string spawnDetail = string.Empty;
+                    if (frameData.image.path != null && frameData.image.path.Length > 0
+                        && SkillNpkSpriteStore.TryGetEntry(frameData.image.path, frameData.image.index,
+                            out Sprite s, out Vector2 c, out _))
+                    {
+                        spawnDetail = $"  {System.IO.Path.GetFileName(frameData.image.path)}#{frameData.image.index}"
+                            + $" NPK={SkillNpkSpriteStore.GetArchiveName(frameData.image.path) ?? "?"}";
+                    }
                     Report.Spawns.Add(new LineInfo
                     {
                         Text = $"{view.Kind}[{view.AreaId}] {view.Name} @{view.ElapsedMs}/{view.TotalMs}ms"
                             + $" 帧{frame + 1}/{view.Clip.frames.Length}"
-                            + (view.OffsetX != 0 ? $" x={view.OffsetX:0.##}" : ""),
+                            + (view.OffsetX != 0 ? $" x={view.OffsetX:0.##}" : "")
+                            + (view.OffsetY != 0 ? $" y={view.OffsetY:0.##}" : "")
+                            + spawnDetail,
                     });
                 }
             }
@@ -491,6 +536,8 @@ namespace ET.Editor
             public int TotalMs;
             /// <summary>横向偏移（单位）：Area=inFront dist；Bullet=出生偏移+速度推进。</summary>
             public float OffsetX;
+            /// <summary>纵向偏移（单位）：Bullet=spawnOffset.y（如冰息 0.7=头部高度）。</summary>
+            public float OffsetY;
         }
 
         public void Dispose()

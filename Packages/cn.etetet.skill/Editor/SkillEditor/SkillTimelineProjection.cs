@@ -63,10 +63,33 @@ namespace ET.Editor
                 phaseStarts[i] = cursor;
                 cursor += phaseDurations[i];
             }
-            // 显示范围 = min(相位累计, totalTimeMs)：LSCastSystem 在 ElapsedMs >= TotalTimeMs
-            // 时直接结束施放，相位累计超出 totalTimeMs 的尾段事件实际永不执行，不能画进刻度
+            // 显示范围 = min(相位累计, totalTimeMs) 与 spawn 特效残留的较大者：
+            // LSCast 到点结束（相位累计超出 totalTime 的尾段事件不执行），但 createArea/Bullet
+            // 是独立实体，触发后按自身 TotalTimeMs 存活——血爆 910ms 触发 + 500ms 残留 = 1410ms。
+            // 超出 cast 时长的尾段在时间轴上属"施放已结束、特效仍在播"，画进刻度（拖轴可检）。
             int totalMs = document?.totalTimeMs ?? 0;
-            TotalDurationMs = Math.Max(totalMs > 0 ? Math.Min(cursor, totalMs) : cursor, 1);
+            int castEnd = totalMs > 0 ? Math.Min(cursor, totalMs) : cursor;
+            int residueEnd = castEnd;
+            if (document?.spawnEvents != null)
+            {
+                foreach (SkillSpawnEventJson spawn in document.spawnEvents)
+                {
+                    if (spawn == null || (spawn.kind != "createArea" && spawn.kind != "createBullet")) continue;
+                    // 近似触发时刻（与窗口 ResolveTriggerMs 同构的简化版：帧时刻/phase 起点含 atMs）
+                    int trigger = 0;
+                    if (spawn.timeBase == "AnimationFrame" && spawn.atFrame > 0)
+                        trigger = spawn.phase >= 0 ? PhaseStart(spawn.phase) : 0;   // 帧精确值由窗口侧算；投影只给下限
+                    else if (spawn.timeBase == "PhaseTime" || spawn.timeBase == "PhaseEnter" || spawn.timeBase == "PhaseEnd")
+                        trigger = spawn.phase >= 0
+                            ? (spawn.timeBase == "PhaseEnd" ? PhaseEnd(spawn.phase) : PhaseStart(spawn.phase) + spawn.atMs)
+                            : spawn.atMs;
+                    else if (spawn.timeBase == "CastTime")
+                        trigger = spawn.atMs;
+                    int duration = spawn.durationMs > 0 ? spawn.durationMs : 500;   // Area 默认 500 与数据一致
+                    residueEnd = Math.Max(residueEnd, trigger + duration);
+                }
+            }
+            TotalDurationMs = Math.Max(castEnd, residueEnd);   // 至少 1（下方 Max(,1) 兜底）
         }
 
         public int PhaseCount => phaseStarts.Length;
