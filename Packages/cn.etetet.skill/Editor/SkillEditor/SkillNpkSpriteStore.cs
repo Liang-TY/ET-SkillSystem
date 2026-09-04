@@ -86,6 +86,13 @@ namespace ET.Editor
             return true;
         }
 
+        /// <summary>虚拟路径所在 NPK 归档名（诊断面板展示）；未挂载/找不到返回 null。</summary>
+        public static string GetArchiveName(string imagePath)
+        {
+            EnsureMounted();
+            return manager?.GetArchiveName(imagePath) ?? manager?.GetArchiveName(System.IO.Path.GetFileName(imagePath));
+        }
+
         public static void EnsureMounted()
         {
             if (mountAttempted) return;

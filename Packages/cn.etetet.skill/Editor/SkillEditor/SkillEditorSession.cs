@@ -28,6 +28,8 @@ namespace ET.Editor
         public bool Playing;
         public float Speed = 1f;
         public bool FacingLeft;
+        /// <summary>当前动画为继承（animId=0 phase）时的实际起播全局时刻；-1=非继承。</summary>
+        public int InheritedPhaseStartMs = -1;
     }
 
     /// <summary>

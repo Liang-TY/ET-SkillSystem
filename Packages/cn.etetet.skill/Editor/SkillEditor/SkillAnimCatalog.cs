@@ -75,6 +75,19 @@ namespace ET.Editor
             return clip;
         }
 
+        /// <summary>
+        /// AnimationFrame 时间基准的唯一换算：atFrame → clip 内累计毫秒
+        /// （与运行时 CurrentFrameIndex 推帧一致：delay<=0 用 50ms）。atFrame 越界返回 -1。
+        /// </summary>
+        public static int FrameToMs(AnimClipData clip, int atFrame)
+        {
+            if (clip?.frames == null || atFrame < 0 || atFrame > clip.frames.Length) return -1;
+            int elapsed = 0;
+            for (int i = 0; i < atFrame && i < clip.frames.Length; i++)
+                elapsed += clip.frames[i].delay > 0 ? clip.frames[i].delay : 50;
+            return elapsed;   // atFrame == Length 时 = 全片时长（Landing 近似用）
+        }
+
         /// <summary>overlay 配置（别名→AnimId 已按表解析）。</summary>
         public static AnimOverlayConfig GetOverlay(int animId)
         {

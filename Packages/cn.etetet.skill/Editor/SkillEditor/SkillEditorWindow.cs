@@ -50,7 +50,13 @@ namespace ET.Editor
         private Button redoButton;
         private VisualElement inspectorContainer;
         private Label previewTitle;
-        private Label debugLabel;
+        private TextField debugLabel;
+        private bool playing;
+        private bool loopPlayback;
+        private int playAccumulatorMs;
+        private double lastPlayTime;
+        private Toggle showBoxesToggle;
+        private Label legendLabel;
         private Image previewImage;
         private SkillPreviewController previewController;
         private int lastRenderedFrame = -1;
@@ -69,23 +75,68 @@ namespace ET.Editor
             MarkViewsDirty();
         }
 
+        private void TogglePlay()
+        {
+            if (!playing)
+            {
+                playing = true;
+                playAccumulatorMs = session.Preview.TimeMs;
+                lastPlayTime = EditorApplication.timeSinceStartup;
+            }
+            else
+            {
+                playing = false;   // 暂停
+            }
+        }
+
+        private void StopPlay()
+        {
+            playing = false;
+            playAccumulatorMs = 0;
+            session.Preview.TimeMs = 0;
+            timeline.CurrentTimeMs = 0;
+            lastRenderedTime = -1;
+            lastPlayTime = 0;
+        }
+
+        private void TickPlay()
+        {
+            if (!playing) return;
+            double now = EditorApplication.timeSinceStartup;
+            int deltaMs = Mathf.RoundToInt((float)((now - lastPlayTime) * 1000.0));
+            lastPlayTime = now;
+            if (deltaMs <= 0) return;
+
+            playAccumulatorMs += deltaMs;
+            int total = timeline.DurationMs;
+            if (playAccumulatorMs >= total)
+            {
+                if (loopPlayback) playAccumulatorMs %= Mathf.Max(1, total);
+                else
+                {
+                    playAccumulatorMs = total;
+                    playing = false;
+                }
+            }
+            session.Preview.TimeMs = playAccumulatorMs;
+            timeline.CurrentTimeMs = playAccumulatorMs;
+            lastRenderedTime = -1;   // 触发 Update 重渲染
+            timeLabel.text = TimeText();
+            previewTitle.text = BuildPreviewText();
+        }
+
         private void RenderPreviewIfReady()
         {
             if (session?.Document == null || previewController == null) return;
             SkillParamJson skill = session.Document.Skill;
             if (skill == null) return;
-            int animId = 0;
-            if (timeline.Projection.PhaseCount > 0)
-            {
-                int phase = timeline.Projection.LocatePhase(session.Preview.TimeMs);
-                SkillPhaseJson[] phases = skill.phases;
-                if (phases != null && phase >= 0 && phase < phases.Length)
-                    animId = phases[phase].animId;
-            }
+
+            // animId=0 = 沿用上一段动画继续推帧（运行时 if (AnimId > 0) PlayAnim 语义）
+            int animId = ResolveAnimId(skill, session.Preview.TimeMs, out int _);
             if (animId <= 0)
             {
                 previewImage.image = null;
-                previewTitle.text = "当前 phase 无动画（animId=0）";
+                previewTitle.text = "整个技能无动画（所有 phase animId=0）";
                 return;
             }
 
@@ -97,72 +148,257 @@ namespace ET.Editor
                 return;
             }
 
-            List<SkillPreviewController.AreaViewSample> areaViews = CollectAreaViews(skill, session.Preview.TimeMs);
+            List<SkillPreviewController.SpawnViewSample> spawnViews =
+                CollectSpawnViews(skill, clip, session.Preview.TimeMs);
 
             bool ok = previewController.Render(
-                clip, SkillAnimCatalog.GetOverlay(animId), areaViews, session.Preview.TimeMs,
-                session.Preview.FacingLeft, out int frameIndex, out string renderError);
+                clip, SkillAnimCatalog.GetOverlay(animId), spawnViews, session.Preview.TimeMs,
+                session.Preview.InheritedPhaseStartMs, session.Preview.FacingLeft,
+                out int frameIndex, out string renderError);
             if (!ok)
             {
                 previewImage.image = null;
                 previewTitle.text = $"渲染失败 animId={animId}: {renderError ?? clipError}";
-                debugLabel.text = renderError ?? clipError;
+                debugLabel.value = renderError ?? clipError;
                 return;
             }
             previewImage.image = previewController.Texture;
             lastRenderedFrame = frameIndex;
             lastRenderedTime = session.Preview.TimeMs;
-            debugLabel.text = previewController.LastDebugInfo
-                + $"  |  {SkillAnimCatalog.GetAddress(animId) ?? $"animId={animId} 无地址"}";
+            RefreshDiagnostics(animId, clip);
+        }
+
+        /// <summary>诊断面板刷新：Report + 事件/盒体上下文 → 可复制多行文本。</summary>
+        private void RefreshDiagnostics(int animId, AnimClipData clip)
+        {
+            SkillPreviewController.RenderReport report = previewController.Report;
+            var lines = new List<string>();
+            if (report.Animation != null) lines.Add($"[动画] {report.Animation.Text}");
+
+            SkillParamJson skill = session.Document?.Skill;
+            int phaseIndex = timeline.Projection.LocatePhase(session.Preview.TimeMs);
+            SkillPhaseJson[] phases = skill?.phases;
+            string phaseText = phases != null && phaseIndex >= 0 && phaseIndex < phases.Length
+                ? $"phase{phaseIndex}(animId={phases[phaseIndex].animId})"
+                : "-";
+            lines.Add($"[时间] t={session.Preview.TimeMs}ms / {timeline.DurationMs}ms  {phaseText}"
+                + $"  地址={SkillAnimCatalog.GetAddress(animId) ?? "无"}");
+
+            foreach (SkillPreviewController.LineInfo line in report.UnitLayers)
+                lines.Add($"[{(line.IsWarning ? "层!" : "层")}] {line.Text}");
+            foreach (SkillPreviewController.LineInfo line in report.Overlays)
+                lines.Add($"[{(line.IsWarning ? "特效!" : "特效")}] {line.Text}");
+            foreach (SkillPreviewController.LineInfo line in report.Spawns)
+                lines.Add($"[生成] {line.Text}");
+
+            // 未触发的 spawnEvent（检查"这个技能应该出什么特效"）
+            if (skill?.spawnEvents != null)
+            {
+                foreach (SkillSpawnEventJson spawn in skill.spawnEvents)
+                {
+                    if (spawn == null) continue;
+                    if (spawn.kind != "createArea" && spawn.kind != "createBullet") continue;
+                    int trigger = ResolveTriggerMs(spawn, clip);
+                    if (trigger < 0)
+                        lines.Add($"[等待] {spawn.kind} {(spawn.areaId ?? spawn.bulletId ?? 0)}"
+                            + $" {spawn.timeBase}"
+                            + (spawn.timeBase == "AnimationFrame" ? $" F{spawn.atFrame}" : $" @{spawn.atMs}ms")
+                            + $" at={spawn.at}（语义时刻，预览不定时）");
+                    else if (trigger > session.Preview.TimeMs)
+                        lines.Add($"[等待] {spawn.kind} {(spawn.areaId ?? spawn.bulletId ?? 0)}"
+                            + $" @{trigger}ms（还有 {trigger - session.Preview.TimeMs}ms）");
+                }
+            }
+
+            // 当前帧盒体原始数据（DNF 像素）
+            AnimFrameData frameData = clip.frames.Length > lastRenderedFrame ? clip.frames[lastRenderedFrame] : null;
+            if (frameData != null)
+            {
+                AnimBox[] dmg = frameData.damageBoxes;
+                if ((dmg == null || dmg.Length == 0)
+                    && (frameData.damageBox.min.x != 0 || frameData.damageBox.max.x != 0))
+                    dmg = new[] { frameData.damageBox };   // 旧 JSON 单数兼容
+                lines.Add("[盒子] 受击=" + FormatBoxes(dmg) + "  攻击=" + FormatBoxes(frameData.attackBoxes));
+            }
+
+            debugLabel.value = string.Join("\n", lines);
+        }
+
+        private static string FormatBoxes(AnimBox[] boxes)
+        {
+            if (boxes == null || boxes.Length == 0) return "无";
+            var parts = new List<string>();
+            foreach (AnimBox box in boxes)
+                parts.Add($"({box.min.x},{box.min.y},{box.min.z})~({box.max.x},{box.max.y},{box.max.z})");
+            return string.Join(" ", parts);
         }
 
         /// <summary>
-        /// 按 spawnEvents 采样当前时刻应显示的 Area 视图（运行时 LSAreaViewComponentSystem 同构：
-        /// atMs 到点创建 → 独立推帧 → totalTimeMs 后消失）。animId 取 area.viewAnimId/viewBackAnimId。
+        /// 当前时刻应采样的 animId：animId=0 的 phase 继承最近一个非 0 phase 的动画，
+        /// 时间基准换到该 phase 起点（运行时 PlayAnim 不被 0 段打断、帧连续推进）。
         /// </summary>
-        private List<SkillPreviewController.AreaViewSample> CollectAreaViews(SkillParamJson skill, int timeMs)
+        private int ResolveAnimId(SkillParamJson skill, int timeMs, out int phaseIndex)
         {
-            var result = new List<SkillPreviewController.AreaViewSample>();
+            phaseIndex = -1;
+            if (timeline.Projection.PhaseCount == 0) return 0;
+            int current = timeline.Projection.LocatePhase(timeMs);
+            phaseIndex = current;
+            SkillPhaseJson[] phases = skill.phases;
+            if (phases == null || current < 0 || current >= phases.Length) return 0;
+            if (phases[current].animId > 0)
+            {
+                session.Preview.InheritedPhaseStartMs = -1;
+                return phases[current].animId;
+            }
+
+            // 向前找最近非 0：动画从那个 phase 起点起播（预览按该起点累计采样时间）
+            for (int i = current - 1; i >= 0; i--)
+            {
+                if (phases[i].animId <= 0) continue;
+                session.Preview.InheritedPhaseStartMs = timeline.Projection.PhaseStart(i);
+                return phases[i].animId;
+            }
+            session.Preview.InheritedPhaseStartMs = -1;
+            return 0;
+        }
+
+        /// <summary>
+        /// 按 spawnEvents 采样当前时刻应显示的 Area/Bullet 视图（运行时 LSAreaView/BulletView 同构：
+        /// 到点创建 → 独立推帧 → total 后消失；at=inFront 时横移 dist；Bullet 再按速度推进）。
+        /// AnimationFrame 精确定时：FrameToMs 按 clip 帧 delay 累计（血爆 atFrame=22 → 910ms）。
+        /// </summary>
+        private List<SkillPreviewController.SpawnViewSample> CollectSpawnViews(
+            SkillParamJson skill, AnimClipData bodyClip, int timeMs)
+        {
+            var result = new List<SkillPreviewController.SpawnViewSample>();
             if (skill.spawnEvents == null || skill.spawnEvents.Length == 0) return result;
 
             foreach (SkillSpawnEventJson spawn in skill.spawnEvents)
             {
-                if (spawn == null || spawn.kind != "createArea" || (spawn.areaId ?? 0) <= 0) continue;
+                if (spawn == null) continue;
+                if (spawn.kind != "createArea" && spawn.kind != "createBullet") continue;
 
-                // 事件触发时刻（CastTime/PhaseTime/AnimationFrame 首版近似：全部换算成 cast 全局 ms）
-                int triggerMs = timeline.Projection.TryGetSpawnMarker(spawn, out SkillTimelineProjection.EventMarker marker)
-                    && marker.Kind != SkillTimelineProjection.MarkerKind.Semantic
-                        ? marker.StartMs
-                        : -1;
-                // AnimationFrame 类没有确定 ms（语义标记），近似用 phase 起点
-                if (triggerMs < 0 && spawn.phase >= 0)
-                    triggerMs = timeline.Projection.PhaseStart(spawn.phase);
-
+                int triggerMs = ResolveTriggerMs(spawn, bodyClip);
                 if (triggerMs < 0 || timeMs < triggerMs) continue;
                 int elapsed = timeMs - triggerMs;
 
-                AreaParamJson area = FindArea(spawn.areaId ?? 0);
-                if (area == null) continue;
+                if (spawn.kind == "createArea")
+                {
+                    AreaParamJson area = FindAsset(SkillEditorAssetKind.Area, spawn.areaId ?? 0, d => d.Area);
+                    if (area == null) continue;
 
-                var sample = new SkillPreviewController.AreaViewSample { AreaId = area.id, ElapsedMs = elapsed };
-                if (area.viewAnimId > 0)
-                    sample.Clip = SkillAnimCatalog.GetClip(area.viewAnimId, out string _);
-                if (area.viewBackAnimId > 0)
-                    sample.BackClip = SkillAnimCatalog.GetClip(area.viewBackAnimId ?? 0, out string _);
-                if (sample.Clip != null) result.Add(sample);
+                    var sample = new SkillPreviewController.SpawnViewSample
+                    {
+                        AreaId = area.id,
+                        Name = area.name,
+                        Kind = "Area",
+                        ElapsedMs = elapsed,
+                        TotalMs = area.totalTimeMs,
+                        OffsetX = spawn.at == "inFront" ? spawn.dist : 0f,
+                    };
+                    if (area.viewAnimId > 0)
+                        sample.Clip = SkillAnimCatalog.GetClip(area.viewAnimId, out string _);
+                    if (area.viewBackAnimId > 0)
+                        sample.BackClip = SkillAnimCatalog.GetClip(area.viewBackAnimId ?? 0, out string _);
+                    if (sample.Clip != null) result.Add(sample);
+                }
+                else
+                {
+                    BulletParamJson bullet = FindAsset(SkillEditorAssetKind.Bullet, spawn.bulletId ?? 0, d => d.Bullet);
+                    if (bullet == null) continue;
+
+                    // 弹体按速度推进：x = 出生偏移 + speed * elapsed（inFront 叠加）
+                    float distance = bullet.speed * elapsed / 1000f;
+                    var sample = new SkillPreviewController.SpawnViewSample
+                    {
+                        AreaId = bullet.id,
+                        Name = bullet.name,
+                        Kind = "Bullet",
+                        ElapsedMs = elapsed,
+                        TotalMs = bullet.totalTimeMs,
+                        OffsetX = (spawn.at == "inFront" ? spawn.dist : 0f)
+                            + (bullet.spawnOffset != null && bullet.spawnOffset.Length > 0 ? bullet.spawnOffset[0] : 0f)
+                            + distance,
+                    };
+                    if (bullet.viewAnimId > 0)
+                        sample.Clip = SkillAnimCatalog.GetClip(bullet.viewAnimId, out string _);
+                    if (sample.Clip != null) result.Add(sample);
+                }
             }
             return result;
         }
 
-        /// <summary>areaId → AreaParamJson（从磁盘目录直查，不走全局 Loader——ISSUE-014 约束）。</summary>
-        private AreaParamJson FindArea(int areaId)
+        /// <summary>
+        /// spawnEvent 触发时刻（cast 全局 ms）。AnimationFrame = FrameToMs（帧 delay 累计，
+        /// 继承动画时基准回继承相位起点）；PhaseTime/Enter/End/CastTime 走投影；
+        /// Landing/Input 无确定时刻返回 -1（诊断面板显示"等待触发"）。
+        /// </summary>
+        private int ResolveTriggerMs(SkillSpawnEventJson spawn, AnimClipData bodyClip)
         {
-            if (areaId <= 0) return null;
+            SkillParamTimeBase timeBase = Enum.TryParse(spawn.timeBase, true, out SkillParamTimeBase tb)
+                ? tb
+                : SkillParamTimeBase.CastTime;
+            switch (timeBase)
+            {
+                case SkillParamTimeBase.AnimationFrame:
+                {
+                    if (spawn.atFrame > 0)
+                    {
+                        int frameMs = SkillAnimCatalog.FrameToMs(bodyClip, spawn.atFrame);
+                        if (frameMs < 0) return -1;
+                        // 默认基准 = 事件所属 phase 起点；若该 phase 是继承动画，动画实际
+                        // 从最近非 0 相位起播，帧时刻相对继承起点
+                        int baseMs = spawn.phase >= 0 ? timeline.Projection.PhaseStart(spawn.phase) : 0;
+                        if (spawn.phase >= 0)
+                        {
+                            SkillPhaseJson[] phases = session.Document?.Skill?.phases;
+                            if (phases != null && spawn.phase < phases.Length && phases[spawn.phase].animId <= 0)
+                            {
+                                for (int i = spawn.phase - 1; i >= 0; i--)
+                                {
+                                    if (phases[i].animId <= 0) continue;
+                                    baseMs = timeline.Projection.PhaseStart(i);
+                                    break;
+                                }
+                            }
+                        }
+                        return baseMs + frameMs;
+                    }
+                    return spawn.phase >= 0
+                        ? timeline.Projection.PhaseStart(spawn.phase) + spawn.atMs
+                        : spawn.atMs;
+                }
+                case SkillParamTimeBase.PhaseTime:
+                    return spawn.phase >= 0
+                        ? timeline.Projection.PhaseStart(spawn.phase) + spawn.atMs
+                        : spawn.atMs;
+                case SkillParamTimeBase.PhaseEnter:
+                    return spawn.phase >= 0 ? timeline.Projection.PhaseStart(spawn.phase) : 0;
+                case SkillParamTimeBase.PhaseEnd:
+                    return spawn.phase >= 0 ? timeline.Projection.PhaseEnd(spawn.phase) : 0;
+                case SkillParamTimeBase.CastTime:
+                    return spawn.atMs;
+                case SkillParamTimeBase.Landing:
+                    // 预览无物理：近似"当前动画播完"（DNF 落地事件本质=空中段结束）
+                    return bodyClip != null
+                        ? (spawn.phase >= 0 ? timeline.Projection.PhaseStart(spawn.phase) : 0)
+                            + SkillAnimCatalog.FrameToMs(bodyClip, bodyClip.frames.Length) // = clip 总时长
+                        : -1;
+                default:
+                    return -1;   // Input：语义事件无确定时刻
+            }
+        }
+
+        /// <summary>按 kind+id 从磁盘目录直查资产（不走全局 Loader——ISSUE-014 约束）。</summary>
+        private T FindAsset<T>(SkillEditorAssetKind kind, int id, Func<SkillEditorDocument, T> pick)
+            where T : class
+        {
+            if (id <= 0) return null;
             SkillEditorDocumentStore store = new();
-            SkillEditorAsset asset = store.Find(SkillEditorAssetKind.Area, areaId);
+            SkillEditorAsset asset = store.Find(kind, id);
             if (asset == null || !SkillEditorDocument.TryLoad(asset, out SkillEditorDocument document, out string _))
                 return null;
-            return document.Area;
+            return pick(document);
         }
 
         private void OnDisable()
@@ -182,10 +418,11 @@ namespace ET.Editor
 
         private void Update()
         {
+            TickPlay();
             if (!viewsDirty && session != null
                 && lastRenderedTime != session.Preview.TimeMs)
             {
-                RenderPreviewIfReady();   // 播放头移动即采样（时间轴拖动/未来播放循环共用）
+                RenderPreviewIfReady();   // 播放头移动即采样（时间轴拖动/播放循环共用）
             }
             if (!viewsDirty) return;
             viewsDirty = false;
@@ -305,17 +542,32 @@ namespace ET.Editor
                 previewTitle.text = BuildPreviewText();
             }) { text = "翻转朝向" };
             previewToolbar.Add(faceButton);
-            previewArea.Add(previewToolbar);
-            debugLabel = new Label("--")
+            Button playButton = new(TogglePlay) { text = "播放" };
+            previewToolbar.Add(playButton);
+            Button stopButton = new(StopPlay) { text = "停止" };
+            previewToolbar.Add(stopButton);
+            Toggle loopToggle = new("循环") { value = loopPlayback };
+            loopToggle.RegisterValueChangedCallback(evt =>
             {
-                style =
-                {
-                    color = new Color(0.55f, 0.75f, 0.95f),
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    whiteSpace = WhiteSpace.Normal,
-                    paddingTop = 2,
-                },
+                loopPlayback = evt.newValue;
+            });
+            previewToolbar.Add(loopToggle);
+            showBoxesToggle = new Toggle("攻击/受击盒") { value = false };
+            showBoxesToggle.RegisterValueChangedCallback(evt =>
+            {
+                if (previewController != null) previewController.ShowBoxes = evt.newValue;
+                lastRenderedTime = -1;
+            });
+            previewToolbar.Add(showBoxesToggle);
+            previewArea.Add(previewToolbar);
+            debugLabel = new TextField(1, int.MaxValue)
+            {
+                value = "渲染后显示诊断",
+                isReadOnly = true,
             };
+            debugLabel.style.flexGrow = 0;
+            debugLabel.style.maxHeight = 110;
+            debugLabel.style.whiteSpace = WhiteSpace.Normal;
             center.Add(debugLabel);
             previewController = new SkillPreviewController();
             center.Add(previewArea);
@@ -337,6 +589,19 @@ namespace ET.Editor
             root.Add(body);
 
             // 下方：校验问题 + 时间轴
+            legendLabel = new Label("图例：色块=Phase 段（第1/2/3段循环配色）  绿条=手动攻击盒窗口(onMs-offMs)  "
+                + "橙菱形=SpawnEvent 橙条=输入窗口(Input untilMs)  黄菱形=HitEvent  黄竖线=播放头  拖动=设时间 滚轮=缩放")
+            {
+                style =
+                {
+                    color = new Color(0.55f, 0.6f, 0.65f),
+                    fontSize = 10,
+                    whiteSpace = WhiteSpace.Normal,
+                    paddingLeft = 6,
+                    flexShrink = 0,
+                },
+            };
+            root.Add(legendLabel);
             issuesScroll = new ScrollView(ScrollViewMode.Vertical) { style = { maxHeight = 90, flexShrink = 0 } };
             root.Add(issuesScroll);
             timeline = new SkillTimelineElement { style = { flexShrink = 0 } };
