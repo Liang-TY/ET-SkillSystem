@@ -3,6 +3,7 @@
     "rootNamespace": "",
     "references": [
         "ET.Skill",
+        "ET.Npkparser",
         "Unity.Pipeline"
     ],
     "includePlatforms": [
